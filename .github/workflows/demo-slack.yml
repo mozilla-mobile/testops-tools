@@ -21,6 +21,9 @@ jobs:
       - name: Run telemetry probe expiry check 
         run: python ./check_metrics.py -p focus-ios 
 
+      - name: Run telemetry probe expiry check 
+        run: cat ./slack-payload.json 
+
       - name: Demo Slack Message
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
