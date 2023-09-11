@@ -1,9 +1,9 @@
 name: Send custom JSON data to Slack workflow
 
+# Tues @4am UTC
 on:
-  push:
-    branches:
-      - slack-demo
+  schedule:
+    - cron:  "0 4 * * 2" 
 
 jobs:
   build:
