@@ -16,19 +16,19 @@ jobs:
         uses: actions/setup-python@v1
  
       - name: Install requirements 
-        run: pip install -r requirements.txt 
+        run: pip install -r ./telemetry-expiry/requirements.txt 
  
       - name: Run telemetry probe expiry check 
-        run: python ./check_metrics.py -p focus-ios 
+        run: python ./telemetry-expiry/check_metrics.py -p focus-ios 
 
       - name: Run telemetry probe expiry check 
-        run: cat ./slack-payload.json 
+        run: ls -la
 
       - name: Demo Slack Message
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          payload-file-path: "./slack-payload.json"
+          payload-file-path: "./telemetry-expiry/slack-payload.json"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
