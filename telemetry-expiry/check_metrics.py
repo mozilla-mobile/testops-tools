@@ -15,7 +15,7 @@ import urllib.request
 import yaml
 
 
-CONFIG_INI = 'check_metrics.ini'
+CONFIG_INI = 'telemetry-expiry/check_metrics.ini'
 PAYLOAD_JSON = 'slack-payload.json'
 WARN_THRESHOLD_DAYS = 7
 expired_already = []
