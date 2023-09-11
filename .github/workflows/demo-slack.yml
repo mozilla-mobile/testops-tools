@@ -18,6 +18,7 @@ jobs:
       - name: Install requirements 
         run: pip install -r ./telemetry-expiry/requirements.txt 
  
+      # Temporary hard code project
       - name: Run telemetry probe expiry check 
         run: python ./telemetry-expiry/check_metrics.py -p focus-ios 
 
@@ -28,7 +29,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          payload-file-path: "./telemetry-expiry/slack-payload.json"
+          payload-file-path: "./slack-payload.json"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
