@@ -1,9 +1,9 @@
 name: Send custom JSON data to Slack workflow
 
+# Tues @4am UTC
 on:
-  push:
-    branches:
-      - slack-demo
+  schedule:
+    - cron:  "0 4 * * 2" 
 
 jobs:
   build:
@@ -16,10 +16,14 @@ jobs:
         uses: actions/setup-python@v1
  
       - name: Install requirements 
-        run: pip install -r requirements.txt 
+        run: pip install -r ./telemetry-expiry/requirements.txt 
  
+      # Temporary hard code project
       - name: Run telemetry probe expiry check 
-        run: python ./check_metrics.py -p focus-ios 
+        run: python ./telemetry-expiry/check_metrics.py -p focus-ios 
+
+      - name: Run telemetry probe expiry check 
+        run: ls -la
 
       - name: Demo Slack Message
         id: slack
