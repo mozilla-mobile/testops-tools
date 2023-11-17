@@ -1,0 +1,42 @@
+name: Queries the Cloud Testing API for device capacities
+
+# Daily at 00:00 UTC
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  device-capacities:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1.1.1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Set up gcloud Cloud SDK environment
+        uses: google-github-actions/setup-gcloud@v1.1.1
+      - name: Run the query
+        id: query
+        run: |
+          gcloud firebase test android list-device-capacities --format json > capacities.json
+      - name: Create Markdown Table
+        uses: gazab/create-markdown-table@v1.0.7
+        id: create_table
+        with:
+          file: capacities.json
+          columns: '[ "model", "name", "version", "capacity" ]'
+      - name: Write Markdown Table to Summary
+        run: |
+          echo "${{ steps.create_table.outputs.table }}" >> $GITHUB_STEP_SUMMARY
+      - name: Overrite devices.md
+        run: |
+          echo "${{ steps.create_table.outputs.table }}" > ftl-devices/devices.md
+      - name: Commit and push changes
+        run: |-
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add ftl-devices/devices.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m 'Automated update of devices.md'; git push)
