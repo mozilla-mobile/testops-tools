@@ -10,6 +10,7 @@
 | PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | RMX3563 | 33 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
+| SO-41A | SO-41A | 31 | Medium |
 | a02q | SM-A025F | 31 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | SM-A125F | 31 | Medium |
@@ -47,6 +48,7 @@
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
 | shiba | Pixel 8 | 34 | High |
+| starlte | SM-G960F | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | High |
 | tangorpro | Pixel Tablet | 33 | High |
 | vivo_1906 | vivo 1906 | 28 | Low |
