@@ -37,13 +37,13 @@
 | java | Motorola G20 | 30 | High |
 | lv0 | K3 2017 | 23 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
-| oriole | Pixel 6 | 31 | High |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
+| oriole | Pixel 6 | 31 | High |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Medium |
-| q2q | Galaxy Z Fold3 | 31 | Low |
 | q2q | Galaxy Z Fold3 | 30 | Low |
+| q2q | Galaxy Z Fold3 | 31 | Low |
 | r11 | Google Pixel Watch | 30 | High |
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
