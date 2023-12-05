@@ -12,6 +12,7 @@
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | SO-41A | 31 | Medium |
 | a02q | SM-A025F | 31 | Medium |
+| a03s | SM-A037G | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | SM-A125F | 31 | Medium |
 | a51 | Galaxy A51 | 31 | Low |
