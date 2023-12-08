@@ -21,7 +21,7 @@
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
-| cheetah | Pixel 7 Pro | 33 | Medium |
+| cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | High |
@@ -32,7 +32,7 @@
 | griffin | Moto Z | 24 | Low |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
-| hammerhead | Nexus 5 | 23 | Medium |
+| hammerhead | Nexus 5 | 23 | Low |
 | harpia | Moto G Play | 23 | Low |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
