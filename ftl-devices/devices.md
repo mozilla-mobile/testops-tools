@@ -3,7 +3,7 @@
 | 1610 | vivo 1610 | 23 | Medium |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| HWCOR | Honor Play | 27 | Medium |
+| HWCOR | Honor Play | 27 | Low |
 | HWMHA | Mate 9 | 24 | Medium |
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Medium |
