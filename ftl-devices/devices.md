@@ -20,7 +20,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | bluejay | Pixel 6a | 32 | Medium |
-| blueline | Pixel 3 | 28 | Medium |
+| blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
