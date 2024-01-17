@@ -47,7 +47,7 @@
 | pettyl | moto e5 play | 27 | Low |
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q2q | Galaxy Z Fold3 | 31 | Low |
-| q4q | SM-F936U1 | 33 | Medium |
+| q4q | SM-F936U1 | 33 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
