@@ -2,7 +2,7 @@
 | --- | --- | --- | --- |
 | 1610 | vivo 1610 | 23 | Medium |
 | F01L | F-01L | 27 | High |
-| FRT | Nokia 1 | 27 | Medium |
+| FRT | Nokia 1 | 27 | Low |
 | HWCOR | Honor Play | 27 | Low |
 | HWMHA | Mate 9 | 24 | Medium |
 | J606F | Lenovo TB-J606F | 30 | Medium |
