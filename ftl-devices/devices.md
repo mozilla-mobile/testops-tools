@@ -7,7 +7,7 @@
 | HWMHA | Mate 9 | 24 | Medium |
 | J606F | Lenovo TB-J606F | 30 | Medium |
 | OP515BL1 | DN2103 | 33 | Medium |
-| OnePlus9Pro | LE2121 | 33 | Medium |
+| OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Medium |
 | RED8BEL1 | RMX3563 | 33 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
