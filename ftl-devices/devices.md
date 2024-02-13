@@ -57,4 +57,5 @@
 | tangorpro | Pixel Tablet | 33 | High |
 | vivo_1906 | vivo 1906 | 28 | Low |
 | x1q | Galaxy S20 | 29 | High |
+| xcoverpro | SM-G715FN | 33 | Medium |
 
