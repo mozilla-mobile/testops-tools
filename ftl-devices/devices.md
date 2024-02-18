@@ -5,7 +5,7 @@
 | FRT | Nokia 1 | 27 | Low |
 | HWCOR | Honor Play | 27 | Low |
 | HWMHA | Mate 9 | 24 | Medium |
-| J606F | Lenovo TB-J606F | 30 | Medium |
+| J606F | Lenovo TB-J606F | 30 | Low |
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Medium |
