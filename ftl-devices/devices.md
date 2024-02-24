@@ -23,7 +23,7 @@
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| crownqlteue | Galaxy Note9 | 29 | Medium |
+| crownqlteue | Galaxy Note9 | 29 | Low |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
