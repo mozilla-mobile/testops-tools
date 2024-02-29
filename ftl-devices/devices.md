@@ -9,7 +9,7 @@
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Medium |
-| RED8BEL1 | RMX3563 | 33 | Medium |
+| RED8BEL1 | RMX3563 | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | SO-41A | 31 | Medium |
 | a02q | SM-A025F | 31 | Medium |
@@ -26,6 +26,7 @@
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | High |
+| dm3q | SM-S918U1 | 34 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
 | felix | Pixel Fold | 34 | High |
