@@ -8,7 +8,7 @@
 | J606F | Lenovo TB-J606F | 30 | Low |
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
-| PD1901 | VIVO 1901 | 28 | Medium |
+| PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | RMX3563 | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | SO-41A | 31 | Medium |
