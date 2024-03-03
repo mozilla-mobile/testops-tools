@@ -4,15 +4,15 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
 | HWCOR | Honor Play | 27 | Low |
-| HWMHA | Mate 9 | 24 | Medium |
+| HWMHA | Mate 9 | 24 | Low |
 | J606F | Lenovo TB-J606F | 30 | Low |
-| OP515BL1 | DN2103 | 33 | Medium |
+| OP515BL1 | DN2103 | 33 | Low |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | RMX3563 | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | SO-41A | 31 | Medium |
-| a02q | SM-A025F | 31 | Medium |
+| a02q | SM-A025F | 31 | Low |
 | a03s | SM-A037G | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | SM-A125F | 31 | Medium |
@@ -25,7 +25,7 @@
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
-| dm3q | SM-S918U1 | 33 | High |
+| dm3q | SM-S918U1 | 33 | Medium |
 | dm3q | SM-S918U1 | 34 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
