@@ -3,7 +3,6 @@
 | 1610 | vivo 1610 | 23 | Medium |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
-| HWCOR | Honor Play | 27 | Low |
 | HWMHA | Mate 9 | 24 | Low |
 | J606F | Lenovo TB-J606F | 30 | Low |
 | OP515BL1 | DN2103 | 33 | Low |
@@ -19,7 +18,7 @@
 | a51 | Galaxy A51 | 31 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| bluejay | Pixel 6a | 32 | Medium |
+| bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
 | cheetah | Pixel 7 Pro | 33 | Low |
