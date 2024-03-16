@@ -5,7 +5,7 @@
 | FRT | Nokia 1 | 27 | Medium |
 | HWMHA | Mate 9 | 24 | Low |
 | J606F | Lenovo TB-J606F | 30 | Low |
-| OP515BL1 | DN2103 | 33 | Low |
+| OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | RMX3563 | 33 | Low |
@@ -26,7 +26,6 @@
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | Medium |
 | dm3q | SM-S918U1 | 34 | High |
-| dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
