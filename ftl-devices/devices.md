@@ -26,6 +26,7 @@
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | Medium |
 | dm3q | SM-S918U1 | 34 | High |
+| dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
