@@ -4,7 +4,7 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
 | HWMHA | Mate 9 | 24 | Low |
-| J606F | Lenovo TB-J606F | 30 | Low |
+| J606F | Lenovo TB-J606F | 30 | Medium |
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
@@ -48,6 +48,7 @@
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | SM-F936U1 | 33 | High |
+| q5q | SM-F946U1 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
