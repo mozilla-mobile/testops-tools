@@ -3,8 +3,8 @@
 | 1610 | vivo 1610 | 23 | Medium |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| HWMHA | Mate 9 | 24 | Low |
-| J606F | Lenovo TB-J606F | 30 | Medium |
+| HWMHA | Mate 9 | 24 | Medium |
+| J606F | Lenovo TB-J606F | 30 | Low |
 | OP515BL1 | DN2103 | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
