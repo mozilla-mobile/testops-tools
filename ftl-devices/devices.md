@@ -27,7 +27,7 @@
 | dm3q | SM-S918U1 | 33 | Medium |
 | dm3q | SM-S918U1 | 34 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
-| f2q | Galaxy Z Fold2 | 30 | Medium |
+| f2q | Galaxy Z Fold2 | 30 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
