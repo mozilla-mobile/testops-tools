@@ -19,16 +19,16 @@
 | a54x | SM-A546U | 34 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| bluejay | Pixel 6a | 32 | Low |
+| bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| crownqlteue | Galaxy Note9 | 29 | Low |
+| crownqlteue | Galaxy Note9 | 29 | Medium |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | SM-S918U1 | 33 | Medium |
 | dm3q | SM-S918U1 | 34 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
-| f2q | Galaxy Z Fold2 | 30 | Low |
+| f2q | Galaxy Z Fold2 | 30 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
@@ -50,7 +50,7 @@
 | q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | SM-F936U1 | 33 | High |
 | q5q | SM-F946U1 | 34 | High |
-| r11 | Google Pixel Watch | 30 | Medium |
+| r11 | Google Pixel Watch | 30 | High |
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
 | shiba | Pixel 8 | 34 | High |
