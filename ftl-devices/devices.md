@@ -16,7 +16,7 @@
 | a10 | Galaxy A10 | 29 | High |
 | a12 | SM-A125F | 31 | Medium |
 | a51 | Galaxy A51 | 31 | Low |
-| a54x | SM-A546U | 34 | Medium |
+| a54x | SM-A546U | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | bluejay | Pixel 6a | 32 | Medium |
@@ -25,7 +25,7 @@
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
-| dm3q | SM-S918U1 | 33 | Medium |
+| dm3q | SM-S918U1 | 33 | High |
 | dm3q | SM-S918U1 | 34 | High |
 | dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
@@ -45,7 +45,7 @@
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
 | panther | Pixel 7 | 33 | High |
-| pettyl | moto e5 play | 27 | Low |
+| pettyl | moto e5 play | 27 | Medium |
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | SM-F936U1 | 33 | High |
