@@ -19,6 +19,7 @@
 | a54x | SM-A546U | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
+| b5q | SM-F731B | 34 | High |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
@@ -33,6 +34,7 @@
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | griffin | Moto Z | 24 | Low |
+| gtaxlwifi | SM-T580 | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | hammerhead | Nexus 5 | 23 | Low |
