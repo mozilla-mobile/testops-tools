@@ -15,7 +15,7 @@
 | a03s | SM-A037G | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | SM-A125F | 31 | Medium |
-| a51 | Galaxy A51 | 31 | Low |
+| a51 | Galaxy A51 | 31 | Medium |
 | a54x | SM-A546U | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
