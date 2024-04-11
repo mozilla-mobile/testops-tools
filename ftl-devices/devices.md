@@ -4,7 +4,7 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
 | HWMHA | Mate 9 | 24 | Medium |
-| J606F | Lenovo Tab P11 | 30 | Medium |
+| J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
@@ -28,7 +28,6 @@
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
-| dreamlte | Galaxy S8 | 28 | Low |
 | f2q | Galaxy Z Fold2 | 30 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
@@ -37,7 +36,6 @@
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
-| hammerhead | Nexus 5 | 23 | Low |
 | harpia | Moto G Play | 23 | Low |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
