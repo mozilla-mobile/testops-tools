@@ -45,7 +45,7 @@
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
 | panther | Pixel 7 | 33 | High |
-| pettyl | moto e5 play | 27 | Medium |
+| pettyl | moto e5 play | 27 | High |
 | q2q | Galaxy Z Fold3 | 30 | Medium |
 | q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
