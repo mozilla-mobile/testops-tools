@@ -24,7 +24,7 @@
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| crownqlteue | Galaxy Note9 | 29 | Medium |
+| crownqlteue | Galaxy Note9 | 29 | Low |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
@@ -46,7 +46,7 @@
 | oriole | Pixel 6 | 31 | High |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | High |
-| q2q | Galaxy Z Fold3 | 30 | Medium |
+| q2q | Galaxy Z Fold3 | 30 | Low |
 | q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
