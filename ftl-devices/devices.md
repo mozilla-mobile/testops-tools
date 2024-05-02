@@ -8,7 +8,7 @@
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
-| RED8BEL1 | realme GT NEO 3 150W | 33 | Medium |
+| RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | Xperia 10 II | 31 | Medium |
 | a02q | Galaxy A02s | 31 | Medium |
