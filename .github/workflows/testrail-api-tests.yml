@@ -59,11 +59,11 @@ jobs:
                 "fields": [
                   {
                     "type": "plain_text",
-                    "text": "*Status:*\n${{ job.status }}"
+                    "text": "*Status:* ${{ job.status }}"
                   },
                   {
                     "type": "plain_text",
-                    "text": "*Test results:*\n$(cat test_results.txt)"
+                    "text": "*Test results:* $(cat test_results.txt)"
                   }
                 ]
               },
@@ -99,11 +99,11 @@ jobs:
                 "fields": [
                   {
                     "type": "plain_text",
-                    "text": "*Status:*\n${{ job.status }}"
+                    "text": "*Status:* ${{ job.status }}"
                   },
                   {
                     "type": "plain_text",
-                    "text": "*Test results:*\n$(cat test_results.txt)"
+                    "text": "*Test results:* Passed"
                   }
                 ]
               },
