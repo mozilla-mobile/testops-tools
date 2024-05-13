@@ -36,7 +36,7 @@ jobs:
 
     - name: Run tests
       run: |
-        python -m unittest discover -s testrail/tests -p '*tests.py'
+        python -m unittest discover -s testrail/tests -p '*tests.py' > test_results.txt 2>&1
 
     - name: Send Slack message on test failure
       if: ${{ failure() }}
@@ -46,12 +46,33 @@ jobs:
         # payload with test failure output
         payload: |
           {
-            "text": "Tests failed",
-            "attachments": [
+            "blocks": [
               {
-                "color": "#FF0000",
-                "title": "Test output",
-                "text": "${{ job.status }}"
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Workflow:* ${GITHUB_WORKFLOW}\n*Job:* ${GITHUB_JOB}"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:*\n${{ job.status }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Test results:*\n$(cat test_results.txt)"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|View results>"
+                }
               }
             ]
           }
@@ -62,16 +83,38 @@ jobs:
       id: slack-success
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        # payload with test success output
+        # payload with slack blocks with job name, status, test results, test output, and url to view the results
         payload: |
           {
-            "text": "Tests passed",
-            "attachments": [
+            "blocks": [
               {
-                "color": "#00FF00",
-                "title": "Test output",
-                "text": "${{ job.status }}"
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Workflow:* ${GITHUB_WORKFLOW}\n*Job:* ${GITHUB_JOB}"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:*\n${{ job.status }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Test results:*\n$(cat test_results.txt)"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|View results>"
+                }
               }
             ]
           }
+        
 
