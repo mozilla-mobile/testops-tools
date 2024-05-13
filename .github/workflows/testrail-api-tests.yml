@@ -46,30 +46,8 @@ jobs:
         channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
         payload: |
           {
-            "text": "TestRail API tests failed! :scream:",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Status:* ${{ job.status }}\n*Test results:* Failed"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-                }
-              }
-            ]
+            "type": "mrkdwn",
+            "text": "TestRail API tests failed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Failed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
           }
         
 
@@ -82,27 +60,6 @@ jobs:
         payload: |
           {
             "type": "mrkdwn",
-            "text": "TestRail API tests passed! :tada:",
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-              }
-            }
+            "text": "TestRail API tests passed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Passed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
           }
         
