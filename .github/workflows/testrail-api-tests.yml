@@ -1,0 +1,49 @@
+name: testrail-api-tests
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run every day at midnight
+  push:
+    paths:
+      - 'testrail/**' # Run on changes to testrail directory
+  pull_request:
+    paths:
+      - 'testrail/**' # Run on changes to testrail directory
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        pip install pipenv
+        pipenv install --dev
+
+    - name: Run tests
+      run: |
+        pipenv run python -m unittest discover -s testrail/tests -p '*tests.py'
+
+    - name: Send Slack message on test result
+      if: ${{ failure() }}
+      uses: rtCamp/action-slack-notify@v2
+      with:
+        slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        message: "TestRail API tests failed. Please check the logs."
+
+    - name: Send Slack message on test result
+      if: ${{ success() }}
+      uses: rtCamp/action-slack-notify@v2
+      with:
+        slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        message: "TestRail API tests passed successfully."
+
