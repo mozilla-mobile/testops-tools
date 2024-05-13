@@ -26,6 +26,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        export PIPENV_SHELL_FANCY=0  # Disable fancy shell to avoid interactive session
         pip install pipenv
         cd testrail
         pipenv install
