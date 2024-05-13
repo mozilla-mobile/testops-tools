@@ -39,15 +39,15 @@ jobs:
 
     - name: Send Slack message on test result
       if: ${{ failure() }}
-      uses: rtCamp/action-slack-notify@v2
-      with:
-        slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-        message: "TestRail API tests failed. Please check the logs."
+      id: slack-failure
+      uses: slackapi/slack-github-action@v1.26.0
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Send Slack message on test result
       if: ${{ success() }}
-      uses: rtCamp/action-slack-notify@v2
-      with:
-        slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-        message: "TestRail API tests passed successfully."
+      id: slack-success
+      uses: slackapi/slack-github-action@v1.26.0
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
