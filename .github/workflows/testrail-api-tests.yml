@@ -15,6 +15,11 @@ jobs:
     name: Run unit tests
     runs-on: ubuntu-latest
 
+    env:
+      TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+      TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+      TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
