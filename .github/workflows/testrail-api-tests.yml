@@ -38,39 +38,40 @@ jobs:
       run: |
         python -m unittest discover -s testrail/tests -p '*tests.py'
 
-    - name: Send Slack message on test result
+    - name: Send Slack message on test failure
       if: ${{ failure() }}
       id: slack-failure
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        # slack message payload for failure
+        # payload with test failure output
         payload: |
           {
-            "text": "Test failed",
+            "text": "Tests failed",
             "attachments": [
               {
                 "color": "#FF0000",
-                "title": "Test failed",
-                "text": "Test failed in testrail-api-tests workflow",
-                "fields": [
-                  {
-                    "title": "Job",
-                    "value": "${{ github.job }}",
-                    "short": true
-                  },
-                  {
-                    "title": "Run ID",
-                    "value": "${{ github.run_id }}",
-                    "short": true
-                  }
-                ]
+                "title": "Test output",
+                "text": "${{ job.status }}"
               }
             ]
           }
         
 
-    - name: Send Slack message on test result
+    - name: Send Slack message on test success
       if: ${{ success() }}
       id: slack-success
       uses: slackapi/slack-github-action@v1.26.0
+      with:
+        # payload with test success output
+        payload: |
+          {
+            "text": "Tests passed",
+            "attachments": [
+              {
+                "color": "#00FF00",
+                "title": "Test output",
+                "text": "${{ job.status }}"
+              }
+            ]
+          }
 
