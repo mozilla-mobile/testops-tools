@@ -51,18 +51,18 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Workflow:* ${GITHUB_WORKFLOW}\n*Job:* ${GITHUB_JOB}"
+                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
                 }
               },
               {
                 "type": "section",
                 "fields": [
                   {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "*Status:*\n${{ job.status }}"
                   },
                   {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "*Test results:*\n$(cat test_results.txt)"
                   }
                 ]
@@ -71,7 +71,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|View results>"
+                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
                 }
               }
             ]
@@ -98,11 +98,11 @@ jobs:
                 "type": "section",
                 "fields": [
                   {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "*Status:*\n${{ job.status }}"
                   },
                   {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "*Test results:*\n$(cat test_results.txt)"
                   }
                 ]
