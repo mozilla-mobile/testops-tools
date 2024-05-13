@@ -26,15 +26,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        export PIPENV_SHELL_FANCY=0  # Disable fancy shell to avoid interactive session
-        pip install pipenv
-        cd testrail
-        pipenv install
-        pipenv shell
+        pip install -r testrail/requirments.txt
 
     - name: Run tests
       run: |
-        pipenv run python -m unittest discover -s testrail/tests -p '*tests.py'
+        python -m unittest discover -s testrail/tests -p '*tests.py'
 
     - name: Send Slack message on test result
       if: ${{ failure() }}
