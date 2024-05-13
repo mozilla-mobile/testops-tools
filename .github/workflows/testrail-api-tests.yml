@@ -81,29 +81,28 @@ jobs:
         channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
         payload: |
           {
+            "type": "mrkdwn",
             "text": "TestRail API tests passed! :tada:",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-                }
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
               }
-            ]
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+              }
+            }
           }
         
