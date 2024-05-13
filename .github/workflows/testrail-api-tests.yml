@@ -65,7 +65,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+                  "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
                 }
               }
             ]
@@ -80,28 +80,9 @@ jobs:
         # payload with slack blocks with job name, status, test results, test output, and url to view the results
         payload: |
           {
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-                }
-              }
-            ]
+            "blocks": {
+              "type": "mrkdwn",
+              "text": "*Test results:* Passed"
+            }
           }
         
