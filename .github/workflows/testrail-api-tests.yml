@@ -56,16 +56,10 @@ jobs:
               },
               {
                 "type": "section",
-                "fields": [
-                  {
-                    "type": "plain_text",
-                    "text": "*Status:* ${{ job.status }}"
-                  },
-                  {
-                    "type": "plain_text",
-                    "text": "*Test results:* $(cat test_results.txt)"
-                  }
-                ]
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Status:* ${{ job.status }}\n*Test results:* Failed"
+                }
               },
               {
                 "type": "section",
@@ -96,16 +90,10 @@ jobs:
               },
               {
                 "type": "section",
-                "fields": [
-                  {
-                    "type": "plain_text",
-                    "text": "*Status:* ${{ job.status }}"
-                  },
-                  {
-                    "type": "plain_text",
-                    "text": "*Test results:* Passed"
-                  }
-                ]
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
+                }
               },
               {
                 "type": "section",
