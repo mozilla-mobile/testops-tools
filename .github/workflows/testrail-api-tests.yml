@@ -91,7 +91,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Workflow:* ${GITHUB_WORKFLOW}\n*Job:* ${GITHUB_JOB}"
+                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
                 }
               },
               {
@@ -111,7 +111,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "test<${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}|View results>"
+                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
                 }
               }
             ]
