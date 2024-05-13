@@ -42,6 +42,31 @@ jobs:
       if: ${{ failure() }}
       id: slack-failure
       uses: slackapi/slack-github-action@v1.26.0
+      with:
+        # slack message payload for failure
+        payload: |
+          {
+            "text": "Test failed",
+            "attachments": [
+              {
+                "color": "#FF0000",
+                "title": "Test failed",
+                "text": "Test failed in testrail-api-tests workflow",
+                "fields": [
+                  {
+                    "title": "Job",
+                    "value": "${{ github.job }}",
+                    "short": true
+                  },
+                  {
+                    "title": "Run ID",
+                    "value": "${{ github.run_id }}",
+                    "short": true
+                  }
+                ]
+              }
+            ]
+          }
         
 
     - name: Send Slack message on test result
