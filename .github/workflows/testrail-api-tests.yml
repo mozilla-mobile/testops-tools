@@ -46,6 +46,7 @@ jobs:
         # payload with test failure output
         payload: |
           {
+            "text": "TestRail API tests failed! :scream:",
             "blocks": [
               {
                 "type": "section",
@@ -80,9 +81,29 @@ jobs:
         # payload with slack blocks with job name, status, test results, test output, and url to view the results
         payload: |
           {
-            "blocks": {
-              "type": "mrkdwn",
-              "text": "*Test results:* Passed"
-            }
+            "text": "TestRail API tests passed! :tada:",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Status:* ${{ job.status }}\n*Test results:* Passed"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Link to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+                }
+              }
+            ]
           }
         
