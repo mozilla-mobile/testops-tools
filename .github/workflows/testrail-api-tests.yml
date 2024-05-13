@@ -43,7 +43,7 @@ jobs:
       id: slack-failure
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        # payload with test failure output
+        channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
         payload: |
           {
             "text": "TestRail API tests failed! :scream:",
@@ -78,7 +78,7 @@ jobs:
       id: slack-success
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        # payload with slack blocks with job name, status, test results, test output, and url to view the results
+        channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
         payload: |
           {
             "text": "TestRail API tests passed! :tada:",
