@@ -27,6 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pipenv
+        cd testrail
         pipenv install --dev
 
     - name: Run tests
