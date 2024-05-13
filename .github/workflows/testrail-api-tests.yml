@@ -19,6 +19,7 @@ jobs:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
     
     steps:
     - name: Checkout code
@@ -41,13 +42,10 @@ jobs:
       if: ${{ failure() }}
       id: slack-failure
       uses: slackapi/slack-github-action@v1.26.0
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        
 
     - name: Send Slack message on test result
       if: ${{ success() }}
       id: slack-success
       uses: slackapi/slack-github-action@v1.26.0
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
