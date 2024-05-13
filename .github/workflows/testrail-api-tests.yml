@@ -28,7 +28,8 @@ jobs:
       run: |
         pip install pipenv
         cd testrail
-        pipenv install --dev
+        pipenv install
+        pipenv shell
 
     - name: Run tests
       run: |
