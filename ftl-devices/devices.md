@@ -23,6 +23,7 @@
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
+| caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
