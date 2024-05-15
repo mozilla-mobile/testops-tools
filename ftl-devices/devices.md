@@ -17,6 +17,7 @@
 | a12 | Galaxy A12 | 31 | Medium |
 | a51 | Galaxy A51 | 31 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
+| akita | Pixel 8a | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
@@ -29,7 +30,7 @@
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
-| f2q | Galaxy Z Fold2 | 30 | Medium |
+| f2q | Galaxy Z Fold2 | 30 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
