@@ -2,13 +2,13 @@ name: testrail-api-tests
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Run every day at midnight
+    - cron: "0 0 * * *" # Run every day at midnight
   push:
     paths:
-      - 'testrail/**' # Run on changes to testrail directory
+      - "testrail/**" # Run on changes to testrail directory
   pull_request:
     paths:
-      - 'testrail/**' # Run on changes to testrail directory
+      - "testrail/**" # Run on changes to testrail directory
 
 jobs:
   test:
@@ -20,44 +20,44 @@ jobs:
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4.1.4
+      - name: Checkout code
+        uses: actions/checkout@v4.1.4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5.1.0
-      with:
-        python-version: 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: 3.11
 
-    - name: Install dependencies
-      run: |
-        pip install -r testrail/requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r testrail/requirements.txt
 
-    - name: Run tests
-      run: |
-        python -m unittest discover -s testrail/tests -p '*tests.py' > test_results.txt 2>&1
+      - name: Run tests
+        run: |
+          python -m unittest discover -s testrail/tests -p '*tests.py'
 
-    - name: Send Slack message on test failure
-      if: ${{ failure() }}
-      id: slack-failure
-      uses: slackapi/slack-github-action@v1.26.0
-      with:
-        channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-        payload: |
-          {
-            "type": "mrkdwn",
-            "text": "TestRail API tests failed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Failed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-          }
-        
-    - name: Send Slack message on test success
-      if: ${{ success() }}
-      id: slack-success
-      uses: slackapi/slack-github-action@v1.26.0
-      with:
-        channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-        payload: |
-          {
-            "type": "mrkdwn",
-            "text": "TestRail API tests passed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Passed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
-          }
+      - name: Send Slack message on test failure
+        if: ${{ failure() }}
+        id: slack-failure
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+          payload: |
+            {
+              "type": "mrkdwn",
+              "text": "TestRail API tests failed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Failed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+            }
+
+      - name: Send Slack message on test success
+        if: ${{ success() }}
+        id: slack-success
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+          payload: |
+            {
+              "type": "mrkdwn",
+              "text": "TestRail API tests passed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Passed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+            }
