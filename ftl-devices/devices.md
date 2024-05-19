@@ -16,7 +16,7 @@
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
 | a51 | Galaxy A51 | 31 | Medium |
-| a54x | Galaxy A54 5G | 34 | High |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
