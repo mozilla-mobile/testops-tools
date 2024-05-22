@@ -3,7 +3,7 @@
 | 1610 | vivo 1610 | 23 | Medium |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| HWMHA | Mate 9 | 24 | Medium |
+| HWMHA | Mate 9 | 24 | Low |
 | J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
@@ -55,6 +55,7 @@
 | redfin | Pixel 5 | 30 | High |
 | sailfish | Pixel | 25 | Low |
 | shiba | Pixel 8 | 34 | High |
+| shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | High |
 | tangorpro | Pixel Tablet | 33 | High |
