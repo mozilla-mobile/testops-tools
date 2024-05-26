@@ -26,7 +26,7 @@
 | cactus | Redmi 6A | 27 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| crownqlteue | Galaxy Note9 | 29 | Low |
+| crownqlteue | Galaxy Note9 | 29 | Medium |
 | daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
