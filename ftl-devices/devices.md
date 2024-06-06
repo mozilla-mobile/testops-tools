@@ -35,6 +35,7 @@
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | griffin | Moto Z | 24 | Low |
+| gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
