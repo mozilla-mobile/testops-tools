@@ -4,7 +4,7 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
 | HWMHA | Mate 9 | 24 | Low |
-| J606F | Lenovo Tab P11 | 30 | Low |
+| J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
