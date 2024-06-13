@@ -6,6 +6,7 @@
 | HWMHA | Mate 9 | 24 | Low |
 | J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
+| OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Medium |
