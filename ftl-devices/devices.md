@@ -16,6 +16,7 @@
 | a03s | Galaxy A03s | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
+| a14xm | Galaxy A14 | 34 | High |
 | a51 | Galaxy A51 | 31 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
