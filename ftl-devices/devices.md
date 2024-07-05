@@ -1,7 +1,7 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
 | 1610 | vivo 1610 | 23 | Medium |
-| CPH2449 | OnePlus 11 5G | 34 | Medium |
+| CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
 | HWMHA | Mate 9 | 24 | Low |
