@@ -1,0 +1,58 @@
+name: Check locales daily
+
+on:
+    schedule:
+        - cron: '0 0 * * *'
+    workflow_dispatch:
+
+jobs:
+    check-locales:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4.1.7
+        - name: Set up Python
+          uses: actions/setup-python@v5.1.0
+          with:
+            python-version: '3.11'
+        - name: Install dependencies
+          run: |
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+        - name: Run dir_extract.py
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+                python src/dir_extract.py $GITHUB_TOKEN
+        - name: Run apk_download.py
+          run: |
+                python src/apk_download.py ./app.apk
+        - name: Run apk_inspect.py
+          run: |
+                python src/apk_inspect.py ./app.apk
+        - name: Run locale_compare.py
+          run: |
+                python src/locale_compare.py
+        - name: Upload result
+          if: failure()
+          uses: actions/upload-artifact@v4.3.3
+          with:
+            name: check-locales-log
+            path: ./check_locales.log
+        - name: Send Slack notice
+          if: failure()
+          uses: slackapi/slack-github-action@v1.26.0
+          with:
+            channel-id: C028QK733QR
+            payload-file-path: ./src/slack_payload.json
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+            run_id: ${{ github.run_id }}
+            repository: ${{ github.repository }}
+            server_url: ${{ github.server_url }}
+            LOCALES_MISSING: ${{ env.LOCALES_MISSING }}
+
+
+

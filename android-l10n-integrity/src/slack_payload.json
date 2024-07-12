@@ -1,0 +1,41 @@
+{
+    "blocks":[
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":x: Fenix :nightly-browser: L10N Integrity Check Failed",
+          "emoji": true
+        }
+      },
+      {
+        "type":"divider"
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "*Github Actions Job*: <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|View Run>"
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": "*Missing Locales*: ${{ env.LOCALES_MISSING }}"
+        }
+      },
+      {
+        "type":"divider"
+      },
+      {
+        "type": "context",
+        "elements": [
+          {
+            "type": "mrkdwn",
+            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
+          }
+        ]
+      }
+    ]
+}
