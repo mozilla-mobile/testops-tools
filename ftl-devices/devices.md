@@ -28,6 +28,7 @@
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
+| cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
