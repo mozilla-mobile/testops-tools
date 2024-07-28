@@ -18,7 +18,7 @@
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
 | a14xm | Galaxy A14 | 34 | High |
-| a51 | Galaxy A51 | 31 | Medium |
+| a51 | Galaxy A51 | 31 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
@@ -29,7 +29,7 @@
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | Medium |
+| caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Low |
