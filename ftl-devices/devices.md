@@ -33,19 +33,16 @@
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Low |
-| daisy_sprout | Mi A2 Lite | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | f2q | Galaxy Z Fold2 | 30 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
-| griffin | Moto Z | 24 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
-| harpia | Moto G Play | 23 | Low |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | lynx | Pixel 7a | 33 | Medium |
@@ -55,12 +52,10 @@
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | High |
 | q2q | Galaxy Z Fold3 | 30 | Low |
-| q2q | Galaxy Z Fold3 | 31 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | r11 | Google Pixel Watch | 30 | High |
 | redfin | Pixel 5 | 30 | High |
-| sailfish | Pixel | 25 | Low |
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
