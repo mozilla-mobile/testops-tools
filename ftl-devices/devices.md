@@ -30,11 +30,12 @@
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | High |
+| caiman | Pixel 9 Pro | 34 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| crownqlteue | Galaxy Note9 | 29 | Low |
+| crownqlteue | Galaxy Note9 | 29 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
@@ -48,6 +49,7 @@
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
+| komodo | Pixel 9 Pro XL | 34 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
@@ -64,6 +66,7 @@
 | starlte | Galaxy S9 | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | High |
 | tangorpro | Pixel Tablet | 33 | High |
+| tokay | Pixel 9 | 34 | High |
 | vivo_1906 | vivo 1906 | 28 | Low |
 | x1q | Galaxy S20 | 29 | High |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
