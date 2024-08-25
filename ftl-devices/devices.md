@@ -35,6 +35,7 @@
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
+| comet | Pixel 9 Pro Fold | 34 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
