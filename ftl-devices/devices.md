@@ -20,6 +20,7 @@
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
 | a14xm | Galaxy A14 | 34 | High |
+| a25x | SM-A256U1 | 34 | Medium |
 | a51 | Galaxy A51 | 31 | Medium |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | Medium |
@@ -35,14 +36,14 @@
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
-| comet | Pixel 9 Pro Fold | 34 | Low |
+| comet | Pixel 9 Pro Fold | 34 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
 | f2q | Galaxy Z Fold2 | 30 | Low |
-| felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 33 | Medium |
+| felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
