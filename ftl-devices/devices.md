@@ -4,7 +4,7 @@
 | CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| HWMHA | Mate 9 | 24 | Low |
+| HWMHA | Mate 9 | 24 | Medium |
 | J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
