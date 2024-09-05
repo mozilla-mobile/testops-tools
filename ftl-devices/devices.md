@@ -4,7 +4,6 @@
 | CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| HWMHA | Mate 9 | 24 | Medium |
 | J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
@@ -41,7 +40,6 @@
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
-| f2q | Galaxy Z Fold2 | 30 | Low |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
@@ -69,7 +67,6 @@
 | starqlteue | Galaxy S9 | 26 | High |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
-| vivo_1906 | vivo 1906 | 28 | Low |
 | x1q | Galaxy S20 | 29 | High |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
