@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Set network parameters based on input
+if [ "$2" == "2g" ]; then
+  NETWORK=50
+  DELAY=300
+elif [ "$2" == "3g" ]; then
+  NETWORK=1000
+  DELAY=200
+elif [ "$2" == "4g" ]; then
+  NETWORK=10000
+  DELAY=100
+elif [ "$2" == "5g" ]; then
+  NETWORK=100000
+  DELAY=20
+else
+  echo "Unknown network type: $2"
+  exit 1
+fi
+
+# Check if the user passed an argument (start or stop)
+if [ "$1" == "start" ]; then
+  echo "Starting network throttling for $2..."
+
+  docker run --rm -it --privileged --network host alpine sh -c "
+    apk add iproute2 &&
+    tc qdisc del dev eth0 root &&
+    tc qdisc add dev eth0 root handle 1: htb default 12 &&
+    tc class add dev eth0 parent 1:1 classid 1:12 htb rate ${NETWORK}kbit ceil ${NETWORK}kbit &&
+    tc qdisc add dev eth0 parent 1:12 netem delay ${DELAY}ms
+  "
+
+  echo "Network throttling started."
+elif [ "$1" == "stop" ]; then
+  echo "Stopping network throttling..."
+
+  docker run --rm -it --privileged --network host alpine sh -c "
+    apk add iproute2 &&
+    tc qdisc del dev eth0 root
+  "
+
+  echo "Network throttling stopped."
+else
+  echo "Usage: $0 {start|stop} {2g|3g|4g|5g}"
+fi
