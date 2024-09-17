@@ -9,6 +9,9 @@ jobs:
   run-appium-tests:
     runs-on: ubuntu-latest
 
+    env:
+      ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT: ${{ secrets.ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
