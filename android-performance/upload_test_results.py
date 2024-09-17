@@ -24,7 +24,7 @@ SCOPE = [
 ]
 
 # Authorize the client
-client = gspread.authorize(creds)
+client = gspread.authorize(creds_dict)
 
 # Open the Google Sheet by URL or ID
 SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1WU-fNMpHXvyuezFrH5JFpDQJ0HflAqyZ-cK_3xgvWG4/edit"
