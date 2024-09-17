@@ -27,31 +27,39 @@ jobs:
           pip install -r ./android-performance/requirements.txt
           pip install Appium-Python-Client
 
+      - name: Start Network Throttling
+        run: |
+          bash ./android-performance/network_throttle
+
+      - name: Start Appium Server
+        run: |
+          appium
+
+      - name: Run Appium Tests - Chrome
+        run: |
+          python ./android-performance/chrome_throttled.py
+
+      - name: Run Appium Tests - Firefox
+        run: |
+          python ./android-performance/firefox.py
+
+      - name: Add Performance Difference Firefox vs. Chrome
+        run: |
+          python ./android-performance/add_perf_diff.py
+
+      #   - name: Send Test Results to Firebase
+      #     run: |
+      #       # Example: Use Firebase CLI to upload test results
+      #       # Assuming Firebase setup and authentication are done
+      #       firebase deploy --only functions
+
+      #   - name: Upload Test Artifacts
+      #     if: always()
+      #     uses: actions/upload-artifact@v2
+      #     with:
+      #       name: appium-test-results
+      #       path: ./test-results/
+
       - name: Upload Test Results
         run: |
           python ./android-performance/upload_test_results.py
-
-    #   - name: Start Appium Server
-    #     run: |
-    #       appium
-
-    #   - name: Run Appium Tests - Chrome
-    #     run: |
-    #       python ./android-performance/chrome_throttled.py
-
-    #   - name: Run Appium Tests - Firefox
-    #     run: |
-    #       python ./android-performance/firefox.py
-
-    #   - name: Send Test Results to Firebase
-    #     run: |
-    #       # Example: Use Firebase CLI to upload test results
-    #       # Assuming Firebase setup and authentication are done
-    #       firebase deploy --only functions
-
-    #   - name: Upload Test Artifacts
-    #     if: always()
-    #     uses: actions/upload-artifact@v2
-    #     with:
-    #       name: appium-test-results
-    #       path: ./test-results/
