@@ -23,14 +23,8 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Load the credentials JSON file you downloaded
-CREDS_FILE = os.getenv("ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT")
-
-# Load credentials
-creds = Credentials.from_service_account_file(CREDS_FILE, scopes=SCOPE)
-
 # Authorize the client
-client = gspread.authorize(creds)
+client = gspread.authorize(creds_dict)
 
 # Open the Google Sheet by URL or ID
 SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1WU-fNMpHXvyuezFrH5JFpDQJ0HflAqyZ-cK_3xgvWG4/edit"

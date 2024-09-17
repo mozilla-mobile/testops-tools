@@ -9,12 +9,9 @@ jobs:
   run-appium-tests:
     runs-on: ubuntu-latest
 
-<<<<<<< HEAD
     env:
       ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT: ${{ secrets.ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT }}
 
-=======
->>>>>>> dff0c6d (add performance data upload GA action and script)
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
