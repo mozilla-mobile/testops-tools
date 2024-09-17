@@ -3,6 +3,7 @@ from google.oauth2.service_account import Credentials
 import pandas as pd
 from datetime import datetime
 import os
+import json
 
 # Get the credentials JSON from the environment variable
 creds_json = os.getenv("ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT")
