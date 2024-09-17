@@ -1,0 +1,6 @@
+PyYAML==6.0.1
+gspread
+pandas
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
