@@ -4,17 +4,23 @@ import pandas as pd
 from datetime import datetime
 import os
 
+# Get the credentials JSON from the environment variable
+creds_json = os.getenv("ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT")
+
+# Check if the environment variable is set correctly
+if not creds_json:
+    raise ValueError(
+        "The environment variable ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT is not set."
+    )
+
+# Convert the JSON string to a Python dictionary
+creds_dict = json.loads(creds_json)
+
 # Google Sheets setup
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
-
-# Load the credentials JSON file you downloaded
-CREDS_FILE = os.getenv("ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT")
-
-# Load credentials
-creds = Credentials.from_service_account_file(CREDS_FILE, scopes=SCOPE)
 
 # Authorize the client
 client = gspread.authorize(creds)
