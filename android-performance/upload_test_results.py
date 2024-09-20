@@ -23,8 +23,11 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive",
 ]
 
+# Create a Credentials object from the service account info
+creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPE)
+
 # Authorize the client
-client = gspread.authorize(creds_dict)
+client = gspread.authorize(creds)
 
 # Open the Google Sheet by URL or ID
 SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1WU-fNMpHXvyuezFrH5JFpDQJ0HflAqyZ-cK_3xgvWG4/edit"

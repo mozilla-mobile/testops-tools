@@ -22,7 +22,7 @@ moz_firefox_options = {
 }
 firefox_options.set_capability("moz:firefoxOptions", moz_firefox_options)
 
-appium_server_url = "http://localhost:4723"
+appium_server_url = "http://127.0.0.1:4723"
 
 
 class TestFirefoxAppium(unittest.TestCase):

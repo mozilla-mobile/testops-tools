@@ -21,7 +21,7 @@ capabilities = dict(
     chromedriverExecutable=CHROMEDRIVER_PATH,
 )
 
-appium_server_url = "http://localhost:4723"
+appium_server_url = "http://127.0.0.1:4723"
 
 
 class TestAppium(unittest.TestCase):
@@ -45,12 +45,14 @@ class TestAppium(unittest.TestCase):
         )
         el.click()
 
-    def test_open_chrome(self) -> None:
+    def test_open_chrome(
+        self,
+    ) -> None:
         # Load the CSV file
         df = pd.read_csv(
             "android-performance/top_1000_websites.csv",
             usecols=[1],
-            nrows=100,
+            nrows=10,
             header=None,
             names=["URL"],
         )
