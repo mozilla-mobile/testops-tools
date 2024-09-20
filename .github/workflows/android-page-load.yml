@@ -7,7 +7,11 @@ on:
 
 jobs:
   run-appium-tests:
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - macOS
+      - X64
+      - firebase-perf-reverse-proxy
 
     env:
       ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT: ${{ secrets.ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT }}
@@ -26,18 +30,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./android-performance/requirements.txt
           pip install Appium-Python-Client
-
-      - name: Start Network Throttling
-        run: |
-          bash ./android-performance/network_throttle
+          pip install gspread google-auth
 
       - name: Start Appium Server
         run: |
-          appium
+          appium &  # Start Appium server in the background
+          sleep 5   # Wait for the server to start
 
       - name: Run Appium Tests - Chrome
         run: |
-          python ./android-performance/chrome_throttled.py
+          python ./android-performance/chrome.py
 
       - name: Run Appium Tests - Firefox
         run: |
@@ -46,19 +48,6 @@ jobs:
       - name: Add Performance Difference Firefox vs. Chrome
         run: |
           python ./android-performance/add_perf_diff.py
-
-      #   - name: Send Test Results to Firebase
-      #     run: |
-      #       # Example: Use Firebase CLI to upload test results
-      #       # Assuming Firebase setup and authentication are done
-      #       firebase deploy --only functions
-
-      #   - name: Upload Test Artifacts
-      #     if: always()
-      #     uses: actions/upload-artifact@v2
-      #     with:
-      #       name: appium-test-results
-      #       path: ./test-results/
 
       - name: Upload Test Results
         run: |
