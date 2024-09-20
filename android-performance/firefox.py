@@ -3,11 +3,11 @@ import time
 import pandas as pd
 from appium import webdriver
 from appium.options.gecko import GeckoOptions
-
+import argparse
+import os
+from datetime import datetime
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
+import sys
 
 firefox_options = GeckoOptions()
 firefox_options.set_capability("platformName", "mac")
@@ -25,6 +25,23 @@ firefox_options.set_capability("moz:firefoxOptions", moz_firefox_options)
 appium_server_url = "http://localhost:4723"
 
 
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description="Run Firefox tests with network type.")
+parser.add_argument(
+    "--network",
+    type=str,
+    default="Unknown",
+    help="Network type (e.g., 2G, 3G, 4G, 5G)",
+)
+parser.add_argument(
+    "--timestamp", type=str, required=True, help="Timestamp of the CSV file"
+)
+args, unknown = parser.parse_known_args()
+
+network_type = args.network
+timestamp = args.timestamp
+
+
 class TestFirefoxAppium(unittest.TestCase):
     def setUp(self) -> None:
         self.driver = webdriver.Remote(
@@ -40,8 +57,17 @@ class TestFirefoxAppium(unittest.TestCase):
             self.driver.quit()
 
     def test_top_100_websites(self) -> None:
+        # Define the directory to save the results
+        results_dir = "./results"
+        os.makedirs(results_dir, exist_ok=True)
+
+        # Construct the output CSV file name with path
+        csv_filename = os.path.join(
+            results_dir, f"{network_type}_Page_Load_Times_{timestamp}.csv"
+        )
+
         # Load the existing CSV file
-        results_df = pd.read_csv("page_load_times.csv")
+        results_df = pd.read_csv(csv_filename)
 
         # Extract URLs from the DataFrame
         websites = results_df["website"].tolist()
@@ -49,9 +75,6 @@ class TestFirefoxAppium(unittest.TestCase):
         firefox_results = []
 
         for site in websites:
-            # since we are reading from the already created csv from the chrome.py tests,
-            # we don't need to add the https:// prefix
-            # site = f"https://{site}"  # Ensure the URL is complete
             start_time = time.time()
 
             try:
@@ -62,11 +85,9 @@ class TestFirefoxAppium(unittest.TestCase):
                     == "complete"
                 )
                 page_load_time = time.time() - start_time
-            except:
-                page_load_time = (
-                    20  # Set to max time if page doesn't load in 20 seconds
-                )
-                print(f"Error loading {site}")
+            except Exception as e:
+                page_load_time = 20  # Set to max time if page doesn't load
+                print(f"Error loading {site}: {e}")
 
             firefox_results.append(page_load_time)
 
@@ -74,11 +95,12 @@ class TestFirefoxAppium(unittest.TestCase):
         results_df["firefox"] = firefox_results
 
         # Save updated results to CSV
-        results_df.to_csv("page_load_times.csv", index=False)
+        results_df.to_csv(csv_filename, index=False)
 
         for site, load_time in zip(websites, firefox_results):
             print(f"Page load time for {site} (Firefox): {load_time:.2f} seconds")
 
 
 if __name__ == "__main__":
-    unittest.main()
+    # Prevent unittest from processing argparse arguments
+    unittest.main(argv=[sys.argv[0]] + unknown)

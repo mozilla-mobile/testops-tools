@@ -37,17 +37,35 @@ jobs:
           appium &  # Start Appium server in the background
           sleep 5   # Wait for the server to start
 
+      - name: Set Network Type and Timestamp
+        run: |
+          echo "NETWORK_TYPE=5G" >> $GITHUB_ENV
+          echo "TIMESTAMP=$(date '+%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+
+      - name: Start Network Throttling
+        run: |
+          bash ./android-performance/network_throttle start 5G
+
       - name: Run Appium Tests - Chrome
         run: |
-          python ./android-performance/chrome.py
+          python ./android-performance/chrome.py --network ${{ env.NETWORK_TYPE }} --timestamp ${{ env.TIMESTAMP }}
+        env:
+          NETWORK_TYPE: ${{ env.NETWORK_TYPE }}
+          TIMESTAMP: ${{ env.TIMESTAMP }}
 
       - name: Run Appium Tests - Firefox
         run: |
-          python ./android-performance/firefox.py
+          python ./android-performance/firefox.py --network ${{ env.NETWORK_TYPE }} --timestamp ${{ env.TIMESTAMP }}
+        env:
+          NETWORK_TYPE: ${{ env.NETWORK_TYPE }}
+          TIMESTAMP: ${{ env.TIMESTAMP }}
 
       - name: Add Performance Difference Firefox vs. Chrome
         run: |
-          python ./android-performance/add_perf_diff.py
+          python ./android-performance/add_perf_diff.py --network ${{ env.NETWORK_TYPE }} --timestamp ${{ env.TIMESTAMP }}
+        env:
+          NETWORK_TYPE: ${{ env.NETWORK_TYPE }}
+          TIMESTAMP: ${{ env.TIMESTAMP }}
 
       - name: Upload Test Results
         run: |

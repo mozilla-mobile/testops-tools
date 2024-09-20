@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import json
+import glob
 
 # Get the credentials JSON from the environment variable
 creds_json = os.getenv("ANDROID_PERFORMANCE_GA_SERVICE_ACCOUNT")
@@ -23,8 +24,11 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive",
 ]
 
+# Create a Credentials object from the service account info
+creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPE)
+
 # Authorize the client
-client = gspread.authorize(creds_dict)
+client = gspread.authorize(creds)
 
 # Open the Google Sheet by URL or ID
 SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1WU-fNMpHXvyuezFrH5JFpDQJ0HflAqyZ-cK_3xgvWG4/edit"
@@ -40,36 +44,43 @@ try:
 except gspread.WorksheetNotFound:
     worksheet = sheet.add_worksheet(title=worksheet_title, rows="500", cols="20")
 
-# Define the test runs and corresponding CSV files
-test_runs = {
-    "5G": "5G_Page_Load_Times.csv",
-    "4G": "4G_Page_Load_Times.csv",
-    "3G": "3G_Page_Load_Times.csv",
-    "2G": "2G_Page_Load_Times.csv",
-}
-
 # Initialize row index for inserting data (starting below the headers)
 row_index = 2
 
 # Add headers to the worksheet if they are not already added
-headers = ["Test Type", "Website", "Page Load Time"]
+headers = ["Test Type", "Website", "Google Chrome", "Firefox", "Performance Difference"]
 if worksheet.cell(1, 1).value is None:
-    worksheet.update("A1:C1", [headers])
+    worksheet.update("A1:E1", [headers])
 
-# Loop through the test runs and append the results to the worksheet
-for test_name, csv_file in test_runs.items():
+# Define the directory where CSV files are stored
+results_dir = "./results"
+
+# Find all CSV files in the results directory
+csv_files = glob.glob(os.path.join(results_dir, "*_Page_Load_Times_*.csv"))
+
+# Loop through the CSV files and append the results to the worksheet
+for csv_file in csv_files:
+    # Extract the network type from the file name
+    filename = os.path.basename(csv_file)
+    network_type = filename.split("_")[0]
+
     # Load the CSV file into a pandas DataFrame
     df = pd.read_csv(csv_file)
 
     # Add a 'Test Type' column to the DataFrame
-    df.insert(0, "Test Type", test_name)
+    df.insert(0, "Test Type", network_type)
+
+    # Prepare data for uploading
+    data = df.values.tolist()
+    data.insert(0, df.columns.values.tolist())  # Include headers
 
     # Post the results starting from the current row
-    worksheet.update(f"A{row_index}", [df.columns.values.tolist()] + df.values.tolist())
+    cell_range = f"A{row_index}:E{row_index + len(df)}"
+    worksheet.update(cell_range, data)
 
     # Update the row index to continue appending after the current data
-    row_index += len(df) + 1
+    row_index += len(df) + 2  # Adding 2 to leave a blank row between tests
 
     print(
-        f"Posted results for {test_name} from {csv_file} to Google Sheet tab: {worksheet_title}"
+        f"Posted results for {network_type} from {csv_file} to Google Sheet tab: {worksheet_title}"
     )
