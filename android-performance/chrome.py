@@ -6,6 +6,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 import time
 import argparse
 import os
+import sys  # Import sys to access sys.argv
 from datetime import datetime
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -24,6 +25,18 @@ capabilities = dict(
 
 appium_server_url = "http://localhost:4723"
 
+# 1. Parse command-line arguments before defining the test class
+parser = argparse.ArgumentParser(description="Run Chrome tests with network type.")
+parser.add_argument(
+    "--network",
+    type=str,
+    default="Unknown",
+    help="Network type (e.g., 2G, 3G, 4G, 5G)",
+)
+args, unknown = parser.parse_known_args()
+
+network_type = args.network
+
 
 class TestAppium(unittest.TestCase):
     def setUp(self) -> None:
@@ -40,20 +53,7 @@ class TestAppium(unittest.TestCase):
             self.driver.quit()
 
     def test_open_chrome(self) -> None:
-        # Parse command-line arguments
-        parser = argparse.ArgumentParser(
-            description="Run Chrome tests with network type."
-        )
-        parser.add_argument(
-            "--network",
-            type=str,
-            default="Unknown",
-            help="Network type (e.g., 2G, 3G, 4G, 5G)",
-        )
-        args = parser.parse_args()
-
-        network_type = args.network
-
+        # Now network_type is available here
         # Load the CSV file
         df = pd.read_csv(
             "android-performance/top_1000_websites.csv",
@@ -80,11 +80,11 @@ class TestAppium(unittest.TestCase):
                     == "complete"
                 )
                 page_load_time = time.time() - start_time
-            except:
+            except Exception as e:
                 page_load_time = (
                     20  # Set to max time if page doesn't load in 20 seconds
                 )
-                print(f"Error loading {site}")
+                print(f"Error loading {site}: {e}")
 
             results.append((site, page_load_time))
 
@@ -97,7 +97,7 @@ class TestAppium(unittest.TestCase):
 
         # Store Test CSV Artifacts in ./results for CI
         results_dir = "./results"
-        os.makesirs(results_dir, exist_ok=True)  # Create directory if it doesn't exist
+        os.makedirs(results_dir, exist_ok=True)  # Corrected os.makedirs
 
         # Construct the output CSV file name with path
         csv_filename = os.path.join(
@@ -112,4 +112,5 @@ class TestAppium(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    # 2. Modify unittest.main() to prevent it from processing custom arguments
+    unittest.main(argv=[sys.argv[0]] + unknown)
