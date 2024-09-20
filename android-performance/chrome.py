@@ -33,9 +33,13 @@ parser.add_argument(
     default="Unknown",
     help="Network type (e.g., 2G, 3G, 4G, 5G)",
 )
+parser.add_argument(
+    "--timestamp", type=str, required=True, help="Timestamp of the CSV file"
+)
 args, unknown = parser.parse_known_args()
 
 network_type = args.network
+timestamp = args.timestamp
 
 
 class TestAppium(unittest.TestCase):
@@ -91,9 +95,6 @@ class TestAppium(unittest.TestCase):
         # Create a DataFrame to store results
         results_df = pd.DataFrame(results, columns=["website", "google_chrome"])
         results_df["firefox"] = None  # Add a column for Firefox results
-
-        # Generate timestamp
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Store Test CSV Artifacts in ./results for CI
         results_dir = "./results"

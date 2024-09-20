@@ -48,7 +48,7 @@ jobs:
 
       - name: Run Appium Tests - Chrome
         run: |
-          python ./android-performance/chrome.py --network ${{ env.NETWORK_TYPE }}
+          python ./android-performance/chrome.py --network ${{ env.NETWORK_TYPE }} --timestamp ${{ env.TIMESTAMP }}
         env:
           NETWORK_TYPE: ${{ env.NETWORK_TYPE }}
           TIMESTAMP: ${{ env.TIMESTAMP }}
