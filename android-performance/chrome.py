@@ -4,9 +4,10 @@ from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
 import time
+import argparse
+import os
+from datetime import datetime
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 
 CHROMEDRIVER_PATH = "/Users/jackiejohnson/Desktop/chromedriver-mac-arm64/chromedriver"
 
@@ -21,7 +22,7 @@ capabilities = dict(
     chromedriverExecutable=CHROMEDRIVER_PATH,
 )
 
-appium_server_url = "http://127.0.0.1:4723"
+appium_server_url = "http://localhost:4723"
 
 
 class TestAppium(unittest.TestCase):
@@ -38,21 +39,26 @@ class TestAppium(unittest.TestCase):
         if self.driver:
             self.driver.quit()
 
-    @unittest.skip("Skip this test")
-    def test_find_battery(self) -> None:
-        el = self.driver.find_element(
-            by=AppiumBy.XPATH, value='//*[@text="Connections"]'
+    def test_open_chrome(self) -> None:
+        # Parse command-line arguments
+        parser = argparse.ArgumentParser(
+            description="Run Chrome tests with network type."
         )
-        el.click()
+        parser.add_argument(
+            "--network",
+            type=str,
+            default="Unknown",
+            help="Network type (e.g., 2G, 3G, 4G, 5G)",
+        )
+        args = parser.parse_args()
 
-    def test_open_chrome(
-        self,
-    ) -> None:
+        network_type = args.network
+
         # Load the CSV file
         df = pd.read_csv(
             "android-performance/top_1000_websites.csv",
             usecols=[1],
-            nrows=10,
+            nrows=100,
             header=None,
             names=["URL"],
         )
@@ -86,8 +92,20 @@ class TestAppium(unittest.TestCase):
         results_df = pd.DataFrame(results, columns=["website", "google_chrome"])
         results_df["firefox"] = None  # Add a column for Firefox results
 
+        # Generate timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Store Test CSV Artifacts in ./results for CI
+        results_dir = "./results"
+        os.makesirs(results_dir, exist_ok=True)  # Create directory if it doesn't exist
+
+        # Construct the output CSV file name with path
+        csv_filename = os.path.join(
+            results_dir, f"{network_type}_Page_Load_Times_{timestamp}.csv"
+        )
+
         # Save results to CSV
-        results_df.to_csv("page_load_times.csv", index=False)
+        results_df.to_csv(csv_filename, index=False)
 
         for site, load_time in results:
             print(f"Page load time for {site}: {load_time:.2f} seconds")

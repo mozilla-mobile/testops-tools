@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Set network parameters based on input
-if [ "$2" == "2g" ]; then
+if [ "$2" == "2G" ]; then
   NETWORK=50
   DELAY=300
-elif [ "$2" == "3g" ]; then
+elif [ "$2" == "3G" ]; then
   NETWORK=1000
   DELAY=200
-elif [ "$2" == "4g" ]; then
+elif [ "$2" == "4G" ]; then
   NETWORK=10000
   DELAY=100
-elif [ "$2" == "5g" ]; then
+elif [ "$2" == "5G" ]; then
   NETWORK=100000
   DELAY=20
 else
@@ -41,5 +41,5 @@ elif [ "$1" == "stop" ]; then
 
   echo "Network throttling stopped."
 else
-  echo "Usage: $0 {start|stop} {2g|3g|4g|5g}"
+  echo "Usage: $0 {start|stop} {2G|3G|4G|5G}"
 fi
