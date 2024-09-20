@@ -44,7 +44,7 @@ jobs:
 
       - name: Start Network Throttling
         run: |
-          bash ./android-performance/network_throttle 5G
+          bash ./android-performance/network_throttle start 5G
 
       - name: Run Appium Tests - Chrome
         run: |
