@@ -69,7 +69,6 @@ class TestTestRail(unittest.TestCase):
         )
         self.created_test_data = {"milestones": [], "test_runs": []}
 
-    # @unittest.skip("skip")
     def test_get_test_cases_signature(self):
         # test 'cases' signature
         expected_cases_signature = {
@@ -119,7 +118,6 @@ class TestTestRail(unittest.TestCase):
             if value is not None:
                 self.assertIsInstance(value, expected_type)
 
-    # @unittest.skip("skip")
     def test_get_milestones_signature(self):
         expected_milestones_signature = {
             "id": int,
@@ -138,7 +136,7 @@ class TestTestRail(unittest.TestCase):
             "milestones": Optional[list],
         }
         project = self.test_data["project"]["test_project_mobile"]
-        response = self.testrail._get_milestones(project["id"])
+        response = self.testrail._get_milestones(project["id"])["milestones"]
 
         # test 'milestones' signature
         for key, value in response[0].items():
@@ -149,19 +147,16 @@ class TestTestRail(unittest.TestCase):
             if value is not None:
                 self.assertIsInstance(value, expected_type)
 
-    # @unittest.skip("skip")
     def test_get_milestone(self):
         milestone_id = 1615
         milestone = self.testrail._get_milestone(milestone_id)
         print(f"{milestone=}")
 
-    # @unittest.skip("skip")
     def test_get_test_runs(self):
         run_id = 85749
         test_run = self.testrail._get_test_run(run_id)
         print(f"{test_run=}")
 
-    # @unittest.skip("skip")
     def test_does_milestone_exist_true(self):
         project = self.test_data["project"]["test_project_mobile"]
         milestone_name = self.test_data["milestone_name"]
@@ -181,7 +176,6 @@ class TestTestRail(unittest.TestCase):
         # Test Assertion
         self.assertTrue(milestone_exists)
 
-    # @unittest.skip("skip")
     def test_does_milestone_exist_false(self):
         project = self.test_data["project"]["test_project_mobile"]
         milestone_name = "Non-Existent Milestone"
@@ -194,7 +188,6 @@ class TestTestRail(unittest.TestCase):
         # Test Assertion
         self.assertFalse(milestone_exists)
 
-    # @unittest.skip("skip")
     def test_create_milestone(self):
         project = self.test_data["project"]["test_project_mobile"]
         milestone = self.testrail.create_milestone(
@@ -211,7 +204,6 @@ class TestTestRail(unittest.TestCase):
         # add milestone to created_test_data for caching and cleanup later
         self.created_test_data["milestones"].append(milestone)
 
-    # @unittest.skip("skip")
     def test_create_milestone_signature(self):
         # Milestone Response Signature
         expected_response_signature = {
@@ -250,7 +242,6 @@ class TestTestRail(unittest.TestCase):
                 print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
                 self.assertIsInstance(value, expected_type)
 
-    # @unittest.skip("skip")
     def test_create_test_run_signature(self):
         # Test Run Response Signature
         expected_response_signature = {
@@ -324,7 +315,6 @@ class TestTestRail(unittest.TestCase):
                 print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
                 self.assertIsInstance(value, expected_type)
 
-    # @unittest.skip("skip")
     def test_update_test_run_tests(self):
         test_run = 85749
         test_status = 1  # Passed
@@ -341,7 +331,6 @@ class TestTestRail(unittest.TestCase):
         for test in tests_after_update:
             print(f"{test['id']=} {test['status_id']=}")
 
-    # @unittest.skip("skip")
     def test_taskcluster_android_workflow(self):
         # Test Setup
         project = self.test_data["project"]["test_project_mobile"]

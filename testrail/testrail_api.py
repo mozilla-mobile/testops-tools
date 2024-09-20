@@ -23,6 +23,7 @@ This module is intended to be used as part of a larger automated testing system,
 
 """
 
+import json
 import os
 import sys
 import time
@@ -69,12 +70,48 @@ class TestRail:
         }
         return self.client.send_post(f"add_run/{project_id}", data)
 
-    def does_milestone_exist(self, project_id, milestone_name, num_of_milestones=10):
+    def does_milestone_exist(self, project_id, milestone_name, num_of_milestones=20):
+        """
+        Check if a milestone with a specific name exists in the last 'num_of_milestones'
+        milestones, paginating through the milestones as needed.
+
+        Args:
+            project_id (int): ID of the project.
+            milestone_name (str): Name of the milestone to search for.
+            num_of_milestones (int): Number of milestones to check (default is 20).
+
+        Returns:
+            bool: True if the milestone exists, False otherwise.
+        """
         if not all([project_id, milestone_name]):
             raise ValueError("Project ID and milestone name must be provided.")
-        # returns reverse chronological order of milestones, check last 10 milestones
-        milestones = self._get_milestones(project_id)[-num_of_milestones:]
-        return any(milestone_name == milestone["name"] for milestone in milestones)
+
+        limit = 250
+        offset = 0
+
+        while True:
+            # Fetch the milestones page by page, with a limit and offset
+            milestones = self._get_milestones(project_id, limit, offset).get(
+                "milestones", []
+            )
+
+            # If there are no more milestones, return False
+            if not milestones:
+                return False
+
+            # Check if the milestone exists in the last 'num_of_milestones' milestones
+            if any(
+                milestone_name == milestone["name"]
+                for milestone in milestones[-num_of_milestones:]
+            ):
+                return True
+
+            # If there are more milestones, increment the offset to fetch the next page
+            offset += limit
+
+            # If the number of milestones returned is less than the limit, it's the last page
+            if len(milestones) < limit:
+                return False
 
     def update_test_run_tests(self, test_run_id, test_status):
         if not all([test_run_id, test_status]):
@@ -101,10 +138,24 @@ class TestRail:
             raise ValueError("Milestone ID must be provided.")
         return self.client.send_get(f"get_milestone/{milestone_id}")
 
-    def _get_milestones(self, project_id):
+    def _get_milestones(self, project_id, limit=250, offset=0):
+        """
+        Fetches milestones for the given project ID, with pagination support.
+
+        Args:
+            project_id (int): ID of the project.
+            limit (int): Maximum number of milestones to fetch per request.
+            offset (int): Offset to start fetching milestones from.
+
+        Returns:
+            dict: The response containing the milestones.
+        """
         if not project_id:
             raise ValueError("Project ID must be provided.")
-        return self.client.send_get(f"get_milestones/{project_id}")["milestones"]
+
+        return self.client.send_get(
+            f"get_milestones/{project_id}&limit={limit}&offset={offset}"
+        )
 
     def _get_tests(self, test_run_id):
         if not test_run_id:
