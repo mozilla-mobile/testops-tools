@@ -12,6 +12,7 @@
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | High |
 | SO-41A | Xperia 10 II | 31 | Medium |
+| TB370FU | Lenovo Tab P12 | 34 | High |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Medium |
