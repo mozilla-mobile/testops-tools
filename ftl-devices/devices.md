@@ -37,7 +37,7 @@
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | High |
-| crownqlteue | Galaxy Note9 | 29 | Medium |
+| crownqlteue | Galaxy Note9 | 29 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
