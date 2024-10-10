@@ -20,7 +20,7 @@
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
 | a14xm | Galaxy A14 | 34 | High |
-| a25x | SM-A256U1 | 34 | High |
+| a25x | SM-A256U1 | 34 | Medium |
 | a51 | Galaxy A51 | 31 | Medium |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | Medium |
@@ -60,7 +60,7 @@
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
-| r11 | Google Pixel Watch | 30 | High |
+| r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
@@ -68,6 +68,6 @@
 | starqlteue | Galaxy S9 | 26 | High |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
-| x1q | Galaxy S20 | 29 | High |
+| x1q | Galaxy S20 | 29 | Medium |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
