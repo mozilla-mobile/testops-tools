@@ -4,15 +4,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from math import pi
 import numpy as np
+import argparse
 
 
-def load_combined_data():
+def load_combined_data(timestamp):
     # Load data for both browsers
     df_chrome = pd.read_csv(
-        "./android-performance/results/chrome/results/performance_metrics.csv"
+        f"./android-performance/data/chrome/{timestamp}/results/performance_metrics.csv"
     )
     df_firefox = pd.read_csv(
-        "./android-performance/results/firefox/results/performance_metrics.csv"
+        f"./android-performance/data/firefox/{timestamp}/results/performance_metrics.csv"
     )
 
     # Combine DataFrames
@@ -186,8 +187,16 @@ def plot_radar_chart(df, output_dir):
 
 
 def main():
-    df_combined = load_combined_data()
-    output_dir = "./android-performance/results/combined_results/graphs"
+    parser = argparse.ArgumentParser(
+        description="Generate comparative performance graphs."
+    )
+    parser.add_argument(
+        "--timestamp", type=str, required=True, help="Timestamp of the test run"
+    )
+    args = parser.parse_args()
+    timestamp = args.timestamp
+    df_combined = load_combined_data(timestamp)
+    output_dir = f"./android-performance/visualizations/combined_results/{timestamp}"
     os.makedirs(output_dir, exist_ok=True)
 
     # Ensure the necessary columns are present

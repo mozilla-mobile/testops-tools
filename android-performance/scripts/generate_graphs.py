@@ -1,5 +1,3 @@
-# generate_graphs.py
-
 import os
 import pandas as pd
 import seaborn as sns
@@ -207,10 +205,15 @@ def main():
         choices=["chrome", "firefox"],
         help="Browser type (chrome or firefox)",
     )
+    parser.add_argument(
+        "--timestamp", type=str, required=True, help="Timestamp of test run"
+    )
     args = parser.parse_args()
     browser = args.browser.lower()
-    results_dir = f"./android-performance/results/{browser}/results"
-    graphs_dir = f"./android-performance/results/{browser}/graphs"
+    timestamp = args.timestamp
+    base_dir = f"./android-performance/data/{browser}/{timestamp}"
+    results_dir = f"{base_dir}/results"
+    graphs_dir = f"{base_dir}/visualizations"
     os.makedirs(graphs_dir, exist_ok=True)
     # Load the performance data
     df = pd.read_csv(os.path.join(results_dir, "performance_metrics.csv"))

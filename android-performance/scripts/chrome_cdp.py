@@ -11,7 +11,7 @@ from datetime import datetime
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
-CHROMEDRIVER_PATH = "/Users/jackiejohnson/Desktop/chromedriver-mac-arm64/chromedriver"
+CHROMEDRIVER_PATH = "./android-performance/driver/chromedriver"
 
 # Define capabilities dictionary
 capabilities = {
@@ -158,7 +158,7 @@ class TestAppium(unittest.TestCase):
                 )
 
                 # Save events to a JSON file
-                events_dir = "./android-performance/results/chrome/events"
+                events_dir = f"./android-performance/data/chrome/{timestamp}/events"
                 os.makedirs(events_dir, exist_ok=True)
                 safe_site_name = site.replace("https://", "").replace("/", "_")
                 events_filename = os.path.join(
@@ -192,7 +192,7 @@ class TestAppium(unittest.TestCase):
 
             # Save an error JSON file if there was an error
             if performance_data is None:
-                events_dir = "./android-performance/results/chrome/events"
+                events_dir = f"./android-performance/data/chrome/{timestamp}/events"
                 os.makedirs(events_dir, exist_ok=True)
                 safe_site_name = site.replace("https://", "").replace("/", "_")
                 events_filename = os.path.join(
@@ -211,7 +211,7 @@ class TestAppium(unittest.TestCase):
         )
 
         # Store Test CSV Artifacts in ./chrome/results
-        results_dir = "./android-performance/results/chrome/results"
+        results_dir = f"./android-performance/data/chrome/{timestamp}/results"
         os.makedirs(results_dir, exist_ok=True)
 
         # Construct the output CSV file name with path

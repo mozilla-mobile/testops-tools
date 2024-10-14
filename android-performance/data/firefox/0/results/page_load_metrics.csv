@@ -1,0 +1,11 @@
+website,total_page_load_time_ms,first_paint_ms,first_contentful_paint_ms,average_resource_processing_time_ms,total_transfer_size_bytes,browser,status,measurement_date
+googletagmanager.com,538,,366,535.0,0,Firefox,SUCCESS,2024-10-13
+youtube.com,2369,,1738,1150.6666666666667,724429,Firefox,SUCCESS,2024-10-13
+facebook.com,1686,,1361,181.41666666666666,486547,Firefox,SUCCESS,2024-10-13
+ajax.googleapis.com,3200,,1545,2035.2592592592594,216833,Firefox,SUCCESS,2024-10-13
+fonts.googleapis.com,616,,346,613.0,0,Firefox,SUCCESS,2024-10-13
+twitter.com,2252,,408,1555.0408163265306,3228,Firefox,SUCCESS,2024-10-13
+google.com,1763,,609,223.3181818181818,545735,Firefox,SUCCESS,2024-10-13
+linkedin.com,1531,,1340,1.8333333333333333,6579,Firefox,SUCCESS,2024-10-13
+instagram.com,7481,,558,245.31034482758622,1762218,Firefox,SUCCESS,2024-10-13
+s.w.org,1668,,791,203.390243902439,329436,Firefox,SUCCESS,2024-10-13

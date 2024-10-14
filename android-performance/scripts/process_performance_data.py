@@ -2,7 +2,7 @@ import os
 import json
 import pandas as pd
 import argparse
-from datetime import datetime  # 1. Import datetime module
+from datetime import datetime
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Process performance data for a browser.")
@@ -13,15 +13,18 @@ parser.add_argument(
     choices=["chrome", "firefox"],
     help="Browser type (chrome or firefox)",
 )
+parser.add_argument(
+    "--timestamp", type=str, required=True, help="Timestamp of the CSV file"
+)
 args = parser.parse_args()
 
 browser = args.browser.lower()
-events_dir = f"./android-performance/data/{browser}/events"
-results_dir = f"./android-performance/data/{browser}/results"
-graphs_dir = f"./android-performance/data/{browser}/graphs"
+timestamp = args.timestamp
+base_dir = f"./android-performance/data/{browser}/{timestamp}"
+events_dir = f"{base_dir}/events"
+results_dir = f"{base_dir}/results"
 
 os.makedirs(results_dir, exist_ok=True)
-os.makedirs(graphs_dir, exist_ok=True)
 
 network_results = []
 dom_results = []
@@ -60,7 +63,7 @@ for filename in os.listdir(events_dir):
                 "total_network_time_ms": None,
                 "browser": browser.capitalize(),
                 "status": status,
-                "measurement_date": current_date,  # 3. Add measurement_date
+                "measurement_date": current_date,
             }
             dom_result = {
                 "website": site,
@@ -69,7 +72,7 @@ for filename in os.listdir(events_dir):
                 "adjusted_browser_processing_time_ms": None,
                 "browser": browser.capitalize(),
                 "status": status,
-                "measurement_date": current_date,  # 3. Add measurement_date
+                "measurement_date": current_date,
             }
             page_load_result = {
                 "website": site,
@@ -80,7 +83,7 @@ for filename in os.listdir(events_dir):
                 "total_transfer_size_bytes": None,
                 "browser": browser.capitalize(),
                 "status": status,
-                "measurement_date": current_date,  # 3. Add measurement_date
+                "measurement_date": current_date,
             }
             master_result = {**network_result, **dom_result, **page_load_result}
             master_results.append(master_result)
@@ -198,7 +201,7 @@ for filename in os.listdir(events_dir):
             "total_network_time_ms": total_network_time,
             "browser": browser.capitalize(),
             "status": "SUCCESS",
-            "measurement_date": current_date,  # 3. Add measurement_date
+            "measurement_date": current_date,
         }
         network_results.append(network_result)
 
@@ -210,7 +213,7 @@ for filename in os.listdir(events_dir):
             "adjusted_browser_processing_time_ms": adjusted_browser_processing_time,
             "browser": browser.capitalize(),
             "status": "SUCCESS",
-            "measurement_date": current_date,  # 3. Add measurement_date
+            "measurement_date": current_date,
         }
         dom_results.append(dom_result)
 
@@ -224,7 +227,7 @@ for filename in os.listdir(events_dir):
             "total_transfer_size_bytes": total_transfer_size,
             "browser": browser.capitalize(),
             "status": "SUCCESS",
-            "measurement_date": current_date,  # 3. Add measurement_date
+            "measurement_date": current_date,
         }
         page_load_results.append(page_load_result)
 
@@ -236,7 +239,7 @@ for filename in os.listdir(events_dir):
         }
         master_result["browser"] = browser.capitalize()
         master_result["status"] = "SUCCESS"
-        master_result["measurement_date"] = current_date  # 3. Add measurement_date
+        master_result["measurement_date"] = current_date
         master_results.append(master_result)
 
 # Create DataFrames and save to CSV

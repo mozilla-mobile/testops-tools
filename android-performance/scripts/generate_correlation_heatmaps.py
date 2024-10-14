@@ -93,7 +93,7 @@ def main():
         )
         df["measurement_date"] = pd.to_datetime(df["measurement_date"])
 
-        historical_graphs_dir = f"./android-performance/data/historical/graphs"
+        historical_graphs_dir = f"./android-performance/visualizations/historical"
         os.makedirs(historical_graphs_dir, exist_ok=True)
 
         # Define metrics

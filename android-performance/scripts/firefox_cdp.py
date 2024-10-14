@@ -152,7 +152,7 @@ class TestFirefoxAppium(unittest.TestCase):
                 )
 
                 # Save events to a JSON file in Firefox-specific directory
-                events_dir = "./android-performance/data/firefox/events"
+                events_dir = f"./android-performance/data/firefox/{timestamp}/events"
                 os.makedirs(events_dir, exist_ok=True)
                 safe_site_name = site.replace("https://", "").replace("/", "_")
                 events_filename = os.path.join(
@@ -186,7 +186,7 @@ class TestFirefoxAppium(unittest.TestCase):
 
             # Save an error JSON file if there was an error
             if performance_data is None:
-                events_dir = "./android-performance/results/firefox/events"
+                events_dir = f"./android-performance/data/firefox/{timestamp}/events"
                 os.makedirs(events_dir, exist_ok=True)
                 safe_site_name = site.replace("https://", "").replace("/", "_")
                 events_filename = os.path.join(
@@ -205,7 +205,7 @@ class TestFirefoxAppium(unittest.TestCase):
         )
 
         # Store Test CSV Artifacts in ./firefox/results
-        results_dir = "./android-performance/results/firefox/results"
+        results_dir = f"./android-performance/data/firefox/{timestamp}/results"
         os.makedirs(results_dir, exist_ok=True)
 
         # Construct the output CSV file name with path
