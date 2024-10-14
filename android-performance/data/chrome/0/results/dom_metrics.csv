@@ -1,0 +1,11 @@
+website,adjusted_dom_parsing_time_ms,adjusted_rendering_time_ms,adjusted_browser_processing_time_ms,browser,status,measurement_date
+googletagmanager.com,46,247,310,Chrome,SUCCESS,2024-10-13
+youtube.com,645,675,1409,Chrome,SUCCESS,2024-10-13
+facebook.com,262,548,819,Chrome,SUCCESS,2024-10-13
+ajax.googleapis.com,258,955,1345,Chrome,SUCCESS,2024-10-13
+fonts.googleapis.com,7,256,274,Chrome,SUCCESS,2024-10-13
+twitter.com,880,1744,2625,Chrome,SUCCESS,2024-10-13
+google.com,76,1057,1137,Chrome,SUCCESS,2024-10-13
+linkedin.com,31,527,559,Chrome,SUCCESS,2024-10-13
+instagram.com,931,6042,6988,Chrome,SUCCESS,2024-10-13
+s.w.org,492,455,948,Chrome,SUCCESS,2024-10-13

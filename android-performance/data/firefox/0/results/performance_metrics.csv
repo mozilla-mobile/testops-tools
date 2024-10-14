@@ -1,0 +1,11 @@
+website,dns_lookup_time_ms,tcp_handshake_time_ms,ssl_time_ms,ttfb_ms,content_download_time_ms,total_network_time_ms,measurement_date,adjusted_dom_parsing_time_ms,adjusted_rendering_time_ms,adjusted_browser_processing_time_ms,total_page_load_time_ms,first_paint_ms,first_contentful_paint_ms,average_resource_processing_time_ms,total_transfer_size_bytes,browser,status
+googletagmanager.com,60,118,85,73,1,274,2024-10-13,11,183,264,538,,366,535.0,0,Firefox,SUCCESS
+youtube.com,5,151,151,99,0,1080,2024-10-13,553,636,1189,2369,,1738,1150.6666666666667,724429,Firefox,SUCCESS
+facebook.com,37,0,0,222,0,686,2024-10-13,519,464,1000,1686,,1361,181.41666666666666,486547,Firefox,SUCCESS
+ajax.googleapis.com,0,0,0,381,0,1004,2024-10-13,537,1648,2185,3200,,1545,2035.2592592592594,216833,Firefox,SUCCESS
+fonts.googleapis.com,1,128,128,67,1,306,2024-10-13,14,291,310,616,,346,613.0,0,Firefox,SUCCESS
+twitter.com,0,0,0,91,0,370,2024-10-13,870,941,1811,2252,,408,1555.0408163265306,3228,Firefox,SUCCESS
+google.com,0,0,0,138,0,532,2024-10-13,143,1073,1231,1763,,609,223.3181818181818,545735,Firefox,SUCCESS
+linkedin.com,50,0,0,228,4,711,2024-10-13,25,787,819,1531,,1340,1.8333333333333333,6579,Firefox,SUCCESS
+instagram.com,54,0,0,108,0,473,2024-10-13,3,6894,6899,7481,,558,245.31034482758622,1762218,Firefox,SUCCESS
+s.w.org,1,151,112,65,31,591,2024-10-13,256,812,1077,1668,,791,203.390243902439,329436,Firefox,SUCCESS
