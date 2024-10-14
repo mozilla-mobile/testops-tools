@@ -1,0 +1,11 @@
+website,dns_lookup_time_ms,tcp_handshake_time_ms,ssl_time_ms,ttfb_ms,content_download_time_ms,total_network_time_ms,browser,status,measurement_date
+googletagmanager.com,60,118,85,73,1,274,Firefox,SUCCESS,2024-10-13
+youtube.com,5,151,151,99,0,1080,Firefox,SUCCESS,2024-10-13
+facebook.com,37,0,0,222,0,686,Firefox,SUCCESS,2024-10-13
+ajax.googleapis.com,0,0,0,381,0,1004,Firefox,SUCCESS,2024-10-13
+fonts.googleapis.com,1,128,128,67,1,306,Firefox,SUCCESS,2024-10-13
+twitter.com,0,0,0,91,0,370,Firefox,SUCCESS,2024-10-13
+google.com,0,0,0,138,0,532,Firefox,SUCCESS,2024-10-13
+linkedin.com,50,0,0,228,4,711,Firefox,SUCCESS,2024-10-13
+instagram.com,54,0,0,108,0,473,Firefox,SUCCESS,2024-10-13
+s.w.org,1,151,112,65,31,591,Firefox,SUCCESS,2024-10-13
