@@ -5,7 +5,7 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
 | J606F | Lenovo Tab P11 | 30 | Medium |
-| OP515BL1 | OnePlus Nord2 5G | 33 | Medium |
+| OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
@@ -60,6 +60,7 @@
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
+| q6q | SM-F956B | 34 | Medium |
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
