@@ -23,7 +23,7 @@
 | a25x | SM-A256U1 | 34 | Medium |
 | a51 | Galaxy A51 | 31 | Medium |
 | a52sxq | Galaxy A52s | 34 | High |
-| a54x | Galaxy A54 5G | 34 | Medium |
+| a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
@@ -66,7 +66,7 @@
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
-| starqlteue | Galaxy S9 | 26 | High |
+| starqlteue | Galaxy S9 | 26 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
 | x1q | Galaxy S20 | 29 | Medium |
