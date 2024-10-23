@@ -41,7 +41,7 @@
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
-| felix | Pixel Fold | 33 | Medium |
+| felix | Pixel Fold | 33 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
