@@ -3,8 +3,6 @@ import csv
 import sys
 import json
 import os
-import textwrap
-from lib.testrail_conn import APIClient
 from datetime import datetime
 from pprint import pprint
 from testrail import TestRail

@@ -1,5 +1,5 @@
 import os
-from lib.testrail_conn import APIClient
+from testrail_conn import APIClient
 
 '''
 export TESTRAIL_HOST=https://mozilla.testrail.io
