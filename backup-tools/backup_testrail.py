@@ -65,14 +65,12 @@ if __name__ == "__main__":
         month=now.month,
         day=now.day
     )
+    
+    # write test cases to json file
     with open(output_json_file, 'w') as output:
         json.dump(test_case, output, indent=2)
-
-    # Open JSON file and load data
-    # with open(filename) as json_file:
-    #    tests = json.load(json_file)
    
-    # Open CSV file for writing
+    # write test cases to CSV file
     output_csv_file = output_json_file.replace(".json", ".csv")
     with open(output_csv_file, 'w') as csv_file:
         csv_writer = csv.writer(csv_file)

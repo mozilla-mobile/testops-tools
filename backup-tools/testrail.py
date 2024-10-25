@@ -1,8 +1,5 @@
-# import json
 import os
-# import textwrap
 from lib.testrail_conn import APIClient
-
 
 '''
 export TESTRAIL_HOST=https://mozilla.testrail.io
