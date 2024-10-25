@@ -1,10 +1,6 @@
 import json
 import csv
-import sys
-import json
-import os
 from datetime import datetime
-from pprint import pprint
 from testrail import TestRail
 
 PROJECT = {
