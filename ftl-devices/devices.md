@@ -10,7 +10,7 @@
 | OnePlus9Pro | LE2121 | 33 | Low |
 | PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
-| SH-01L | AQUOS sense2 SH-01L | 28 | High |
+| SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
 | TB370FU | Lenovo Tab P12 | 34 | High |
 | XQ-DC54 | XQ-DC54 | 34 | High |
