@@ -1,0 +1,40 @@
+name: TestRail Backup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: ./backup-tools
+
+    env:
+      TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+      TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+      TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python install -r requirements.txt
+
+      - name: Fetch test cases
+        run: |
+          python backup_testrail.py
+       
+      - name: Upload to GCP bucket (todo)
+        run: |
+          echo "TODO"
+          head *.csv
