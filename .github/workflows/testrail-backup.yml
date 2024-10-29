@@ -37,3 +37,4 @@ jobs:
       - name: Upload to GCP bucket (todo)
         run: |
           echo "TODO"
+          head *.csv
