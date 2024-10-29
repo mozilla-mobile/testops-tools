@@ -1,12 +1,6 @@
 import os
 from testrail_conn import APIClient
 
-'''
-***REMOVED***
-***REMOVED***
-***REMOVED***
-'''
-
 class TestRail():
     
     def __init__(self):
