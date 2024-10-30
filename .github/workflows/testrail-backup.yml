@@ -41,6 +41,8 @@ jobs:
           today=`date "+%Y-%m-%d"`
           mkdir $today
           cp *.csv $today
+          pwd
+          ls $today
           echo "today=$today" >> $GITHUB_ENV
           
       - name: Upload CSV to GCP bucket
