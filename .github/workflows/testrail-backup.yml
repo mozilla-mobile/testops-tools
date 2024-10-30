@@ -38,11 +38,13 @@ jobs:
       - name: Fetch test cases
         run: |
           python backup_testrail.py
-          
-      - name: Upload CSV to GCP bucket
-        run: |
           today=`date "+%Y-%m-%d"`
           mkdir $today
           cp *.csv $today
-          gcloud storage cp $today gs://backups-testrail-test-suites --recursive
+          echo "today=$today" >> $GITHUB_ENV
           
+      - name: Upload CSV to GCP bucket
+        uses: google-github-actions/upload-cloud-storage@v2
+        with:
+          path: ${{ env.today }}
+          destination: backups-testrail-test-suites
