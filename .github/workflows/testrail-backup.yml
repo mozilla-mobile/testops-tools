@@ -33,7 +33,7 @@ jobs:
       - name: Establish Google Cloud connection
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GLOUD_AUTH }}
 
       - name: Fetch test cases
         run: |
