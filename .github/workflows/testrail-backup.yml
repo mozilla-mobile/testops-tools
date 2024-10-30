@@ -33,8 +33,18 @@ jobs:
       - name: Fetch test cases
         run: |
           python backup_testrail.py
+
+      - name: Establish Cloud SQL Proxy
+        uses: mattes/gce-cloudsql-proxy-action@v1
+        with:
+          creds: ${{ secrets.GCLOUD_AUTH }}
+          instance: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
+          port: ${{ secrets.CLOUD_SQL_DATABASE_PORT }}
        
       - name: Upload to GCP bucket (todo)
         run: |
-          echo "TODO"
-          head *.csv
+          today=`date "+%Y-%m-%d"`
+          mkdir $today
+          cp *.csv $today
+          gcloud storage cp $today gs://backups-testrail-test-suites --recursive
+          
