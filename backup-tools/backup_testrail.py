@@ -27,7 +27,7 @@ def create_csv(project_id, project_name, suite_id, suite_name):
     )
     output_json_file = sanitize_filename(output_json_file)
     
-    # write test cases to json file
+    # Write test cases to json file (For debugging)
     with open(output_json_file, 'w') as output:
         json.dump(cases, output, indent=2)
    
