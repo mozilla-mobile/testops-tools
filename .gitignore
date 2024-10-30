@@ -4,3 +4,4 @@ actions-runner
 backup-tools/*.csv
 backup-tools/*.json
 backup-tools/__pychache__/
+*.pyc
