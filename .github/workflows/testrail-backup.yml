@@ -32,6 +32,8 @@ jobs:
           
       - name: Establish Google Cloud connection
         uses: google-github-actions/auth@v2
+        env:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
