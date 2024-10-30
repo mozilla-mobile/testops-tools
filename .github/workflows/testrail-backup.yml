@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    name: Run unit tests
+    name: Backup test suites
     runs-on: macos-14
     defaults:
       run:
