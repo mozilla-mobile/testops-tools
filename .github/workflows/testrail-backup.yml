@@ -3,13 +3,18 @@ name: TestRail Backup
 on:
   workflow_dispatch:
 
+env:
+  BUCKET: backups-testrail-test-suites
+  DEFAULT_DIR: ./backup-tools
+  SUITE_IDS: 59 14 27 13 48
+
 jobs:
   test:
     name: Backup test suites
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backup-tools
+        working-directory: ${{ env.DEFAULT_DIR }}
 
     env:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
@@ -37,16 +42,18 @@ jobs:
 
       - name: Fetch test cases
         run: |
-          python backup_testrail.py
+          python backup_testrail.py ${{ env.SUITE_IDS }}
+          // TODO: Create README with file path on bucket
           today=`date "+%Y-%m-%d"`
-          mkdir $today
-          cp *.csv $today
-          pwd
-          ls $today
+          filename=$today-TestRail-Backup
+          mkdir $filename
+          cp *.csv $filename
+          tar -cvzf $filename.tgz $filename/*
           echo "today=$today" >> $GITHUB_ENV
+          echo "filename=$filename" >> $GITHUB_ENV
           
-      - name: Upload CSV to GCP bucket
+      - name: Upload CSV files to GCP bucket
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: backup-tools/${{ env.today }}
-          destination: backups-testrail-test-suites
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          destination: ${{ env.BUCKET }}
