@@ -7,11 +7,16 @@ env:
   BUCKET: backups-testrail-test-suites
   DEFAULT_DIR: ./backup-tools
   SUITE_IDS: 59 14 27 13 48
+  # Fenix Browser: 59
+  # Firefox for iOS: 14 
+  # Focus for iOS: 27 
+  # Firefox for Android: 13 
+  # Focus for Android:48
 
 jobs:
   test:
     name: Backup test suites
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ${{ env.DEFAULT_DIR }}
@@ -40,10 +45,10 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
+      # todo: create readme including a list of files
       - name: Fetch test cases
         run: |
           python backup_testrail.py ${{ env.SUITE_IDS }}
-          // TODO: Create README with file path on bucket
           today=`date "+%Y-%m-%d"`
           filename=$today-TestRail-Backup
           mkdir $filename
