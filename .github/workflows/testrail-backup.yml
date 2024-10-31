@@ -45,18 +45,30 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
-      # todo: create readme including a list of files
       - name: Fetch test cases
         run: |
           python backup_testrail.py ${{ env.SUITE_IDS }}
+
+      - name: Create README with file listing
+        run: |
+          touch README.md
+          echo "# Test Suites & Test Plans" >> README.md
+          echo "" >> README.md
+          echo "| Test Suite | Test Plan | File |" >> README.md
+          echo "|------------|-----------|------|" >> README.md
+          ls *.csv > files.txt
+          awk -F '_' '{print "| " $2 " | " $3 " | " $0 " |"}' < files.txt >> README.md
+
+      - name: Create gzip file containing csv and README
+        run: |
           today=`date "+%Y-%m-%d"`
           filename=$today-TestRail-Backup
+
           mkdir $filename
-          cp *.csv $filename
+          mv *.csv $filename
+          mv README.md $filename
           tar -cvzf $filename.tgz $filename/*
-          echo "today=$today" >> $GITHUB_ENV
-          echo "filename=$filename" >> $GITHUB_ENV
-          
+
       - name: Upload CSV files to GCP bucket
         uses: google-github-actions/upload-cloud-storage@v2
         with:

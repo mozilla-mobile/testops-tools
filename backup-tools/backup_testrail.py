@@ -19,7 +19,7 @@ def create_csv(project_id, project_name, suite_id, suite_name):
     if len(cases) == 0:
         return
     
-    output_json_file = "backup-{project}-{suite}-{year}-{month}-{day}.json".format(
+    output_json_file = "backup_{project}_{suite}_{year}-{month}-{day}.json".format(
         project=project_name, 
         suite=suite_name,
         year=now.year,
@@ -67,9 +67,6 @@ def create_csv(project_id, project_name, suite_id, suite_name):
 
 if __name__ == "__main__":
     testrail = TestRail()
-
-    # Fenix Browser, Firefox for iOS, Focus for iOS, Firefox for Android, Focus for Android
-    # for project_id in [59, 14, 27, 13, 48]:
     
     if len(sys.argv) == 1:
         print("Usage: python backup_testrail.py <project id...>")
