@@ -44,7 +44,7 @@ jobs:
         run: |
           python backup_testrail.py ${{ env.SUITE_IDS }}
 
-      - name: Create README with file listing
+      - name: Create file listing
         run: |
           touch Listing.md
           echo "# Test Suites & Test Plans" >> Listing.md
@@ -52,7 +52,7 @@ jobs:
           echo "| Test Suite | Test Plan | File |" >> Listing.md
           echo "|------------|-----------|------|" >> Listing.md
           ls *.csv > files.txt
-          awk -F '_' '{print "| " $2 " | " $3 " | " $0 " |"}' < files.txt >> Listing.md
+          awk -F '_' '{print "| " $2 " | " $3 " | `" $0 "` |"}' < files.txt >> Listing.md
 
       - name: Create gzip file containing csv and listing
         run: |
