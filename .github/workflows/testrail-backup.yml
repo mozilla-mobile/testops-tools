@@ -69,6 +69,8 @@ jobs:
           mv README.md $filename
           tar -cvzf $filename.tgz $filename/*
 
+          echo "filename=$filename" >> GITHUB_ENV
+
       - name: Upload CSV files to GCP bucket
         uses: google-github-actions/upload-cloud-storage@v2
         with:
