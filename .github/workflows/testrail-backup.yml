@@ -49,8 +49,8 @@ jobs:
           touch Listing.md
           echo "# Test Suites & Test Plans" >> Listing.md
           echo "" >> Listing.md
-          echo "| Test Suite | Test Plan | File |" >> Listing.md
-          echo "|------------|-----------|------|" >> Listing.md
+          echo "| Project | Test Suite | File |" >> Listing.md
+          echo "|---------|------------|------|" >> Listing.md
           ls *.csv > files.txt
           awk -F '_' '{print "| " $2 " | " $3 " | `" $0 "` |"}' < files.txt >> Listing.md
 
