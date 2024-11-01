@@ -48,7 +48,7 @@ jobs:
       - name: Create file listing
         run: |
           touch Listing.md
-          echo "# Test Suites & Test Plans" >> Listing.md
+          echo "# Projects & Test Suites" >> Listing.md
           echo "" >> Listing.md
           echo "| Project | Test Suite | File |" >> Listing.md
           echo "|---------|------------|------|" >> Listing.md
@@ -58,6 +58,7 @@ jobs:
       - name: Create gzip file containing csv and listing
         run: |
           today=`date "+%Y-%m-%d"`
+          subdir=`date "+%Y-%m"`
           filename=$today-TestRail-backup
 
           mkdir $filename
@@ -66,6 +67,7 @@ jobs:
           tar -cvzf $filename.tgz $filename/*
 
           echo "filename=$filename" >> $GITHUB_ENV
+          echo "subdir=$subdir" >> $GITHUB_ENV
 
       - name: Establish Google Cloud connection
         uses: google-github-actions/auth@v2
@@ -75,10 +77,10 @@ jobs:
       - name: Upload CSV files to GCP bucket
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          path: ${{ env.DEFAULT_DIR }}/${{ env.subdir }}/${{ env.filename }}.tgz
           destination: ${{ env.BUCKET }}
 
       - name: Output URL to Github Actions job page
         run: |
-          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.filename }}.tgz)" >> $GITHUB_STEP_SUMMARY
+          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.subdir }}/${{ env.filename }}.tgz)" >> $GITHUB_STEP_SUMMARY
           echo "[TestRail configuration file](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg)" >> $GITHUB_STEP_SUMMARY
