@@ -97,16 +97,8 @@ jobs:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload: | 
             {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":sad: TestRail Backup Failed :sad:",
-                    "emoji": true
-                  }
-                }
-              ]
+              "type": "mrkdwn",
+              "text": ":sad:">"
             }
 
       - name: Notify Slack for successful job
@@ -116,14 +108,6 @@ jobs:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload: |
             {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":sad: TestRail Backup Successful :smiley:",
-                    "emoji": true
-                  }
-                }
-              ]
+              "type": "mrkdwn",
+              "text": ":tada:">"
             }
