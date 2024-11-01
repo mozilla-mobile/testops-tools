@@ -98,7 +98,7 @@ jobs:
           payload: | 
             {
               "type": "mrkdwn",
-              "text": ":sad:">"
+              "text": ":sad:"
             }
 
       - name: Notify Slack for successful job
@@ -109,5 +109,5 @@ jobs:
           payload: |
             {
               "type": "mrkdwn",
-              "text": ":tada:">"
+              "text": ":tada:"
             }
