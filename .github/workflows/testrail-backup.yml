@@ -105,13 +105,6 @@ jobs:
                     "text": ":sad: TestRail Backup Failed :sad:",
                     "emoji": true
                   }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
-                  }
                 }
               ]
             }
@@ -128,22 +121,8 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "TestRail Backup Successful :smiley:",
+                    "text": ":sad: TestRail Backup Successful :smiley:",
                     "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Archive>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
                   }
                 }
               ]
