@@ -12,6 +12,7 @@ env:
   # Focus for iOS: 27 
   # Firefox for Android: 13 
   # Focus for Android:48
+  STORAGE_URL_PREFIX: https://storage.googleapis.com
 
 jobs:
   test:
@@ -76,3 +77,8 @@ jobs:
         with:
           path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
           destination: ${{ env.BUCKET }}
+
+      - name: Output URL to Github Actions job page
+        run: |
+          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.filename }}.tgz)" >> $GITHUB_STEP_SUMMARY
+          echo "[TestRail configuration file](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg)" >> $GITHUB_STEP_SUMMARY
