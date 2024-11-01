@@ -6,7 +6,7 @@ on:
 env:
   BUCKET: backups-testrail-test-suites
   DEFAULT_DIR: ./backup-tools
-  SUITE_IDS: 59 14 27 13 48
+  PROJECT_IDS: 59 14 27 13 48
   # Fenix Browser: 59
   # Firefox for iOS: 14 
   # Focus for iOS: 27 
@@ -26,7 +26,6 @@ jobs:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
 
     steps:
       - name: Checkout code
@@ -43,7 +42,7 @@ jobs:
 
       - name: Fetch test cases
         run: |
-          python backup_testrail.py ${{ env.SUITE_IDS }}
+          python backup_testrail.py ${{ env.PROJECT_IDS }}
 
       - name: Create file listing
         run: |
@@ -84,4 +83,8 @@ jobs:
       - name: Output URL to Github Actions summary
         run: |
           echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }})" >> $GITHUB_STEP_SUMMARY
-          echo "[TestRail configuration file](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Projects Included in the Backup" >> $GITHUB_STEP_SUMMARY
+          cd $filename
+          ls *.csv > files.txt
+          awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
