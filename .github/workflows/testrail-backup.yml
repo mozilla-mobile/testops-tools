@@ -75,12 +75,13 @@ jobs:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
     
       - name: Upload CSV files to GCP bucket
+        id: upload-file
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: ${{ env.DEFAULT_DIR }}/${{ env.subdir }}/${{ env.filename }}.tgz
-          destination: ${{ env.BUCKET }}
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          destination: ${{ env.BUCKET }}/${{ env.subdir }}
 
-      - name: Output URL to Github Actions job page
+      - name: Output URL to Github Actions summary
         run: |
-          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.subdir }}/${{ env.filename }}.tgz)" >> $GITHUB_STEP_SUMMARY
+          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.subdir }}/${{ steps.upload-file.outputs.uploaded }})" >> $GITHUB_STEP_SUMMARY
           echo "[TestRail configuration file](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg)" >> $GITHUB_STEP_SUMMARY
