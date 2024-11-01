@@ -83,5 +83,5 @@ jobs:
 
       - name: Output URL to Github Actions summary
         run: |
-          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.subdir }}/${{ steps.upload-file.outputs.uploaded }})" >> $GITHUB_STEP_SUMMARY
+          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }})" >> $GITHUB_STEP_SUMMARY
           echo "[TestRail configuration file](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg)" >> $GITHUB_STEP_SUMMARY
