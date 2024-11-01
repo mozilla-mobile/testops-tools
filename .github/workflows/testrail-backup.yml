@@ -26,6 +26,7 @@ jobs:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
 
     steps:
       - name: Checkout code
@@ -88,3 +89,62 @@ jobs:
           cd $filename
           ls *.csv > files.txt
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify Slack for failures
+        uses: slackapi/slack-github-action@v1.26.0
+        if: ${{ failure() }}
+        with:
+          channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+          payload: | 
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":sad: TestRail Backup Failed :sad:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
+                  }
+                }
+              ]
+            }
+
+      - name: Notify Slack for successful job
+        uses: slackapi/slack-github-action@v1.26.0
+        if: ${{ success() }}
+        with:
+          channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "TestRail Backup Successful :smiley:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Archive>"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
+                  }
+                }
+              ]
+            }
