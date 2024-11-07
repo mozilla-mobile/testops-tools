@@ -7,13 +7,6 @@
           "text": ":x: TestRail Backup",
           "emoji": true
         }
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "mrkdwn",
-        "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
       }
     ]
   }
