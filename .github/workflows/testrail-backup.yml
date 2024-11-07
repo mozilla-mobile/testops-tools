@@ -107,11 +107,10 @@ jobs:
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload: |
-            { 
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": ":tada: TestRail backup finished"
-                }
-              ]
+            {
+              "type": "mrkdwn",
+              "text": "*:tada: TestRail backup finished*\n
+                        <${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Download Backup>\n
+                        <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Link>
+                      "
             }
