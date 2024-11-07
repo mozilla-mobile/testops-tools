@@ -107,7 +107,11 @@ jobs:
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload: |
-            {
-              "type": "header",
-              "text": ":tada: TestRail backup finished"
+            { 
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": ":tada: TestRail backup finished"
+                }
+              ]
             }
