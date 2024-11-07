@@ -106,8 +106,4 @@ jobs:
         if: ${{ success() }}
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-          payload: |
-            {
-              "type": "mrkdwn",
-              "text": "*:tada: TestRail backup finished*\n<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Download Backup>\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Link>"
-            }
+          payload-file-path: slack.json
