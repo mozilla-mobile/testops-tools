@@ -108,13 +108,6 @@ jobs:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload: |
             {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":tada: TestRail Backup"
-                  }
-                }
-              ]
+              "type": "header",
+              "text": ":tada: TestRail backup finished"
             }
