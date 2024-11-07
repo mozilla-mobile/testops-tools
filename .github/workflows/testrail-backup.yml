@@ -106,4 +106,4 @@ jobs:
         if: ${{ success() }}
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-          payload-file-path: slack.json
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack.json
