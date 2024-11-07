@@ -1,12 +1,12 @@
 {
-    "blocks": [
-        {
-            "type": "section",
-            "text": {
-                "type": "header",
-                "text": ":tada: TestRail Backup",
-                "emoji": true
-            }
-        }
-    ]
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": ":tada: TestRail Backup: Success",
+				"emoji": true
+			}
+		}
+	]
 }
