@@ -43,7 +43,7 @@ jobs:
                   "type": "header",
                   "text": {
                   "type": "plain_text",
-                    "text": ":tada: TestRail Backup",
+                    "text": ":tada: TestRail Backup Begins",
                     "emoji": true
                   }
                 },
@@ -127,6 +127,9 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
 
       - name: Notify Slack (Success)
         uses: slackapi/slack-github-action@v1.27.0
@@ -137,3 +140,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          uploaded: ${{ steps.upload-file.outputs.uploaded }}
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
