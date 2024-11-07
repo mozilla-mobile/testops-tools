@@ -51,7 +51,7 @@ jobs:
                   "type": "section",
                   "text": {
                   "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>"
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>",
                     "text": "Can we have more than one text?"  
                   }
                 }
