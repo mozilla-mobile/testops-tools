@@ -27,7 +27,8 @@ Google Cloud bucket on a regular basis.
 
 * Not all custom fields are captured in [testrail-import.cfg](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg).
   * See [Configuring custom fields](https://support.testrail.com/hc/en-us/articles/7373850291220-Configuring-custom-fields) for setting TestRail test suite custom fields for the test cases.
-* An import to a non-empty test suite adds test cases to the test suite.
+* An import to a non-empty test suite adds test cases to the test suite. Duplicated test cases may be added: An import does not check for duplicate titles.
 * An import does not restore the test cases' original IDs. The imported cases have new IDs.
 * An import does not restore the sections from test suites.
 * An import does not detect duplicate test cases.
+* Attachments to the test cases are not included in the backups.
