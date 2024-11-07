@@ -2,6 +2,6 @@ node_modules
 android-performance/node_modules
 actions-runner
 backup-tools/*.csv
-backup-tools/*.json
+backup-tools/backup*.json
 backup-tools/__pychache__/
 *.pyc
