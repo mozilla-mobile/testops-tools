@@ -109,8 +109,5 @@ jobs:
           payload: |
             {
               "type": "mrkdwn",
-              "text": "*:tada: TestRail backup finished*\n
-                        <${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Download Backup>\n
-                        <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Link>
-                      "
+              "text": "*:tada: TestRail backup finished*\n<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Download Backup>\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Link>"
             }
