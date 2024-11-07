@@ -115,20 +115,6 @@ jobs:
                     "type": "mrkdwn",
                     "text": ":tada: TestRail Backup"
                   }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }}|Download Backup>"
-                  }
-                },
-                                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Link>"
-                  }
                 }
               ]
             }
