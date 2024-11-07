@@ -4,7 +4,7 @@
         "type": "header",
         "text": {
           "type": "plain_text",
-          "text": ":tada: TestRail Backup",
+          "text": ":tada: TestRail Backup Successful",
           "emoji": true
         }
       },
@@ -15,14 +15,7 @@
         "type": "section",
         "text": {
         "type": "mrkdwn",
-          "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.uploaded }}|Download Backup>"
-        }
-      },
-      {
-        "type": "section",
-        "text": {
-        "type": "mrkdwn",
-          "text": "<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Github Actions Job>"
+          "text": "* <${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.uploaded }}|Download Backup> * <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Github Actions Job>"
         }
       }
     ]

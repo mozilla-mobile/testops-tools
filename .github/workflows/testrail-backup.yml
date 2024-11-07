@@ -32,35 +32,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.4
 
-      - name: Test Slack connection
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                  "type": "plain_text",
-                    "text": ":tada: TestRail Backup Begins",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                  "type": "mrkdwn",
-                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Github Actions Job>",
-                    "text": "Can we have more than one text?"  
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
       - name: Set up Python
         uses: actions/setup-python@v5.1.0
         with:
