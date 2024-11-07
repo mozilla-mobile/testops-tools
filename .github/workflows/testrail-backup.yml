@@ -37,6 +37,9 @@ jobs:
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Set up Python
         uses: actions/setup-python@v5.1.0
@@ -112,4 +115,8 @@ jobs:
         if: ${{ success() }}
         with:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-          payload-file-path: ${{ env.DEFAULT_DIR }}/slack.json
+          payload: | 
+            {
+              "type": "mrkdwn",
+              "text": "TestRail backup successful :tada:"
+            }
