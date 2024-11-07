@@ -112,7 +112,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          uploaded: ${{ steps.upload-file.outputs.uploaded }}
+          uploaded: ${{ env.filename }}.tgz
           server_url: ${{ github.server_url }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
