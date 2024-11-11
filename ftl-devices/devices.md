@@ -50,7 +50,7 @@
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
-| komodo | Pixel 9 Pro XL | 34 | High |
+| komodo | Pixel 9 Pro XL | 34 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
