@@ -60,7 +60,7 @@
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
-| q6q | SM-F956B | 34 | Medium |
+| q6q | Galaxy Z Fold6 | 34 | Medium |
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
