@@ -106,15 +106,15 @@ jobs:
       #     run_id: ${{ github.run_id }}
 
       # - name: Notify Slack (Success)
-        uses: slackapi/slack-github-action@v1.27.0
-        if: ${{ success() }}
-        with:
-          # channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          uploaded: ${{ env.filename }}.tgz
-          server_url: ${{ github.server_url }}
-          repository: ${{ github.repository }}
-          run_id: ${{ github.run_id }}
+        # uses: slackapi/slack-github-action@v1.27.0
+        # if: ${{ success() }}
+        # with:
+        #   # channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+        #   payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
+        # env:
+        #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        #   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        #   uploaded: ${{ env.filename }}.tgz
+        #   server_url: ${{ github.server_url }}
+        #   repository: ${{ github.repository }}
+        #   run_id: ${{ github.run_id }}
