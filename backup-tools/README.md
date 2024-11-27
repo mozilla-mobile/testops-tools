@@ -5,8 +5,11 @@ Google Cloud bucket on a regular basis.
 
 ## Recover from backup
 
-1. Download the CSV file from the Google Cloud bucket. A link to the `.tgz` file is available through the
+1. Download the encrypted CSV file from the Google Cloud bucket. A link to the `.tgz.gpg` file is available through the
    [Github Actions job summary page](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testrail-backup.yml.)
+1. Install `gpg`. Decrypt and untar the `.tgz.gpg` file. (Note: The passphrase is available through Mobile Test Engineering's 1Password shared vault.)
+   * `gpg --batch --decrypt --passphrase [passphrase] [filename].tgz.gpg > [filename].tgz`
+   * `tar -xzf [filename].tgz`
 1. Download [testrail-import.cfg](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg).
 1. Navigate to TestRail project's *TestSuites & Cases* tab and open to an empty test suite.
 1. Select *Import Cases* icon ➡️ *Import From CSV*.
