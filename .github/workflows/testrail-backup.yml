@@ -40,6 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+          brew isntall gnupg
 
       - name: Fetch test cases
         run: |
@@ -65,6 +66,7 @@ jobs:
           mv *.csv $filename
           mv Listing.md $filename
           tar -cvzf $filename.tgz $filename/*
+          gpg --batch --passphrase $TESTRAIL_BACKUP_GPG -c $filename.tgz
 
           echo "filename=$filename" >> $GITHUB_ENV
           echo "subdir=$subdir" >> $GITHUB_ENV
@@ -78,7 +80,7 @@ jobs:
         id: upload-file
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz.gpg
           destination: ${{ env.BUCKET }}/${{ env.subdir }}
 
       - name: Output URL to Github Actions summary
