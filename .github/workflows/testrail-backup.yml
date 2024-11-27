@@ -110,7 +110,7 @@ jobs:
           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TEST_INFRA_ALERT }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           uploaded: ${{ env.filename }}.tgz
           server_url: ${{ github.server_url }}
