@@ -64,7 +64,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
-| shiba_beta | Pixel 8 | 35 | High |
+| shiba_beta | Pixel 8 | 35 | Medium |
 | starlte | Galaxy S9 | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
