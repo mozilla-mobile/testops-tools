@@ -67,7 +67,6 @@ jobs:
           mv *.csv $filename
           mv Listing.md $filename
           tar -cvzf $filename.tgz $filename/*
-          gpg --batch --passphrase $TESTRAIL_BACKUP_GPG -c $filename.tgz
 
           echo "filename=$filename" >> $GITHUB_ENV
           echo "subdir=$subdir" >> $GITHUB_ENV
@@ -81,7 +80,7 @@ jobs:
         id: upload-file
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz.gpg
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
           destination: ${{ env.BUCKET }}/${{ env.subdir }}
 
       - name: Output URL to Github Actions summary
@@ -106,16 +105,16 @@ jobs:
       #     repository: ${{ github.repository }}
       #     run_id: ${{ github.run_id }}
 
-      # - name: Notify Slack (Success)
-        # uses: slackapi/slack-github-action@v1.27.0
-        # if: ${{ success() }}
-        # with:
-        #   # channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-        #   payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
-        # env:
-        #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        #   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        #   uploaded: ${{ env.filename }}.tgz
-        #   server_url: ${{ github.server_url }}
-        #   repository: ${{ github.repository }}
-        #   run_id: ${{ github.run_id }}
+      - name: Notify Slack (Success)
+        uses: slackapi/slack-github-action@v1.27.0
+        if: ${{ success() }}
+        with:
+           channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          uploaded: ${{ steps.upload-file.outputs.uploaded }}
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
