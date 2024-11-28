@@ -90,18 +90,17 @@ jobs:
           ls *.csv > files.txt
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
 
-      # - name: Notify Slack (Fail)
-      #   uses: slackapi/slack-github-action@v1.27.0
-      #   if: ${{ failure() }}
-      #   with:
-      #     channel-id: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-      #     payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-      #     server_url: ${{ github.server_url }}
-      #     repository: ${{ github.repository }}
-      #     run_id: ${{ github.run_id }}
+      - name: Notify Slack (Fail)
+        uses: slackapi/slack-github-action@v1.27.0
+        if: ${{ failure() }}
+        with:
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
 
       - name: Notify Slack (Success)
         uses: slackapi/slack-github-action@v1.27.0
