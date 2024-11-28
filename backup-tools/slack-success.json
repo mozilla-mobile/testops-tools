@@ -1,0 +1,22 @@
+{
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":tada: TestRail Backup Successful",
+          "emoji": true
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "section",
+        "text": {
+        "type": "mrkdwn",
+          "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.uploaded }}|Download Backup (${{ env.uploaded }})> \n <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Github Actions Job>"
+        }
+      }
+    ]
+  }

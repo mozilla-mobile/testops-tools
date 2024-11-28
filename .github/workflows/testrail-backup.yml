@@ -2,20 +2,32 @@ name: TestRail Backup
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 15 * * *" # Run every day at 3pm
+
+env:
+  BUCKET: backups-testrail-test-suites
+  DEFAULT_DIR: ./backup-tools
+  PROJECT_IDS: 59 14 27 13 48
+  # Fenix Browser: 59
+  # Firefox for iOS: 14 
+  # Focus for iOS: 27 
+  # Firefox for Android: 13 
+  # Focus for Android:48
+  STORAGE_URL_PREFIX: https://storage.googleapis.com
 
 jobs:
   test:
     name: Backup test suites
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
-        working-directory: ./backup-tools
+        working-directory: ${{ env.DEFAULT_DIR }}
 
     env:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
 
     steps:
       - name: Checkout code
@@ -29,24 +41,78 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          
+          sudo apt-get install gnupg
+
+      - name: Fetch test cases
+        run: |
+          python backup_testrail.py ${{ env.PROJECT_IDS }}
+
+      - name: Create file listing
+        run: |
+          touch Listing.md
+          echo "# Projects & Test Suites" >> Listing.md
+          echo "" >> Listing.md
+          echo "| Project | Test Suite | File |" >> Listing.md
+          echo "|---------|------------|------|" >> Listing.md
+          ls *.csv > files.txt
+          awk -F '_' '{print "| " $2 " | " $3 " | `" $0 "` |"}' < files.txt >> Listing.md
+
+      - name: Create gzip file containing csv and listing
+        run: |
+          today=`date "+%Y-%m-%d"`
+          subdir=`date "+%Y-%m"`
+          filename=$today-TestRail-backup
+
+          mkdir $filename
+          mv *.csv $filename
+          mv Listing.md $filename
+          tar -cvzf $filename.tgz $filename/*
+
+          echo "filename=$filename" >> $GITHUB_ENV
+          echo "subdir=$subdir" >> $GITHUB_ENV
+
       - name: Establish Google Cloud connection
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
-
-      - name: Fetch test cases
-        run: |
-          python backup_testrail.py
-          today=`date "+%Y-%m-%d"`
-          mkdir $today
-          cp *.csv $today
-          pwd
-          ls $today
-          echo "today=$today" >> $GITHUB_ENV
-          
-      - name: Upload CSV to GCP bucket
+    
+      - name: Upload CSV files to GCP bucket
+        id: upload-file
         uses: google-github-actions/upload-cloud-storage@v2
         with:
-          path: backup-tools/${{ env.today }}
-          destination: backups-testrail-test-suites
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          destination: ${{ env.BUCKET }}/${{ env.subdir }}
+
+      - name: Output URL to Github Actions summary
+        run: |
+          echo "[Download CSV files](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ steps.upload-file.outputs.uploaded }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Projects Included in the Backup" >> $GITHUB_STEP_SUMMARY
+          cd $filename
+          ls *.csv > files.txt
+          awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify Slack (Fail)
+        uses: slackapi/slack-github-action@v1.27.0
+        if: ${{ failure() }}
+        with:
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+
+      - name: Notify Slack (Success)
+        uses: slackapi/slack-github-action@v1.27.0
+        if: ${{ success() }}
+        with:
+           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          uploaded: ${{ steps.upload-file.outputs.uploaded }}
+          server_url: ${{ github.server_url }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
