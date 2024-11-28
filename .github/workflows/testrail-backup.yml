@@ -25,7 +25,7 @@ jobs:
     env:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
-      TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+      TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}hello
 
     steps:
       - name: Checkout code
