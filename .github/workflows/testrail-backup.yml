@@ -59,7 +59,7 @@ jobs:
 
       - name: Create gzip file containing csv and listing
         run: |
-          today=`date "+%Y-%m-%dT%H:%M:%S"`
+          today=`date "+%Y-%m-%d"`
           subdir=`date "+%Y-%m"`
           filename=$today-TestRail-backup
 
