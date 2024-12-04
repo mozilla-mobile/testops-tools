@@ -8,7 +8,6 @@
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | OnePlus9Pro | LE2121 | 33 | Low |
-| PD1901 | VIVO 1901 | 28 | Low |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
@@ -29,7 +28,7 @@
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | bluejay | Pixel 6a | 32 | Medium |
-| blueline | Pixel 3 | 28 | Low |
+| blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | High |
 | cancunf | moto g54 5G | 34 | Medium |
