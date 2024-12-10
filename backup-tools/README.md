@@ -5,7 +5,7 @@ Google Cloud bucket on a regular basis.
 
 ## Recover from backup
 
-1. Download the encrypted CSV file from the Google Cloud bucket. A link to the `.tgz.gpg` file is available through the
+1. Download the CSV tarfile from the Google Cloud bucket. A link to the `.tgz` file is available through the
    [Github Actions job summary page](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testrail-backup.yml).
 1. Download [testrail-import.cfg](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg).
 1. Navigate to TestRail project's *TestSuites & Cases* tab and open to an empty test suite.
@@ -29,6 +29,7 @@ Google Cloud bucket on a regular basis.
   * See [Configuring custom fields](https://support.testrail.com/hc/en-us/articles/7373850291220-Configuring-custom-fields) for setting TestRail test suite custom fields for the test cases.
 * An import to a non-empty test suite adds test cases to the test suite. Duplicated test cases may be added: An import does not check for duplicate titles.
 * An import does not restore the test cases' original IDs. The imported cases have new IDs.
-* An import does not restore the sections from test suites.
+* An import does not restore the folder structure from test suites. Instead, all test cases are dumped into the same big folder.
 * An import does not detect duplicate test cases.
+* An import does not restore the original order of the test cases. Instead, the test cases are ordered alphabetically.
 * Attachments to the test cases are not included in the backups.
