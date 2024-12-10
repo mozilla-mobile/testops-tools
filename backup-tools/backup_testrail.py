@@ -47,7 +47,7 @@ def create_csv(project_id, project_name, suite_id, suite_name):
         csv_writer.writerow(backup_fields) 
 
         # Print rows (including unravel the Steps and Expected Results)
-        for case in cases[1:-1]:
+        for case in cases[1:]:
             first_row = [case.get(field, '') for field in backup_fields[:-2]] # need treatment for steps
             steps = case['custom_steps_separated']
             if steps:
@@ -59,7 +59,7 @@ def create_csv(project_id, project_name, suite_id, suite_name):
                 steps = []
             csv_writer.writerow(first_row)
             
-            for step in steps[1:-1]:
+            for step in steps[1:]:
                 row = ["" for field in backup_fields[:-2]]
                 row.append(step['content'])
                 row.append(step['expected'])
