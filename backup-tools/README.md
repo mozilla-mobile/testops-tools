@@ -25,11 +25,13 @@ Google Cloud bucket on a regular basis.
 
 ## Limitations
 
+* Only the first 250 test cases are exported.
 * Not all custom fields are captured in [testrail-import.cfg](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg).
+  * The following fields are known to be not imported: Automation, Automation Coverage, Sub Test Suite(s), Automated Test Name(s), Notes.
+  * The following fields may not be imported properly: Type, Priority, AssignedTo, Estimate, References.
   * See [Configuring custom fields](https://support.testrail.com/hc/en-us/articles/7373850291220-Configuring-custom-fields) for setting TestRail test suite custom fields for the test cases.
-* An import to a non-empty test suite adds test cases to the test suite. Duplicated test cases may be added: An import does not check for duplicate titles.
+* An import does not detect duplicate test cases. An import to a non-empty test suite adds test cases to the test suite. Duplicated test cases may be added.
 * An import does not restore the test cases' original IDs. The imported cases have new IDs.
 * An import does not restore the folder structure from test suites. Instead, all test cases are dumped into the same big folder.
-* An import does not detect duplicate test cases.
 * An import does not restore the original order of the test cases. Instead, the test cases are ordered alphabetically.
 * Attachments to the test cases are not included in the backups.
