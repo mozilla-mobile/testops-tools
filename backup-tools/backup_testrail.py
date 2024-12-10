@@ -10,15 +10,24 @@ def create_csv(project_id, project_name, suite_id, suite_name):
     
     now = datetime.now()
     testrail = TestRail()
-    response = testrail.test_cases(project_id, suite_id)
     
-    # Get only the cases only
-    cases = response['cases']
+    # TestRail API limits 250 test cases to be fetched at a time.
+    # We repeatedly fetch test cases until there's no more left.
+    offset_count = 0
+    cases = []
+    more_cases = [{}]
+    while len(more_cases) > 0:
+        response = testrail.test_cases(project_id, suite_id, offset_count)
+        more_cases = response['cases']
+        cases += more_cases
+        offset_count = len(cases)
+    print("TOTAL: {0} cases fetched".format(len(cases)))
     
     # Do not create backup for empty suites
     if len(cases) == 0:
+        print("No backup file is created because the test suite is empty.")
         return
-    
+
     output_json_file = "backup_{project}_{suite}_{year}-{month}-{day}.json".format(
         project=project_name, 
         suite=suite_name,
@@ -47,7 +56,7 @@ def create_csv(project_id, project_name, suite_id, suite_name):
         csv_writer.writerow(backup_fields) 
 
         # Print rows (including unravel the Steps and Expected Results)
-        for case in cases[1:]:
+        for case in cases:
             first_row = [case.get(field, '') for field in backup_fields[:-2]] # need treatment for steps
             steps = case['custom_steps_separated']
             if steps:

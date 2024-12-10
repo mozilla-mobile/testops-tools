@@ -25,7 +25,7 @@ Google Cloud bucket on a regular basis.
 
 ## Limitations
 
-* Only the first 250 test cases are exported.
+* Some test cases (max 5%) are not exported for unknown reasons.
 * Not all custom fields are captured in [testrail-import.cfg](https://github.com/mozilla-mobile/testops-tools/blob/main/backup-tools/testrail-import.cfg).
   * The following fields are known to be not imported: Automation, Automation Coverage, Sub Test Suite(s), Automated Test Name(s), Notes.
   * The following fields may not be imported properly: Type, Priority, AssignedTo, Estimate, References.
