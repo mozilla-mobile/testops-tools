@@ -24,10 +24,10 @@ class TestRail():
             'get_project/{0}'.format(testrail_project_id))
 
     # API: Cases
-    def test_cases(self, testrail_project_id, testrail_test_suite_id):
+    def test_cases(self, testrail_project_id, testrail_test_suite_id, offset = 0):
         return self.client.send_get(
-            'get_cases/{0}&suite_id={1}'
-            .format(testrail_project_id, testrail_test_suite_id))
+            'get_cases/{0}&suite_id={1}&offset={2}'
+            .format(testrail_project_id, testrail_test_suite_id, offset))
 
     def test_case(self, testrail_test_case_id):
         return self.client.send_get(
