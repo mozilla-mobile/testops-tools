@@ -6,6 +6,7 @@
 | FRT | Nokia 1 | 27 | Medium |
 | J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
+| OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | OnePlus9Pro | LE2121 | 33 | Low |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
