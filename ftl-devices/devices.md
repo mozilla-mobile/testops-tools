@@ -43,6 +43,7 @@
 | e1q | Galaxy S24 | 34 | High |
 | felix | Pixel Fold | 33 | Low |
 | felix | Pixel Fold | 34 | High |
+| felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
