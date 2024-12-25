@@ -21,7 +21,7 @@
 | a12 | Galaxy A12 | 31 | Medium |
 | a14xm | Galaxy A14 | 34 | High |
 | a25x | SM-A256U1 | 34 | Medium |
-| a51 | Galaxy A51 | 31 | Medium |
+| a51 | Galaxy A51 | 31 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
