@@ -40,18 +40,16 @@ jobs:
           with:
             name: check-locales-log
             path: ./check_locales.log
-            - name: Send Slack notice
-            if: failure()
-            uses: slackapi/slack-github-action@v1.26.0
-            with:
-              channel-id: C028QK733QR
-              payload-file-path: ./android-l10n-integrity/src/slack_payload.json
-            env:
-              SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-              SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-              run_id: ${{ github.run_id }}
-              repository: ${{ github.repository }}
-              server_url: ${{ github.server_url }}
-              LOCALES_MISSING: ${{ env.LOCALES_MISSING }}
-
-
+        - name: Send Slack notice
+          if: failure()
+          uses: slackapi/slack-github-action@v1.26.0
+          with:
+            channel-id: C028QK733QR
+            payload-file-path: ./android-l10n-integrity/src/slack_payload.json
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+            run_id: ${{ github.run_id }}
+            repository: ${{ github.repository }}
+            server_url: ${{ github.server_url }}
+            LOCALES_MISSING: ${{ env.LOCALES_MISSING }}
