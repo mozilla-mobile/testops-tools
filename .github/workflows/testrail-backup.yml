@@ -8,12 +8,13 @@ on:
 env:
   BUCKET: backups-testrail-test-suites
   DEFAULT_DIR: ./backup-tools
-  PROJECT_IDS: 59 14 27 13 48
+  PROJECT_IDS: 59 14 27 13 48 17
   # Fenix Browser: 59
   # Firefox for iOS: 14 
   # Focus for iOS: 27 
   # Firefox for Android: 13 
-  # Focus for Android:48
+  # Focus for Android: 48
+  # Firefox Desktop: 17
   STORAGE_URL_PREFIX: https://storage.googleapis.com
 
 jobs:
@@ -97,21 +98,23 @@ jobs:
         if: ${{ failure() }}
         with:
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
+          payload-templated: true 
+          webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           server_url: ${{ github.server_url }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
 
       - name: Notify Slack (Success)
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.0.0
         if: ${{ success() }}
         with:
            payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
+           payload-templated: true 
+           webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+           webhook-type: incoming-webhook
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           uploaded: ${{ steps.upload-file.outputs.uploaded }}
           server_url: ${{ github.server_url }}
           repository: ${{ github.repository }}
