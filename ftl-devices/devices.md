@@ -41,6 +41,7 @@
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
+| e3q | Galaxy S24 Ultra | 34 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
@@ -55,12 +56,14 @@
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
+| p3q | Galaxy S21 Ultra | 34 | Medium |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Medium |
 | q2q | Galaxy Z Fold3 | 30 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
+| r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
