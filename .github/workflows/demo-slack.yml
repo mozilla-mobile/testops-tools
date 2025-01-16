@@ -27,11 +27,9 @@ jobs:
 
       - name: Demo Slack Message
         id: slack
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v1.24.0
         with:
           payload-file-path: "./slack-payload.json"
-          webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-          webhook-type: incoming-webhook
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
