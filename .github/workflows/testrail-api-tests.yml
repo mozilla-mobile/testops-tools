@@ -41,7 +41,7 @@ jobs:
       - name: Send Slack message on test failure
         if: ${{ failure() }}
         id: slack-failure
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
@@ -55,7 +55,7 @@ jobs:
       - name: Send Slack message on test success
         if: ${{ success() }}
         id: slack-success
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
