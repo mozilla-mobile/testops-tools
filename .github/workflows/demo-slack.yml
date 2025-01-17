@@ -22,14 +22,14 @@ jobs:
       - name: Run telemetry probe expiry check 
         run: python ./telemetry-expiry/check_metrics.py -p focus-ios 
 
-      - name: Run telemetry probe expiry check 
+      - name: Run telemetry probe expiry check
         run: ls -la
 
       - name: Demo Slack Message
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          channel-id: C08096YAV09
           payload-file-path: "./slack-payload.json"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

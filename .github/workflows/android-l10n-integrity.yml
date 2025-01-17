@@ -44,11 +44,12 @@ jobs:
           if: failure()
           uses: slackapi/slack-github-action@v1.26.0
           with:
-            channel-id: C028QK733QR
+            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
+            channel-id: C08096YAV09
             payload-file-path: ./android-l10n-integrity/src/slack_payload.json
+            payload-templated: true
           env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
             run_id: ${{ github.run_id }}
             repository: ${{ github.repository }}
             server_url: ${{ github.server_url }}
