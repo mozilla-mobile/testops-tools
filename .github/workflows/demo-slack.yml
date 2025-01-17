@@ -31,5 +31,4 @@ jobs:
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
-          channel-id: C08096YAV09
           payload-file-path: "./slack-payload.json"
