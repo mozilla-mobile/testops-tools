@@ -33,7 +33,7 @@
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | High |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | High |
+| caprip | moto g(30) | 31 | Medium |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
@@ -55,6 +55,7 @@
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
+| maui | moto g play - 2023 | 33 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
