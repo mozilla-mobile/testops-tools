@@ -1,0 +1,54 @@
+name: Android Performance Tests in Firebases
+
+on:
+  # Trigger the workflow on push or pull request
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    # Set up JDK
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    # Set up Android SDK
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+    
+    # Build the APK
+    - name: Build Android APK
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDebug
+    
+    # Authenticate with Google Cloud
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    
+    # Install Firebase CLI
+    - name: Install Firebase CLI
+      run: |
+        curl -sL https://firebase.tools | bash
+    
+    # Run tests in Firebase Test Lab
+    - name: Run Wireless Debug Test in Firebase Test Lab
+      run: |
+        termux_apk="some_gcloud_bucket.termux.apk"
+
+        firebase test android run \
+          --app ${perf-test-app} \
+          --test ${termux_apk} \
+          --test-targets "class com.example.browserperftest.WirelessDebugTest" \
+          --device model=redfin,version=30,locale=en_US,orientation=portrait
