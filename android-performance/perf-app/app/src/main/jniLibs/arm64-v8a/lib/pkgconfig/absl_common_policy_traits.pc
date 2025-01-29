@@ -1,0 +1,12 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=${prefix}
+libdir=/data/data/com.termux/files/usr/lib
+includedir=/data/data/com.termux/files/usr/include
+
+Name: absl_common_policy_traits
+Description: Abseil common_policy_traits library
+URL: https://abseil.io/
+Version: 20240116
+Requires: absl_meta = 20240116
+Libs: -L${libdir}  
+Cflags: -I${includedir} -Wno-float-conversion -Wno-implicit-float-conversion -Wno-implicit-int-float-conversion -Wno-unknown-warning-option -DNOMINMAX

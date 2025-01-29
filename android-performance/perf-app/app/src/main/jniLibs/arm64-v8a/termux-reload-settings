@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+if [ "$#" != "0" ]; then
+	echo 'usage: termux-reload-settings'
+	echo 'Use without arguments to reload settings after modifying any of:'
+	echo '  ~/.termux/colors.properties'
+	echo '  ~/.termux/font.ttf '
+	echo '  ~/.termux/termux.properties'
+	exit
+fi
+
+case "${TERMUX__USER_ID:-}" in ''|*[!0-9]*|0[0-9]*) TERMUX__USER_ID=0;; esac
+
+am broadcast --user "$TERMUX__USER_ID" -a "com.termux.app.reload_style" "com.termux" > /dev/null

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Browser Performance Test</string>
+    <string name="shared_user_label">Browser Performance Test</string>
+    <string-array name="browser_options">
+        <item>Chrome</item>
+        <item>Firefox</item>
+    </string-array>
+</resources>

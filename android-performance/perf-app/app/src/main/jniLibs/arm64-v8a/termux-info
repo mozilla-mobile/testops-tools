@@ -1,0 +1,158 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+NO_SET_CLIPBOARD=0
+
+show_usage () {
+	echo 'usage: termux-info'
+	echo 'Provides information about Termux, and the current system. Helpful for debugging.'
+	exit 0
+
+}
+
+while [ $# -ge 1 ]; do
+	case "$1" in
+		--no-set-clipboard) NO_SET_CLIPBOARD="1"; shift;;
+		-h | --help) show_usage;;
+		*) break;;
+	esac
+done
+
+if [ "$#" != "0" ]; then
+	show_usage
+fi
+
+updates() {
+	local updatable
+
+	if [ "$(id -u)" = "0" ]; then
+		echo "Running as root. Cannot check package updates."
+	else
+		if [ "$TERMUX_APP_PACKAGE_MANAGER" = "apt" ]; then
+			apt update >/dev/null 2>&1
+			updatable=$(apt list --upgradable 2>/dev/null | tail -n +2)
+		elif [ "$TERMUX_APP_PACKAGE_MANAGER" = "pacman" ]; then
+			pacman -Sy >/dev/null 2>&1
+			updatable=$(pacman -Qu)
+		fi
+
+		if [ -z "$updatable" ];then
+			echo "All packages up to date"
+		else
+			echo "$updatable"
+		fi
+	fi
+}
+
+repo_subscriptions_apt() {
+	local main_sources
+	main_sources=$(grep -E '^[[:space:]]*deb[[:space:]]' "/data/data/com.termux/files/usr/etc/apt/sources.list")
+
+	if [ -n "$main_sources" ]; then
+		echo "# sources.list"
+		echo "$main_sources"
+	fi
+
+	if [ -d "/data/data/com.termux/files/usr/etc/apt/sources.list.d" ]; then
+		local filename repo_package supl_sources
+		while read -r filename; do
+			repo_package=$(dpkg -S "$filename" 2>/dev/null | cut -d : -f 1)
+			supl_sources=$(grep -E '^[[:space:]]*deb[[:space:]]' "$filename")
+
+			if [ -n "$supl_sources" ]; then
+				if [ -n "$repo_package" ]; then
+					echo "# $repo_package (sources.list.d/$(basename "$filename"))"
+				else
+					echo "# sources.list.d/$(basename "$filename")"
+				fi
+				echo "$supl_sources"
+			fi
+		done < <(find "/data/data/com.termux/files/usr/etc/apt/sources.list.d" -maxdepth 1 ! -type d)
+	fi
+}
+
+repo_subscriptions_pacman() {
+	local conf
+	conf="/data/data/com.termux/files/usr/etc/pacman.conf"
+
+	if [[ -f $conf ]]; then
+		echo "# $conf"
+		for i in $(pacman-conf -l); do
+			echo "[$i]"
+			pacman-conf -r "$i"
+		done
+	else
+		echo "$conf file not found"
+	fi
+}
+
+# Setup TERMUX_APP_PACKAGE_MANAGER
+source "/data/data/com.termux/files/usr/bin/termux-setup-package-manager" || exit 1
+
+case "${TERMUX__USER_ID:-}" in ''|*[!0-9]*|0[0-9]*) TERMUX__USER_ID=0;; esac
+export TERMUX__USER_ID
+
+output=""
+
+if [ -n "${TERMUX_VERSION:-}" ]; then
+# Application version is exported in Termux v0.107 or higher only.
+output+="Termux Variables:
+$(compgen -e TERMUX_ | while read v; do echo "${v}=${!v}"; done)
+"
+else
+output+="Termux Variables:
+unsupported
+"
+fi
+
+output+="Packages CPU architecture:
+$(
+	if [ "$TERMUX_APP_PACKAGE_MANAGER" = "apt" ]; then
+		dpkg --print-architecture
+	elif [ "$TERMUX_APP_PACKAGE_MANAGER" = "pacman" ]; then
+		pacman-conf | grep Architecture | sed 's/Architecture = //g'
+	fi
+)
+Subscribed repositories:
+$(
+	if [ "$TERMUX_APP_PACKAGE_MANAGER" = "apt" ]; then
+		repo_subscriptions_apt
+	elif [ "$TERMUX_APP_PACKAGE_MANAGER" = "pacman" ]; then
+		repo_subscriptions_pacman
+	fi
+)
+Updatable packages:
+$(updates)
+termux-tools version:
+1.44.6
+Android version:
+$(getprop ro.build.version.release)
+Kernel build information:
+$(uname -a)
+Device manufacturer:
+$(getprop ro.product.manufacturer)
+Device model:
+$(getprop ro.product.model)
+LD Variables:
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+LD_PRELOAD=$LD_PRELOAD"
+# Escape '\$[](){}|^.?+*' with backslashes for regex
+escaped_package_name="$(echo -n "com.termux" | sed -zE -e 's/[][\.|$(){}?+*^]/\\&/g')"
+show_version_code=""
+sdk_version="$(getprop ro.build.version.sdk || :)"
+if [[ "$sdk_version" =~ ^[0-9]+$ ]] && [ "$sdk_version" -ge "26" ]; then
+  show_version_code="--show-versioncode"
+fi
+TERMUX_PLUGINS="$(pm list packages --user "$TERMUX__USER_ID" $show_version_code 2>&1 </dev/null | grep -E "^package:$escaped_package_name\.[a-zA-Z]" | cut -d ":" -f 2- | grep -vE "^$escaped_package_name\.tapm\.[a-zA-Z]")"
+if [ -n "${TERMUX_PLUGINS:-}" ]; then
+	        output+="$(printf "\nInstalled termux plugins:\n${TERMUX_PLUGINS}\n")"
+fi
+echo "$output"
+
+if [ "$NO_SET_CLIPBOARD" != "1" ] && [ -n "$(command -v termux-clipboard-set)" ]; then
+	# Copy to clipboard (requires termux-api)
+	# use timeout in case termux-api is installed but the termux:api app is missing
+	echo "$output" | timeout 3 termux-clipboard-set 2>/dev/null
+	timeout 3 termux-toast "Information has been copied to the clipboard" 2>/dev/null
+fi
+
+exit 0

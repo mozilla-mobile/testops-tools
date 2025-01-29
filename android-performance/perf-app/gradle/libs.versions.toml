@@ -1,0 +1,66 @@
+[versions]
+agp = "8.7.2"
+cronetEmbedded = "119.6045.31"
+espressoCoreVersion = "3.5.1"
+geckoviewVersion = "133.0.20241209150345"
+kotlin = "1.8.21"
+kotlinCompilerExtensionVersion = "1.4.7"
+composeBom = "2023.03.00"
+coreKtx = "1.10.1"
+appcompat = "1.6.1"
+activity = "1.7.2"
+kotlinxCoroutinesAndroid = "1.7.3"
+material = "1.9.0"
+constraintlayout = "2.1.4"
+browser = "1.5.0"
+nanohttpd = "2.3.1"
+moshi = "1.14.0"
+lifecycleRuntimeKtx = "2.6.1"
+okhttpVersion = "4.11.0"
+uiautomator = "2.2.0"
+espressoIdlingResource = "3.5.1"
+junit = "4.13.2"
+androidxJUnit = "1.1.5"
+androidxJUnitV113 = "1.1.3"
+composeUi = "1.7.5"
+composeMaterial3 = "1.1.0"
+composeActivity = "1.7.2"
+uiTestJunit4 = "1.7.2"
+monitor = "1.7.2"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
+cronet-embedded = { module = "org.chromium.net:cronet-embedded", version.ref = "cronetEmbedded" }
+geckoview-arm64-v8a = { module = "org.mozilla.geckoview:geckoview-arm64-v8a", version.ref = "geckoviewVersion" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesAndroid" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+nanohttpd = { module = "org.nanohttpd:nanohttpd", version.ref = "nanohttpd" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
+androidx-espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoIdlingResource" }
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJUnit" }
+androidx-junit-v113 = { module = "androidx.test.ext:junit-ktx", version.ref = "androidxJUnitV113" }
+androidx-webkit = { module = "androidx.webkit:webkit", version = "1.12.1" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "composeUi" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "composeUi" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeUi" }
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "composeUi" }
+androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeUi" }
+androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+okhttp-v4110 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }

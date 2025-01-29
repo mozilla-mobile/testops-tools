@@ -1,0 +1,13 @@
+prefix=/data/data/com.termux/files/usr
+exec_prefix=/data/data/com.termux/files/usr
+libdir=/data/data/com.termux/files/usr/lib
+includedir=/data/data/com.termux/files/usr/include
+datarootdir=/data/data/com.termux/files/usr/share
+datadir=/data/data/com.termux/files/usr/share
+
+Name: oniguruma
+Description: Regular expression library
+Version: 6.9.10
+Requires:
+Libs: -L${libdir} -lonig
+Cflags: -I${includedir}
