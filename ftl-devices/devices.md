@@ -38,6 +38,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
+| dm2q | S23 Plus | 34 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
