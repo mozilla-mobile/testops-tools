@@ -38,5 +38,5 @@ jobs:
           --app browser-perf-test.apk \
           --additional-apks termux.apk \
           --test-targets "class com.example.browserperftest.WirelessDebugTest" \
-          --device model=samsung_s24ultra,version=34,locale=en_US,orientation=portrait \
+          --device model=e3q,version=34,locale=en_US,orientation=portrait \
           --timeout 30m
