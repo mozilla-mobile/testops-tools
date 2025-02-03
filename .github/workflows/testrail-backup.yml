@@ -72,7 +72,7 @@ jobs:
           echo "subdir=$subdir" >> $GITHUB_ENV
 
       - name: Establish Google Cloud connection
-        uses: google-github-actions/auth@v2.1.7
+        uses: google-github-actions/auth@v2.1.8
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
     
