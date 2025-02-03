@@ -33,7 +33,7 @@
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | High |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | Medium |
+| caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
