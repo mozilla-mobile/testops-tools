@@ -24,7 +24,7 @@ jobs:
     - name: Download APKs
       run: |
         # download apks for termux, debug, and androidTest app
-        gsutil cp gs://android_perf_test/ apks/
+        gsutil cp -r gs://android_perf_test/ .
     
     # Install Firebase CLI
     - name: Install Firebase CLI
