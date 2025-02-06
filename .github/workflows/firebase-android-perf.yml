@@ -1,7 +1,7 @@
 name: Android Performance Tests in Firebase
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   test:
@@ -48,4 +48,3 @@ jobs:
           --timeout 30m \
           --directories-to-pull /sdcard/Download \
           --client-details matrixLabel="Chrome vs Firefox"
-          
