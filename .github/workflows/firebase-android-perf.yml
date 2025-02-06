@@ -35,7 +35,8 @@ jobs:
     # Run tests in Firebase Test Lab
     - name: Run Wireless Debug Test in Firebase Test Lab
       run: |
-        
+        # verify location of apks
+        ls -la
         gcloud firebase test android run \
           --project moz-fenix \
           --app=./app-debug.apk \
