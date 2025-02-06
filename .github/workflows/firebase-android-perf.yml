@@ -14,7 +14,7 @@ jobs:
     - name: Authenticate with Google Cloud
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        credentials_json: ${{ secrets.GCP_SA_PERF_TESTS_TEST_LAB }}
     
     # Set up Cloud SDK
     - name: Set up Cloud SDK
@@ -44,4 +44,4 @@ jobs:
           --device model=e3q,version=34,locale=en_US,orientation=portrait \
           --timeout 30m \
           --directories-to-pull /sdcard/Download \
-          --client-details matrixLabel="performance test"
+          --client-details matrixLabel="Chrome vs Firefox"
