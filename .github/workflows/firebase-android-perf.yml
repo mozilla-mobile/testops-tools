@@ -25,8 +25,6 @@ jobs:
       run: |
         # download apks for termux, debug, and androidTest app
         gsutil cp -r gs://android_perf_test/ .
-    steps:
-    - uses: actions/checkout@v3
     
     # Authenticate with Google Cloud Service Account for Firebase Test Lab moz_fenix
     - name: Authenticate with Google Cloud
