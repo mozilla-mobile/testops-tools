@@ -10,27 +10,30 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    # Authenticate with Google Cloud
+    # Authenticate with Google Cloud for bucket access with moz-mobile-testops for android_perf_test
     - name: Authenticate with Google Cloud
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
     
     # Set up Cloud SDK
     - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
+      uses: google-github-actions/setup-gcloud@v2
     
     # Download APKs from GCP bucket
     - name: Download APKs
       run: |
         # download apks for termux, debug, and androidTest app
         gsutil cp -r gs://android_perf_test/ .
+    steps:
+    - uses: actions/checkout@v3
     
-    # Install Firebase CLI
-    - name: Install Firebase CLI
-      run: |
-        curl -sL https://firebase.tools | bash
-    
+    # Authenticate with Google Cloud Service Account for Firebase Test Lab moz_fenix
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_PERF_TESTS_TEST_LAB }}
+
     # Run tests in Firebase Test Lab
     - name: Run Wireless Debug Test in Firebase Test Lab
       run: |
@@ -44,4 +47,5 @@ jobs:
           --device model=e3q,version=34,locale=en_US,orientation=portrait \
           --timeout 30m \
           --directories-to-pull /sdcard/Download \
-          --client-details matrixLabel="performance test"
+          --client-details matrixLabel="Chrome vs Firefox"
+          
