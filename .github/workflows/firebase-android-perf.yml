@@ -35,13 +35,11 @@ jobs:
     # Run tests in Firebase Test Lab
     - name: Run Wireless Debug Test in Firebase Test Lab
       run: |
-        # verify location of apks
-        ls -la
         gcloud firebase test android run \
           --project moz-fenix \
-          --app=./app-debug.apk \
-          --test=./app-debug-androidTest.apk \
-          --additional-apks ./com.termux_1000.apk \
+          --app=./android_perf_test/app-debug.apk \
+          --test=./android_perf_test/app-debug-androidTest.apk \
+          --additional-apks ./android_perf_test/com.termux_1000.apk \
           --test-targets "class com.example.browserperformancetest.WirelessDebugAutomationTest" \
           --device model=e3q,version=34,locale=en_US,orientation=portrait \
           --timeout 30m \
