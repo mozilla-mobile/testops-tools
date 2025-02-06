@@ -17,7 +17,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
       - name: Set up gcloud Cloud SDK environment
-        uses: google-github-actions/setup-gcloud@v2.1.2
+        uses: google-github-actions/setup-gcloud@v2.1.4
       - name: Run the query
         id: query
         run: |
