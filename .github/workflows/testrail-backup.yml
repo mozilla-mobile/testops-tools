@@ -66,6 +66,7 @@ jobs:
           mkdir $filename
           mv *.csv $filename
           mv Listing.md $filename
+          cp README.md $filename
           tar -cvzf $filename.tgz $filename/*
 
           echo "filename=$filename" >> $GITHUB_ENV
