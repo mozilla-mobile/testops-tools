@@ -46,3 +46,11 @@ class TestRail():
     def test_suite(self, testrail_test_suite_id):
         return self.client \
                    .send_get('get_suite/{0}'.format(testrail_test_suite_id))
+                   
+    def get_sections(self, testrail_project_id, testrail_suite_id):
+        return self.client \
+                .send_get('get_sections/{0}&suite_id={1}'.format(testrail_project_id, testrail_suite_id))
+                
+    def get_section(self, testrail_section_id):
+        return self.client \
+                .send_get('get_section/{0}'.format(testrail_section_id))

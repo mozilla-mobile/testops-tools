@@ -21,7 +21,6 @@ def create_csv(project_id, project_name, suite_id, suite_name):
         more_cases = response['cases']
         cases += more_cases
         offset_count = len(cases)
-        print("Next offset: {0}".format(offset_count))
     print("TOTAL: {0} cases fetched".format(len(cases)))
     
     # Do not create backup for empty suites

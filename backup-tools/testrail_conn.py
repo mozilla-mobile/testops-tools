@@ -59,6 +59,7 @@ class APIClient:
         ).strip()
         headers = {"Authorization": "Basic " + auth}
 
+        print("URI: {0}".format(url))
         if method == "POST":
             if uri[:14] == "add_attachment":  # add_attachment API method
                 files = {"attachment": (open(data, "rb"))}
