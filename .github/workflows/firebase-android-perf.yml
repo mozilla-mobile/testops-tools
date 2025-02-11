@@ -1,6 +1,9 @@
 name: Android Performance Tests in Firebase
 
 on:
+  schedule:
+    # run every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
