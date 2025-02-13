@@ -3,6 +3,13 @@
 This directory holds the source code for backing up selected test suites to the designated
 Google Cloud bucket on a regular basis.
 
+The following projects are included in the backup:
+
+* Fenix Browser
+* Firefox for iOS
+* Focus for Android
+* Focus for iOS
+
 ## Recover from backup
 
 1. Download the CSV tarfile from the Google Cloud bucket. A link to the `.tgz` file is available through the
@@ -11,17 +18,31 @@ Google Cloud bucket on a regular basis.
 1. Navigate to TestRail project's *TestSuites & Cases* tab and open to an empty test suite.
 1. Select *Import Cases* icon ➡️ *Import From CSV*.
 1. From the *Import from CSV* modal:
-   * Select the CSV file from step 1.
-   * Select *Load mapping from configuration file* and select the .cfg file from step 1.
-   * Select *UTF-8* as *File Encoding*.
-   * Select *Test Case (Steps)* as the *Template* 
+   * File
+     * Select the CSV file from step 1.
+   * Format & Mapping
+     * Select *Load mapping from configuration file* and select the .cfg file from step 1.
+   * Advanced Options
+     * Select *UTF-8* as *File Encoding*.
+     * Select *Test Case (Steps)* as the *Template*
    * Click *Next*
 1. From the 2nd *Import from CSV* modal:
-   * Select *Test cases use multiple rows*
-   * Select *Title* as the *Column to detect new test cases*
-   * Click *Next* until the *Preview Import* screen
-   * Configure the mapping for custom fields if necessary
-1. Click *Import* and then *Close*.
+   * Row Layout
+     * Select *Test cases use multiple rows*
+     * Select *Title* as the *Column to detect new test cases*
+   * From "CSV Column ➡️ TestRail Field"
+     * Examine each mapping. Select an appropriate "TestRail Field" if such a mapping has not been selected
+   * Click *Next*
+1. From the 3rd *Import from CSV* modal:
+   * Review the values of each field to be imported
+   * Click *Next*
+1. From the 4th *Import from CSV* modal:
+   * Preview Import
+     * Review the first few cases
+   * If all looks good, click "Import"
+   * If some fields are missing or wrong, go back to the 2nd modal and review the mapping
+1. From the last *Import from CSV* modal:
+   * Click *Close* if there are no errors
 
 ## Limitations
 

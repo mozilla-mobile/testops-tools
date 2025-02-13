@@ -8,11 +8,10 @@ on:
 env:
   BUCKET: backups-testrail-test-suites
   DEFAULT_DIR: ./backup-tools
-  PROJECT_IDS: 59 14 27 13 48
+  PROJECT_IDS: 59 14 27 48
   # Fenix Browser: 59
   # Firefox for iOS: 14 
   # Focus for iOS: 27 
-  # Firefox for Android: 13 
   # Focus for Android: 48
   STORAGE_URL_PREFIX: https://storage.googleapis.com
 
