@@ -15,7 +15,7 @@
         "type": "section",
         "text": {
         "type": "mrkdwn",
-          "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.uploaded }}|Download Backup (${{ env.uploaded }})> \n <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Github Actions Job>"
+          "text": "<${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.uploaded }}|Download Backup> \n <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Github Actions Job>"
         }
       }
     ]
