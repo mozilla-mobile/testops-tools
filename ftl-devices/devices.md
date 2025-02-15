@@ -51,6 +51,7 @@
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogona | moto g play - 2024 | 34 | Medium |
 | g0q | SM-S906U1 | 34 | Medium |
+| gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
@@ -72,6 +73,7 @@
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
+| r11q | SM-S711U | 34 | None |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | Medium |
