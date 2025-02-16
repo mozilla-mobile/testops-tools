@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     # Authenticate with Google Cloud for bucket access with moz-mobile-testops for android_perf_test
     - name: Authenticate with Google Cloud
