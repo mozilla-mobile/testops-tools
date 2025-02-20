@@ -8,7 +8,7 @@ on:
 env:
   BUCKET: backups-testrail-test-suites
   DEFAULT_DIR: ./backup-tools
-  PROJECT_IDS: 59 14 27 48
+  PROJECT_IDS: 59 # 14 27 48
   # Fenix Browser: 59
   # Firefox for iOS: 14 
   # Focus for iOS: 27 
@@ -24,7 +24,7 @@ jobs:
         working-directory: ${{ env.DEFAULT_DIR }}
 
     env:
-      TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+      TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST_2025 }}
       TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
       TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
 
