@@ -76,7 +76,7 @@
 | r11q | SM-S711U | 34 | None |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
-| shiba_beta | Pixel 8 | 35 | Medium |
+| shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
