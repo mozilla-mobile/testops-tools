@@ -73,7 +73,7 @@
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
-| r11q | SM-S711U | 34 | None |
+| r11q | SM-S711U | 34 | Low |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
