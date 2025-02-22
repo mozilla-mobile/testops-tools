@@ -22,6 +22,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Medium |
 | a25x | SM-A256U1 | 34 | High |
+| a35x | Samsung A35 | 34 | Medium |
 | a51 | Galaxy A51 | 31 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | High |
@@ -72,13 +73,14 @@
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
-| r11 | Google Pixel Watch | 30 | Medium |
-| r11q | SM-S711U | 34 | Low |
+| r11 | Google Pixel Watch | 30 | High |
+| r11q | SM-S711U | 34 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | starqlteue | Galaxy S9 | 26 | Medium |
+| t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
 | x1q | Galaxy S20 | 29 | Medium |
