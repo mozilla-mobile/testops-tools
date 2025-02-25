@@ -2,6 +2,11 @@ name: Digest ios test results and import to BigQuery
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow'
+        required: true
+        default: 'main'
 
 jobs:
   procesar-archivos:
@@ -34,7 +39,7 @@ jobs:
             gsutil cp "$file_html" .
             name_base=$(basename "$file_html" .html)
             # Execute the conversion script
-            python convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
+            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
             # Save the generated JSON in the processed folder
             mv "$name_base.json" processed/
           done < html_files.txt
