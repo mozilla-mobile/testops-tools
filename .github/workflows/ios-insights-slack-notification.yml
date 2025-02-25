@@ -1,0 +1,47 @@
+name: Digest ios test results and import to BigQuery
+
+on:
+  workflow_dispatch:
+
+jobs:
+  procesar-archivos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configurae Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: moz-mobile-tools
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: List all the HTML files in the bucket
+        id: list-html
+        run: |
+          echo "List HTML file on gs://test_insights/build/report/"
+          gsutil ls gs://test_insights/build/report/*.html > html_files.txt
+          cat html_files.txt
+
+      - name: Convert HTML a NDJSON
+        run: |
+          mkdir -p processed
+          while IFS= read -r file_html; do
+            echo "Processing $file_html"
+            # Download the HTML file
+            gsutil cp "$file_html" .
+            name_base=$(basename "$file_html" .html)
+            # Execute the conversion script
+            python convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
+            # Save the generated JSON in the processed folder
+            mv "$name_base.json" processed/
+          done < html_files.txt
+
+      - name: Upload generated NDJSON to the bucket
+        run: |
+          for ndjson_file in processed/*.ndjson; do
+            echo "Uplod $ndjson_file to bucket..."
+            gsutil cp "$ndjson_file" gs://test_insights/build/report/
+          done
