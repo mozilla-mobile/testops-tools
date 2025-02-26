@@ -8,7 +8,6 @@
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
-| OnePlus9Pro | LE2121 | 33 | Low |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
@@ -56,19 +55,21 @@
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
+| gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
+| gts8wifi | Galaxy Tab S8 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
 | maui | moto g play - 2023 | 33 | Medium |
+| o1q | Galaxy S21 | 34 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Medium |
-| q2q | Galaxy Z Fold3 | 30 | Low |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
