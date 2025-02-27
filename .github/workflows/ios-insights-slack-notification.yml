@@ -60,14 +60,26 @@ jobs:
                 exit 1
             fi
 
+            # Check if the Python script exists
+            if [ ! -f "ios-insights/convertHTML2NDJSON.py" ]; then
+                echo "ERROR: convertHTML2NDJSON.py not found!"
+                ls -lh ios-insights
+                exit 1
+            fi
+
             echo "Running conversion script..."
-            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.ndjson"
+            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.ndjson" 2> error_log.txt
+
+            if [ -s error_log.txt ]; then
+                echo "Python script error output:"
+                cat error_log.txt
+            fi
 
             if [ -f "$name_base.json" ]; then
-                echo "JSON successfully created: $name_base.ndjson"
-                mv "$name_base.json" processed/
+                echo "NDJSON successfully created: $name_base.ndjson"
+                mv "$name_base.ndjson" processed/
             else
-                echo "ERROR: JSON file not generated!"
+                echo "ERROR: NDJSON file not generated!"
                 exit 1
             fi
           done < html_files.txt
