@@ -44,37 +44,34 @@ jobs:
         run: pip install -r ios-insights/requirements.txt
 
       - name: Convert HTML a NDJSON
+        shell: bash
         run: |
           set -x  # Enables command logging for debugging
           mkdir -p processed
           while IFS= read -r file_html; do
             echo "Processing $file_html"
-            # Download the HTML file
             gsutil cp "$file_html" .
             name_base=$(basename "$file_html" .html)
 
-            # Print available files for debugging
-            echo "Files in the current directory:"
+            echo "Checking if $name_base.html exists..."
             ls -lh
+            if [ ! -f "$name_base.html" ]; then
+                echo "ERROR: $name_base.html not found!"
+                exit 1
+            fi
 
-            # Execute the conversion script
             echo "Running conversion script..."
             python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
-            
-            # Check if JSON was generated
+
             if [ -f "$name_base.json" ]; then
-                echo "JSON generated successfully: $name_base.json"
+                echo "JSON successfully created: $name_base.json"
                 mv "$name_base.json" processed/
             else
-                echo "ERROR: JSON file was not created!"
-            exit 1
+                echo "ERROR: JSON file not generated!"
+                exit 1
             fi
+          done < html_files.txt
             
-            # Save the generated JSON in the processed folder
-            # mv "$name_base.json" processed/
-            done < html_files.txt
-        shell: /usr/bin/bash -e
-
       - name: Upload generated NDJSON to the bucket
         run: |
           for ndjson_file in processed/*.ndjson; do
