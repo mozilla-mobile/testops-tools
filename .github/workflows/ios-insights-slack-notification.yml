@@ -75,7 +75,7 @@ jobs:
                 cat error_log.txt
             fi
 
-            if [ -f "$name_base.json" ]; then
+            if [ -f "$name_base.ndjson" ]; then
                 echo "NDJSON successfully created: $name_base.ndjson"
                 mv "$name_base.ndjson" processed/
             else
