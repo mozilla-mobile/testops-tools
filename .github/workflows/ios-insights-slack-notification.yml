@@ -45,17 +45,35 @@ jobs:
 
       - name: Convert HTML a NDJSON
         run: |
+          set -x  # Enables command logging for debugging
           mkdir -p processed
           while IFS= read -r file_html; do
             echo "Processing $file_html"
             # Download the HTML file
             gsutil cp "$file_html" .
             name_base=$(basename "$file_html" .html)
+
+            # Print available files for debugging
+            echo "Files in the current directory:"
+            ls -lh
+
             # Execute the conversion script
+            echo "Running conversion script..."
             python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
+            
+            # Check if JSON was generated
+            if [ -f "$name_base.json" ]; then
+                echo "JSON generated successfully: $name_base.json"
+                mv "$name_base.json" processed/
+            else
+                echo "ERROR: JSON file was not created!"
+            exit 1
+            fi
+            
             # Save the generated JSON in the processed folder
-            mv "$name_base.json" processed/
-          done < html_files.txt
+            # mv "$name_base.json" processed/
+            done < html_files.txt
+        shell: /usr/bin/bash -e
 
       - name: Upload generated NDJSON to the bucket
         run: |
