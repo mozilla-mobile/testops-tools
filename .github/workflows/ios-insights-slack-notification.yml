@@ -68,7 +68,7 @@ jobs:
             fi
 
             echo "Running conversion script..."
-            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.ndjson" 2> error_log.txt
+            python ios-insights/convertHTML2NDJSON.py "$name_base.html" "$name_base.ndjson"
 
             if [ -s error_log.txt ]; then
                 echo "Python script error output:"
