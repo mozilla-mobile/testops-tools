@@ -27,7 +27,7 @@ jobs:
         id: list-html
         run: |
           echo "List HTML file on gs://test_insights/build/report/"
-          gsutil ls gs://test_insights/build/report/*.html > html_files.txt
+          gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html > html_files.txt
           cat html_files.txt
 
       - name: Convert HTML a NDJSON
@@ -48,5 +48,5 @@ jobs:
         run: |
           for ndjson_file in processed/*.ndjson; do
             echo "Uplod $ndjson_file to bucket..."
-            gsutil cp "$ndjson_file" gs://test_insights/build/report/
+            gsutil cp "$ndjson_file" gs://mobile-reports/public/test_ios_insights/build/reports/
           done
