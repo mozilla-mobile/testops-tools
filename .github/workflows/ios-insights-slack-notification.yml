@@ -20,8 +20,13 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: moz-mobile-tools
-          service_account_key: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}
-          export_default_credentials: true
+          # service_account_key: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}
+          # export_default_credentials: true
+      - name: Authenticate with Google Cloud
+        run: |
+          echo '${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}' > gcloud-key.json
+          gcloud auth activate-service-account --key-file=gcloud-key.json
+          rm -f gcloud-key.json
 
       - name: List all the HTML files in the bucket
         id: list-html
@@ -29,6 +34,14 @@ jobs:
           echo "List HTML file on gs://test_insights/build/report/"
           gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html > html_files.txt
           cat html_files.txt
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+            python-version: '3.13'
+        
+      - name: Install dependencies
+        run: pip install -r ios-insight/requirements.txt
 
       - name: Convert HTML a NDJSON
         run: |
