@@ -85,11 +85,16 @@ def convert_to_ndjson(html_file, output_ndjson):
     print(f"✅ NDJSON file created: {output_ndjson}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python convert_xcuitest_to_ndjson.py <path_to_html_file> <output_ndjson_file>")
-        sys.exit(1)
+    try:
+        print("Starting HTML to JSON conversion for:", sys.argv[1])
+        if len(sys.argv) != 3:
+            print("Usage: python convert_xcuitest_to_ndjson.py <path_to_html_file> <output_ndjson_file>")
+            sys.exit(1)
     
-    html_file = sys.argv[1]
-    output_ndjson = sys.argv[2]
+        html_file = sys.argv[1]
+        output_ndjson = sys.argv[2]
     
-    convert_to_ndjson(html_file, output_ndjson)
+        convert_to_ndjson(html_file, output_ndjson)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)  # Ensure the script exits with an error code

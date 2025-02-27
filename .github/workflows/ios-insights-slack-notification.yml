@@ -61,10 +61,10 @@ jobs:
             fi
 
             echo "Running conversion script..."
-            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
+            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.ndjson"
 
             if [ -f "$name_base.json" ]; then
-                echo "JSON successfully created: $name_base.json"
+                echo "JSON successfully created: $name_base.ndjson"
                 mv "$name_base.json" processed/
             else
                 echo "ERROR: JSON file not generated!"
