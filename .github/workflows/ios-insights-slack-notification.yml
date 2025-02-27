@@ -9,7 +9,7 @@ on:
         default: 'main'
 
 jobs:
-  procesar-archivos:
+  process-test-results:
     runs-on: ubuntu-latest
 
     steps:
