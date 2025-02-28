@@ -33,7 +33,7 @@
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
-| caiman | Pixel 9 Pro | 34 | High |
+| caiman | Pixel 9 Pro | 34 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Medium |
