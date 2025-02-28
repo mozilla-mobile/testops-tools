@@ -52,7 +52,7 @@ def parse_xcuitest_html(file_path):
     return test_suites
 
 def extract_metadata_from_filename(filename):
-    match = re.match(r"index_(?P<branch>[^_]+_[^_]+)_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html", filename)
+    match = re.match(r"ios_insights_(?P<branch>[^_]+_[^_]+)_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html", filename)
     if match:
         return {
             "branch": match.group("branch"),
