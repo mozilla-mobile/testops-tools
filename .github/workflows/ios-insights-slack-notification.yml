@@ -104,3 +104,9 @@ jobs:
                ios-insights/schema.json
           done
         
+      - name: Clear bucket
+        if: ${{ success() }}
+        run: |
+           echo "Delete HTML and JSON files from the bucket..."
+           gsutil rm gs://test_insights/build/report/*.html
+           gsutil rm gs://test_insights/build/report/*.ndjson
