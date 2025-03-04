@@ -93,7 +93,7 @@ jobs:
 
       - name: Import NDJSON to BigQuery
         run: |
-          for file in processed/*.json; do
+          for file in processed/*.ndjson; do
             echo "Importing $file into BigQuery..."
             bq --location=US load \
                --source_format=NEWLINE_DELIMITED_JSON \
