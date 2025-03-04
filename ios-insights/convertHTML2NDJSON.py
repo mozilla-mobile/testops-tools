@@ -52,15 +52,29 @@ def parse_xcuitest_html(file_path):
     return test_suites
 
 def extract_metadata_from_filename(filename):
-    match = re.match(r"ios_insights_(?P<branch>[^_]+_[^_]+)_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html", filename)
+    import re
+from datetime import datetime
+
+def extract_metadata_from_filename(filename):
+    
+    match = re.match(
+        r"ios_insights_(?P<branch>origin_(?:main|release(?:_v\d+)?))_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html",
+        filename
+    )
+
     if match:
-        return {
+        metadata = {
             "branch": match.group("branch"),
             "suite": match.group("suite"),
             "device": match.group("device"),
             "timestamp": datetime.strptime(match.group("timestamp"), "%Y%m%d-%H%M%S").isoformat()
         }
-    return {}
+        print(f"✅ Extracted Metadata: {metadata}")  # Debugging step
+        return metadata
+    else:
+        print("❌ No match found!")  # Debugging step
+        return {}
+
 
 def convert_to_ndjson(html_file, output_ndjson):
     metadata = extract_metadata_from_filename(html_file.split("/")[-1])
