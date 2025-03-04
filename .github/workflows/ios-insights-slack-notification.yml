@@ -98,6 +98,7 @@ jobs:
             bq --location=US load \
                --source_format=NEWLINE_DELIMITED_JSON \
                --time_partitioning_field=timestamp \
+               --clustering_fields=test_suite,test_case \
                ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }} \
                "$file" \
                ios-insights/schema.json
