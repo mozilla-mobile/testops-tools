@@ -90,3 +90,16 @@ jobs:
             echo "Uplod $ndjson_file to bucket..."
             gsutil cp "$ndjson_file" gs://mobile-reports/public/test_ios_insights/build/reports/
           done
+
+      - name: Import NDJSON to BigQuery
+        run: |
+          for file in processed/*.json; do
+            echo "Importing $file into BigQuery..."
+            bq --location=US load \
+               --source_format=NEWLINE_DELIMITED_JSON \
+               --time_partitioning_field=timestamp \
+               ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }} \
+               "$file" \
+               schema.json
+          done
+        
