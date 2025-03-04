@@ -20,8 +20,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: moz-mobile-tools
-          # service_account_key: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}
-          # export_default_credentials: true
       - name: Authenticate with Google Cloud
         run: |
           echo '${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}' > gcloud-key.json
@@ -31,7 +29,7 @@ jobs:
       - name: List all the HTML files in the bucket
         id: list-html
         run: |
-          echo "List HTML file on gs://test_insights/build/report/"
+          echo "List HTML file on gs://mobile-reports/public/test_ios_insights/build/reports/"
           gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html > html_files.txt
           cat html_files.txt
         
@@ -108,5 +106,5 @@ jobs:
         if: ${{ success() }}
         run: |
            echo "Delete HTML and JSON files from the bucket..."
-           gsutil rm gs://test_insights/build/report/*.html
-           gsutil rm gs://test_insights/build/report/*.ndjson
+           gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html
+           gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson
