@@ -27,6 +27,7 @@
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
+| austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
