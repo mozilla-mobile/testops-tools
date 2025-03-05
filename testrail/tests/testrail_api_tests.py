@@ -148,12 +148,12 @@ class TestTestRail(unittest.TestCase):
                 self.assertIsInstance(value, expected_type)
 
     def test_get_milestone(self):
-        milestone_id = 1615
+        milestone_id = 2903
         milestone = self.testrail._get_milestone(milestone_id)
         print(f"{milestone=}")
 
     def test_get_test_runs(self):
-        run_id = 85749
+        run_id = 101256
         test_run = self.testrail._get_test_run(run_id)
         print(f"{test_run=}")
 
@@ -316,7 +316,7 @@ class TestTestRail(unittest.TestCase):
                 self.assertIsInstance(value, expected_type)
 
     def test_update_test_run_tests(self):
-        test_run = 85749
+        test_run = 100759
         test_status = 1  # Passed
         tests = self.testrail._get_tests(test_run)
         for test in tests:
