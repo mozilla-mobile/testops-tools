@@ -6,6 +6,7 @@
 | FRT | Nokia 1 | 27 | Medium |
 | J606F | Lenovo Tab P11 | 30 | Medium |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
+| OP5552L1 | CPH2415 | 34 | Medium |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
@@ -49,7 +50,7 @@
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
-| felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
+| felix_camera | Pixel Fold (Camera-enabled) | 33 | None |
 | fogona | moto g play - 2024 | 34 | Medium |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
