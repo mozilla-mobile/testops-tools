@@ -60,6 +60,7 @@
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
+| gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
