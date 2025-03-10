@@ -114,7 +114,7 @@ jobs:
           done
         
       - name: Clear bucket
-        if: ${{ success() }}
+        if: steps.list-html.outputs.found == 'true' && ${{ success() }}
         run: |
            echo "Delete HTML and JSON files from the bucket..."
            gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html
