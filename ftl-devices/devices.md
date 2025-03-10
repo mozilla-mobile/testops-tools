@@ -50,7 +50,7 @@
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
-| felix_camera | Pixel Fold (Camera-enabled) | 33 | None |
+| felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogona | moto g play - 2024 | 34 | Medium |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
