@@ -114,11 +114,25 @@ jobs:
           done
         
       - name: Clear bucket
-        if: ${{ steps.list-html.outputs.found == 'true' && success() }}
+        if: ${{ success() }}
         run: |
-           echo "Delete HTML and JSON files from the bucket..."
-           gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html
-           gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson
+            echo "Checking for HTML files to delete..."
+            html_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || echo "")
+            if [ -n "$html_files" ]; then
+                echo "Deleting HTML files..."
+                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html || true
+            else
+                echo "No HTML files found to delete."
+            fi
+
+            echo "Checking for NDJSON files to delete..."
+            ndjson_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson 2>/dev/null || echo "")
+            if [ -n "$ndjson_files" ]; then
+                echo "Deleting NDJSON files..."
+                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson || true
+            else
+                echo "No NDJSON files found to delete."
+            fi
 
       - name: Get Daily Test Stats from BigQuery
         run: |
