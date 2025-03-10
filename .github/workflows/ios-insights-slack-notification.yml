@@ -117,7 +117,7 @@ jobs:
                COUNT(*) AS total_tests,
                COUNTIF(result = 'failed') AS failed_tests,
                COUNTIF(result = 'flaky') AS flaky_tests
-             FROM \`${{ secrets.BQ_TABLE_NAME }}\`
+             FROM \`${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}\`
              WHERE DATE(timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
            )
            SELECT 
