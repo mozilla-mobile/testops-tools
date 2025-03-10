@@ -108,3 +108,51 @@ jobs:
            echo "Delete HTML and JSON files from the bucket..."
            gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html
            gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson
+
+      - name: Get Daily Test Stats from BigQuery
+        run: |
+           bq query --use_legacy_sql=false --format=json \
+           "WITH test_data AS (
+             SELECT 
+               COUNT(*) AS total_tests,
+               COUNTIF(result = 'failed') AS failed_tests,
+               COUNTIF(result = 'flaky') AS flaky_tests
+             FROM \`${{ secrets.BQ_TABLE_NAME }}\`
+             WHERE DATE(timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
+           )
+           SELECT 
+             total_tests,
+             failed_tests,
+             flaky_tests,
+             ROUND((failed_tests / total_tests) * 100, 2) AS failure_rate,
+             ROUND((flaky_tests / total_tests) * 100, 2) AS flaky_rate
+           FROM test_data;" > test_report.json
+         
+           cat test_report.json
+
+      - name: Send Slack Notification
+        run: |
+           TOTAL_TESTS=$(jq -r '.[0].total_tests' test_report.json)
+           FAILED_TESTS=$(jq -r '.[0].failed_tests' test_report.json)
+           FLAKY_TESTS=$(jq -r '.[0].flaky_tests' test_report.json)
+           FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
+           FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
+           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
+         
+           SLACK_MESSAGE='{
+             "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
+             "blocks": [
+                 { "type": "section", "text": { "type": "mrkdwn", "text": "*Firefox iOS UI Test Daily Digest - Fennec*" } },
+                 { "type": "section", "text": { "type": "mrkdwn", "text": "Fennec UI Test Daily Digest for '"$YESTERDAY"'" } },
+                 { "type": "section", "fields": [
+                   { "type": "mrkdwn", "text": "*Tests Ran Yesterday:* '"$TOTAL_TESTS"'" },
+                   { "type": "mrkdwn", "text": "*Flaky Tests Yesterday:* '"$FLAKY_TESTS"' - WIP" },
+                   { "type": "mrkdwn", "text": "*Flaky Rate Yesterday:* '"$FLAKY_RATE"'% - WIP" },
+                   { "type": "mrkdwn", "text": "*Failed Tests Yesterday:* '"$FAILED_TESTS"'" },
+                   { "type": "mrkdwn", "text": "*Failure Rate Yesterday:* '"$FAILURE_RATE"'%" }
+                 ]}
+             ]
+           }'
+         
+           curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+         
