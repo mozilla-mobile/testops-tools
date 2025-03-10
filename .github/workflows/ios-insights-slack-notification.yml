@@ -189,7 +189,7 @@ jobs:
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
              "blocks": [
                  { "type": "section", "text": { "type": "mrkdwn", "text": "*Firefox iOS UI Test Daily Digest - Fennec*" } },
-                 { "type": "section", "text": { "type": "mrkdwn", "text": "Fennec UI Test Daily Digest for '"$YESTERDAY"'" } },
+                 { "type": "section", "text": { "type": "mrkdwn", "text": "Fennec UI Test Daily Digest for *'"$YESTERDAY"'*" } },
                  { "type": "section", "fields": [
                    { "type": "mrkdwn", "text": "*Tests Ran Yesterday:* '"$TOTAL_TESTS"'" },
                    { "type": "mrkdwn", "text": "*Flaky Tests Yesterday:* '"$FLAKY_TESTS"'" },
