@@ -30,8 +30,16 @@ jobs:
         id: list-html
         run: |
           echo "List HTML file on gs://mobile-reports/public/test_ios_insights/build/reports/"
-          gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html > html_files.txt
-          cat html_files.txt
+          files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || true)
+          if [ -z "$files" ]; then
+            echo "No HTML files found."
+            echo "found=false" >> $GITHUB_OUTPUT
+          else
+            echo "$files" > html_files.txt
+            echo "found=true" >> $GITHUB_OUTPUT
+            cat html_files.txt
+          fi
+        shell: bash
         
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -42,6 +50,7 @@ jobs:
         run: pip install -r ios-insights/requirements.txt
 
       - name: Convert HTML a NDJSON
+        if: steps.list-html.outputs.found == 'true'
         shell: bash
         run: |
           set -x  # Enables command logging for debugging
@@ -83,6 +92,7 @@ jobs:
           done < html_files.txt
             
       - name: Upload generated NDJSON to the bucket
+        if: steps.list-html.outputs.found == 'true'
         run: |
           for ndjson_file in processed/*.ndjson; do
             echo "Uplod $ndjson_file to bucket..."
@@ -90,6 +100,7 @@ jobs:
           done
 
       - name: Import NDJSON to BigQuery
+        if: steps.list-html.outputs.found == 'true'
         run: |
           for file in processed/*.ndjson; do
             echo "Importing $file into BigQuery..."
