@@ -202,19 +202,15 @@ jobs:
          
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
         run: |
-           
             date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
             csv_report_filename="ios_flaky_report_${date_report}.csv"
-
-            echo "TIMESTAMP: ${date_report}"
-            echo "REPORT_FILENAME: ${csv_report_filename}"
     
-            bq query --use_legacy_sql=false --format=csv < ios-insights/flacky_test_details.sql > ${csv_report_filename}
+            bq query --use_legacy_sql=false --format=csv < ios-insights/flacky_test_details.sql > ios_flacky_detail.csv
 
       - name: Upload CSV Report to Cloud Storage
         run: |
-            echo "Uploading file: ${csv_report_filename}"
-            gsutil cp ${csv_report_filename} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}
+            echo "Uploading file: ios_flacky_detail.csv
+            gsutil cp ${csv_report_filename} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/ios_flacky_detail.csv
                 
       - name: Send Slack Notification
         run: |
@@ -224,7 +220,7 @@ jobs:
            FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
            FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
-           FILE_URL="gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${FILENAME}"
+           FILE_URL="gs://mobile-reports/public/test_ios_insights/flacky_test_reports/ios_flacky_detail.csv
          
            SLACK_MESSAGE='{
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
