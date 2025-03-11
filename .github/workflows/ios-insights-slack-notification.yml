@@ -202,8 +202,8 @@ jobs:
          
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
         run: |
-            TIMESTAMP=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-            CSV_REPORT_FILENAME="ios_flaky_report_${TIMESTAMP}.csv"
+            DATE_REPORT=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+            CSV_REPORT_FILENAME="ios_flaky_report_${DATE_REPORT}.csv"
     
             bq query --use_legacy_sql=false --format=csv \
                 "WITH test_comparisons AS (
