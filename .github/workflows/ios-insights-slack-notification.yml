@@ -202,61 +202,19 @@ jobs:
          
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
         run: |
-            set -x  # Enable debugging output
+           
             date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
             csv_report_filename="ios_flaky_report_${date_report}.csv"
 
             echo "TIMESTAMP: ${date_report}"
             echo "REPORT_FILENAME: ${csv_report_filename}"
     
-            bq query --use_legacy_sql=false --format=csv \
-                "WITH test_comparisons AS (
-                    SELECT
-                        branch,
-                        device,
-                        test_case,
-                        timestamp,
-                        result,
-                        LAG(result, 1) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result1,
-                        LAG(result, 2) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result2,
-                        LAG(result, 3) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result3
-                    FROM \`${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}\`
-                ),
-                yesterday_tests AS (
-                    SELECT *
-                    FROM test_comparisons
-                    WHERE DATE(timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
-                ),
-                flagged_tests AS (
-                    SELECT
-                        branch,
-                        device,
-                        test_case,
-                        result,
-                        CASE
-                            WHEN prev_result1 IS NULL OR prev_result2 IS NULL OR prev_result3 IS NULL THEN FALSE
-                            WHEN (result = prev_result1 AND result = prev_result2 AND result = prev_result3) THEN FALSE
-                            ELSE TRUE
-                        END AS is_flaky
-                    FROM yesterday_tests
-                )
-                SELECT
-                    branch,
-                    device,
-                    COUNT(*) AS total_tests,
-                    COUNTIF(is_flaky) AS flaky_tests_count,
-                    SAFE_DIVIDE(COUNTIF(is_flaky), COUNT(*)) AS flaky_tests_ratio,
-                    ARRAY_AGG(CASE WHEN is_flaky THEN test_case END IGNORE NULLS) AS flaky_tests_details
-                FROM flagged_tests
-                GROUP BY branch, device
-                ORDER BY branch, device;" > ${csv_report_filename}
-
-            echo "Generated file: ${csv_report_filename}"
+            bq query --use_legacy_sql=false --format=csv < ios-insights/flacky_test_details.sql > ${csv_report_filename}
 
       - name: Upload CSV Report to Cloud Storage
         run: |
-            echo "Uploading file: ${CSV_REPORT_FILENAME}"
-            gsutil cp ${FILENAME} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${CSV_REPORT_FILENAME}
+            echo "Uploading file: ${csv_report_filename}"
+            gsutil cp ${csv_report_filename} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}
                 
       - name: Send Slack Notification
         run: |
