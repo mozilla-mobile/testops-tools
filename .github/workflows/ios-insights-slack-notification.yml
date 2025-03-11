@@ -201,11 +201,14 @@ jobs:
              cat test_report.json
          
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
+        env:
+            GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
         run: |
             date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
             csv_report_filename="ios_flaky_report_${date_report}.csv"
+            envsubst < ios-insights/flacky_test_details.sql > query_temp.sql
                
-            bq query --use_legacy_sql=false --format=csv < ios-insights/flacky_test_details.sql > ios_flacky_detail.csv
+            bq query --use_legacy_sql=false --format=csv < query_temp.sql > ios_flacky_detail.csv
 
       - name: Upload CSV Report to Cloud Storage
         run: |
