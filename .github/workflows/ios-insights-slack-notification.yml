@@ -202,8 +202,12 @@ jobs:
          
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
         run: |
-            DATE_REPORT=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-            CSV_REPORT_FILENAME="ios_flaky_report_${DATE_REPORT}.csv"
+            set -x  # Enable debugging output
+            date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+            csv_report_filename="ios_flaky_report_${date_report}.csv"
+
+            echo "TIMESTAMP: ${date_report}"
+            echo "REPORT_FILENAME: ${csv_report_filename}"
     
             bq query --use_legacy_sql=false --format=csv \
                 "WITH test_comparisons AS (
@@ -245,9 +249,9 @@ jobs:
                     ARRAY_AGG(CASE WHEN is_flaky THEN test_case END IGNORE NULLS) AS flaky_tests_details
                 FROM flagged_tests
                 GROUP BY branch, device
-                ORDER BY branch, device;" > ${CSV_REPORT_FILENAME}
+                ORDER BY branch, device;" > ${csv_report_filename}
 
-            echo "Generated file: ${CSV_REPORT_FILENAME}"
+            echo "Generated file: ${csv_report_filename}"
 
       - name: Upload CSV Report to Cloud Storage
         run: |
