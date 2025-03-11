@@ -204,6 +204,7 @@ jobs:
         run: |
             date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
             csv_report_filename="ios_flaky_report_${date_report}.csv"
+            ls ios-indights/
     
             bq query --use_legacy_sql=false --format=csv < ios-insights/flacky_test_details.sql > ios_flacky_detail.csv
 
