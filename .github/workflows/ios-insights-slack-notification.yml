@@ -213,17 +213,76 @@ jobs:
            SLACK_MESSAGE='{
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
              "blocks": [
-                 { "type": "section", "text": { "type": "mrkdwn", "text": "*Firefox iOS UI Test Daily Digest - Fennec*" } },
-                 { "type": "section", "text": { "type": "mrkdwn", "text": "Fennec UI Test Daily Digest for *'"$YESTERDAY"'*" } },
-                 { "type": "section", "fields": [
-                   { "type": "mrkdwn", "text": "*Tests Ran Yesterday:* '"$TOTAL_TESTS"'" },
-                   { "type": "mrkdwn", "text": "*Flaky Tests Yesterday:* '"$FLAKY_TESTS"'" },
-                   { "type": "mrkdwn", "text": "*Flaky Rate Yesterday:* '"$FLAKY_RATE"'%" },
-                   { "type": "mrkdwn", "text": "*Failed Tests Yesterday:* '"$FAILED_TESTS"'" },
-                   { "type": "mrkdwn", "text": "*Failure Rate Yesterday:* '"$FAILURE_RATE"'%" }
-                 ]}
+                { 
+                    "type": "section", 
+                    "text": { 
+                        "type": "mrkdwn", 
+                        "text": ":firefox: Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
+                    } 
+                },
+                {
+                    "type": "divider"
+                },
+                { 
+                    "type": "rich_text", 
+                    "elements": [
+                        { 
+                            "type": "rich_text_list", 
+                            "style": "bullet", 
+                            "indent": 0, 
+                            "border": 0, 
+                            "elements": [
+                                { 
+                                    "type": "rich_text_section", 
+                                    "elements": [ 
+                                        {
+                                            "type": "text", 
+                                            "text": "Tests Ran Yesterday: '"$TOTAL_TESTS"'" 
+                                        }
+                                    ]
+                                },
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Flaky Tests Yesterday: '"$FLAKY_TESTS"'" 
+                                        }
+                                    ]
+                                },
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Flaky Rate Yesterday: '"$FLAKY_RATE"'" 
+                                        }
+                                    ]
+                                },  
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Failed Tests Yesterday: '"$FAILED_TESTS"'" 
+                                        }
+                                    ]
+                                }, 
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"'" 
+                                        }
+                                    ]
+                                }  
+                            ]
+                        }
+                    ]
+                }
              ]
-           }'
+            }'
          
-           curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+            curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
          
