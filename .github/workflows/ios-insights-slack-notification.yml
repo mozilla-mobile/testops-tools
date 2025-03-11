@@ -203,7 +203,7 @@ jobs:
       - name: Get Daily Test Stats Flacky Test Details from BigQuery 
         run: |
             TIMESTAMP=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-            FILENAME="ios_flaky_report_${TIMESTAMP}.csv"
+            CSV_REPORT_FILENAME="ios_flaky_report_${TIMESTAMP}.csv"
     
             bq query --use_legacy_sql=false --format=csv \
                 "WITH test_comparisons AS (
@@ -245,14 +245,14 @@ jobs:
                     ARRAY_AGG(CASE WHEN is_flaky THEN test_case END IGNORE NULLS) AS flaky_tests_details
                 FROM flagged_tests
                 GROUP BY branch, device
-                ORDER BY branch, device;" > ${FILENAME}
+                ORDER BY branch, device;" > ${CSV_REPORT_FILENAME}
 
-            echo "Generated file: ${FILENAME}"
+            echo "Generated file: ${CSV_REPORT_FILENAME}"
 
       - name: Upload CSV Report to Cloud Storage
         run: |
-            echo "Uploading file: ${FILENAME}"
-            gsutil cp ${FILENAME} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${FILENAME}
+            echo "Uploading file: ${CSV_REPORT_FILENAME}"
+            gsutil cp ${FILENAME} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${CSV_REPORT_FILENAME}
                 
       - name: Send Slack Notification
         run: |
