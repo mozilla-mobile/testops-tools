@@ -305,8 +305,9 @@ jobs:
                 { 
                     "type": "section", 
                     "text": { 
-                        "type": "mrkdwn", 
+                        "type": "plain_text", 
                         "text": "The report for yesterday is available [here](${FILE_URL})." 
+                        "emoji": true
                     } 
                 }
              ]
