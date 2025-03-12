@@ -206,9 +206,12 @@ jobs:
         run: |
             date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
             csv_report_filename="ios_flaky_report_${date_report}.csv"
+            echo "csv_report_filename=${csv_report_filename}" >> $GITHUB_ENV
             envsubst < ios-insights/flacky_test_details.sql > query_temp.sql
                
             bq query --use_legacy_sql=false --format=csv < query_temp.sql > ${csv_report_filename}
+
+            ls -l
 
       - name: Upload CSV Report to Cloud Storage
         run: |
