@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configurae Google Cloud SDK
+      - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: moz-mobile-tools
@@ -216,7 +216,7 @@ jobs:
       - name: Upload CSV Report to Cloud Storage
         run: |
             echo "Uploading file: ${csv_report_filename}"
-            gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flacky_test_reports/
+            gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}
                 
       - name: Send Slack Notification
         run: |
@@ -302,12 +302,12 @@ jobs:
                 {
                     "type": "divider"
                 },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "The report for yesterday is available [here](${FILE_URL})."
-                    }
+                { 
+                    "type": "section", 
+                    "text": { 
+                        "type": "mrkdwn", 
+                        "text": "The report for yesterday is available [here](${FILE_URL})." 
+                    } 
                 }
              ]
             }'
