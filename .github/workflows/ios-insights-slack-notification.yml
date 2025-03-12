@@ -200,7 +200,7 @@ jobs:
          
              cat test_report.json
          
-      - name: Get Daily Test Stats Flacky Test Details from BigQuery 
+      - name: Get Daily Test Stats Flaky Test Details from BigQuery 
         env:
             GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
         run: |
@@ -226,7 +226,7 @@ jobs:
            FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
            FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
-           FILE_URL="gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}"
+           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}"
          
            SLACK_MESSAGE='{
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
@@ -306,7 +306,7 @@ jobs:
                     "type": "section", 
                     "text": { 
                         "type": "plain_text", 
-                        "text": "The report for yesterday is available [here]('"${FILE_URL}"').",
+                        "text": "The report for yesterday flaky tests is available [here] ('"${FILE_URL}"').",
                         "emoji": true
                     } 
                 }
