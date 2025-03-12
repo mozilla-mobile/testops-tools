@@ -87,6 +87,7 @@
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
+| tokay | Pixel 9 | 35 | High |
 | x1q | Galaxy S20 | 29 | Medium |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
