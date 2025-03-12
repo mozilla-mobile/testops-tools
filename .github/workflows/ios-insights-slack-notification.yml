@@ -226,7 +226,7 @@ jobs:
            FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
            FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
-           FILE_URL="gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}
+           FILE_URL="gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}"
          
            SLACK_MESSAGE='{
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
