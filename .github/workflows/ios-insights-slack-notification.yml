@@ -212,8 +212,8 @@ jobs:
 
       - name: Upload CSV Report to Cloud Storage
         run: |
-            echo "Uploading file: ios_flacky_detail.csv"
-            gsutil cp ${csv_report_filename} gs://mobile-reports/public/test_ios_insights/flacky_test_reports/${csv_report_filename}
+            echo "Uploading file: ${csv_report_filename}"
+            gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flacky_test_reports/
                 
       - name: Send Slack Notification
         run: |
