@@ -8,7 +8,7 @@ WITH test_comparisons AS (
         LAG(result, 1) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result1,
         LAG(result, 2) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result2,
         LAG(result, 3) OVER (PARTITION BY test_case, branch, device ORDER BY timestamp) AS prev_result3
-    FROM \`${GCP_SA_IOS_TESTS_INSIGHTS_TABLE}\`
+    FROM `${GCP_SA_IOS_TESTS_INSIGHTS_TABLE}`
 ),
 yesterday_tests AS (
     SELECT *
