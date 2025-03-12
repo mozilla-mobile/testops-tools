@@ -299,27 +299,29 @@ jobs:
                         }
                     ]
                 },
+                 {
+                    "type": "divider"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "Detailed Report <'"$FILE_URL"'|here>"
+                        }
+                    ]
+                }
                 {
                     "type": "divider"
                 },
                 {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Report with detailed data flaky tests.",
-                    },
-                    "accessory": {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Get Report",
-                            "emoji": true
-                            
-                        },
-                        "value": "click_for_report",
-                        "url": "'"${FILE_URL}"'",
-                        "action_id": "button-action"
-                    }
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview#Test-Operations|Mobile Test Engineering>"
+                        }
+                    ]
                 }
              ]
             }'
