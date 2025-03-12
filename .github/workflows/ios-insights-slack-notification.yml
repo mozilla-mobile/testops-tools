@@ -306,7 +306,7 @@ jobs:
                     "type": "section", 
                     "text": { 
                         "type": "plain_text", 
-                        "text": "The report for yesterday is available [here](${FILE_URL})." 
+                        "text": "The report for yesterday is available [here](${FILE_URL}).",
                         "emoji": true
                     } 
                 }
