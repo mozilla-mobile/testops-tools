@@ -310,7 +310,7 @@ jobs:
                             "text": "Detailed Report <'"$FILE_URL"'|here>"
                         }
                     ]
-                }
+                },
                 {
                     "type": "divider"
                 },
