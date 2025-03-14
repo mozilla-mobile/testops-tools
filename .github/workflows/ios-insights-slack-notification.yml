@@ -1,6 +1,8 @@
 name: Digest ios test results and import to BigQuery
 
 on:
+  schedule:
+    - cron: "0 7 * * *"  
   workflow_dispatch:
     inputs:
       branch:
@@ -16,37 +18,251 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configurae Google Cloud SDK
+      - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: moz-mobile-tools
-          service_account_key: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}
-          export_default_credentials: true
+      - name: Authenticate with Google Cloud
+        run: |
+          echo '${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}' > gcloud-key.json
+          gcloud auth activate-service-account --key-file=gcloud-key.json
+          rm -f gcloud-key.json
 
       - name: List all the HTML files in the bucket
         id: list-html
         run: |
-          echo "List HTML file on gs://test_insights/build/report/"
-          gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html > html_files.txt
-          cat html_files.txt
+          echo "List HTML file on gs://mobile-reports/public/test_ios_insights/build/reports/"
+          files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || true)
+          if [ -z "$files" ]; then
+            echo "No HTML files found."
+            echo "found=false" >> $GITHUB_OUTPUT
+          else
+            echo "$files" > html_files.txt
+            echo "found=true" >> $GITHUB_OUTPUT
+            cat html_files.txt
+          fi
+        shell: bash
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+            python-version: '3.13'
+        
+      - name: Install dependencies
+        run: pip install -r ios-insights/requirements.txt
 
       - name: Convert HTML a NDJSON
+        if: steps.list-html.outputs.found == 'true'
+        shell: bash
         run: |
+          set -x  # Enables command logging for debugging
           mkdir -p processed
           while IFS= read -r file_html; do
             echo "Processing $file_html"
-            # Download the HTML file
             gsutil cp "$file_html" .
             name_base=$(basename "$file_html" .html)
-            # Execute the conversion script
-            python ios-insights/convertHTML2NDJSON.py "$name_base.html" > "$name_base.json"
-            # Save the generated JSON in the processed folder
-            mv "$name_base.json" processed/
-          done < html_files.txt
 
+            echo "Checking if $name_base.html exists..."
+            ls -lh
+            if [ ! -f "$name_base.html" ]; then
+                echo "ERROR: $name_base.html not found!"
+                exit 1
+            fi
+
+            # Check if the Python script exists
+            if [ ! -f "ios-insights/convertHTML2NDJSON.py" ]; then
+                echo "ERROR: convertHTML2NDJSON.py not found!"
+                ls -lh ios-insights
+                exit 1
+            fi
+
+            echo "Running conversion script..."
+            python ios-insights/convertHTML2NDJSON.py "$name_base.html" "$name_base.ndjson"
+
+            if [ -s error_log.txt ]; then
+                echo "Python script error output:"
+                cat error_log.txt
+            fi
+
+            if [ -f "$name_base.ndjson" ]; then
+                echo "NDJSON successfully created: $name_base.ndjson"
+                mv "$name_base.ndjson" processed/
+            else
+                echo "ERROR: NDJSON file not generated!"
+                exit 1
+            fi
+          done < html_files.txt
+            
       - name: Upload generated NDJSON to the bucket
+        if: steps.list-html.outputs.found == 'true'
         run: |
           for ndjson_file in processed/*.ndjson; do
             echo "Uplod $ndjson_file to bucket..."
             gsutil cp "$ndjson_file" gs://mobile-reports/public/test_ios_insights/build/reports/
           done
+
+      - name: Import NDJSON to BigQuery
+        if: steps.list-html.outputs.found == 'true'
+        run: |
+          for file in processed/*.ndjson; do
+            echo "Importing $file into BigQuery..."
+            bq --location=US load \
+               --source_format=NEWLINE_DELIMITED_JSON \
+               --time_partitioning_field=timestamp \
+               --clustering_fields=test_suite,test_case \
+               ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }} \
+               "$file" \
+               ios-insights/schema.json
+          done
+        
+      - name: Clear bucket removing the processed files
+        if: ${{ success() }}
+        run: |
+            echo "Checking for HTML files to delete..."
+            html_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || echo "")
+            if [ -n "$html_files" ]; then
+                echo "Deleting HTML files..."
+                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html || true
+            else
+                echo "No HTML files found to delete."
+            fi
+
+            echo "Checking for NDJSON files to delete..."
+            ndjson_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson 2>/dev/null || echo "")
+            if [ -n "$ndjson_files" ]; then
+                echo "Deleting NDJSON files..."
+                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson || true
+            else
+                echo "No NDJSON files found to delete."
+            fi
+
+      - name: Get Daily Test Stats from BigQuery
+        env:
+            GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
+        run: |
+            envsubst < ios-insights/daily_test_stats.sql > stats_query_temp.sql
+            bq query --use_legacy_sql=false --format=json < stats_query_temp.sql > test_report.json
+         
+      - name: Get Daily Test Stats Flaky Test Details from BigQuery 
+        env:
+            GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
+        run: |
+            date_report=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+            csv_report_filename="ios_flaky_report_${date_report}.csv"
+            echo "csv_report_filename=${csv_report_filename}" >> $GITHUB_ENV
+            envsubst < ios-insights/flaky_test_details.sql > query_temp.sql
+               
+            bq query --use_legacy_sql=false --format=csv < query_temp.sql > ${csv_report_filename}
+
+      - name: Upload CSV Report to Cloud Storage
+        run: |
+            echo "Uploading file: ${csv_report_filename}"
+            gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}
+                
+      - name: Send Slack Notification
+        run: |
+           TOTAL_TESTS=$(jq -r '.[0].total_tests' test_report.json)
+           FAILED_TESTS=$(jq -r '.[0].failed_tests' test_report.json)
+           FLAKY_TESTS=$(jq -r '.[0].flaky_tests' test_report.json)
+           FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
+           FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
+           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
+           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
+         
+           SLACK_MESSAGE='{
+             "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
+             "blocks": [
+                { 
+                    "type": "section", 
+                    "text": { 
+                        "type": "mrkdwn", 
+                        "text": ":firefox: Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
+                    } 
+                },
+                {
+                    "type": "divider"
+                },
+                { 
+                    "type": "rich_text", 
+                    "elements": [
+                        { 
+                            "type": "rich_text_list", 
+                            "style": "bullet", 
+                            "indent": 0, 
+                            "border": 0, 
+                            "elements": [
+                                { 
+                                    "type": "rich_text_section", 
+                                    "elements": [ 
+                                        {
+                                            "type": "text", 
+                                            "text": "Tests Ran Yesterday: '"$TOTAL_TESTS"'" 
+                                        }
+                                    ]
+                                },
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Flaky Tests Yesterday: '"$FLAKY_TESTS"'" 
+                                        }
+                                    ]
+                                },
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Flaky Rate Yesterday: '"$FLAKY_RATE"'%" 
+                                        }
+                                    ]
+                                },  
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Failed Tests Yesterday: '"$FAILED_TESTS"'" 
+                                        }
+                                    ]
+                                }, 
+                                { 
+                                    "type": "rich_text_section",
+                                    "elements": [
+                                        {
+                                            "type": "text", 
+                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"'%" 
+                                        }
+                                    ]
+                                }  
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "Detailed Report <'"$FILE_URL"'|here>"
+                        }
+                    ]
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview#Test-Operations|Mobile Test Engineering>"
+                        }
+                    ]
+                }
+             ]
+            }'
+         
+            curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+         

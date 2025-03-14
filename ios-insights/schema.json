@@ -1,0 +1,10 @@
+[
+    {"name": "branch", "type": "STRING"},
+    {"name": "suite", "type": "STRING"},
+    {"name": "device", "type": "STRING"},
+    {"name": "timestamp", "type": "TIMESTAMP"},
+    {"name": "test_suite", "type": "STRING"},
+    {"name": "test_case", "type": "STRING"},
+    {"name": "execution_time_s", "type": "FLOAT"},
+    {"name": "result", "type": "STRING"}
+  ]
