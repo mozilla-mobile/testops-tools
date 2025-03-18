@@ -31,9 +31,10 @@ flagged_tests AS (
     SELECT
 	    branch,
         device,
+        DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS report_date,
         COUNT(*) AS total_tests,
         COUNTIF(is_flaky) AS flaky_tests_count,
-        SAFE_DIVIDE(COUNTIF(is_flaky), COUNT(*)) AS flaky_tests_ratio,
+        ROUND(SAFE_DIVIDE(COUNTIF(is_flaky), COUNT(*)), 4) AS flaky_tests_ratio,
         ARRAY_TO_STRING(ARRAY_AGG(CASE WHEN is_flaky THEN test_case END IGNORE NULLS), ', ') AS flaky_tests_details
     FROM flagged_tests
     GROUP BY branch, device

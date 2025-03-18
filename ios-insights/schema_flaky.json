@@ -1,0 +1,9 @@
+[
+    {"name": "branch", "type": "STRING"},
+    {"name": "device", "type": "STRING"},
+    {"name": "total_tests", "type": "INTEGER"},
+    {"name": "flaky_test_count", "type": "INTEGER"},
+    {"name": "flaky_tests_ratio", "type": "FLOAT"},
+    {"name": "flaky_test_details", "type": "STRING"},
+    {"name": "report_date", "type": "DATE"}
+  ]
