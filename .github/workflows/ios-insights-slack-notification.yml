@@ -168,7 +168,7 @@ jobs:
                ${{ secrets.GCP_SA_IOS_FLAKY_TEST_TABLE }} \
                gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename} \
                ios-insights/schema_flaky.json
-            shell: bash      
+        shell: bash      
             
       - name: Send Slack Notification
         run: |
