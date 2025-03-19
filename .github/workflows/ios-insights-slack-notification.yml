@@ -158,7 +158,18 @@ jobs:
         run: |
             echo "Uploading file: ${csv_report_filename}"
             gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}
-                
+      
+      - name: Import CSV Report into BigQuery Flaky Test Table
+        run: |
+            echo "Importing CSV report into BigQuery Flaky Test Table"
+            bq --location=US load \
+               --source_format=CSV \
+               --skip_leading_rows=1 \
+               ${{ secrets.GCP_SA_IOS_FLAKY_TEST_TABLE }} \
+               gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename} \
+               ios-insights/schema_flaky.json
+        shell: bash      
+            
       - name: Send Slack Notification
         run: |
            TOTAL_TESTS=$(jq -r '.[0].total_tests' test_report.json)
@@ -176,7 +187,7 @@ jobs:
                     "type": "section", 
                     "text": { 
                         "type": "mrkdwn", 
-                        "text": ":firefox: Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
+                        "text": ":firefox: iOS Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
                     } 
                 },
                 {
