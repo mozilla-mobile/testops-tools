@@ -275,5 +275,5 @@ jobs:
              ]
             }'
          
-            curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+            curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_STATS_CHANNEL }}
          
