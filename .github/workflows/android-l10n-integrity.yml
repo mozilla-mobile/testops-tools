@@ -36,7 +36,7 @@ jobs:
                 python android-l10n-integrity/src/locale_compare.py
         - name: Upload result
           if: failure()
-          uses: actions/upload-artifact@v4.6.1
+          uses: actions/upload-artifact@v4.6.2
           with:
             name: check-locales-log
             path: ./check_locales.log
