@@ -172,11 +172,11 @@ jobs:
             
       - name: Send Slack Notification
         run: |
-           TOTAL_TESTS=$(jq -r '.[0].total_tests' test_report.json)
-           FAILED_TESTS=$(jq -r '.[0].failed_tests' test_report.json)
-           FLAKY_TESTS=$(jq -r '.[0].flaky_tests' test_report.json)
-           FAILURE_RATE=$(jq -r '.[0].failure_rate' test_report.json)
-           FLAKY_RATE=$(jq -r '.[0].flaky_rate' test_report.json)
+           TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
+           FAILED_TESTS=$(jq -r '.[0].failed_tests // 0' test_report.json)
+           FLAKY_TESTS=$(jq -r '.[0].flaky_tests // 0' test_report.json)
+           FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
+           FLAKY_RATE=$(jq -r '.[0].flaky_rate // 0' test_report.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
            FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
          
@@ -225,7 +225,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Rate Yesterday: '"$FLAKY_RATE"'%" 
+                                            "text": "Flaky Rate Yesterday: '"$FLAKY_RATE"' %" 
                                         }
                                     ]
                                 },  
@@ -243,7 +243,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"'%" 
+                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"' %" 
                                         }
                                     ]
                                 }  

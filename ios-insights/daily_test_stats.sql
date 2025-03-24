@@ -2,7 +2,7 @@ WITH overall AS (
     SELECT 
         COUNT(*) AS total_tests,
         COUNTIF(result = 'failed') AS failed_tests,
-        ROUND((COUNTIF(result = 'failed') / COUNT(*)) * 100, 2) AS failure_rate
+        ROUND(SAFE_DIVIDE(COUNTIF(result = 'failed'), COUNT(*)) * 100, 2) AS failure_rate
     FROM `${GCP_SA_IOS_TESTS_INSIGHTS_TABLE}`
     WHERE DATE(timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
 ),
