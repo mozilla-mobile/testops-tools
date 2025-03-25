@@ -179,7 +179,8 @@ jobs:
            FLAKY_RATE=$(jq -r '.[0].flaky_rate // 0' test_report.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
            FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
-         
+           LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
+
            SLACK_MESSAGE='{
              "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
              "blocks": [
@@ -256,7 +257,7 @@ jobs:
                     "elements": [
                         {
                             "type": "mrkdwn",
-                            "text": "Detailed Report <'"$FILE_URL"'|here>"
+                            "text": "Detailed Report <'"$FILE_URL"'|here> and Looker Reports <'"$LOOKER_URL"'|here>"
                         }
                     ]
                 },
