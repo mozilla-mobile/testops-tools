@@ -41,7 +41,6 @@ flagged_tests AS (
 SELECT
   branch,
   device,
-  test_suite,
   COUNT(DISTINCT test_case) AS total_failed_tests,
   COUNT(DISTINCT CASE WHEN is_flaky THEN test_case END) AS flaky_tests_count,
   ROUND(
@@ -55,7 +54,8 @@ SELECT
     ARRAY_AGG(DISTINCT CASE WHEN is_flaky THEN test_case END IGNORE NULLS),
     ', '
   ) AS flaky_tests_details,
-  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS report_date
+  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS report_date,
+  test_suite
 FROM flagged_tests
 GROUP BY branch, device, test_suite
 HAVING COUNT(DISTINCT CASE WHEN is_flaky THEN test_case END) > 0
