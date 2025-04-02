@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f5f5f5"/>
+  
+  <!-- Title -->
+  <text x="450" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">Page Navigation Flow</text>
+  
+  <!-- HomePage Box -->
+  <rect x="350" y="80" width="200" height="80" rx="10" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+  <text x="450" y="110" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">HomePage</text>
+  <text x="450" y="140" font-family="Arial" font-size="14" text-anchor="middle">navigationPath = [ ]</text>
+  
+  <!-- SettingsHomePage Box -->
+  <rect x="100" y="240" width="200" height="100" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="200" y="270" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">SettingsHomePage</text>
+  <text x="200" y="300" font-family="Arial" font-size="14" text-anchor="middle">navigationPath = [</text>
+  <text x="200" y="320" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(THREE_DOT_MENU),</text>
+  <text x="200" y="340" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(SETTINGS_BUTTON)</text>
+  <text x="200" y="360" font-family="Arial" font-size="14" text-anchor="middle">]</text>
+  
+  <!-- PrivacySettingsPage Box -->
+  <rect x="350" y="240" width="200" height="100" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="450" y="270" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">PrivacySettingsPage</text>
+  <text x="450" y="300" font-family="Arial" font-size="14" text-anchor="middle">navigationPath = [</text>
+  <text x="450" y="320" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(THREE_DOT_MENU),</text>
+  <text x="450" y="340" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(SETTINGS_BUTTON),</text>
+  <text x="450" y="360" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(PRIVACY_MENU)</text>
+  <text x="450" y="380" font-family="Arial" font-size="14" text-anchor="middle">]</text>
+  
+  <!-- BookmarksPage Box -->
+  <rect x="600" y="240" width="200" height="100" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="700" y="270" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">BookmarksPage</text>
+  <text x="700" y="300" font-family="Arial" font-size="14" text-anchor="middle">navigationPath = [</text>
+  <text x="700" y="320" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(THREE_DOT_MENU),</text>
+  <text x="700" y="340" font-family="Arial" font-size="14" text-anchor="middle">  mozClick(BOOKMARKS_BUTTON)</text>
+  <text x="700" y="360" font-family="Arial" font-size="14" text-anchor="middle">]</text>
+  
+  <!-- Navigation arrows -->
+  <line x1="450" y1="160" x2="200" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="205,233 200,240 210,240" fill="#666"/>
+  <text x="300" y="190" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Three Dot Menu → Settings</text>
+  
+  <line x1="450" y1="160" x2="450" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="445,230 450,240 455,230" fill="#666"/>
+  <text x="520" y="200" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Three Dot Menu →</text>
+  <text x="520" y="220" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Settings → Privacy</text>
+  
+  <line x1="450" y1="160" x2="700" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="695,233 700,240 690,240" fill="#666"/>
+  <text x="600" y="190" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Three Dot Menu → Bookmarks</text>
+  
+  <!-- Navigation Execution Box -->
+  <rect x="200" y="450" width="500" height="130" rx="10" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+  <text x="450" y="480" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">Navigation Execution Pseudocode</text>
+  <line x1="200" y1="500" x2="700" y2="500" stroke="#52c41a" stroke-width="1"/>
+  
+  <text x="220" y="525" font-family="Arial" font-size="14" text-anchor="start">fun navigateToPage() {</text>
+  <text x="240" y="550" font-family="Arial" font-size="14" text-anchor="start">if (current page is already the target page) return</text>
+  <text x="240" y="575" font-family="Arial" font-size="14" text-anchor="start">for (step in navigationPath) {</text>
+  <text x="260" y="600" font-family="Arial" font-size="14" text-anchor="start">execute step (click, swipe, enter text, etc.)</text>
+  <text x="240" y="625" font-family="Arial" font-size="14" text-anchor="start">}</text>
+  <text x="220" y="650" font-family="Arial" font-size="14" text-anchor="start">}</text>
+  
+  <!-- Connection to execution -->
+  <line x1="200" y1="340" x2="100" y2="400" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="100" y1="400" x2="100" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="100" y1="500" x2="200" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <line x1="450" y1="380" x2="450" y2="450" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <line x1="700" y1="340" x2="800" y2="400" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="800" y1="400" x2="800" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="800" y1="500" x2="700" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Shortcut explanation boxes -->
+  <rect x="50" y="120" width="180" height="80" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="140" y="145" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Root Page</text>
+  <text x="140" y="170" font-family="Arial" font-size="14" text-anchor="middle">Default starting page</text>
+  <text x="140" y="190" font-family="Arial" font-size="14" text-anchor="middle">Empty navigation path</text>
+  
+  <rect x="670" y="120" width="180" height="80" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="760" y="145" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Page Transitions</text>
+  <text x="760" y="170" font-family="Arial" font-size="14" text-anchor="middle">Each page stores</text>
+  <text x="760" y="190" font-family="Arial" font-size="14" text-anchor="middle">how to reach it from root</text>
+  
+  <line x1="230" y1="160" x2="350" y2="120" stroke="#666" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="670" y1="160" x2="550" y2="120" stroke="#666" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

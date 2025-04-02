@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+  <!-- Background -->
+  <rect width="900" height="650" fill="#f5f5f5"/>
+  
+  <!-- Title -->
+  <text x="450" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">Test Development Workflow</text>
+  
+  <!-- Start node -->
+  <circle cx="450" cy="90" r="30" fill="#52c41a" stroke="#389e0d" stroke-width="2"/>
+  <text x="450" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Start</text>
+  
+  <!-- Step 1: Write Test Structure First -->
+  <rect x="300" y="140" width="300" height="60" rx="10" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+  <text x="450" y="170" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">1. Write Test Structure First</text>
+  <text x="450" y="195" font-family="Arial" font-size="14" text-anchor="middle">Define Given/When/Then sections</text>
+  
+  <!-- Code box for step 1 -->
+  <rect x="50" y="140" width="225" height="110" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="60" y="160" font-family="Courier New" font-size="11" text-anchor="start">@Test</text>
+  <text x="60" y="175" font-family="Courier New" font-size="11" text-anchor="start">fun verifyFeature() {</text>
+  <text x="60" y="190" font-family="Courier New" font-size="11" text-anchor="start">  // Given: initial state</text>
+  <text x="60" y="205" font-family="Courier New" font-size="11" text-anchor="start">  on = PageContext()</text>
+  <text x="60" y="220" font-family="Courier New" font-size="11" text-anchor="start">  // When: actions</text>
+  <text x="60" y="235" font-family="Courier New" font-size="11" text-anchor="start">  // Then: verification</text>
+  <text x="60" y="250" font-family="Courier New" font-size="11" text-anchor="start">}</text>
+  
+  <!-- Step 2: Check Required Page Objects and Selectors Exist -->
+  <rect x="300" y="240" width="300" height="60" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="450" y="270" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">2. Check Required Page Objects</text>
+  <text x="450" y="295" font-family="Arial" font-size="14" text-anchor="middle">Identify required pages and selectors</text>
+  
+  <!-- Decision: Page Objects Exist? -->
+  <polygon points="450,320 500,370 450,420 400,370" fill="#fffbe6" stroke="#faad14" stroke-width="2"/>
+  <text x="450" y="375" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Do required</text>
+  <text x="450" y="395" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">pages exist?</text>
+  
+  <!-- Step 3A: Create New Page Objects -->
+  <rect x="600" y="340" width="250" height="60" rx="10" fill="#fff2e8" stroke="#fa541c" stroke-width="2"/>
+  <text x="725" y="370" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">3A. Create New Page Objects</text>
+  <text x="725" y="395" font-family="Arial" font-size="14" text-anchor="middle">Define selectors and navigation paths</text>
+  
+  <!-- Code box for step 3A -->
+  <rect x="600" y="410" width="250" height="110" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="610" y="430" font-family="Courier New" font-size="11" text-anchor="start">object NewPage : BasePage() {</text>
+  <text x="610" y="445" font-family="Courier New" font-size="11" text-anchor="start">  private val selectors = </text>
+  <text x="610" y="460" font-family="Courier New" font-size="11" text-anchor="start">    NewPageSelectors</text>
+  <text x="610" y="475" font-family="Courier New" font-size="11" text-anchor="start">  override val navigationPath = </text>
+  <text x="610" y="490" font-family="Courier New" font-size="11" text-anchor="start">    listOf(mozClick(...))</text>
+  <text x="610" y="505" font-family="Courier New" font-size="11" text-anchor="start">  ...</text>
+  <text x="610" y="520" font-family="Courier New" font-size="11" text-anchor="start">}</text>
+  
+  <!-- Step 4: Implement Test Actions -->
+  <rect x="300" y="440" width="300" height="60" rx="10" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+  <text x="450" y="470" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">4. Implement Test Actions</text>
+  <text x="450" y="495" font-family="Arial" font-size="14" text-anchor="middle">Add navigation steps and user actions</text>
+  
+  <!-- Code box for step 4 -->
+  <rect x="50" y="440" width="225" height="110" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="60" y="460" font-family="Courier New" font-size="11" text-anchor="start">// When: actions</text>
+  <text x="60" y="475" font-family="Courier New" font-size="11" text-anchor="start">on.HomePage.navigateToPage()</text>
+  <text x="60" y="490" font-family="Courier New" font-size="11" text-anchor="start">.mozClick(HomeSelectors.</text>
+  <text x="60" y="505" font-family="Courier New" font-size="11" text-anchor="start">  FEATURE_BUTTON)</text>
+  <text x="60" y="520" font-family="Courier New" font-size="11" text-anchor="start">on.FeaturePage</text>
+  <text x="60" y="535" font-family="Courier New" font-size="11" text-anchor="start">.enableFeature()</text>
+  <text x="60" y="550" font-family="Courier New" font-size="11" text-anchor="start">...</text>
+  
+  <!-- Step 5: Add Verification Steps -->
+  <rect x="300" y="540" width="300" height="60" rx="10" fill="#e6fffb" stroke="#13c2c2" stroke-width="2"/>
+  <text x="450" y="570" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">5. Add Verification Steps</text>
+  <text x="450" y="595" font-family="Arial" font-size="14" text-anchor="middle">Assertions to verify expected behavior</text>
+  
+  <!-- Code box for step 5 -->
+  <rect x="625" y="540" width="225" height="60" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="635" y="560" font-family="Courier New" font-size="11" text-anchor="start">// Then: verification</text>
+  <text x="635" y="575" font-family="Courier New" font-size="11" text-anchor="start">on.FeaturePage</text>
+  <text x="635" y="590" font-family="Courier New" font-size="11" text-anchor="start">.mozVerifyElementsByGroup</text>
+  <text x="635" y="605" font-family="Courier New" font-size="11" text-anchor="start">("enabledFeatures")</text>
+  
+  <!-- Finish node -->
+  <circle cx="450" cy="640" r="30" fill="#f5222d" stroke="#cf1322" stroke-width="2"/>
+  <text x="450" y="645" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">End</text>
+  
+  <!-- Connection lines -->
+  <line x1="450" y1="120" x2="450" y2="140" stroke="#666" stroke-width="2"/>
+  <polygon points="445,130 450,140 455,130" fill="#666"/>
+  
+  <line x1="450" y1="200" x2="450" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="445,230 450,240 455,230" fill="#666"/>
+  
+  <line x1="450" y1="300" x2="450" y2="320" stroke="#666" stroke-width="2"/>
+  <polygon points="445,310 450,320 455,310" fill="#666"/>
+  
+  <!-- No branch -->
+  <line x1="500" y1="370" x2="600" y2="370" stroke="#666" stroke-width="2"/>
+  <polygon points="590,365 600,370 590,375" fill="#666"/>
+  <text x="550" y="360" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">No</text>
+  
+  <line x1="725" y1="520" x2="725" y2="570" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="725" y1="570" x2="600" y2="570" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="610,565 600,570 610,575" fill="#666"/>
+  
+  <!-- Yes branch -->
+  <line x1="450" y1="420" x2="450" y2="440" stroke="#666" stroke-width="2"/>
+  <polygon points="445,430 450,440 455,430" fill="#666"/>
+  <text x="435" y="430" font-family="Arial" font-size="14" fill="#666" text-anchor="middle">Yes</text>
+  
+  <line x1="450" y1="500" x2="450" y2="540" stroke="#666" stroke-width="2"/>
+  <polygon points="445,530 450,540 455,530" fill="#666"/>
+  
+  <line x1="450" y1="600" x2="450" y2="640" stroke="#666" stroke-width="2"/>
+  <polygon points="445,630 450,640 455,630" fill="#666"/>
+  
+  <!-- Step 3B: Create New Selectors -->
+  <rect x="600" y="240" width="250" height="60" rx="10" fill="#fff7e6" stroke="#fa8c16" stroke-width="2"/>
+  <text x="725" y="270" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">3B. Create New Selectors</text>
+  <text x="725" y="295" font-family="Arial" font-size="14" text-anchor="middle">Define UI elements and groups</text>
+  
+  <!-- Connection for 3A to 3B -->
+  <line x1="725" y1="300" x2="725" y2="340" stroke="#666" stroke-width="2"/>
+  <polygon points="720,330 725,340 730,330" fill="#666"/>
+  
+  <!-- Code box for step 3B -->
+  <rect x="600" y="160" width="250" height="70" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="610" y="180" font-family="Courier New" font-size="11" text-anchor="start">val FEATURE_TOGGLE = Selector(</text>
+  <text x="610" y="195" font-family="Courier New" font-size="11" text-anchor="start">  strategy = BY_ID,</text>
+  <text x="610" y="210" font-family="Courier New" font-size="11" text-anchor="start">  value = "feature_toggle",</text>
+  <text x="610" y="225" font-family="Courier New" font-size="11" text-anchor="start">  groups = ["requiredForPage"]</text>
+  <text x="610" y="240" font-family="Courier New" font-size="11" text-anchor="start">)</text>
+  
+  <!-- Connection for 3A to 3B -->
+  <line x1="725" y1="300" x2="725" y2="340" stroke="#666" stroke-width="2"/>
+  <polygon points="720,330 725,340 730,330" fill="#666"/>
+  
+  <!-- Add to PageContext step -->
+  <rect x="600" y="530" width="250" height="0" rx="10" fill="#fff0f6" stroke="#eb2f96" stroke-width="0"/>
+  
+  <!-- Support explanation texts -->
+  <rect x="50" y="270" width="225" height="145" rx="5" fill="#f9f9f9" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="60" y="290" font-family="Arial" font-size="12" font-weight="bold" text-anchor="start">Required Page Objects to check:</text>
+  <text x="60" y="310" font-family="Arial" font-size="12" text-anchor="start">• Page objects for each screen</text>
+  <text x="60" y="330" font-family="Arial" font-size="12" text-anchor="start">• Selectors for all UI elements</text>
+  <text x="60" y="350" font-family="Arial" font-size="12" text-anchor="start">• Navigation paths defined</text>
+  <text x="60" y="370" font-family="Arial" font-size="12" text-anchor="start">• PageContext contains pages</text>
+  <text x="60" y="390" font-family="Arial" font-size="12" font-weight="bold" text-anchor="start">Missing items must be created</text>
+  <text x="60" y="410" font-family="Arial" font-size="12" text-anchor="start">before implementing the test!</text>
+</svg>

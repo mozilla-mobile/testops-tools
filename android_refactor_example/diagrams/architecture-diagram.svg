@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+  <!-- Background -->
+  <rect width="1000" height="600" fill="#f5f5f5"/>
+  
+  <!-- Title -->
+  <text x="500" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">Page Object Model Architecture</text>
+  
+  <!-- Test Class Box -->
+  <rect x="50" y="80" width="200" height="120" rx="10" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+  <text x="150" y="110" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">Test Class</text>
+  <text x="150" y="140" font-family="Arial" font-size="14" text-anchor="middle">@Test methods</text>
+  <text x="150" y="160" font-family="Arial" font-size="14" text-anchor="middle">Test setup, flow, and</text>
+  <text x="150" y="180" font-family="Arial" font-size="14" text-anchor="middle">assertions</text>
+  
+  <!-- Page Context Box -->
+  <rect x="400" y="80" width="200" height="120" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="500" y="110" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">Page Context</text>
+  <text x="500" y="140" font-family="Arial" font-size="14" text-anchor="middle">Provides "on" syntax</text>
+  <text x="500" y="160" font-family="Arial" font-size="14" text-anchor="middle">Access to all page</text>
+  <text x="500" y="180" font-family="Arial" font-size="14" text-anchor="middle">objects</text>
+  
+  <!-- BasePage Box -->
+  <rect x="400" y="240" width="200" height="120" rx="10" fill="#e6fffb" stroke="#13c2c2" stroke-width="2"/>
+  <text x="500" y="270" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">BasePage</text>
+  <text x="500" y="300" font-family="Arial" font-size="14" text-anchor="middle">Abstract class</text>
+  <text x="500" y="320" font-family="Arial" font-size="14" text-anchor="middle">Common functionality</text>
+  <text x="500" y="340" font-family="Arial" font-size="14" text-anchor="middle">Navigation methods</text>
+  
+  <!-- HomePage Box -->
+  <rect x="100" y="400" width="160" height="120" rx="10" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+  <text x="180" y="430" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">HomePage</text>
+  <text x="180" y="460" font-family="Arial" font-size="14" text-anchor="middle">Extends BasePage</text>
+  <text x="180" y="480" font-family="Arial" font-size="14" text-anchor="middle">navigationPath</text>
+  <text x="180" y="500" font-family="Arial" font-size="14" text-anchor="middle">Page-specific methods</text>
+  
+  <!-- SettingsPage Box -->
+  <rect x="300" y="400" width="160" height="120" rx="10" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+  <text x="380" y="430" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">SettingsPage</text>
+  <text x="380" y="460" font-family="Arial" font-size="14" text-anchor="middle">Extends BasePage</text>
+  <text x="380" y="480" font-family="Arial" font-size="14" text-anchor="middle">navigationPath</text>
+  <text x="380" y="500" font-family="Arial" font-size="14" text-anchor="middle">Page-specific methods</text>
+  
+  <!-- OtherPage Box -->
+  <rect x="500" y="400" width="160" height="120" rx="10" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+  <text x="580" y="430" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">ProfilePage</text>
+  <text x="580" y="460" font-family="Arial" font-size="14" text-anchor="middle">Extends BasePage</text>
+  <text x="580" y="480" font-family="Arial" font-size="14" text-anchor="middle">navigationPath</text>
+  <text x="580" y="500" font-family="Arial" font-size="14" text-anchor="middle">Page-specific methods</text>
+  
+  <!-- Selectors Box -->
+  <rect x="740" y="80" width="200" height="120" rx="10" fill="#fff7e6" stroke="#fa8c16" stroke-width="2"/>
+  <text x="840" y="110" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">Selectors</text>
+  <text x="840" y="140" font-family="Arial" font-size="14" text-anchor="middle">UI element definitions</text>
+  <text x="840" y="160" font-family="Arial" font-size="14" text-anchor="middle">Grouped by page and</text>
+  <text x="840" y="180" font-family="Arial" font-size="14" text-anchor="middle">functionality</text>
+  
+  <!-- HomeSelectors Box -->
+  <rect x="700" y="240" width="160" height="80" rx="10" fill="#fff2e8" stroke="#fa541c" stroke-width="2"/>
+  <text x="780" y="270" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">HomeSelectors</text>
+  <text x="780" y="300" font-family="Arial" font-size="14" text-anchor="middle">Home page elements</text>
+  
+  <!-- SettingsSelectors Box -->
+  <rect x="700" y="340" width="160" height="80" rx="10" fill="#fff2e8" stroke="#fa541c" stroke-width="2"/>
+  <text x="780" y="370" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">SettingsSelectors</text>
+  <text x="780" y="400" font-family="Arial" font-size="14" text-anchor="middle">Settings page elements</text>
+  
+  <!-- ProfileSelectors Box -->
+  <rect x="700" y="440" width="160" height="80" rx="10" fill="#fff2e8" stroke="#fa541c" stroke-width="2"/>
+  <text x="780" y="470" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">ProfileSelectors</text>
+  <text x="780" y="500" font-family="Arial" font-size="14" text-anchor="middle">Profile page elements</text>
+  
+  <!-- NavigationStep Box -->
+  <rect x="740" y="540" width="200" height="40" rx="10" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+  <text x="840" y="565" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">NavigationStep</text>
+  
+  <!-- Connections - Lines -->
+  <!-- Test to PageContext -->
+  <line x1="250" y1="140" x2="400" y2="140" stroke="#666" stroke-width="2"/>
+  <polygon points="390,135 400,140 390,145" fill="#666"/>
+  
+  <!-- PageContext to BasePage -->
+  <line x1="500" y1="200" x2="500" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="495,230 500,240 505,230" fill="#666"/>
+  
+  <!-- BasePage to Pages -->
+  <line x1="400" y1="300" x2="180" y2="400" stroke="#666" stroke-width="2"/>
+  <polygon points="187,393 180,400 192,402" fill="#666"/>
+  
+  <line x1="475" y1="360" x2="380" y2="400" stroke="#666" stroke-width="2"/>
+  <polygon points="388,393 380,400 391,404" fill="#666"/>
+  
+  <line x1="525" y1="360" x2="580" y2="400" stroke="#666" stroke-width="2"/>
+  <polygon points="572,393 580,400 575,388" fill="#666"/>
+  
+  <!-- Selectors to Specific Selectors -->
+  <line x1="840" y1="200" x2="780" y2="240" stroke="#666" stroke-width="2"/>
+  <polygon points="777,230 780,240 787,233" fill="#666"/>
+  
+  <line x1="780" y1="320" x2="780" y2="340" stroke="#666" stroke-width="2"/>
+  <polygon points="775,330 780,340 785,330" fill="#666"/>
+  
+  <line x1="780" y1="420" x2="780" y2="440" stroke="#666" stroke-width="2"/>
+  <polygon points="775,430 780,440 785,430" fill="#666"/>
+  
+  <!-- Pages to Selectors -->
+  <line x1="180" y1="460" x2="700" y2="280" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="692,282 700,280 695,288" fill="#666"/>
+  
+  <line x1="380" y1="460" x2="700" y2="380" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="692,378 700,380 692,384" fill="#666"/>
+  
+  <line x1="580" y1="460" x2="700" y2="480" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="692,476 700,480 692,484" fill="#666"/>
+  
+  <!-- NavigationStep connections -->
+  <line x1="840" y1="540" x2="580" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="840" y1="540" x2="380" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="840" y1="540" x2="180" y2="500" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+</svg>
