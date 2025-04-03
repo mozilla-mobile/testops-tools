@@ -169,14 +169,22 @@ jobs:
                gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename} \
                ios-insights/schema_flaky.json
         shell: bash      
+
+      - name: Get Daily Flaky Test Stats from BigQuery
+        env:
+            GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_FLAKY_TEST_TABLE }}
+        run: |
+            envsubst < ios-insights/flaky_test_details.sql > stats_query_flaky_temp.sql
+            bq query --use_legacy_sql=false --format=json < stats_query_flaky_temp.sql > test_report_flaky.json
+           
             
       - name: Send Slack Notification
         run: |
            TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
            FAILED_TESTS=$(jq -r '.[0].failed_tests // 0' test_report.json)
-           FLAKY_TESTS=$(jq -r '.[0].flaky_tests // 0' test_report.json)
+           FLAKY_TESTS=$(jq -r '.[0].flaky_tests_count // 0' test_report_flaky.json)
            FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
-           FLAKY_RATE=$(jq -r '.[0].flaky_rate // 0' test_report.json)
+           FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
            FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
            LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
