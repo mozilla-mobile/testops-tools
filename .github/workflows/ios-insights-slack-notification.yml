@@ -172,7 +172,7 @@ jobs:
 
       - name: Get Daily Flaky Test Stats from BigQuery
         env:
-           GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_FLAKY_TEST_TABLE }}
+           GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
         run: |
           envsubst < ios-insights/flaky_test_details.sql > stats_query_flaky_temp.sql
           bq query --use_legacy_sql=false --format=json < stats_query_flaky_temp.sql > test_report_flaky.json 2> error_log.txt || (cat error_log.txt && exit 1)
