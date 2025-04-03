@@ -188,7 +188,7 @@ jobs:
            if [ "$TOTAL_FAILED" -eq 0 ]; then
               OVERALL_RATIO=0
            else
-              OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l)
+              OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l | awk '{printf "%.3f", $0}')
            fi
            FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
            FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
