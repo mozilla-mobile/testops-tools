@@ -169,14 +169,29 @@ jobs:
                gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename} \
                ios-insights/schema_flaky.json
         shell: bash      
-            
+
+      - name: Get Daily Flaky Test Stats from BigQuery
+        env:
+           GCP_SA_IOS_TESTS_INSIGHTS_TABLE: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS_TABLE }}
+        run: |
+          envsubst < ios-insights/flaky_test_details.sql > stats_query_flaky_temp.sql
+          bq query --use_legacy_sql=false --format=json < stats_query_flaky_temp.sql > test_report_flaky.json
+        shell: bash
+              
       - name: Send Slack Notification
         run: |
            TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
-           FAILED_TESTS=$(jq -r '.[0].failed_tests // 0' test_report.json)
-           FLAKY_TESTS=$(jq -r '.[0].flaky_tests // 0' test_report.json)
+           FAILED_TESTS=$(jq '[.[] | .failed_tests | tonumber] | add' test_report.json)
+           TOTAL_FAILED=$(jq '[.[] | .total_failed_tests | tonumber] | add' test_report_flaky.json)
+           TOTAL_FLAKY=$(jq '[.[] | .flaky_tests_count | tonumber] | add' test_report_flaky.json)
+    
+           if [ "$TOTAL_FAILED" -eq 0 ]; then
+              OVERALL_RATIO=0
+           else
+              OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l | awk '{printf "%.3f", $0}')
+           fi
            FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
-           FLAKY_RATE=$(jq -r '.[0].flaky_rate // 0' test_report.json)
+           FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
            YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
            FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
            LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
@@ -217,7 +232,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Tests Yesterday: '"$FLAKY_TESTS"'" 
+                                            "text": "Flaky Tests Yesterday: '"$TOTAL_FLAKY"'" 
                                         }
                                     ]
                                 },
@@ -226,7 +241,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Rate Yesterday: '"$FLAKY_RATE"' %" 
+                                            "text": "Flaky Rate Yesterday: '"$OVERALL_RATIO"' %" 
                                         }
                                     ]
                                 },  
