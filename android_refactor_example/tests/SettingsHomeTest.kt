@@ -25,4 +25,15 @@ class SettingsHomeTest : BaseTest() {
             .mozVerifyElementsByGroup("requiredForPage")
             .mozVerifyElementsByGroup("topSites")
     }
+
+    fun myNewTest() {
+        // Given: the onboarding is false, setting2 is false, setting3 is true
+        val activityIntentTestRule = skipOnboarding.false
+
+        // When: navigating to settings page and toggling credit card autofill
+        on.BookmarksPage.navigateToPage()
+
+        // Then: make sure all the page elements and top site elements are present
+
+    }
 }
