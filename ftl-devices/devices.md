@@ -4,7 +4,7 @@
 | CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Medium |
-| J606F | Lenovo Tab P11 | 30 | Medium |
+| J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP5552L1 | CPH2415 | 34 | Medium |
 | OP573DL1 | CPH2557 | 34 | High |
@@ -76,7 +76,7 @@
 | pettyl | moto e5 play | 27 | Medium |
 | q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
-| q6q | Galaxy Z Fold6 | 34 | Medium |
+| q6q | Galaxy Z Fold6 | 34 | High |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | High |
 | r11q | SM-S711U | 34 | Medium |
