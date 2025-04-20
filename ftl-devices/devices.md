@@ -15,7 +15,7 @@
 | TB370FU | Lenovo Tab P12 | 34 | High |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
-| a02q | Galaxy A02s | 31 | Low |
+| a02q | Galaxy A02s | 31 | Medium |
 | a03s | Galaxy A03s | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
