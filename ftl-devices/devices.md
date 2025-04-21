@@ -46,7 +46,7 @@
 | dm3q | Galaxy S23 Ultra | 33 | High |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
-| e3q | Galaxy S24 Ultra | 34 | Medium |
+| e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
