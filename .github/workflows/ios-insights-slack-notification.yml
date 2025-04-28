@@ -2,7 +2,7 @@ name: Digest ios test results and import to BigQuery
 
 on:
   schedule:
-    - cron: "0 7 * * *"  
+    - cron: "0 7 * * 1-6"
   workflow_dispatch:
     inputs:
       branch:
