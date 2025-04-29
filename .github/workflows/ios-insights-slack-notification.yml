@@ -239,7 +239,7 @@ jobs:
                                     "elements": [ 
                                         {
                                             "type": "text", 
-                                            "text": "Tests Ran Yesterday: '"$TOTAL_TESTS"'" 
+                                            "text": "Tests Ran Yesterday: '$TOTAL_TESTS'" 
                                         }
                                     ]
                                 },
@@ -248,7 +248,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Tests Yesterday: '"$TOTAL_FLAKY"'" 
+                                            "text": "Flaky Tests Yesterday: '$TOTAL_FLAKY'" 
                                         }
                                     ]
                                 },
@@ -257,7 +257,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Rate Yesterday: '"$OVERALL_RATIO"' %" 
+                                            "text": "Flaky Rate Yesterday: '$OVERALL_RATIO' %" 
                                         }
                                     ]
                                 },  
@@ -266,7 +266,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Failed Tests Yesterday: '"$FAILED_TESTS"'" 
+                                            "text": "Failed Tests Yesterday: '$FAILED_TESTS'" 
                                         }
                                     ]
                                 }, 
@@ -275,7 +275,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"' %" 
+                                            "text": "Failure Rate Yesterday: '$FAILURE_RATE' %" 
                                         }
                                     ]
                                 }  
@@ -306,12 +306,6 @@ jobs:
                 }
              ]
             }'
-         
-            echo "---- SLACK PAYLOAD ----"  
-            echo "$SLACK_MESSAGE" > payload.json  
-            sed -n '20,30p' payload.json
-            jq . payload.json 
-            echo "----------------------"
 
             curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_STATS_CHANNEL }}
          
