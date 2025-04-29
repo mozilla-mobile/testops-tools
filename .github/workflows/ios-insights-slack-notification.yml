@@ -185,18 +185,24 @@ jobs:
           TOTAL_FAILED=$(jq 'map(.total_failed_tests // 0) | add // 0' test_report_flaky.json)
           TOTAL_FLAKY=$(jq 'map(.flaky_tests_count // 0) | add // 0' test_report_flaky.json)
 
-          FLAKY_RATE_JSON=$(jq -r '.[0]?.flaky_tests_ratio // 0' test_report_flaky.json)
-          FLAKY_RATE=$(awk "BEGIN { printf \"%.3f\", $FLAKY_RATE_JSON }")
-    
-          OVERALL_RATIO=$(awk "BEGIN {
-            if ($TOTAL_FAILED == 0) { print \"0.000\" }
-            else { printf \"%.3f\", $TOTAL_FLAKY / $TOTAL_FAILED }
-          }")
-           
-          FAILURE_RATE=$(awk "BEGIN {
-            if ($TOTAL_TESTS == 0) { print \"0.000\" }
-            else { printf \"%.3f\", $FAILED_TESTS / $TOTAL_TESTS }
-          }")
+          # default to zero if empty
+          TOTAL_FAILED=${TOTAL_FAILED:-0}
+          TOTAL_FLAKY=${TOTAL_FLAKY:-0}
+          TOTAL_TESTS=${TOTAL_TESTS:-0}
+          FAILED_TESTS=${FAILED_TESTS:-0}
+
+          if [ "$TOTAL_FAILED" -eq 0 ]; then
+            OVERALL_RATIO="0.000"
+          else
+            OVERALL_RATIO=$(awk "BEGIN { printf \"%.3f\", $TOTAL_FLAKY / $TOTAL_FAILED }")
+          fi
+
+          # compute failure rate
+          if [ "$TOTAL_TESTS" -eq 0 ]; then
+            FAILURE_RATE="0.000"
+          else
+            FAILURE_RATE=$(awk "BEGIN { printf \"%.3f\", $FAILED_TESTS / $TOTAL_TESTS }")
+          fi
            
           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
