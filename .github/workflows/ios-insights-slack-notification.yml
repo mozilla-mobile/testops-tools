@@ -180,31 +180,31 @@ jobs:
               
       - name: Send Slack Notification
         run: |
-           TOTAL_TESTS=$(jq 'map(.total_tests // 0) | add // 0' test_report.json)
-           FAILED_TESTS=$(jq 'map(.failed_tests // 0) | add // 0' test_report.json)
-           TOTAL_FAILED=$(jq '[.[] | (.total_failed_tests // 0) | tonumber] | add' test_report_flaky.json)
-           TOTAL_FLAKY=$(jq '[.[] | (.flaky_tests_count // 0) | tonumber] | add' test_report_flaky.json)
+          TOTAL_TESTS=$(jq 'map(.total_tests // 0) | add // 0' test_report.json)
+          FAILED_TESTS=$(jq 'map(.failed_tests // 0) | add // 0' test_report.json)
+          TOTAL_FAILED=$(jq 'map(.total_failed_tests // 0) | add // 0' test_report_flaky.json)
+          TOTAL_FLAKY=$(jq 'map(.flaky_tests_count // 0) | add // 0' test_report_flaky.json)
 
-           FLAKY_RATE_JSON=$(jq -r '.[0]?.flaky_tests_ratio // 0' test_report_flaky.json)
-           FLAKY_RATE=$(awk "BEGIN { printf \"%.3f\", $FLAKY_RATE_JSON }")
+          FLAKY_RATE_JSON=$(jq -r '.[0]?.flaky_tests_ratio // 0' test_report_flaky.json)
+          FLAKY_RATE=$(awk "BEGIN { printf \"%.3f\", $FLAKY_RATE_JSON }")
     
-           OVERALL_RATIO=$(awk "BEGIN {
-              if ($TOTAL_FAILED == 0) { print \"0.000\" }
-              else { printf \"%.3f\", $TOTAL_FLAKY / $TOTAL_FAILED }
-           }")
+          OVERALL_RATIO=$(awk "BEGIN {
+            if ($TOTAL_FAILED == 0) { print \"0.000\" }
+            else { printf \"%.3f\", $TOTAL_FLAKY / $TOTAL_FAILED }
+          }")
            
-           FAILURE_RATE=$(awk "BEGIN {
-              if ($TOTAL_TESTS == 0) { print \"0.000\" }
-              else { printf \"%.3f\", $FAILED_TESTS / $TOTAL_TESTS }
-           }")
+          FAILURE_RATE=$(awk "BEGIN {
+            if ($TOTAL_TESTS == 0) { print \"0.000\" }
+            else { printf \"%.3f\", $FAILED_TESTS / $TOTAL_TESTS }
+          }")
            
-           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
-           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
-           LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
+          YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
+          FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
+          LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
 
-           SLACK_MESSAGE='{
-             "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
-             "blocks": [
+          SLACK_MESSAGE='{
+            "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
+            "blocks": [
                 { 
                     "type": "section", 
                     "text": { 
