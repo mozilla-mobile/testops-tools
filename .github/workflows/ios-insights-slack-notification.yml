@@ -180,34 +180,24 @@ jobs:
               
       - name: Send Slack Notification
         run: |
-          TOTAL_TESTS=$(jq 'map(.total_tests // 0) | add // 0' test_report.json)
-          FAILED_TESTS=$(jq 'map(.failed_tests // 0) | add // 0' test_report.json)
-          TOTAL_FAILED=$(jq 'map(.total_failed_tests // 0) | add // 0' test_report_flaky.json)
-          TOTAL_FLAKY=$(jq 'map(.flaky_tests_count // 0) | add // 0' test_report_flaky.json)
+          TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
+          FAILED_TESTS=$(jq '[.[] | .failed_tests | tonumber] | add' test_report.json)
+          TOTAL_FAILED=$(jq '[.[] | .total_failed_tests | tonumber] | add' test_report_flaky.json)
+          TOTAL_FLAKY=$(jq '[.[] | .flaky_tests_count | tonumber] | add' test_report_flaky.json)
 
-          FLAKY_RATE=$(jq -r '.[0]?.flaky_tests_ratio? // 0' test_report_flaky.json)
-          FLAKY_RATE=$(awk "BEGIN { printf \"%.3f\", $FLAKY_RATE }")
-
-          OVERALL_RATIO=$(awk "BEGIN {
-            tf = $TOTAL_FAILED;
-            f  = $TOTAL_FLAKY;
-            if (tf == 0) {
-              print \"0.000\";
-            } else {
-              printf \"%.3f\", f / tf;
-            }
-          }")
-
-          FAILURE_RATE=$(awk "BEGIN {
-            t   = $TOTAL_TESTS;
-            d   = $FAILED_TESTS;
-            if (t == 0) {
-              print \"0.000\";
-            } else {
-              printf \"%.3f\", d / t;
-            }
-          }")
-
+          if [ "$TOTAL_TESTS" -eq 0 ]; then
+            FAILED_TESTS=0
+            TOTAL_FAILED=0
+            TOTAL_FLAKY=0
+            OVERALL_RATIO="0.000"
+            FAILURE_RATE="0.000"
+            FLAKY_RATE="0.000"
+          else
+            FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
+            FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
+            OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l | awk '{printf "%.3f", $0}')
+          fi
+          
           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
           LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
