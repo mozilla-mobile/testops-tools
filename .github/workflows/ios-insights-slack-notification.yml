@@ -207,7 +207,7 @@ jobs:
               printf \"%.3f\", d / t;
             }
           }")
-           
+
           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
           LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
@@ -307,5 +307,10 @@ jobs:
              ]
             }'
          
+            echo "---- SLACK PAYLOAD ----"  
+            echo "$SLACK_MESSAGE" > payload.json  
+            jq . payload.json 
+            echo "----------------------"
+            
             curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_STATS_CHANNEL }}
          
