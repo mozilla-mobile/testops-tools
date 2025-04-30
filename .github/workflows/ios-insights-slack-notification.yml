@@ -180,25 +180,31 @@ jobs:
               
       - name: Send Slack Notification
         run: |
-           TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
-           FAILED_TESTS=$(jq '[.[] | .failed_tests | tonumber] | add' test_report.json)
-           TOTAL_FAILED=$(jq '[.[] | .total_failed_tests | tonumber] | add' test_report_flaky.json)
-           TOTAL_FLAKY=$(jq '[.[] | .flaky_tests_count | tonumber] | add' test_report_flaky.json)
-    
-           if [ "$TOTAL_FAILED" -eq 0 ]; then
-              OVERALL_RATIO=0
-           else
-              OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l | awk '{printf "%.3f", $0}')
-           fi
-           FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
-           FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
-           YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
-           FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
-           LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
+          TOTAL_TESTS=$(jq -r '.[0].total_tests // 0' test_report.json)
+          FAILED_TESTS=$(jq '[.[] | .failed_tests | tonumber] | add' test_report.json)
+          TOTAL_FAILED=$(jq '[.[] | .total_failed_tests | tonumber] | add' test_report_flaky.json)
+          TOTAL_FLAKY=$(jq '[.[] | .flaky_tests_count | tonumber] | add' test_report_flaky.json)
 
-           SLACK_MESSAGE='{
-             "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
-             "blocks": [
+          if [ "$TOTAL_TESTS" -eq 0 ]; then
+            FAILED_TESTS=0
+            TOTAL_FAILED=0
+            TOTAL_FLAKY=0
+            OVERALL_RATIO="0.000"
+            FAILURE_RATE="0.000"
+            FLAKY_RATE="0.000"
+          else
+            FAILURE_RATE=$(jq -r '.[0].failure_rate // 0' test_report.json)
+            FLAKY_RATE=$(jq -r '.[0].flaky_tests_ratio // 0' test_report_flaky.json)
+            OVERALL_RATIO=$(echo "scale=4; $TOTAL_FLAKY / $TOTAL_FAILED" | bc -l | awk '{printf "%.3f", $0}')
+          fi
+          
+          YESTERDAY=$(date -d "yesterday" '+%Y-%m-%d')
+          FILE_URL="https://storage.googleapis.com/mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}"
+          LOOKER_URL="https://mozilla.cloud.looker.com/dashboards/2199"
+
+          SLACK_MESSAGE='{
+            "text": "*Firefox iOS UI Test Daily Digest - Fennec*",
+            "blocks": [
                 { 
                     "type": "section", 
                     "text": { 
@@ -223,7 +229,7 @@ jobs:
                                     "elements": [ 
                                         {
                                             "type": "text", 
-                                            "text": "Tests Ran Yesterday: '"$TOTAL_TESTS"'" 
+                                            "text": "Tests Ran Yesterday: '$TOTAL_TESTS'" 
                                         }
                                     ]
                                 },
@@ -232,7 +238,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Tests Yesterday: '"$TOTAL_FLAKY"'" 
+                                            "text": "Flaky Tests Yesterday: '$TOTAL_FLAKY'" 
                                         }
                                     ]
                                 },
@@ -241,7 +247,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Flaky Rate Yesterday: '"$OVERALL_RATIO"' %" 
+                                            "text": "Flaky Rate Yesterday: '$OVERALL_RATIO' %" 
                                         }
                                     ]
                                 },  
@@ -250,7 +256,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Failed Tests Yesterday: '"$FAILED_TESTS"'" 
+                                            "text": "Failed Tests Yesterday: '$FAILED_TESTS'" 
                                         }
                                     ]
                                 }, 
@@ -259,7 +265,7 @@ jobs:
                                     "elements": [
                                         {
                                             "type": "text", 
-                                            "text": "Failure Rate Yesterday: '"$FAILURE_RATE"' %" 
+                                            "text": "Failure Rate Yesterday: '$FAILURE_RATE' %" 
                                         }
                                     ]
                                 }  
@@ -290,6 +296,6 @@ jobs:
                 }
              ]
             }'
-         
+
             curl -X POST -H 'Content-type: application/json' --data "$SLACK_MESSAGE" ${{ secrets.SLACK_WEBHOOK_URL_STATS_CHANNEL }}
          

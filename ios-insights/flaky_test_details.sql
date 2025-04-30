@@ -1,9 +1,7 @@
 WITH target_date AS (
-  -- Define yesterday as the target date.
   SELECT DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) AS rpt_date
 ),
 yesterday_failures AS (
-  -- Select distinct test records that failed on target_date, at the granularity of branch/device/test_suite/test_case.
   SELECT DISTINCT
     branch,
     device,
@@ -13,21 +11,27 @@ yesterday_failures AS (
   WHERE DATE(timestamp) = (SELECT rpt_date FROM target_date)
     AND result = 'failed'
 ),
-historical AS (
-  -- Select distinct historical records for the same tests in the 3 days before target_date.
-  SELECT DISTINCT
+historical_ranked AS (
+  SELECT
     branch,
     device,
     test_suite,
     test_case,
-    result
+    result,
+    timestamp,
+    ROW_NUMBER() OVER (
+      PARTITION BY branch, device, test_suite, test_case
+      ORDER BY timestamp DESC
+    ) AS rn
   FROM `${GCP_SA_IOS_TESTS_INSIGHTS_TABLE}`
-  WHERE DATE(timestamp) BETWEEN DATE_SUB((SELECT rpt_date FROM target_date), INTERVAL 3 DAY)
-                            AND DATE_SUB((SELECT rpt_date FROM target_date), INTERVAL 1 DAY)
+  WHERE DATE(timestamp) < (SELECT rpt_date FROM target_date)
+),
+last_3_runs AS (
+  SELECT *
+  FROM historical_ranked
+  WHERE rn <= 3
 ),
 flagged AS (
-  -- For each test (branch, device, test_suite, test_case) that failed yesterday,
-  -- flag it as flaky if there is at least one historical record that is not 'failed'.
   SELECT
     y.branch,
     y.device,
@@ -35,12 +39,13 @@ flagged AS (
     y.test_case,
     CASE
       WHEN EXISTS (
-        SELECT 1 FROM historical h
+        SELECT 1
+        FROM last_3_runs h
         WHERE h.branch = y.branch
           AND h.device = y.device
           AND h.test_suite = y.test_suite
           AND h.test_case = y.test_case
-          AND h.result <> 'failed'
+          AND h.result = 'succeeded'
       )
       THEN TRUE
       ELSE FALSE
@@ -48,8 +53,6 @@ flagged AS (
   FROM yesterday_failures y
 ),
 combined AS (
-  -- Now collapse flagged results by branch, device, and test_case (ignoring test_suite).
-  -- If the same test_case appears in multiple suites, we count it as flaky if any occurrence is flaky.
   SELECT 
     branch,
     device,
@@ -59,9 +62,6 @@ combined AS (
   GROUP BY branch, device, test_case
 ),
 totals AS (
-  -- Aggregate totals by branch and device:
-  -- total_failed_tests: distinct test_case count (ignoring test_suite)
-  -- flaky_tests_count: distinct test_case count flagged as flaky
   SELECT 
     branch,
     device,
