@@ -85,7 +85,7 @@
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
-| starqlteue | Galaxy S9 | 26 | Medium |
+| starqlteue | Galaxy S9 | 26 | Low |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
