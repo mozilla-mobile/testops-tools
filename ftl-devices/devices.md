@@ -11,7 +11,7 @@
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
-| SO-41A | Xperia 10 II | 31 | Medium |
+| SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 34 | High |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
@@ -66,6 +66,7 @@
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
+| komodo | Pixel 9 Pro XL | 35 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
 | maui | moto g play - 2023 | 33 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
