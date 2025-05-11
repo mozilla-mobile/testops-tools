@@ -8,6 +8,8 @@ The purpose of this repo is to house automation / notification tools for the Moz
 
 [![Check locales daily](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml)
 
+[![Queries the Cloud Testing API for device capacities](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ftl-device-capacities.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ftl-device-capacities.yml)
+
 [![testrail-api-tests](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml)
 
 ### iOS
