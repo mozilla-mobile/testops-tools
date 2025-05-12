@@ -93,7 +93,7 @@ jobs:
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
 
       - name: Notify Slack (Fail)
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.0
         if: ${{ failure() }}
         with:
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
@@ -106,7 +106,7 @@ jobs:
           run_id: ${{ github.run_id }}
 
       - name: Notify Slack (Success)
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.0
         if: ${{ success() }}
         with:
            payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
