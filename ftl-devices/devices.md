@@ -3,7 +3,7 @@
 | 1610 | vivo 1610 | 23 | Medium |
 | CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
-| FRT | Nokia 1 | 27 | Medium |
+| FRT | Nokia 1 | 27 | Low |
 | J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP5552L1 | CPH2415 | 34 | Medium |
@@ -12,7 +12,7 @@
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Low |
-| TB370FU | Lenovo Tab P12 | 34 | High |
+| TB370FU | Lenovo Tab P12 | 35 | Medium |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Medium |
@@ -21,6 +21,7 @@
 | a12 | Galaxy A12 | 31 | Medium |
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Medium |
+| a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a35x | Samsung A35 | 34 | Medium |
@@ -86,7 +87,6 @@
 | shiba | Pixel 8 | 34 | High |
 | shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
-| starqlteue | Galaxy S9 | 26 | Low |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tokay | Pixel 9 | 34 | High |
