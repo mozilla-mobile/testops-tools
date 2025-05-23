@@ -6,6 +6,7 @@
 | FRT | Nokia 1 | 27 | Low |
 | J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
+| OP535DL1 | CPH2409 | 34 | Medium |
 | OP5552L1 | CPH2415 | 34 | Low |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
@@ -92,5 +93,6 @@
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | x1q | Galaxy S20 | 29 | Medium |
+| xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
