@@ -35,12 +35,12 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
-| bluejay | Pixel 6a | 32 | Low |
+| bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | High |
+| caprip | moto g(30) | 31 | Medium |
 | caymanlm | VELVET | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
