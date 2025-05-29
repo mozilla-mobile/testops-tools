@@ -35,12 +35,13 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
+| b6q | Flip 6 | 34 | Medium |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | Medium |
+| caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
@@ -66,6 +67,7 @@
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
 | gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
+| gts9wifi | SM-X710 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
@@ -94,7 +96,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
-| x1q | Galaxy S20 | 29 | Medium |
+| x1q | Galaxy S20 | 29 | Low |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
