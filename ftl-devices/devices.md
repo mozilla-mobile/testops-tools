@@ -1,6 +1,7 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
 | 1610 | vivo 1610 | 23 | Medium |
+| A402SO | Xperia 10 | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
@@ -40,6 +41,7 @@
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | High |
 | caiman | Pixel 9 Pro | 34 | Medium |
+| caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Low |
