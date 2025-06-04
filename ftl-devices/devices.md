@@ -52,6 +52,7 @@
 | dm2q | S23 Plus | 34 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
+| dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
@@ -81,6 +82,7 @@
 | oriole | Pixel 6 | 33 | Low |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
+| pa3q | Galaxy S25 Ultra | 35 | High |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Medium |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
@@ -95,7 +97,7 @@
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
-| tegu | Pixel 9a | 35 | Low |
+| tegu | Pixel 9a | 35 | Medium |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | x1q | Galaxy S20 | 29 | Medium |
