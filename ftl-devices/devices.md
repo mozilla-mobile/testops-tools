@@ -54,18 +54,20 @@
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
-| e3q | Galaxy S24 Ultra | 34 | Low |
+| e3q | Galaxy S24 Ultra | 34 | Medium |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogona | moto g play - 2024 | 34 | Low |
+| fogos | moto g34 5G | 34 | Low |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
+| gts7lwifi | SM-T870 | 33 | Medium |
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
@@ -76,6 +78,7 @@
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
+| manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
 | oriole | Pixel 6 | 32 | High |
