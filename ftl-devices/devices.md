@@ -8,7 +8,7 @@
 | J606F | Lenovo Tab P11 | 30 | Low |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP535DL1 | CPH2409 | 34 | Medium |
-| OP5552L1 | CPH2415 | 34 | Low |
+| OP5552L1 | CPH2415 | 34 | Medium |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
