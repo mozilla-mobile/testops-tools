@@ -83,7 +83,7 @@
 | maui | moto g play - 2023 | 33 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
 | oriole | Pixel 6 | 32 | High |
-| oriole | Pixel 6 | 33 | Low |
+| oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | pa3q | Galaxy S25 Ultra | 35 | High |
