@@ -2,7 +2,7 @@
 | --- | --- | --- | --- |
 | 1610 | vivo 1610 | 23 | Medium |
 | A402SO | Xperia 10 | 34 | Low |
-| CPH2449 | OnePlus 11 5G | 34 | Medium |
+| CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
 | J606F | Lenovo Tab P11 | 30 | Low |
