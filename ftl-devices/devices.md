@@ -28,7 +28,6 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a35x | Samsung A35 | 34 | Medium |
-| a51 | Galaxy A51 | 31 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
