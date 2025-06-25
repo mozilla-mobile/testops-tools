@@ -56,6 +56,7 @@
 | e1q | Galaxy S24 | 34 | High |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | eos | Eos | 33 | Medium |
+| eqe | motorola edge 50 pro | 35 | Low |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
