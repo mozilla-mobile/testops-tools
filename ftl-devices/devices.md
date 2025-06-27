@@ -22,6 +22,7 @@
 | a03s | Galaxy A03s | 33 | Medium |
 | a10 | Galaxy A10 | 29 | High |
 | a12 | Galaxy A12 | 31 | Medium |
+| a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Low |
 | a15x | Samsung A15 5G | 34 | Low |
@@ -79,6 +80,7 @@
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
 | lynx | Pixel 7a | 33 | Medium |
+| lyriq | motorola edge 40 | 34 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
@@ -89,15 +91,15 @@
 | pa3q | Galaxy S25 Ultra | 35 | High |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Medium |
-| q4q | Galaxy Z Fold4 | 33 | Medium |
+| q4q | Galaxy Z Fold4 | 33 | High |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | redfin | Pixel 5 | 30 | High |
+| shiba | Pixel 8 | 35 | Low |
 | shiba | Pixel 8 | 34 | High |
-| shiba_beta | Pixel 8 | 35 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
