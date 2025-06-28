@@ -5,7 +5,6 @@
 | CPH2449 | OnePlus 11 5G | 34 | High |
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
-| J606F | Lenovo Tab P11 | 30 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP535DL1 | CPH2409 | 34 | Medium |
