@@ -97,7 +97,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | redfin | Pixel 5 | 30 | High |
-| shiba | Pixel 8 | 35 | Low |
+| shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
