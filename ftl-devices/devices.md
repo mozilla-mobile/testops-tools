@@ -31,6 +31,7 @@
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
+| akita | Pixel 8a | 35 | Medium |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
 | austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
@@ -78,6 +79,7 @@
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
+| lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
