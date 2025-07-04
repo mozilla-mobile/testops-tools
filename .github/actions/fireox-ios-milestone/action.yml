@@ -1,0 +1,40 @@
+name: "Create Firefox TestRail Milestone"
+description: "Creates a Firefox iOS TestRail milestone based on release information"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install -r testrail/requirements.txt
+      shell: bash
+
+    - name: Create .testrail_credentials.json
+      run: |
+        cat > .testrail_credentials.json <<EOF
+        {
+          "host": "${{ secrets.TESTRAIL_HOST }}",
+          "username": "${{ secrets.TESTRAIL_USERNAME }}",
+          "password": "${{ secrets.TESTRAIL_PASSWORD }}"
+        }
+        EOF
+      shell: bash
+
+    - name: Run create milestone script
+      run: |
+        python testrail/testrail_main.py
+      env:
+        SHIPPING_PRODUCT: focus
+        TESTRAIL_PRODUCT_TYPE: Focus
+        TESTRAIL_PROJECT_ID: '27'  # Focus for ios
+        TESTRAIL_TEST_SUITE_ID: '5291'  # Test Automation Release Milestone - Focus
+
+      shell: bash
+
+    - name: Delete credentials file
+      run: rm -f .testrail_credentials.json
+      shell: bash
