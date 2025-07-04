@@ -1,6 +1,23 @@
 name: "Create Firefox TestRail Milestone"
 description: "Creates a Firefox iOS TestRail milestone based on release information"
 
+inputs:
+  release-name:
+    description: "Name of the GitHub release"
+    required: true
+  release-tag:
+    description: "Tag of the GitHub release"
+    required: true
+  testrail-host:
+    description: "TestRail host"
+    required: true
+  testrail-username:
+    description: "TestRail username"
+    required: true
+  testrail-api-key:
+    description: "TestRail API key"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -17,9 +34,9 @@ runs:
       run: |
         cat > .testrail_credentials.json <<EOF
         {
-          "host": "${{ secrets.TESTRAIL_HOST }}",
-          "username": "${{ secrets.TESTRAIL_USERNAME }}",
-          "password": "${{ secrets.TESTRAIL_PASSWORD }}"
+          "host": "${{ inputs.testrail-host }}",
+          "username": "${{ inputs.testrail-username }}",
+          "password": "${{ inputs.testrail-api-key }}"
         }
         EOF
       shell: bash
@@ -32,6 +49,8 @@ runs:
         TESTRAIL_PRODUCT_TYPE: Focus
         TESTRAIL_PROJECT_ID: '27'  # Focus for ios
         TESTRAIL_TEST_SUITE_ID: '5291'  # Test Automation Release Milestone - Focus
+        RELEASE_NAME: ${{ inputs.release-name }}
+        RELEASE_TAG: ${{ inputs.release-tag }}
 
       shell: bash
 
