@@ -25,6 +25,10 @@ runs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Clone testops-tools repo
+      run: |
+        git clone --branch mb/firefox-ios-milestone https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
+      shell: bash
 
     - name: Install dependencies
       run: pip install -r ${{ github.workspace }}/testrail/requirements.txt
