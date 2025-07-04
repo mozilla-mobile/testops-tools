@@ -27,7 +27,7 @@ runs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: pip install -r testrail/requirements.txt
+      run: pip install -r ${{ github.workspace }}/testrail/requirements.txt
       shell: bash
 
     - name: Create .testrail_credentials.json
