@@ -31,7 +31,7 @@ runs:
       shell: bash
 
     - name: Install dependencies
-      run: pip install -r ${{ github.workspace }}/testrail/requirements.txt
+      run: pip install -r ../testops-tools/testrail/requirements.txt
       shell: bash
 
     - name: Create .testrail_credentials.json
@@ -47,7 +47,7 @@ runs:
 
     - name: Run create milestone script
       run: |
-        python testrail/testrail_main.py
+        python ../testops-tools/testrail/testrail_main.py
       env:
         SHIPPING_PRODUCT: focus
         TESTRAIL_PRODUCT_TYPE: Focus
