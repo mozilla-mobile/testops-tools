@@ -40,7 +40,7 @@
 | b6q | Flip 6 | 34 | Medium |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
-| cactus | Redmi 6A | 27 | High |
+| cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
