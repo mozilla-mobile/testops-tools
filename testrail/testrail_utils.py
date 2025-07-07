@@ -82,3 +82,10 @@ def load_testrail_credentials(json_file_path):
         return credentials
     except json.JSONDecodeError as e:
         raise ValueError(f"Failed to load TestRail credentials: {e}")
+
+def get_release_version_ios(release_tag):
+    if release_tag and 'v' in release_tag:
+        version = release_tag.split('v')[-1]  # e.g., "140.0b2"
+    else:
+        version = None
+    return version
