@@ -47,7 +47,7 @@ runs:
 
     - name: Run create milestone script
       run: |
-        python ../testops-tools/testrail/testrail_main.py
+        python ../testops-tools/testrail/testrail_main_ios.py
       env:
         SHIPPING_PRODUCT: focus
         TESTRAIL_PRODUCT_TYPE: Focus
