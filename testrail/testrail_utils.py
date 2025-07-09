@@ -89,3 +89,21 @@ def get_release_version_ios(release_tag):
     else:
         version = None
     return version
+
+def build_milestone_description_ios(milestone_name):
+    current_date = datetime.now()
+    formatted_date = current_date = current_date.strftime("%B %d, %Y")
+    return textwrap.dedent(
+        f"""
+        RELEASE: {milestone_name}\n\n\
+        RELEASE_TAG_URL: https://github.com/mozilla-mobile/firefox-ios/releases/\n\n\
+        RELEASE_DATE: {formatted_date}\n\n\
+        TESTING_STATUS: [ TBD ]\n\n\
+        QA_RECOMMENDATION: [ TBD ]\n\n\
+        QA_RECOMENTATION_VERBOSE: \n\n\
+        TESTING_SUMMARY\n\n\
+        Known issues: n/a\n\
+        New issue: n/a\n\
+        Verified issue:
+    """
+    )

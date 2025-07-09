@@ -19,7 +19,7 @@ import sys
 
 from testrail_api import TestRail
 from testrail_utils import (
-    build_milestone_description,
+    build_milestone_description_ios,
     build_milestone_name,
     get_release_type,
     get_release_version_ios,
@@ -62,7 +62,7 @@ def main():
     milestone_name = build_milestone_name(
         testrail_product_type, release_type, release_version
     )
-    milestone_description = build_milestone_description(milestone_name)
+    milestone_description = build_milestone_description_ios(milestone_name)
 
     # Configure Taskcluster API
     #options = get_taskcluster_options()
