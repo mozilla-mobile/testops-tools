@@ -46,13 +46,29 @@ def main():
 
     # Read task environment variables
     try:
-        shipping_product = os.environ["SHIPPING_PRODUCT"]
-        testrail_product_type = os.environ["TESTRAIL_PRODUCT_TYPE"]
-        testrail_project_id = os.environ["TESTRAIL_PROJECT_ID"]
-        testrail_test_suite_id = os.environ["TESTRAIL_TEST_SUITE_ID"]
+        #shipping_product = os.environ["SHIPPING_PRODUCT"]
+        #testrail_product_type = os.environ["TESTRAIL_PRODUCT_TYPE"]
+        #testrail_project_id = os.environ["TESTRAIL_PROJECT_ID"]
+        #testrail_test_suite_id = os.environ["TESTRAIL_TEST_SUITE_ID"]
         release_tag = os.environ["RELEASE_TAG"]
+        release_name = os.environ["RELEASE_NAME"]
     except KeyError as e:
         raise ValueError(f"ERROR: Missing Environment Variable: {e}")
+    
+    if any(keyword in release_name.lower() for keyword in ("focus", "klar")) \
+            or any(keyword in release_tag.lower() for keyword in ("focus", "klar")):
+        shipping_product = "focus"
+        testrail_product_type = "Focus"
+        testrail_project_id = "27"
+        testrail_test_suite_id = "5291"
+    elif release_name.lower().startswith("firefox") or release_tag.lower().startswith("firefox-"):
+        shipping_product = "firefox"
+        testrail_product_type = "Firefox"
+        testrail_project_id = "14"
+        testrail_test_suite_id = "45443"
+    else:
+        raise Exception(f"Unrecognized release name: {release_name} or tag: {release_tag}")
+
 
     # Release information
     release_version = get_release_version_ios(release_tag)
