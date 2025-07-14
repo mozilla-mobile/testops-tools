@@ -6,7 +6,7 @@
 
 from datetime import datetime
 import os
-from typing import Optional
+from typing import Optional, get_origin, get_args, Union
 import sys
 import unittest
 
@@ -30,6 +30,19 @@ from testrail.testrail_api import TestRail
 # - _retry_api_call TBD
 # - _get_tests TBD
 # - test_taskcluster_android_workflow
+
+
+def resolve_type(expected_type):
+    """Extract a real type from Optional, Union, or raw types"""
+    if expected_type is None:
+        return None
+    origin = get_origin(expected_type)
+    if origin is Union:
+        args = [arg for arg in get_args(expected_type) if arg is not type(None)]
+        if len(args) == 1:
+            return args[0]
+        return tuple(args)
+    return expected_type
 
 
 class TestTestRail(unittest.TestCase):
@@ -77,7 +90,7 @@ class TestTestRail(unittest.TestCase):
             "section_id": int,
             "template_id": int,
             "type_id": int,
-            "priority_id": Optional[int],
+            "priority_id": int,
             "milestone_id": Optional[int],
             "refs": Optional[str],
             "created_by": int,
@@ -115,8 +128,9 @@ class TestTestRail(unittest.TestCase):
             expected_type = expected_cases_signature.get(key)
             actual_type = type(value)
             print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
-            if value is not None:
-                self.assertIsInstance(value, expected_type)
+            if value is not None and expected_type is not None:
+                resolved_type = resolve_type(expected_type)
+                self.assertIsInstance(value, resolved_type)
 
     def test_get_milestones_signature(self):
         expected_milestones_signature = {
