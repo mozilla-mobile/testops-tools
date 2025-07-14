@@ -77,7 +77,7 @@ class TestTestRail(unittest.TestCase):
             "section_id": int,
             "template_id": int,
             "type_id": int,
-            "priority_id": int,
+            "priority_id": Optional[int],
             "milestone_id": Optional[int],
             "refs": Optional[str],
             "created_by": int,
