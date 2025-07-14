@@ -42,7 +42,7 @@ jobs:
             path: ./check_locales.log
         - name: Send Slack notice
           if: failure()
-          uses: slackapi/slack-github-action@v2.1.0
+          uses: slackapi/slack-github-action@v2.1.1
           with:
             webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
             webhook-type: incoming-webhook
