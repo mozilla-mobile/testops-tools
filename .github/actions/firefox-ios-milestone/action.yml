@@ -49,10 +49,6 @@ runs:
       run: |
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
-        #SHIPPING_PRODUCT: focus
-        #TESTRAIL_PRODUCT_TYPE: Focus
-        #TESTRAIL_PROJECT_ID: '27'  # Focus for ios
-        #TESTRAIL_TEST_SUITE_ID: '5291'  # Test Automation Release Milestone - Focus
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
 

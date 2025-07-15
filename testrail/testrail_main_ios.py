@@ -34,7 +34,7 @@ from testrail_utils import (
 
 # Constants
 SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
-ERROR_CHANNEL_ID = "C0134KJ4JHL"  # mobile-alerts-android
+ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
 
 
 def main():
@@ -46,10 +46,6 @@ def main():
 
     # Read task environment variables
     try:
-        #shipping_product = os.environ["SHIPPING_PRODUCT"]
-        #testrail_product_type = os.environ["TESTRAIL_PRODUCT_TYPE"]
-        #testrail_project_id = os.environ["TESTRAIL_PROJECT_ID"]
-        #testrail_test_suite_id = os.environ["TESTRAIL_TEST_SUITE_ID"]
         release_tag = os.environ["RELEASE_TAG"]
         release_name = os.environ["RELEASE_NAME"]
     except KeyError as e:
@@ -80,9 +76,6 @@ def main():
     )
     milestone_description = build_milestone_description_ios(milestone_name)
 
-    # Configure Taskcluster API
-    #options = get_taskcluster_options()
-
     try:
         # Check if milestone exists
         if testrail.does_milestone_exist(testrail_project_id, milestone_name):
@@ -91,6 +84,13 @@ def main():
 
         # Create milestone and test runs
         devices = ["iPhone 16 Pro(iOS 18.2)", "iPad mini 2(iOS 18.2)"]
+        case_ids = testrail.get_case_ids_by_custom_field(
+            testrail_project_id,
+            testrail_test_suite_id,
+            "Automation",
+            "Completed"
+        )
+
         milestone = testrail.create_milestone(
             testrail_project_id, milestone_name, milestone_description
         )
@@ -99,27 +99,24 @@ def main():
             test_run = testrail.create_test_run(
                 testrail_project_id, milestone["id"], device, testrail_test_suite_id
             )
+            # Update the test run with only the automated tests
+            testrail.client.send_post(f"update_run/{test_run['id']}", {
+                "case_ids": case_ids
+            })
             testrail.update_test_run_tests(test_run["id"], 1)  # 1 = Passed
 
-        #product_icon = get_product_icon(shipping_product)
-
         # Send success notification
-        '''
         success_values = {
             "RELEASE_TYPE": release_type,
             "RELEASE_VERSION": release_version,
             "SHIPPING_PRODUCT": shipping_product,
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
-            "PRODUCT_ICON": product_icon,
         }
         send_success_notification(success_values, SUCCESS_CHANNEL_ID, options)
-        '''
 
     except Exception as error_message:
-        #send_error_notification(str(error_message), ERROR_CHANNEL_ID, options)
-        print("Error")
-
+        send_error_notification(str(error_message), ERROR_CHANNEL_ID, options)
 
 if __name__ == "__main__":
     main()
