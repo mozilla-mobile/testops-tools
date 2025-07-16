@@ -25,10 +25,10 @@ from testrail_utils import (
     get_release_version_ios,
     load_testrail_credentials,
 )
-from slack_notifier import (
-    send_error_notification,
-    send_success_notification,
-)
+#from slack_notifier import (
+#    send_error_notification,
+#    send_success_notification,
+#)
 
 # Constants
 #SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
