@@ -88,11 +88,16 @@ def main():
             "custom_automation_status": 4, # Automation = Completed
             "custom_automation_coverage": 3 # Automation Coverage = Full
         }
+
+        print("*******FILTERS************")
+        print(filters)
         case_ids = testrail._get_case_ids_by_multiple_custom_fields(
             testrail_project_id,
             testrail_test_suite_id,
             filters
         )
+        print("*******CASE IDS************")
+        print(case_ids)
 
         milestone = testrail.create_milestone(
             testrail_project_id, milestone_name, milestone_description
