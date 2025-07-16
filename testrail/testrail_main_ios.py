@@ -113,10 +113,11 @@ def main():
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
-        send_success_notification(success_values, SUCCESS_CHANNEL_ID, options)
+        #send_success_notification(success_values, SUCCESS_CHANNEL_ID, options)
 
     except Exception as error_message:
-        send_error_notification(str(error_message), ERROR_CHANNEL_ID, options)
+        #send_error_notification(str(error_message), ERROR_CHANNEL_ID, options)
+        print("Error")
 
 if __name__ == "__main__":
     main()
