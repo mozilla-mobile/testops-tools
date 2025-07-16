@@ -207,10 +207,15 @@ class TestRail:
             raise ValueError("Project ID, suite ID, field name and expected value must be provided.")
 
         all_cases = self._get_test_cases(project_id, suite_id)
+        print("*********ALL CASES***************")
+        print(all_cases)
 
         matching_cases = [
             case for case in all_cases
          if str(case.get(field_name, "")).strip().lower() == expected_value.strip().lower()
         ]
+
+        print("*********MATCHING CASES***************")
+        print(all_cases)
 
         return matching_cases
