@@ -84,11 +84,14 @@ def main():
 
         # Create milestone and test runs
         devices = ["iPhone 16 Pro(iOS 18.2)", "iPad mini 2(iOS 18.2)"]
-        case_ids = testrail.get_case_ids_by_custom_field(
+        filters = {
+            "custom_automation_status": 4, # Automation = Completed
+            "custom_automation_coverage": 3 # Automation Coverage = Full
+        }
+        case_ids = testrail._get_case_ids_by_multiple_custom_fields(
             testrail_project_id,
             testrail_test_suite_id,
-            "Automation",
-            "Completed"
+            filters
         )
 
         milestone = testrail.create_milestone(
