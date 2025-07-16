@@ -204,7 +204,7 @@ class TestRail:
                 time.sleep(delay)
 
     def _get_test_cases_by_multiple_custom_fields(self, project_id, suite_id, filters):
-        if not all([project_id, suite_id, filters]):
+        """if not all([project_id, suite_id, filters]):
             raise ValueError("Project ID, suite ID y filtros deben ser provistos.")
 
         all_cases = self._get_test_cases(project_id, suite_id)
@@ -214,4 +214,21 @@ class TestRail:
             if all(case.get(field) == expected for field, expected in filters.items())
         ]
 
-        return matching_cases
+        return matching_cases"""
+        if not all([project_id, suite_id, filters]):
+            raise ValueError("Project ID, suite ID and filters must be provided.")
+
+        all_cases = self._get_test_cases(project_id, suite_id)
+
+        def satisfies_all(case):
+            for field, condition in filters.items():
+                value = case.get(field)
+                if callable(condition):
+                    if not condition(value):
+                        return False
+                else:
+                    if value != condition:
+                        return False
+            return True
+
+        return [case for case in all_cases if satisfies_all(case)]

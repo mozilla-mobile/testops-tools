@@ -25,16 +25,16 @@ from testrail_utils import (
     get_release_version_ios,
     load_testrail_credentials,
 )
-#from slack_notifier import (
-#    get_product_icon,
-#    get_taskcluster_options,
-#    send_error_notification,
-#    send_success_notification,
-#)
+from slack_notifier import (
+    send_error_notification,
+    send_success_notification,
+)
 
 # Constants
-SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
-ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
+#SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
+#ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
+SUCCESS_CHANNEL_ID = "C016BC5FUHJ"  
+ERROR_CHANNEL_ID = "C016BC5FUHJ"
 
 
 def main():
@@ -83,10 +83,11 @@ def main():
             sys.exit()
 
         # Create milestone and test runs
-        devices = ["iPhone 16 Pro(iOS 18.2)", "iPad mini 2(iOS 18.2)"]
+        devices = ["iPhone 16 (iOS 18.2)", "iPad mini (6th generation) (iOS 18.2)"]
         filters = {
             "custom_automation_status": 4, # Automation = Completed
-            "custom_automation_coverage": 3 # Automation Coverage = Full
+            "custom_automation_coverage": 3, # Automation Coverage = Full
+            "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
         }
 
         case_ids = testrail.get_case_ids_by_multiple_custom_fields(
@@ -94,14 +95,14 @@ def main():
             testrail_test_suite_id,
             filters
         )
-        print("*******CASE IDS************")
-        print(case_ids)
 
         milestone = testrail.create_milestone(
             testrail_project_id, milestone_name, milestone_description
         )
 
         for device in devices:
+            # Once we create a single script for Android and iOS
+            # we should use create_test_run instead of the send_post
             #test_run = testrail.create_test_run(
             #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
             #)
@@ -126,10 +127,10 @@ def main():
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
-        #send_success_notification(success_values, SUCCESS_CHANNEL_ID, options)
+        #send_success_notification(success_values, SUCCESS_CHANNEL_ID)
 
     except Exception as error_message:
-        #send_error_notification(str(error_message), ERROR_CHANNEL_ID, options)
+        #send_error_notification(str(error_message), ERROR_CHANNEL_ID)
         print("Error")
 
 if __name__ == "__main__":
