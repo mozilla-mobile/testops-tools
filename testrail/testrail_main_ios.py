@@ -107,7 +107,7 @@ def main():
             #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
             #)
             test_run = testrail.client.send_post(f"add_run/{testrail_project_id}", {
-                "name": device,
+                "name": "Smoke Tests Suite - " + release_version + " " + device,
                 "milestone_id": milestone["id"],
                 "suite_id": testrail_test_suite_id,
                 "include_all": False,
