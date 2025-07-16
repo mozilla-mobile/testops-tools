@@ -85,7 +85,9 @@ if __name__ == "__main__":
     for project_id in project_ids:
         project = testrail.project(project_id)
         project_name = project.get('name')
-        suites = testrail.test_suites(project_id)
+        # Starting v9.3.2, get_cases returns a pagination containing a list of
+        # suites instead of just a list of suites.
+        suites = testrail.test_suites(project_id).get('suites')
         
         for suite in suites:
             suite_id = suite.get('id')
