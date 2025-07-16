@@ -124,11 +124,12 @@ class TestRail:
         }
         return self.client.send_post(f"add_results/{test_run_id}", data)
     
-    def get_case_ids_by_custom_field(self, project_id, suite_id, field_name, expected_value):
-        filtered_cases = self._get_test_cases_by_custom_field(
-            project_id, suite_id, field_name, expected_value
+    def get_case_ids_by_multiple_custom_fields(self, project_id, suite_id, filters):
+        filtered_cases = self._get_test_cases_by_multiple_custom_fields(
+            project_id, suite_id, filters
         )
         return [case["id"] for case in filtered_cases]
+
 
     # Private Methods
 
@@ -202,20 +203,15 @@ class TestRail:
                     raise  # Reraise the last exception
                 time.sleep(delay)
 
-    def _get_test_cases_by_custom_field(self, project_id, suite_id, field_name, expected_value):
-        if not all([project_id, suite_id, field_name, expected_value]):
-            raise ValueError("Project ID, suite ID, field name and expected value must be provided.")
+    def _get_test_cases_by_multiple_custom_fields(self, project_id, suite_id, filters):
+        if not all([project_id, suite_id, filters]):
+            raise ValueError("Project ID, suite ID y filtros deben ser provistos.")
 
         all_cases = self._get_test_cases(project_id, suite_id)
-        print("*********ALL CASES***************")
-        print(all_cases)
 
         matching_cases = [
             case for case in all_cases
-         if str(case.get(field_name, "")).strip().lower() == expected_value.strip().lower()
+            if all(case.get(field) == expected for field, expected in filters.items())
         ]
-
-        print("*********MATCHING CASES***************")
-        print(all_cases)
 
         return matching_cases
