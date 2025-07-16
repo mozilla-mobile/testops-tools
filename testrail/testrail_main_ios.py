@@ -89,9 +89,7 @@ def main():
             "custom_automation_coverage": 3 # Automation Coverage = Full
         }
 
-        print("*******FILTERS************")
-        print(filters)
-        case_ids = testrail._get_case_ids_by_multiple_custom_fields(
+        case_ids = testrail.get_case_ids_by_multiple_custom_fields(
             testrail_project_id,
             testrail_test_suite_id,
             filters
