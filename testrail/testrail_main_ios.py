@@ -102,9 +102,16 @@ def main():
         )
 
         for device in devices:
-            test_run = testrail.create_test_run(
-                testrail_project_id, milestone["id"], device, testrail_test_suite_id
-            )
+            #test_run = testrail.create_test_run(
+            #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
+            #)
+            test_run = testrail.client.send_post(f"add_run/{testrail_project_id}", {
+                "name": device,
+                "milestone_id": milestone["id"],
+                "suite_id": testrail_test_suite_id,
+                "include_all": False,
+                "case_ids": case_ids
+            })
             # Update the test run with only the automated tests
             testrail.client.send_post(f"update_run/{test_run['id']}", {
                 "case_ids": case_ids
