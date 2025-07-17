@@ -61,5 +61,5 @@ jobs:
           payload: |
             {
               "type": "mrkdwn",
-              "text": "TestRail API tests passed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Passed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
+              "text": "TestRail API tests passed! :tada:\n\n*Workflow:* ${{ github.workflow }}\n*Branch:* ${{ github.ref_name }}\n*Job:* ${{ github.job }}\n\n*Status:* ${{ job.status }}\n*Test results:* Passed\n\nLink to results: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View results>"
             }
