@@ -90,11 +90,17 @@ def main():
             "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
         }
 
+        print("*********FILTERS***********")
+        print(filter)
+
         case_ids = testrail.get_case_ids_by_multiple_custom_fields(
             testrail_project_id,
             testrail_test_suite_id,
             filters
         )
+
+        print("************FILTERED CASES****************")
+        print(case_ids)
 
         milestone = testrail.create_milestone(
             testrail_project_id, milestone_name, milestone_description
