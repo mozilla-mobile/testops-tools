@@ -89,7 +89,7 @@ def main():
         filters = {
             "custom_automation_status": 4, # Automation = Completed
             "custom_automation_coverage": 3, # Automation Coverage = Full
-            # "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
+            "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
             #"custom_sub_test_suites": lambda v: all(x in (v or []) for x in [1, 2])
         }
 
