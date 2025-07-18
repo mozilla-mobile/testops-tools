@@ -18,13 +18,16 @@ import os
 import sys
 
 from testrail_api import TestRail
+
 from testrail_utils import (
     build_milestone_description_ios,
     build_milestone_name,
     get_release_type,
     get_release_version_ios,
     load_testrail_credentials,
+    create_paginated_test_runs
 )
+
 #from slack_notifier import (
 #    send_error_notification,
 #    send_success_notification,
@@ -97,9 +100,6 @@ def main():
             filters
         )
 
-        print("************FILTERED CASES****************")
-        print(case_ids)
-
         milestone = testrail.create_milestone(
             testrail_project_id, milestone_name, milestone_description
         )
@@ -110,18 +110,27 @@ def main():
             #test_run = testrail.create_test_run(
             #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
             #)
-            test_run = testrail.client.send_post(f"add_run/{testrail_project_id}", {
-                "name": "Smoke Tests Suite - " + release_version + " " + device,
-                "milestone_id": milestone["id"],
-                "suite_id": testrail_test_suite_id,
-                "include_all": False,
-                "case_ids": case_ids
-            })
+            #test_run = testrail.client.send_post(f"add_run/{testrail_project_id}", {
+            #    "name": "Smoke Tests Suite - " + release_version + " " + device,
+            #    "milestone_id": milestone["id"],
+            #    "suite_id": testrail_test_suite_id,
+            #    "include_all": False,
+            #    "case_ids": case_ids
+            #})
             # Update the test run with only the automated tests
-            testrail.client.send_post(f"update_run/{test_run['id']}", {
-                "case_ids": case_ids
-            })
-            testrail.update_test_run_tests(test_run["id"], 1)  # 1 = Passed
+            #testrail.client.send_post(f"update_run/{test_run['id']}", {
+            #    "case_ids": case_ids
+            #})
+            # testrail.update_test_run_tests(test_run["id"], 1)  # 1 = Passed
+            create_paginated_test_runs(
+                project_id=testrail_project_id,
+                suite_id=testrail_test_suite_id,
+                release_version_id = release_version,
+                milestone_id=milestone["id"],
+                base_run_name="Smoke Tests Suite",
+                device_name=device,
+                case_ids=case_ids
+            )
 
         # Send success notification
         success_values = {
