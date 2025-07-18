@@ -140,6 +140,31 @@ class TestRail:
             "cases"
         ]
 
+    def _get_test_cases_with_pagination(self, project_id, suite_id):
+        if not all([project_id, suite_id]):
+            raise ValueError("Project ID and suite ID must be provided.")
+
+        all_cases = []
+        limit = 250
+        offset = 0
+
+        while True:
+            endpoint = f"get_cases/{project_id}&suite_id={suite_id}&limit={limit}&offset={offset}"
+            response = self.client.send_get(endpoint)
+
+            if "cases" not in response:
+                break
+
+            cases = response["cases"]
+            all_cases.extend(cases)
+
+            if len(cases) < limit:
+                break  # Last page
+
+            offset += limit
+
+        return all_cases
+
     def _get_milestone(self, milestone_id):
         if not milestone_id:
             raise ValueError("Milestone ID must be provided.")
@@ -218,7 +243,7 @@ class TestRail:
         if not all([project_id, suite_id, filters]):
             raise ValueError("Project ID, suite ID and filters must be provided.")
 
-        all_cases = self._get_test_cases(project_id, suite_id)
+        all_cases = self._get_test_cases_with_pagination(project_id, suite_id)
         print("************LENGHT****************")
         print(len(all_cases))
 
