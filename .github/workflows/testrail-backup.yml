@@ -104,6 +104,7 @@ jobs:
           server_url: ${{ github.server_url }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
+          branch: ${{ github.ref_name }}
 
       - name: Notify Slack (Success)
         uses: slackapi/slack-github-action@v2.1.1
@@ -118,3 +119,4 @@ jobs:
           server_url: ${{ github.server_url }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
+          branch: ${{ github.ref_name }}
