@@ -129,6 +129,50 @@ class TestRail:
             project_id, suite_id, filters
         )
         return [case["id"] for case in filtered_cases]
+    
+    def create_paginated_test_runs(
+        self,
+        project_id,
+        suite_id,
+        release_version_id,
+        milestone_id,
+        base_run_name,
+        device_name,
+        case_ids,
+        status_id=1,  # default to Passed
+        max_cases_per_run=250
+    ):
+        """
+        Crete one or more test runs if the number of test cases is greater than 250 
+        (Test rail API limit).
+
+        Args:
+            project_id (int): ID of the project.
+            suite_id (int): ID of the test suite.
+            milestone_id (int): ID of the milestone.
+            base_run_name (str): Common Prefix for all the test runs.
+            device_name (str): Device name (to include in the name of the test run).
+            case_ids (list): List of the IDs of the test cases to include in the test run.
+            status_id (int): Result to apply by default to the test cases (default: 1 = Passed).
+            max_cases_per_run (int): Límit for the test cases for each run (default: 250).
+        """
+        def chunk_case_ids(case_ids, size):
+            for i in range(0, len(case_ids), size):
+                yield case_ids[i:i + size]
+
+        for index, chunk in enumerate(chunk_case_ids(case_ids, max_cases_per_run)):
+            run_name = f"{base_run_name} - {release_version_id} - {device_name} (part {index + 1})" if len(case_ids) > max_cases_per_run else f"{base_run_name} - {device_name}"
+            
+            test_run = self.client.send_post(f"add_run/{project_id}", {
+                "name": run_name,
+                "milestone_id": milestone_id,
+                "suite_id": suite_id,
+                "include_all": False,
+                "case_ids": chunk
+            })
+
+        self.update_test_run_tests(test_run["id"], status_id)
+
 
 
     # Private Methods
