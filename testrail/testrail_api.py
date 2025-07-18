@@ -160,9 +160,24 @@ class TestRail:
             for i in range(0, len(case_ids), size):
                 yield case_ids[i:i + size]
 
+        total_cases = len(case_ids)
+        if total_cases == 0:
+            print(f"No test cases provided for {device_name}. No test runs created.")
+            return
+
         for index, chunk in enumerate(chunk_case_ids(case_ids, max_cases_per_run)):
-            run_name = f"{base_run_name} - {release_version_id} - {device_name} (part {index + 1})" if len(case_ids) > max_cases_per_run else f"{base_run_name} - {device_name}"
-            
+            if not chunk:
+                print(f"Skipping empty test run chunk for {device_name} (part {index + 1})")
+                continue
+
+            run_name = (
+                f"{base_run_name} - {device_name} (part {index + 1})"
+                if total_cases > max_cases_per_run
+                else f"{base_run_name} - {device_name}"
+            )
+
+            print(f"Creating test run: '{run_name}' with {len(chunk)} test cases")
+
             test_run = self.client.send_post(f"add_run/{project_id}", {
                 "name": run_name,
                 "milestone_id": milestone_id,
@@ -171,9 +186,15 @@ class TestRail:
                 "case_ids": chunk
             })
 
-        self.update_test_run_tests(test_run["id"], status_id)
+            # Update all tests in the run with the given status
+            self.update_test_run_tests(test_run["id"], status_id)
 
-
+            # Optional: confirm how many tests were added to the run
+            try:
+                tests = self.client.send_get(f"get_tests/{test_run['id']}")["tests"]
+                print(f"✅ Test run {test_run['id']} created with {len(tests)} test(s).")
+            except Exception as e:
+                print(f"⚠️ Could not fetch tests for run {test_run['id']}: {e}")
 
     # Private Methods
 
