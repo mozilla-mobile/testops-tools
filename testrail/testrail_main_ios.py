@@ -24,8 +24,7 @@ from testrail_utils import (
     build_milestone_name,
     get_release_type,
     get_release_version_ios,
-    load_testrail_credentials,
-    create_paginated_test_runs
+    load_testrail_credentials
 )
 
 #from slack_notifier import (
@@ -122,7 +121,7 @@ def main():
             #    "case_ids": case_ids
             #})
             # testrail.update_test_run_tests(test_run["id"], 1)  # 1 = Passed
-            create_paginated_test_runs(
+            testrail.create_paginated_test_runs(
                 project_id=testrail_project_id,
                 suite_id=testrail_test_suite_id,
                 release_version_id = release_version,
