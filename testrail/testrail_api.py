@@ -189,13 +189,6 @@ class TestRail:
             # Update all tests in the run with the given status
             self.update_test_run_tests(test_run["id"], status_id)
 
-            # Optional: confirm how many tests were added to the run
-            try:
-                tests = self.client.send_get(f"get_tests/{test_run['id']}")["tests"]
-                print(f"✅ Test run {test_run['id']} created with {len(tests)} test(s).")
-            except Exception as e:
-                print(f"⚠️ Could not fetch tests for run {test_run['id']}: {e}")
-
     # Private Methods
 
     def _get_test_cases(self, project_id, suite_id):
