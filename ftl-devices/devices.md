@@ -13,7 +13,7 @@
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
-| SO-41A | Xperia 10 II | 31 | Low |
+| SO-41A | Xperia 10 II | 31 | Medium |
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
@@ -61,7 +61,7 @@
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
-| fogona | moto g play - 2024 | 34 | Low |
+| fogona | moto g play - 2024 | 34 | Medium |
 | fogos | moto g34 5G | 34 | Low |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
