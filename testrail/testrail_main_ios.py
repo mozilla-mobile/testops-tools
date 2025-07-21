@@ -27,16 +27,21 @@ from testrail_utils import (
     load_testrail_credentials
 )
 
-#from slack_notifier import (
-#    send_error_notification,
-#    send_success_notification,
-#)
+from slack_notifier import (
+    send_error_notification,
+    send_success_notification_ios
+)
 
 # Constants
 #SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
 #ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
 SUCCESS_CHANNEL_ID = "C016BC5FUHJ"  
 ERROR_CHANNEL_ID = "C016BC5FUHJ"
+
+SLACK_WEBHOOK_URL = os.environ.get("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL")
+
+if not SLACK_WEBHOOK_URL:
+    raise ValueError("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL not defined in the environment variable.")
 
 
 def main():
@@ -90,7 +95,6 @@ def main():
             "custom_automation_status": 4, # Automation = Completed
             "custom_automation_coverage": 3, # Automation Coverage = Full
             "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
-            #"custom_sub_test_suites": lambda v: all(x in (v or []) for x in [1, 2])
         }
 
         case_ids = testrail.get_case_ids_by_multiple_custom_fields(
@@ -109,18 +113,7 @@ def main():
             #test_run = testrail.create_test_run(
             #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
             #)
-            #test_run = testrail.client.send_post(f"add_run/{testrail_project_id}", {
-            #    "name": "Smoke Tests Suite - " + release_version + " " + device,
-            #    "milestone_id": milestone["id"],
-            #    "suite_id": testrail_test_suite_id,
-            #    "include_all": False,
-            #    "case_ids": case_ids
-            #})
-            # Update the test run with only the automated tests
-            #testrail.client.send_post(f"update_run/{test_run['id']}", {
-            #    "case_ids": case_ids
-            #})
-            # testrail.update_test_run_tests(test_run["id"], 1)  # 1 = Passed
+            
             testrail.create_paginated_test_runs(
                 project_id=testrail_project_id,
                 suite_id=testrail_test_suite_id,
@@ -139,10 +132,11 @@ def main():
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
-        #send_success_notification(success_values, SUCCESS_CHANNEL_ID)
+        #send_success_notification_ios(success_values, SUCCESS_CHANNEL_ID)
+        send_success_notification_ios(success_values, SLACK_WEBHOOK_URL)
 
     except Exception as error_message:
-        #send_error_notification(str(error_message), ERROR_CHANNEL_ID)
+        send_error_notification(str(error_message), ERROR_CHANNEL_ID)
         print("Error")
 
 if __name__ == "__main__":

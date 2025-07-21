@@ -171,7 +171,7 @@ class TestRail:
                 continue
 
             run_name = (
-                f"{base_run_name} - {device_name} (part {index + 1})"
+                f"{base_run_name} - {release_version_id} - {device_name} (part {index + 1})"
                 if total_cases > max_cases_per_run
                 else f"{base_run_name} - {device_name}"
             )
@@ -287,23 +287,10 @@ class TestRail:
                 time.sleep(delay)
 
     def _get_test_cases_by_multiple_custom_fields(self, project_id, suite_id, filters):
-        """if not all([project_id, suite_id, filters]):
-            raise ValueError("Project ID, suite ID y filtros deben ser provistos.")
-
-        all_cases = self._get_test_cases(project_id, suite_id)
-
-        matching_cases = [
-            case for case in all_cases
-            if all(case.get(field) == expected for field, expected in filters.items())
-        ]
-
-        return matching_cases"""
         if not all([project_id, suite_id, filters]):
             raise ValueError("Project ID, suite ID and filters must be provided.")
 
         all_cases = self._get_test_cases_with_pagination(project_id, suite_id)
-        print("************LENGHT****************")
-        print(len(all_cases))
 
         def satisfies_all(case):
             for field, condition in filters.items():
