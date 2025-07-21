@@ -52,7 +52,7 @@ runs:
       run: |
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
-        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secretes.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
 
