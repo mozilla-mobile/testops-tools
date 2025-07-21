@@ -47,6 +47,13 @@ runs:
         }
         EOF
       shell: bash
+    - name: Check if webhook is set
+      run: |
+        if [ -z "${{ inputs.webhook_url }}" ]; then
+          echo "❌ webhook_url input is EMPTY"
+        else
+          echo "✅ webhook_url input is PRESENT"
+        fi
 
     - name: Run create Focus milestone
       run: |
