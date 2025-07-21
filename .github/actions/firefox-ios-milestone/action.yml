@@ -51,6 +51,8 @@ runs:
       env:
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
+        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+
 
       shell: bash
 
