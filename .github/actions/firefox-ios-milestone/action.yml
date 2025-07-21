@@ -50,10 +50,9 @@ runs:
 
     - name: Run create Focus milestone
       run: |
-        echo "SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL=${SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL}"        
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
-        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ env.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
+        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secretes.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
 
