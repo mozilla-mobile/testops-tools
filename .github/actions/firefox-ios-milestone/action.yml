@@ -17,7 +17,10 @@ inputs:
   testrail-api-key:
     description: "TestRail API key"
     required: true
-
+  webhook_url:
+    description: Slack webhook URL
+    required: true
+    
 runs:
   using: "composite"
   steps:
@@ -47,12 +50,10 @@ runs:
 
     - name: Run create Focus milestone
       run: |
-        python ../testops-tools/testrail/testrail_main_ios.py
+        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL="${{ inputs.webhook_url }}" python ../testops-tools/testrail/testrail_main_ios.py
       env:
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
-        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
-
 
       shell: bash
 
