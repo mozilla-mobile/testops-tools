@@ -54,6 +54,7 @@ runs:
         else
           echo "✅ webhook_url input is PRESENT"
         fi
+      shell: bash
 
     - name: Run create Focus milestone
       run: |
