@@ -48,8 +48,10 @@ runs:
         EOF
       shell: bash
 
-    - name: Run create Focus milestone
+    - name: Run create milestone
       run: |
+        echo "webhook_url value inside reusable action: '${{ inputs.webhook_url }}'"
+        echo "SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL (env var for Python): '${SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL}'"
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
         SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
