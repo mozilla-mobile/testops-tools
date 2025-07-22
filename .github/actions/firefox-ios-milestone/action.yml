@@ -54,7 +54,7 @@ runs:
         echo "SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL (env var for Python): '${SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL}'"
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
-        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ inputs.webhook_url }}
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
 
