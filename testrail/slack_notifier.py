@@ -258,7 +258,7 @@ def send_success_notification(success_values, channel_id, options):
 
 def send_success_notification_ios(success_values, SLACK_WEBHOOK_URL):
     try:
-        blocks = json.loads(SLACK_SUCCESS_MESSAGE_TEMPLATE.safe_substitute(**success_values))
+        blocks = json.loads(SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS.safe_substitute(**success_values))
         payload = {
             "text": str(int(time.time())),  # para evitar duplicados en Slack
             "blocks": blocks

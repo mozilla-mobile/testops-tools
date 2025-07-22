@@ -38,8 +38,6 @@ from slack_notifier import (
 SUCCESS_CHANNEL_ID = "C016BC5FUHJ"  
 ERROR_CHANNEL_ID = "C016BC5FUHJ"
 
-print(f"SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL inside the Python script: '{os.getenv('SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL')}'")
-
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL")
 
 if not SLACK_WEBHOOK_URL:
@@ -134,7 +132,6 @@ def main():
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
-        #send_success_notification_ios(success_values, SUCCESS_CHANNEL_ID)
         send_success_notification_ios(success_values, SLACK_WEBHOOK_URL)
 
     except Exception as error_message:

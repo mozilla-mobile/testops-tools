@@ -50,7 +50,6 @@ runs:
 
     - name: Run create milestone
       run: |
-        echo "SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL (env var for Python): ${{ inputs.slack_webhook_url }}"
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
         SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ inputs.slack_webhook_url }}
