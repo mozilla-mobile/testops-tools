@@ -9,3 +9,27 @@ updates:
     directory: "/"
     schedule: 
       interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "testrail"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "backup-tools"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "ios-insights"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "android-l10n-integrity"
+    schedule: 
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "android-performance"
+    schedule: 
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "telemetry-expiry"
+    schedule:
+      interval: "weekly"
