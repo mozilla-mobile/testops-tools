@@ -16,6 +16,8 @@ Key Features:
 - get_taskcluster_options: Retrieves configuration options for Taskcluster based on the current runtime environment, ensuring appropriate setup for notification delivery.
 - send_error_notification: A higher-level function that formats and sends error notifications to a specified Slack channel.
 - send_success_notification: Similarly, this function sends success notifications to a specified Slack channel, using the success message template.
+- send_send_success_notification_ios: This function sends success notifications to a specified Slack channel, using the success message template for ios.
+- send_error_notification_ios: This function sends error notifications to a specified Slack channel for ios.
 
 Usage:
 The module is intended to be integrated into automated testing and release workflows, where Slack 
@@ -250,6 +252,19 @@ def send_error_notification(error_message, channel_id, options):
     }
     send_slack_notification(SLACK_ERROR_MESSAGE_TEMPLATE, values, channel_id, options)
 
+def send_error_notification_ios(error_message, SLACK_WEBHOOK_URL_ERROR_CHANNEL):
+    try:
+        payload = {
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+            "error_message": error_message,
+        }
+
+        response = requests.post(SLACK_WEBHOOK_URL_ERROR_CHANNEL, json=payload)
+        response.raise_for_status()
+        print("Slack Notification sent.")
+    except Exception as e:
+        print(f"Error sending the slack notification: {e}")
+        traceback.print_exc()
 
 def send_success_notification(success_values, channel_id, options):
     send_slack_notification(

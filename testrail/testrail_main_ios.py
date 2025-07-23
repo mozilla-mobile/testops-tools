@@ -28,20 +28,22 @@ from testrail_utils import (
 )
 
 from slack_notifier import (
-    send_error_notification,
+    send_error_notification_ios,
     send_success_notification_ios
 )
 
 # Constants
-#SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
-#ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
-SUCCESS_CHANNEL_ID = "C016BC5FUHJ"  
-ERROR_CHANNEL_ID = "C016BC5FUHJ"
+SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
+ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
 
-SLACK_WEBHOOK_URL = os.environ.get("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL")
+SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = os.environ.get("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL")
+SLACK_MOBILE_ALERTS_IOS_CHANNEL = os.environ.get("SLACK_MOBILE_ALERTS_IOS_CHANNEL")
 
-if not SLACK_WEBHOOK_URL:
+if not SLACK_MOBILE_TESTENG_RELEASE_CHANNEL:
     raise ValueError("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL not defined in the environment variable.")
+
+if not SLACK_MOBILE_ALERTS_IOS_CHANNEL:
+    raise ValueError("SLACK_MOBILE_ALERTS_IOS_CHANNEL not defined in the environment variable.")
 
 
 def main():
@@ -132,11 +134,10 @@ def main():
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
-        send_success_notification_ios(success_values, SLACK_WEBHOOK_URL)
+        send_success_notification_ios(success_values, SLACK_MOBILE_TESTENG_RELEASE_CHANNEL)
 
     except Exception as error_message:
-        send_error_notification(str(error_message), ERROR_CHANNEL_ID)
-        print("Error")
-
+        send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
+        
 if __name__ == "__main__":
     main()

@@ -18,8 +18,11 @@ inputs:
     description: "TestRail API key"
     required: true
   slack_webhook_url:
-    description: "Slack Webhook Url"
+    description: "Slack Webhook Url for mobile testend channel"
     required: true
+  slack_webhook_url_error_channel:
+     description: "Slack Webhook Url for mobile alerts io channel"
+     required: true
     
 runs:
   using: "composite"
@@ -52,9 +55,10 @@ runs:
       run: |
         python ../testops-tools/testrail/testrail_main_ios.py
       env:
-        SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL: ${{ inputs.slack_webhook_url }}
+        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL: ${{ inputs.slack_webhook_url }}
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL: ${{ slack_webhook_url_error_channel }}
       shell: bash
 
     - name: Delete credentials file
