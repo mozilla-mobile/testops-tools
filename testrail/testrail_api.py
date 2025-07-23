@@ -123,6 +123,71 @@ class TestRail:
             ]
         }
         return self.client.send_post(f"add_results/{test_run_id}", data)
+    
+    def get_case_ids_by_multiple_custom_fields(self, project_id, suite_id, filters):
+        filtered_cases = self._get_test_cases_by_multiple_custom_fields(
+            project_id, suite_id, filters
+        )
+        return [case["id"] for case in filtered_cases]
+    
+    def create_paginated_test_runs(
+        self,
+        project_id,
+        suite_id,
+        release_version_id,
+        milestone_id,
+        base_run_name,
+        device_name,
+        case_ids,
+        status_id=1,  # default to Passed
+        max_cases_per_run=250
+    ):
+        """
+        Crete one or more test runs if the number of test cases is greater than 250 
+        (Test rail API limit).
+
+        Args:
+            project_id (int): ID of the project.
+            suite_id (int): ID of the test suite.
+            milestone_id (int): ID of the milestone.
+            base_run_name (str): Common Prefix for all the test runs.
+            device_name (str): Device name (to include in the name of the test run).
+            case_ids (list): List of the IDs of the test cases to include in the test run.
+            status_id (int): Result to apply by default to the test cases (default: 1 = Passed).
+            max_cases_per_run (int): Límit for the test cases for each run (default: 250).
+        """
+        def chunk_case_ids(case_ids, size):
+            for i in range(0, len(case_ids), size):
+                yield case_ids[i:i + size]
+
+        total_cases = len(case_ids)
+        if total_cases == 0:
+            print(f"No test cases provided for {device_name}. No test runs created.")
+            return
+
+        for index, chunk in enumerate(chunk_case_ids(case_ids, max_cases_per_run)):
+            if not chunk:
+                print(f"Skipping empty test run chunk for {device_name} (part {index + 1})")
+                continue
+
+            run_name = (
+                f"{base_run_name} - {release_version_id} - {device_name} (part {index + 1})"
+                if total_cases > max_cases_per_run
+                else f"{base_run_name} - {device_name}"
+            )
+
+            print(f"Creating test run: '{run_name}' with {len(chunk)} test cases")
+
+            test_run = self.client.send_post(f"add_run/{project_id}", {
+                "name": run_name,
+                "milestone_id": milestone_id,
+                "suite_id": suite_id,
+                "include_all": False,
+                "case_ids": chunk
+            })
+
+            # Update all tests in the run with the given status
+            self.update_test_run_tests(test_run["id"], status_id)
 
     # Private Methods
 
@@ -132,6 +197,31 @@ class TestRail:
         return self.client.send_get(f"get_cases/{project_id}&suite_id={suite_id}")[
             "cases"
         ]
+
+    def _get_test_cases_with_pagination(self, project_id, suite_id):
+        if not all([project_id, suite_id]):
+            raise ValueError("Project ID and suite ID must be provided.")
+
+        all_cases = []
+        limit = 250
+        offset = 0
+
+        while True:
+            endpoint = f"get_cases/{project_id}&suite_id={suite_id}&limit={limit}&offset={offset}"
+            response = self.client.send_get(endpoint)
+
+            if "cases" not in response:
+                break
+
+            cases = response["cases"]
+            all_cases.extend(cases)
+
+            if len(cases) < limit:
+                break  # Last page
+
+            offset += limit
+
+        return all_cases
 
     def _get_milestone(self, milestone_id):
         if not milestone_id:
@@ -195,3 +285,22 @@ class TestRail:
                 if attempt == max_retries - 1:
                     raise  # Reraise the last exception
                 time.sleep(delay)
+
+    def _get_test_cases_by_multiple_custom_fields(self, project_id, suite_id, filters):
+        if not all([project_id, suite_id, filters]):
+            raise ValueError("Project ID, suite ID and filters must be provided.")
+
+        all_cases = self._get_test_cases_with_pagination(project_id, suite_id)
+
+        def satisfies_all(case):
+            for field, condition in filters.items():
+                value = case.get(field)
+                if callable(condition):
+                    if not condition(value):
+                        return False
+                else:
+                    if value != condition:
+                        return False
+            return True
+
+        return [case for case in all_cases if satisfies_all(case)]

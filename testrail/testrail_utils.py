@@ -20,6 +20,9 @@ Functions:
   the version string.
 - load_testrail_credentials(json_file_path): Loads TestRail credentials from a JSON file
   and handles potential errors during the loading process.
+- get_release_version_ios(release_tag): Reads and returns the release version from the release tag.
+- build_milestone_description_ios(milestone_name): Generates a detailed description for the
+  milestonefor ios, including the release date and placeholders for testing status and QA recommendations.
 """
 
 import json
@@ -82,3 +85,28 @@ def load_testrail_credentials(json_file_path):
         return credentials
     except json.JSONDecodeError as e:
         raise ValueError(f"Failed to load TestRail credentials: {e}")
+
+def get_release_version_ios(release_tag):
+    if release_tag and 'v' in release_tag:
+        version = release_tag.split('v')[-1]  # e.g., "140.0b2"
+    else:
+        version = None
+    return version
+
+def build_milestone_description_ios(milestone_name):
+    current_date = datetime.now()
+    formatted_date = current_date = current_date.strftime("%B %d, %Y")
+    return textwrap.dedent(
+        f"""
+        RELEASE: {milestone_name}\n\n\
+        RELEASE_TAG_URL: https://github.com/mozilla-mobile/firefox-ios/releases/\n\n\
+        RELEASE_DATE: {formatted_date}\n\n\
+        TESTING_STATUS: [ TBD ]\n\n\
+        QA_RECOMMENDATION: [ TBD ]\n\n\
+        QA_RECOMENTATION_VERBOSE: \n\n\
+        TESTING_SUMMARY\n\n\
+        Known issues: n/a\n\
+        New issue: n/a\n\
+        Verified issue:
+    """
+    )

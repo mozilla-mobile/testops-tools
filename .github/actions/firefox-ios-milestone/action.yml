@@ -1,0 +1,66 @@
+name: "Create Firefox TestRail Milestone"
+description: "Creates a Firefox iOS TestRail milestone based on release information"
+
+inputs:
+  release-name:
+    description: "Name of the GitHub release"
+    required: true
+  release-tag:
+    description: "Tag of the GitHub release"
+    required: true
+  testrail-host:
+    description: "TestRail host"
+    required: true
+  testrail-username:
+    description: "TestRail username"
+    required: true
+  testrail-api-key:
+    description: "TestRail API key"
+    required: true
+  slack_webhook_url:
+    description: "Slack Webhook Url for mobile testend channel"
+    required: true
+  slack_webhook_url_error_channel:
+     description: "Slack Webhook Url for mobile alerts io channel"
+     required: true
+    
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Clone testops-tools repo
+      run: |
+        git clone --branch mb/firefox-ios-milestone https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
+      shell: bash
+
+    - name: Install dependencies
+      run: pip install -r ../testops-tools/testrail/requirements.txt
+      shell: bash
+
+    - name: Create .testrail_credentials.json
+      run: |
+        cat > .testrail_credentials.json <<EOF
+        {
+          "host": "${{ inputs.testrail-host }}",
+          "username": "${{ inputs.testrail-username }}",
+          "password": "${{ inputs.testrail-api-key }}"
+        }
+        EOF
+      shell: bash
+
+    - name: Run create milestone
+      run: |
+        python ../testops-tools/testrail/testrail_main_ios.py
+      env:
+        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL: ${{ inputs.slack_webhook_url }}
+        RELEASE_NAME: ${{ inputs.release-name }}
+        RELEASE_TAG: ${{ inputs.release-tag }}
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL: ${{ inputs.slack_webhook_url_error_channel }}
+      shell: bash
+
+    - name: Delete credentials file
+      run: rm -f .testrail_credentials.json
+      shell: bash
