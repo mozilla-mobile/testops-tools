@@ -58,7 +58,7 @@ runs:
         SLACK_MOBILE_TESTENG_RELEASE_CHANNEL: ${{ inputs.slack_webhook_url }}
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
-        SLACK_MOBILE_ALERTS_IOS_CHANNEL: ${{ slack_webhook_url_error_channel }}
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL: ${{ inputs.slack_webhook_url_error_channel }}
       shell: bash
 
     - name: Delete credentials file
