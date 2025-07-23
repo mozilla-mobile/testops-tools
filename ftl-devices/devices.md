@@ -23,7 +23,7 @@
 | a12 | Galaxy A12 | 31 | Medium |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
-| a15 | Samsung A15 | 34 | Low |
+| a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
