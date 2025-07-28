@@ -46,7 +46,7 @@
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | High |
 | caymanlm | VELVET | 31 | Low |
-| cheetah | Pixel 7 Pro | 33 | Low |
+| cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Medium |
