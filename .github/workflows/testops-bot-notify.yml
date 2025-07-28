@@ -1,0 +1,24 @@
+name: Monthly Monitoring Notification
+
+on:
+    workflow_dispatch:
+    schedule:
+      - cron: '0 13 1 * *'  # Runs at 13:00 UTC on the first day of every month
+
+jobs: 
+    notify-user:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4.2.2
+            - name: Set up Python
+              uses: actions/setup-python@v5.6.0
+              with:
+                python-version: '3.12'
+            - name: Install dependencies
+              run: pip install slack_sdk
+            - name: Select user for monitoring
+              env:
+                SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+                SLACK_CHANNEL_ID: ${{ secrets.SLACK_MOBILE_TOOLING_CHANNEL_ID }}
+              run: python testops-bot-notify/src/select_user.py
