@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 * * * *"  # every hour
   workflow_dispatch:
+  push:
+    branches:
+      - mb/fixMilestoneiOS
 
 jobs:
   check-bitrise:
