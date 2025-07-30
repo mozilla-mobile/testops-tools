@@ -1,0 +1,27 @@
+name: Check Bitrise Tags
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # every hour
+  workflow_dispatch:
+
+jobs:
+  check-bitrise:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install GH CLI
+        uses: cli/gh-action@v2
+
+      - name: Run tag checker
+        run: python testrail/check_bitrise_for_release.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
