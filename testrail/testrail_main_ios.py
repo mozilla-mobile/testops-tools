@@ -36,14 +36,14 @@ from slack_notifier import (
 SUCCESS_CHANNEL_ID = "C07HUFVU2UD"  # mobile-testeng-releases
 ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
 
-#SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = os.environ.get("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL")
-#SLACK_MOBILE_ALERTS_IOS_CHANNEL = os.environ.get("SLACK_MOBILE_ALERTS_IOS_CHANNEL")
+SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = os.environ.get("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL")
+SLACK_MOBILE_ALERTS_IOS_CHANNEL = os.environ.get("SLACK_MOBILE_ALERTS_IOS_CHANNEL")
 
-#if not SLACK_MOBILE_TESTENG_RELEASE_CHANNEL:
-#    raise ValueError("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL not defined in the environment variable.")
+if not SLACK_MOBILE_TESTENG_RELEASE_CHANNEL:
+    raise ValueError("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL not defined in the environment variable.")
 
-#if not SLACK_MOBILE_ALERTS_IOS_CHANNEL:
-#    raise ValueError("SLACK_MOBILE_ALERTS_IOS_CHANNEL not defined in the environment variable.")
+if not SLACK_MOBILE_ALERTS_IOS_CHANNEL:
+    raise ValueError("SLACK_MOBILE_ALERTS_IOS_CHANNEL not defined in the environment variable.")
 
 
 def main():
