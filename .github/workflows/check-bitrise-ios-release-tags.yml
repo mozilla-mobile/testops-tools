@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install GH CLI
-        uses: cli/gh-action@v2
+        uses: cli/gh-actions@v2
 
       - name: Run tag checker
         run: python testrail/check_bitrise_for_release.py
