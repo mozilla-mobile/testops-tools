@@ -1,6 +1,9 @@
 name: Create Milestone
 
 on:
+  push:
+    branches:
+      - mb/fixMilestoneiOS
   workflow_dispatch:
     inputs:
       release-name:
