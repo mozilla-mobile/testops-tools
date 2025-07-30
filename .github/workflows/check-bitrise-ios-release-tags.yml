@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install testrail/requirements.txt
+        run: pip install -r testrail/requirements.txt
 
       - name: Run tag checker
         run: python testrail/check_bitrise_for_release.py
