@@ -37,6 +37,7 @@ def run_create_milestone(tag):
 
     result = subprocess.run([
         "gh", "workflow", "run", "create-milestone.yml",
+        "--ref", "mb/fixMilestoneiOS",
         "-f", f"release-name={release_name}",
         "-f", f"release-tag={tag}"
     ], capture_output=True, text=True)
