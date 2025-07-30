@@ -21,8 +21,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install GH CLI
-        run: gh --version
+      - name: Install dependencies
+        run: pip install testrail/requirements.txt
 
       - name: Run tag checker
         run: python testrail/check_bitrise_for_release.py
