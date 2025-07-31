@@ -1,4 +1,4 @@
-name: Check Bitrise Tags
+name: Check Bitrise Firefox iOS Tags
 
 on:
   schedule:
@@ -24,7 +24,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r testrail/requirements.txt
 
-      - name: Run tag checker
+      - name: Run Bitrise tag checker
         run: python testrail/check_bitrise_for_release.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Commit and push updated last_tag.txt
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+          git add last_tag.txt
+
+          if git diff --cached --quiet; then
+            echo "🟢 No changes to commit"
+          else
+            git commit -m "Update last_tag.txt [skip ci]"
+            git push origin HEAD
+          fi
