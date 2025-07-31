@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use reusable milestone action
-        uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@main
+        uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@mb/fixMilestoneiOS
         with:
           release-name: ${{ github.event.inputs.release-name }}
           release-tag: ${{ github.event.inputs.release-tag }}
           testrail-host: ${{ secrets.TESTRAIL_HOST }}
           testrail-username: ${{ secrets.TESTRAIL_USERNAME }}
           testrail-api-key: ${{ secrets.TESTRAIL_PASSWORD }}
-          #slack_webhook_url: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_CHANNEL }}
-          #slack_webhook_url_error_channel: ${{ secrets.WEBHOOK_SLACK_MOBILE_ALERTS_IOS_CHANNEL }}
+          slack_webhook_url: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_CHANNEL }}
+          slack_webhook_url_error_channel: ${{ secrets.WEBHOOK_SLACK_MOBILE_ALERTS_IOS_CHANNEL }}
