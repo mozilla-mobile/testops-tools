@@ -23,11 +23,15 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r testrail/requirements.txt
+      
+      - name: Pull latest remote changes
+        run: git pull --rebase
 
       - name: Run Bitrise tag checker
         run: python testrail/check_bitrise_for_release.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BITRISE_APP_ID: ${{ secrets.BITRISE_APP_ID }}
         
       - name: Commit and push updated last_tag.txt
         run: |

@@ -2,7 +2,7 @@ import os
 import requests
 import subprocess
 
-BITRISE_APP_ID = "6c06d3a40422d10f"
+BITRISE_APP_ID = os.environ["BITRISE_APP_ID"]
 LAST_TAG_FILE = "last_tag.txt"
 
 def get_latest_successful_tag():
