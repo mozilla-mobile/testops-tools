@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: "0 * * * 1-5"  # every hour
   workflow_dispatch:
-  push:
-    branches:
-      - mb/fixMilestoneiOS
 
 jobs:
   check-bitrise:
@@ -35,8 +32,7 @@ jobs:
         
       - name: Commit and push updated last_tag.txt
         env:
-          # WEBHOOK_CHANNEL: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_CHANNEL }}
-          WEBHOOK_CHANNEL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX}}
+          WEBHOOK_CHANNEL: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_CHANNEL }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name 'github-actions'
@@ -61,6 +57,6 @@ jobs:
             echo "✅ PR creado: $PR_URL"
 
             curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"🚨 *IMPORTANT*: iOS Milestone created. \nReview and approve the Pull Request: <$PR_URL|See PR>\"}" \
+              --data "{\"text\":\"🚨 *iOS Milestone created* \nReview and approve the Pull Request that updates the ios release version: <$PR_URL|See PR>\"}" \
               "$WEBHOOK_CHANNEL"            
           fi
