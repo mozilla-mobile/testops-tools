@@ -138,7 +138,7 @@ def main():
 
     except Exception as error_message:
         #send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
-        print("Error Occurred")
+        print("Error")
         
 if __name__ == "__main__":
     main()
