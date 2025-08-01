@@ -40,7 +40,7 @@ SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = os.environ.get("SLACK_MOBILE_TESTENG_RELE
 SLACK_MOBILE_ALERTS_IOS_CHANNEL = os.environ.get("SLACK_MOBILE_ALERTS_IOS_CHANNEL")
 
 if not SLACK_MOBILE_TESTENG_RELEASE_CHANNEL:
-    raise ValueError("SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL not defined in the environment variable.")
+    raise ValueError("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL not defined in the environment variable.")
 
 if not SLACK_MOBILE_ALERTS_IOS_CHANNEL:
     raise ValueError("SLACK_MOBILE_ALERTS_IOS_CHANNEL not defined in the environment variable.")
