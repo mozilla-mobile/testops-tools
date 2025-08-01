@@ -1,1 +1,1 @@
-firefox-v141.0
+firefox-v140.0

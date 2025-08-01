@@ -56,8 +56,7 @@ jobs:
             PR_URL=$(gh pr create --title "Update last_tag.txt" \
                 --body "File uploaded automaticaclly." \
                 --head $BRANCH_NAME \
-                --base ${{ github.event.repository.default_branch }} \
-                --label automation)
+                --base ${{ github.event.repository.default_branch }})
 
             echo "✅ PR creado: $PR_URL"
 
