@@ -1,4 +1,4 @@
-name: Create iOS Milestone
+name: Create iOS Milestone in TestRail
 
 on:
   workflow_dispatch:
