@@ -4,6 +4,10 @@ The purpose of this repo is to house automation / notification tools for the Moz
 
 ## Priority Task Monitoring
 
+### General
+
+[![Monthly Monitoring Notification](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml)
+
 ### Android
 
 [![Check locales daily](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml)
@@ -13,6 +17,12 @@ The purpose of this repo is to house automation / notification tools for the Moz
 [![testrail-api-tests](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml)
 
 ### iOS
+
+[![Digest ios test results and import to BigQuery](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ios-insights-slack-notification.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ios-insights-slack-notification.yml)
+
+[![Create iOS Milestone in TestRail](https://github.com/mozilla-mobile/testops-tools/actions/workflows/create-milestone.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/create-milestone.yml)
+
+[![Check Bitrise Firefox iOS Tags](https://github.com/mozilla-mobile/testops-tools/actions/workflows/check-bitrise-ios-release-tags.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/check-bitrise-ios-release-tags.yml)
 
 [![Build and Run Autofill Automation](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-autofill-playwrite-tests.yml/badge.svg)](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-autofill-playwrite-tests.yml)
 
