@@ -27,33 +27,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BITRISE_APP_ID: ${{ secrets.BITRISE_APP_ID }}
         
-      - name: Commit and push updated last_tag.txt
-        env:
-          WEBHOOK_CHANNEL: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_CHANNEL }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      - name: Commit and push changes
+        run: |-
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-
-          git add last_tag.txt
-
-          if git diff --cached --quiet; then
-            echo "🟢 No changes to commit"
-          else
-            BRANCH_NAME=update-last-tag-${GITHUB_RUN_ID}
-            git checkout -b $BRANCH_NAME
-
-            git commit -m "Update last_tag.txt [skip ci]"
-            git push origin $BRANCH_NAME
-
-            PR_URL=$(gh pr create --title "Update last_tag.txt" \
-                --body "File uploaded automaticaclly." \
-                --head $BRANCH_NAME \
-                --base ${{ github.event.repository.default_branch }})
-
-            echo "✅ PR creado: $PR_URL"
-
-            curl -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"🚨 *iOS Milestone created* \nReview and approve the Pull Request that updates the ios release version: <$PR_URL|See PR>\"}" \
-              "$WEBHOOK_CHANNEL"            
-          fi
+          git add testrail/last_tag.txt
+          git diff --quiet && git diff --staged --quiet || (git commit -m 'Automated update of last_tag'; git push)
