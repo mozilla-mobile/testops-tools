@@ -11,7 +11,6 @@
 | OP5552L1 | CPH2415 | 34 | Medium |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
-| RED8BEL1 | realme GT NEO 3 150W | 33 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
