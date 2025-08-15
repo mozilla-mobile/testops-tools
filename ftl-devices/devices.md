@@ -90,7 +90,7 @@
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | pa3q | Galaxy S25 Ultra | 35 | High |
 | panther | Pixel 7 | 33 | High |
-| pettyl | moto e5 play | 27 | Medium |
+| pettyl | moto e5 play | 27 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
