@@ -88,7 +88,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
 | pettyl | moto e5 play | 27 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
