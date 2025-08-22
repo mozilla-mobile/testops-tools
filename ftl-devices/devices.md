@@ -26,7 +26,7 @@
 | a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
-| a35x | Samsung A35 | 34 | Medium |
+| a35x | Samsung A35 | 34 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
@@ -37,7 +37,7 @@
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Flip 6 | 34 | Medium |
-| bluejay | Pixel 6a | 32 | Medium |
+| bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
