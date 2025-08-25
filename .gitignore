@@ -1,7 +1,18 @@
 node_modules
 android-performance/node_modules
 actions-runner
+
+# Ignore editor and cache files
+.DS_Store
+*.pyc
+__pycache__
+*.sw?
+.*.sw?
+4913
+
+Dockerfile.*
+docker-compose.*
+
 backup-tools/*.csv
 backup-tools/backup*.json
-backup-tools/__pychache__/
-*.pyc
+backup-tools/__pycache__/

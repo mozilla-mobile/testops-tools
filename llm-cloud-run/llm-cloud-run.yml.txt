@@ -1,0 +1,28 @@
+name: Postprocess with LLM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  postprocess-with-llm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up GCP credentials
+        run: echo "${{ secrets.GCP_CREDENTIALS }}" > key.json
+
+      - name: Authenticate and call Cloud Run
+        run: |
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project YOUR_PROJECT_ID
+          TOKEN=$(gcloud auth print-access-token)
+
+          PROMPT=$(cat path/to/prompt.txt | jq -Rs .)
+          CONTENT=$(cat path/to/artifact.txt | jq -Rs .)
+
+          RESPONSE=$(curl -s -X POST https://llm-runner-abcdef-uc.a.run.app/ \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"prompt\": $PROMPT, \"content\": $CONTENT}")
+
+          echo "LLM response:"
+          echo "$RESPONSE"

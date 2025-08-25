@@ -1,8 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
+
 WORKDIR /app
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
-ENV PORT=8080
-# Default to API; override CMD for Jobs in the deploy step
-CMD ["python", "serve.py"]
+
+RUN pip install fastapi uvicorn google-cloud-aiplatform vertexai
+
+COPY main.py .
+
+EXPOSE 8080
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
