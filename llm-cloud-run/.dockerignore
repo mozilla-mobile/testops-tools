@@ -1,0 +1,7 @@
+# Vim artifacts
+*.sw?
+.*.sw?
+*~ 
+4913
+
+.DS_Store
