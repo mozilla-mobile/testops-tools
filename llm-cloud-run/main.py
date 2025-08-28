@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from vertexai.preview.generative_models import GenerativeModel
 import vertexai
@@ -8,9 +9,19 @@ app = FastAPI()
 
 vertexai.init(project=os.getenv("GCP_PROJECT"), location="us-central1")
 
+
 class LLMRequest(BaseModel):
     prompt: str
     content: str
+
+
+@app.get("/")
+async def root():
+    return JSONResponse(
+        content={"message": "Welcome to the LLM API"},
+        status_code=200
+    )
+
 
 @app.post("/")
 async def analyze(request: LLMRequest):
