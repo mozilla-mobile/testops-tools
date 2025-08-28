@@ -1,10 +1,10 @@
-name: Manual POC run (pull artifacts from GCS)
+name: Gemini-LLM GCS Artifact Test
 
 on:
   workflow_dispatch:
     inputs:
       use_prod_service_url:
-        description: "Call the Cloud Run service after downloading artifacts?"
+        description: "Call the Cloud Run service after downloading artifacts"
         required: false
         type: boolean
         default: false
@@ -13,10 +13,8 @@ permissions:
   contents: read
 
 env:
-  # ---- Update these if needed ----
   GCP_PROJECT_ID: moz-testops-tools 
   SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
-  # GCS object URIs you shared:
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI:   gs://testops-llm-artifacts/anr/examples/anr_example.txt
   LOCAL_ARTIFACT_DIR: artifacts
@@ -29,7 +27,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Auth via JSON key (what you asked for)
       - name: Authenticate to Google Cloud (JSON key)
         uses: google-github-actions/auth@v2
         with:
@@ -52,7 +49,6 @@ jobs:
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
 
-      # Optional: call your private Cloud Run service (only if you toggle the input)
       - name: (Optional) POST artifacts as JSON to Cloud Run
         if: ${{ inputs.use_prod_service_url == true }}
         run: |
@@ -62,7 +58,6 @@ jobs:
           ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
-
 
           # Create payload.json without putting large content in argv
           jq -n \
@@ -78,4 +73,3 @@ jobs:
             -H "Content-Type: application/json" \
             --data-binary @payload.json \
             "${SERVICE_URL}/"
-
