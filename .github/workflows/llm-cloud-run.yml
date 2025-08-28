@@ -56,16 +56,23 @@ jobs:
       - name: (Optional) POST artifacts as JSON to Cloud Run
         if: ${{ inputs.use_prod_service_url == true }}
         run: |
+          set -euo pipefail
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
           CRASH_CONTENT="$(cat "${LOCAL_ARTIFACT_DIR}/crash_example.txt" | sed 's/"/\\"/g')"
           ANR_CONTENT="$(cat "${LOCAL_ARTIFACT_DIR}/anr_example.txt"   | sed 's/"/\\"/g')"
 
-          # Combine both into one content block (you can format however you like)
-          CONTENT="Crash:\n${CRASH_CONTENT}\n\nANR:\n${ANR_CONTENT}"
+          # Create payload.json without putting large content in argv
+          jq -n \
+            --arg prompt "Analyze these artifacts." \
+            --rawfile crash "$CRASH_FILE" \
+            --rawfile anr "$ANR_FILE" \
+            '{prompt: $prompt, content: ("Crash:\n"+$crash+"\n\nANR:\n"+$anr)}' \
+            > payload.json
 
+          # Post the JSON file
           curl -i -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
             -H "Content-Type: application/json" \
-            -d "{\"prompt\":\"Analyze these artifacts.\",\"content\":\"${CONTENT}\"}" \
+            --data-binary @payload.json \
             "${SERVICE_URL}/"
 
