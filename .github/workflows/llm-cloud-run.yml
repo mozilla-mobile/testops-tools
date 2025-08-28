@@ -6,24 +6,63 @@ on:
 jobs:
   postprocess-with-llm:
     runs-on: ubuntu-latest
+    # Lock down default token perms
+    permissions:
+      contents: read
+
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_GCP_PROJECT_ID }}      # e.g. my-gcp-project
+      REGION: us-central1                             # adjust
+      SERVICE_URL: https://llm-runner-abcdef-uc.a.run.app
+
     steps:
-      - name: Set up GCP credentials
-        run: echo "${{ secrets.GCP_CREDENTIALS }}" > key.json
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Auth using the service account key in memory (no key.json written)
+      - name: Auth to Google Cloud (SA key)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
+
+      # Install gcloud and set the active project
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure gcloud
+        run: |
+          gcloud --quiet config set project "$GCP_PROJECT_ID"
+
+      - name: Install tooling
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
 
       - name: Authenticate and call Cloud Run
+        shell: bash
         run: |
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud config set project YOUR_PROJECT_ID
-          TOKEN=$(gcloud auth print-access-token)
+          set -euo pipefail
 
-          PROMPT=$(cat path/to/prompt.txt | jq -Rs .)
-          CONTENT=$(cat path/to/artifact.txt | jq -Rs .)
+          # Prepare request body (read files and JSON-escape)
+          PROMPT=$(jq -Rs . < path/to/prompt.txt)
+          CONTENT=$(jq -Rs . < path/to/artifact.txt)
 
-          RESPONSE=$(curl -s -X POST https://llm-runner-abcdef-uc.a.run.app/ \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"prompt\": $PROMPT, \"content\": $CONTENT}")
+          # Call Cloud Run using a short-lived token generated at runtime.
+          # NOTE: Do not echo the token; use it inline.
+          RESPONSE=$(
+            curl -s -X POST "$SERVICE_URL" \
+              -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+              -H "Content-Type: application/json" \
+              -d "{\"prompt\": $PROMPT, \"content\": $CONTENT}"
+          )
 
           echo "LLM response:"
-          echo "$RESPONSE" 
-          echo "$RESPONSE" | jq -r '.output' # use in another job
+          echo "$RESPONSE"
+          echo "$RESPONSE" | jq -r '.output' > llm_output.txt
+
+      - name: Upload output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-output
+          path: llm_output.txt
+
