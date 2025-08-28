@@ -26,7 +26,7 @@ async def root():
 @app.post("/")
 async def analyze(request: LLMRequest):
     full_prompt = f"{request.prompt.strip()}\n\n{request.content.strip()}"
-    model = GenerativeModel("gemini-1.5-pro")
+    model = GenerativeModel("gemini-2.5-flash-lite")
     response = model.generate_content(
         full_prompt,
         generation_config={
