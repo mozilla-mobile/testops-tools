@@ -1,0 +1,62 @@
+name: Manual POC run (pull artifacts from GCS)
+
+on:
+  workflow_dispatch:
+    inputs:
+      use_prod_service_url:
+        description: "Call the Cloud Run service after downloading artifacts?"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  # ---- Update these if needed ----
+  GCP_PROJECT_ID: moz-testops-tools 
+  SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
+  # GCS object URIs you shared:
+  CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
+  ANR_URI:   gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  LOCAL_ARTIFACT_DIR: artifacts
+
+jobs:
+  manual-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Auth via JSON key (what you asked for)
+      - name: Authenticate to Google Cloud (JSON key)
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Set gcloud project (quiet)
+        run: |
+          gcloud --quiet config set project "$GCP_PROJECT_ID"
+
+      - name: Download artifacts from GCS
+        run: |
+          mkdir -p "${LOCAL_ARTIFACT_DIR}"
+          gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
+          gcloud storage cp "${ANR_URI}"   "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          echo "Downloaded files:"
+          ls -la "${LOCAL_ARTIFACT_DIR}"
+
+      # Optional: call your private Cloud Run service (only if you toggle the input)
+      - name: (Optional) Invoke secured Cloud Run service
+        if: ${{ inputs.use_prod_service_url == true }}
+        run: |
+          # Fetch an ID token for the SERVICE_URL audience and call the service
+          TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
+          curl -i -H "Authorization: Bearer ${TOKEN}" "${SERVICE_URL}" || true
+
