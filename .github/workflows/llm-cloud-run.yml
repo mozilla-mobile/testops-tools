@@ -57,9 +57,12 @@ jobs:
         if: ${{ inputs.use_prod_service_url == true }}
         run: |
           set -euo pipefail
+
+          CRASH_FILE="${LOCAL_ARTIFACT_DIR}/crash_example.txt"
+          ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
-          CRASH_CONTENT="$(cat "${LOCAL_ARTIFACT_DIR}/crash_example.txt" | sed 's/"/\\"/g')"
-          ANR_CONTENT="$(cat "${LOCAL_ARTIFACT_DIR}/anr_example.txt"   | sed 's/"/\\"/g')"
+
 
           # Create payload.json without putting large content in argv
           jq -n \
