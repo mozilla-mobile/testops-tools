@@ -11,9 +11,9 @@ jobs:
       contents: read
 
     env:
-      GCP_PROJECT_ID: ${{ secrets.GCP_GCP_PROJECT_ID }}      # e.g. my-gcp-project
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}      # e.g. my-gcp-project
       REGION: us-central1                             # adjust
-      SERVICE_URL: https://llm-runner-abcdef-uc.a.run.app
+      SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
 
     steps:
       - name: Checkout
