@@ -1,68 +1,62 @@
-name: Postprocess with LLM
+name: Manual POC run (pull artifacts from GCS)
 
 on:
   workflow_dispatch:
+    inputs:
+      use_prod_service_url:
+        description: "Call the Cloud Run service after downloading artifacts?"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  # ---- Update these if needed ----
+  GCP_PROJECT_ID: moz-testops-tools 
+  SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
+  # GCS object URIs you shared:
+  CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
+  ANR_URI:   gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
-  postprocess-with-llm:
+  manual-run:
     runs-on: ubuntu-latest
-    # Lock down default token perms
-    permissions:
-      contents: read
-
-    env:
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}      # e.g. my-gcp-project
-      REGION: us-central1                             # adjust
-      SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Auth using the service account key in memory (no key.json written)
-      - name: Auth to Google Cloud (SA key)
+      # Auth via JSON key (what you asked for)
+      - name: Authenticate to Google Cloud (JSON key)
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
 
-      # Install gcloud and set the active project
-      - name: Set up gcloud
+      - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
 
-      - name: Configure gcloud
+      - name: Set gcloud project (quiet)
         run: |
           gcloud --quiet config set project "$GCP_PROJECT_ID"
 
-      - name: Install tooling
+      - name: Download artifacts from GCS
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y jq
+          mkdir -p "${LOCAL_ARTIFACT_DIR}"
+          gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
+          gcloud storage cp "${ANR_URI}"   "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          echo "Downloaded files:"
+          ls -la "${LOCAL_ARTIFACT_DIR}"
 
-      - name: Authenticate and call Cloud Run
-        shell: bash
+      # Optional: call your private Cloud Run service (only if you toggle the input)
+      - name: (Optional) Invoke secured Cloud Run service
+        if: ${{ inputs.use_prod_service_url == true }}
         run: |
-          set -euo pipefail
-
-          # Prepare request body (read files and JSON-escape)
-          PROMPT=$(jq -Rs . < path/to/prompt.txt)
-          CONTENT=$(jq -Rs . < path/to/artifact.txt)
-
-          # Call Cloud Run using a short-lived token generated at runtime.
-          # NOTE: Do not echo the token; use it inline.
-          RESPONSE=$(
-            curl -s -X POST "$SERVICE_URL" \
-              -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-              -H "Content-Type: application/json" \
-              -d "{\"prompt\": $PROMPT, \"content\": $CONTENT}"
-          )
-
-          echo "LLM response:"
-          echo "$RESPONSE"
-          echo "$RESPONSE" | jq -r '.output' > llm_output.txt
-
-      - name: Upload output artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: llm-output
-          path: llm_output.txt
+          # Fetch an ID token for the SERVICE_URL audience and call the service
+          TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
+          curl -i -H "Authorization: Bearer ${TOKEN}" "${SERVICE_URL}" || true
 
