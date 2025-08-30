@@ -18,7 +18,7 @@
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Medium |
 | a03s | Galaxy A03s | 33 | Medium |
-| a10 | Galaxy A10 | 29 | High |
+| a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Medium |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
@@ -26,7 +26,7 @@
 | a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
-| a35x | Samsung A35 | 34 | Low |
+| a35x | Samsung A35 | 34 | Medium |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
