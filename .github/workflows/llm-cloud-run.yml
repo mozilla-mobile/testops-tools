@@ -33,7 +33,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
 
       - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
 
