@@ -20,5 +20,5 @@ jobs:
             - name: Select user for monitoring
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-                SLACK_CHANNEL_ID: ${{ secrets.SLACK_MOBILE_TOOLING_CHANNEL_ID }}
+                SLACK_MOBILE_TOOLING_CHANNEL_ID: ${{ secrets.SLACK_MOBILE_TOOLING_CHANNEL_ID }}
               run: python testops-bot-notify/src/select_user.py
