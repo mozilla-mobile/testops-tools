@@ -2,9 +2,11 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-RUN pip install fastapi uvicorn google-cloud-aiplatform vertexai
+COPY requirements.txt .
 
-COPY main.py .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 EXPOSE 8080
 

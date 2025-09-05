@@ -16,7 +16,8 @@ env:
   GCP_PROJECT_ID: moz-testops-tools 
   SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
-  ANR_URI:   gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  IMG_URI: gs://testops-llm-artifacts/images/examples/iOS/1.png
   LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
@@ -45,7 +46,8 @@ jobs:
         run: |
           mkdir -p "${LOCAL_ARTIFACT_DIR}"
           gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
-          gcloud storage cp "${ANR_URI}"   "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          gcloud storage cp "${ANR_URI}" "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          gcloud storage cp "${IMG_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
 
@@ -56,20 +58,37 @@ jobs:
 
           CRASH_FILE="${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          IMG_FILE="${LOCAL_ARTIFACT_DIR}/1.png"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
-          # Create payload.json without putting large content in argv
-          jq -n \
-            --arg prompt "Analyze these artifacts." \
-            --rawfile crash "$CRASH_FILE" \
-            --rawfile anr "$ANR_FILE" \
-            '{prompt: $prompt, content: ("Crash:\n"+$crash+"\n\nANR:\n"+$anr)}' \
-            > payload.json
+          # Write combined crash + ANR content to a temp file
+          CONTENT_FILE="$(mktemp)"
+          {
+            printf 'Crash:\n'
+            cat "$CRASH_FILE"
+            printf '\n\nANR:\n'
+            cat "$ANR_FILE"
+          } > "$CONTENT_FILE"
 
-          # Post the JSON file
-          curl -i -X POST \
+          # Post multipart form data: prompt, content (from file), and image
+          RESPONSE_FILE="$(mktemp)"
+          curl --fail-with-body -sS -i -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data-binary @payload.json \
-            "${SERVICE_URL}/"
+            -F "prompt=Analyze these crash, ANR, and image files?" \
+            -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
+            -F "image=@${IMG_FILE};type=image/png" \
+            "${SERVICE_URL}/analyze"
+            -o "$RESPONSE_FILE"
+
+            # Extract output from JSON response and write to GitHub summary
+            OUTPUT=$(jq -r '.output' "$RESPONSE_FILE")
+
+            {
+              echo "### 🧠 LLM Analysis Summary"
+              echo ""
+              echo "$OUTPUT"
+            } >> "$GITHUB_STEP_SUMMARY"
+
+
+          rm -f "$CONTENT_FILE"
