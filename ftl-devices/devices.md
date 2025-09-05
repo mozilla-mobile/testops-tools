@@ -29,7 +29,7 @@
 | a25x | SM-A256U1 | 34 | Medium |
 | a35x | Samsung A35 | 34 | Medium |
 | a52sxq | Galaxy A52s | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | High |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Medium |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
