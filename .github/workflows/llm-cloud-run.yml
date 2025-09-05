@@ -16,7 +16,8 @@ env:
   GCP_PROJECT_ID: moz-testops-tools 
   SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
-  ANR_URI:   gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
+  IMG_URI: gs://testops-llm-artifacts/images/examples/iOS/1.png
   LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
@@ -46,6 +47,7 @@ jobs:
           mkdir -p "${LOCAL_ARTIFACT_DIR}"
           gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           gcloud storage cp "${ANR_URI}"   "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          gcloud storage cp "${IMAGE_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
 
@@ -56,6 +58,7 @@ jobs:
 
           CRASH_FILE="${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          IMG_URI="${LOCAL_ARTIFACT_DIR}/1.png"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
@@ -70,6 +73,9 @@ jobs:
           # Post the JSON file
           curl -i -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data-binary @payload.json \
+            -H "Content-Type: multipart/form-data" \
+            -F "metadata=@payload.json;type=application/json" \
+            -F "image=@${IMG_FILE};type=image/png" \
             "${SERVICE_URL}/"
+
+           
