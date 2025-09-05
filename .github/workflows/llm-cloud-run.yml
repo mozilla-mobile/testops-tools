@@ -61,21 +61,13 @@ jobs:
           IMG_FILE="${LOCAL_ARTIFACT_DIR}/1.png"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
-
-          # Create payload.json without putting large content in argv
-          jq -n \
-            --arg prompt "Analyze these artifacts with image." \
-            --rawfile crash "$CRASH_FILE" \
-            --rawfile anr "$ANR_FILE" \
-            --arg img_b64 "$(base64 -w 0 "$IMG_FILE")" \
-            '{
-              prompt: $prompt,
-              content: ("Crash:\n" + $crash + "\n\nANR:\n" + $anr + "\n\nImage (base64):\n" + $img_b64)
-            }' > payload.json
+          CONTENT="$(printf 'Crash:\n%s\n\nANR:\n%s\n' "$(cat "$CRASH_FILE")" "$(cat "$ANR_FILE")")"
 
           # Post the JSON file
           curl -i -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data-binary @payload.json \
-            "${SERVICE_URL}/"
+            -H "Content-Type: multipart/form-data" \
+            --form-string "prompt=Analyze these artifacts." \
+            --form-string "content=${CONTENT}" \
+            -F "image=@${IMG_FILE};type=image/png" \
+            "${SERVICE_URL}/analyze"
