@@ -61,13 +61,22 @@ jobs:
           IMG_FILE="${LOCAL_ARTIFACT_DIR}/1.png"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
-          CONTENT="$(printf 'Crash:\n%s\n\nANR:\n%s\n' "$(cat "$CRASH_FILE")" "$(cat "$ANR_FILE")")"
 
-          # Post the JSON file
-          curl -i -X POST \
+          # Write combined crash + ANR content to a temp file
+          CONTENT_FILE="$(mktemp)"
+          {
+            printf 'Crash:\n'
+            cat "$CRASH_FILE"
+            printf '\n\nANR:\n'
+            cat "$ANR_FILE"
+          } > "$CONTENT_FILE"
+
+          # Post multipart form data: prompt, content (from file), and image
+          curl --fail-with-body -sS -i -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -H "Content-Type: multipart/form-data" \
-            --form-string "prompt=Analyze these artifacts." \
-            --form-string "content=${CONTENT}" \
+            -F "prompt=Analyze these crash, ANR, and image files?" \
+            -F "content=@${CONTENT_FILE};type=text/plain; charset=utf-8" \
             -F "image=@${IMG_FILE};type=image/png" \
             "${SERVICE_URL}/analyze"
+
+          rm -f "$CONTENT_FILE"
