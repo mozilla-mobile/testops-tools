@@ -78,8 +78,8 @@ jobs:
             -F "prompt=Analyze these crash, ANR, and image files?" \
             -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
             -F "image=@${IMG_FILE};type=image/png" \
+            -o "$RESPONSE_FILE" \
             "${SERVICE_URL}/analyze"
-            -o "$RESPONSE_FILE"
 
             # Extract output from JSON response and write to GitHub summary
             OUTPUT=$(jq -r '.output' "$RESPONSE_FILE")
