@@ -3,8 +3,11 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Optional
 from vertexai.preview.generative_models import GenerativeModel, Part
-import vertexai
+import logging
 import os
+import vertexai
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 
@@ -58,10 +61,11 @@ async def analyze_multipart(
             )
         img_bytes = await image.read()
         parts.append(Part.from_data(mime_type=image.content_type, data=img_bytes))
+        logging.info(f"Including image in prompt: {image.filename}, type: {image.content_type}, size: {len(img_bytes)} bytes")
 
-    model = GenerativeModel("gemini-2.5-flash-lite")  # model must support images
+    model = GenerativeModel("gemini-2.5-flash-lite")
     response = model.generate_content(
-        parts if len(parts) > 1 else parts[0],  # array of parts when image present
+        parts if len(parts) > 1 else parts[0],
         generation_config={"temperature": 0.3, "max_output_tokens": 1024},
     )
     return {"output": response.text}
