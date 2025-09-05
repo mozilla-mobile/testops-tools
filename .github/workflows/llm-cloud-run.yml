@@ -21,7 +21,7 @@ permissions:
 
 env:
   GCP_PROJECT_ID: moz-testops-tools 
-  SERVICE_URL: https://llm-tool-620861480696.us-central1.run.app
+  SERVICE_URL: ${{ secrets.LLM_PROD_SERVICE_URL }}
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
   IMG_URI: gs://testops-llm-artifacts/images/examples/iOS/1.png
