@@ -73,7 +73,7 @@ jobs:
 
           # Post multipart form data: prompt, content (from file), and image
           RESPONSE_FILE="$(mktemp)"
-          curl --fail-with-body -sS -i -X POST \
+          curl --fail-with-body -sS -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
             -F "prompt=Analyze these crash, ANR, and image files?" \
             -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
@@ -81,14 +81,14 @@ jobs:
             -o "$RESPONSE_FILE" \
             "${SERVICE_URL}/analyze"
 
-            # Extract output from JSON response and write to GitHub summary
-            OUTPUT=$(jq -r '.output' "$RESPONSE_FILE")
+          # Extract output from JSON response and write to GitHub summary
+          OUTPUT=$(jq -r '.output' "$RESPONSE_FILE")
 
-            {
-              echo "### 🧠 LLM Analysis Summary"
-              echo ""
-              echo "$OUTPUT"
-            } >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### 🧠 LLM Analysis Summary"
+            echo ""
+            echo "$OUTPUT"
+          } >> "$GITHUB_STEP_SUMMARY"
 
 
           rm -f "$CONTENT_FILE"
