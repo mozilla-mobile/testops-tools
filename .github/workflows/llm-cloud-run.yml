@@ -58,7 +58,7 @@ jobs:
 
           CRASH_FILE="${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
-          IMG_URI="${LOCAL_ARTIFACT_DIR}/1.png"
+          IMG_FILE="${LOCAL_ARTIFACT_DIR}/1.png"
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
