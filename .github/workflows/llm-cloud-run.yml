@@ -75,7 +75,7 @@ jobs:
           RESPONSE_FILE="$(mktemp)"
           curl --fail-with-body -sS -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -F "prompt=Analyze these crash, ANR, and image files?" \
+            -F "prompt=Analyze and provide a short summary of these crash, ANR, and image files." \
             -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
             -F "image=@${IMG_FILE};type=image/png" \
             -o "$RESPONSE_FILE" \
