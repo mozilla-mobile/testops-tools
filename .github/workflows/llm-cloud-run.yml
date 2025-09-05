@@ -8,6 +8,13 @@ on:
         required: false
         type: boolean
         default: false
+      prompt_file:
+        description: "Select a prompt to use for analysis"
+        required: true
+        default: "multi-analyze.txt"
+        type: choice
+        options:
+          - multi-analyze.txt
 
 permissions:
   contents: read
@@ -62,6 +69,9 @@ jobs:
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
+          PROMPT_FILE=".github/prompts/${{ inputs.prompt_file }}"
+          PROMPT=$(<"$PROMPT_FILE")
+
           # Write combined crash + ANR content to a temp file
           CONTENT_FILE="$(mktemp)"
           {
@@ -75,7 +85,7 @@ jobs:
           RESPONSE_FILE="$(mktemp)"
           curl --fail-with-body -sS -X POST \
             -H "Authorization: Bearer ${TOKEN}" \
-            -F "prompt=Analyze and provide a short summary of these crash, ANR, and image files." \
+            -F "prompt=$(printf "%s" "$PROMPT")"
             -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
             -F "image=@${IMG_FILE};type=image/png" \
             -o "$RESPONSE_FILE" \
@@ -91,4 +101,4 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
 
-          rm -f "$CONTENT_FILE"
+          rm -f "$CONTENT_FILE" "$RESPONSE_FILE"
