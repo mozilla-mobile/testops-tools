@@ -1,0 +1,1 @@
+You are an expert mobile test engineer. Analyze the following crash log, ANR log, and screenshot image from a mobile application. Provide a short analysis of the artifacts, potential causes if any, and recommended solutions.
