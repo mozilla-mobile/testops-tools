@@ -46,8 +46,8 @@ jobs:
         run: |
           mkdir -p "${LOCAL_ARTIFACT_DIR}"
           gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
-          gcloud storage cp "${ANR_URI}"   "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
-          gcloud storage cp "${IMAGE_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
+          gcloud storage cp "${ANR_URI}" "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+          gcloud storage cp "${IMG_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
 
