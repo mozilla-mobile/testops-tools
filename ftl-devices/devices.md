@@ -39,7 +39,7 @@
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Flip 6 | 34 | Medium |
 | bluejay | Pixel 6a | 32 | Low |
-| blueline | Pixel 3 | 28 | Medium |
+| blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
@@ -49,7 +49,7 @@
 | cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
-| crownqlteue | Galaxy Note9 | 29 | Medium |
+| crownqlteue | Galaxy Note9 | 29 | Low |
 | dm2q | S23 Plus | 34 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
