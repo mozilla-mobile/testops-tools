@@ -104,7 +104,7 @@
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
-| tegu | Pixel 9a | 35 | Medium |
+| tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | tokay | Pixel 9 | 36 | Medium |
