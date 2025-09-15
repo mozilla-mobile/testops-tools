@@ -58,7 +58,7 @@ from datetime import datetime
 def extract_metadata_from_filename(filename):
     
     match = re.match(
-        r"ios_insights_(?P<branch>origin_(?:main|release(?:_v\d+)?))_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html",
+        r"ios_insights_(?P<branch>origin_(?:main|release(?:_v[\d\.]+)?))_(?P<suite>[^_]+-[^_]+-[^_]+)-(?P<device>[^_]+)_(?P<timestamp>\d{8}-\d{6})\.html",
         filename
     )
 
