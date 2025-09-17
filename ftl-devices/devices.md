@@ -23,7 +23,7 @@
 | a12 | Galaxy A12 | 31 | Medium |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
-| a15 | Samsung A15 | 34 | Medium |
+| a15 | Samsung A15 | 34 | Low |
 | a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
@@ -104,7 +104,7 @@
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
-| tegu | Pixel 9a | 35 | Low |
+| tegu | Pixel 9a | 35 | Medium |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | tokay | Pixel 9 | 36 | Medium |
