@@ -1,0 +1,19 @@
+# xchtmlreport-extract
+
+Given the URL of a test report, we can get the list of failed tests and
+an `xcodebuild` command to re-run them
+
+![Sample test report](sample-report.png)
+
+## Usage
+```
+python extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
+```
+* `--url` (mandatory): Public URL of the test report
+* `--testPlan`: Test plan where the tests are located (default: `FullFunctionalTestPlan`)
+* `--parallel`: Number of parallel simulators (default: `2`)
+
+## Example
+```
+python extract_failed_tests.py --url https://storage.googleapis.com/report.html
+````
