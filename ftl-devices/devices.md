@@ -65,7 +65,7 @@
 | fogos | moto g34 5G | 34 | Low |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
-| gta8wifi | Galaxy Tab A8 | 34 | Medium |
+| gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
