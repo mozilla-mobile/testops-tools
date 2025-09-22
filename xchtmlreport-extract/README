@@ -12,10 +12,11 @@ python extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <
 * `--url` (mandatory): Public URL of the test report
 * `--testPlan`: Test plan where the tests are located (default: `FullFunctionalTestPlan`)
 * `--parallel`: Number of parallel simulators (default: `2`)
+* `--iterations`: Number of repetitions (default: `2`)
 
 ## Example
 ```
-python extract_failed_tests.py --url https://storage.googleapis.com/report.html
+$ python extract_failed_tests.py --url https://storage.googleapis.com/report.html
 # Failed Tests
 ActivityStreamTest/testShortcutsToggle
 ToolbarTests/testOpenNewTabButtonOnToolbar_tabTrayExperimentOff
@@ -35,19 +36,19 @@ PrivateBrowsingTest/testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperime
 # xcodebuild command for re-run
 xcodebuild test-without-building -target Client -scheme Fennec \
  -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.6' \
- -testPlan FullFunctionalTestPlan -parallel-testing-enabled YES -parallel-testing-worker-count 2 \
+ -testPlan FullFunctionalTestPlan -parallel-testing-enabled YES \
+ -parallel-testing-worker-count 2 -test-iterations 2 \
  -only-testing:XCUITests/ActivityStreamTest/testShortcutsToggle \
  -only-testing:XCUITests/ToolbarTests/testOpenNewTabButtonOnToolbar_tabTrayExperimentOff \
- -only-testing:XCUITests/ZoomingTests/testZoomingActionsLandscape_tabTrayExperimentOff \
- -only-testing:XCUITests/DisplaySettingTests/testCheckDisplaySettingsDefault \
- -only-testing:XCUITests/LoginTest/testLoginFreshInstallMessage \
+ -only-testing:XCUITests/NavigationTest/testCopyLinkPrivateMode_tabTrayExperimentOff \
+ -only-testing:XCUITests/SwipingTabsTests/testSwipeToSwitchTabs_swipingTabsExperimentOn \
  -only-testing:XCUITests/TodayWidgetTests/testFxShortcutGoToCopiedLinkWidget \
  -only-testing:XCUITests/CookiePersistenceTests/testCookiePersistenceBasic \
  -only-testing:XCUITests/CookiePersistenceTests/testCookiePersistenceOpenNewTab \
  -only-testing:XCUITests/CookiePersistenceTests/testCookiePersistenceOpenRegularTabAfterPrivateTab \
- -only-testing:XCUITests/ShareLongPressTests/testHistoryShareNormalWebsiteCopyURL \
- -only-testing:XCUITests/HomePageSettingsUITests/testClipboard \
  -only-testing:XCUITests/HomePageSettingsUITests/testRecentlySaved_tabTrayExperimentOff \
+ -only-testing:XCUITests/DisplaySettingTests/testCheckDisplaySettingsDefault \
+ -only-testing:XCUITests/ZoomingTests/testZoomingActionsLandscape_tabTrayExperimentOff \
  -only-testing:XCUITests/PrivateBrowsingTest/testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperimentOff \
  -only-testing:XCUITests/PrivateBrowsingTest/testTabCountShowsOnlyNormalOrPrivateTabCount_tabTrayExperimentOn
 ````
