@@ -16,15 +16,25 @@ parser.add_argument("--iterations", help="Number of repetitions", default="2")
 parser.add_argument("--url", required=True, help="URL of the test report") 
 args = parser.parse_args()
 
-# URL must be defined
 # Download the file first
-response = requests.get(args.url)
-soup = BeautifulSoup(response.content, "html.parser")
+try:
+    response = requests.get(args.url)
+    response.raise_for_status()
+except Exception as e:
+    print(f"Error fetching URL: {e}")
+    exit(1)
+
+report_doc = BeautifulSoup(response.content, "html.parser")
 
 # Get values for the destination
-device_name = soup.find("h3", class_="device-name").get_text(strip=True)
-device_os = soup.find("li", class_="device-os").get_text(strip=True)
-device_os = re.sub(r"iOS ", "", device_os)
+device_name = "iPhone 16"
+device_os = "latest"
+try:
+  device_name = report_doc.find("h3", class_="device-name").get_text(strip=True)
+  device_os = report_doc.find("li", class_="device-os").get_text(strip=True)
+  device_os = re.sub(r"iOS ", "", device_os)
+except AttributeError:
+  print("Warning: Could not find device name or OS in the report. Using defaults.")
 
 # Construct the first part of the command
 test_plan = args.testPlan 
@@ -37,7 +47,7 @@ cmd = ("xcodebuild test-without-building -target Client -scheme Fennec \\\n"
            device_name, device_os, test_plan, num_parallel, num_iterations)
 
 # Construct individual "-only-testing" argument
-failed_groups = soup.find_all("div", class_="test-summary-group failed")
+failed_groups = report_doc.find_all("div", class_="test-summary-group failed")
 
 print("# Failed Tests")
 
