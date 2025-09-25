@@ -52,15 +52,15 @@ failed_groups = report_doc.find_all("div", class_="test-summary-group failed")
 print("# Failed Tests")
 
 for group in failed_groups:
-  group_name = group.find("p").get_text(strip=True) 
-  group_name = re.sub(r"\s*\(\d+(\.\d+)?s\)", "", group_name)
+    group_name = group.find("p").get_text(strip=True) 
+    group_name = re.sub(r"\s*\(\d+(\.\d+)?s\)", "", group_name)
 
-  failed_divs = group.find_all("div", class_="test-summary failed")
-  for div in failed_divs:
-    test_name = div.find("p").get_text(strip=True)
-    test_name = re.sub(r"\s*\(.*", "", test_name)
-    cmd += " \\\n -only-testing:XCUITests/{0}/{1}".format(group_name, test_name)
-    print("{0}/{1}".format(group_name, test_name))
+    failed_divs = group.find_all("div", class_="test-summary failed")
+    for div in failed_divs:
+        test_name = div.find("p").get_text(strip=True)
+        test_name = re.sub(r"\s*\(.*", "", test_name)
+        cmd += " \\\n -only-testing:XCUITests/{0}/{1}".format(group_name, test_name)
+        print("{0}/{1}".format(group_name, test_name))
 
 print("\n# xcodebuild command for re-run")
 print(cmd)
