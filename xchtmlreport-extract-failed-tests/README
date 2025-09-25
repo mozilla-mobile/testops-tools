@@ -28,7 +28,7 @@ python extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <
 
 ## Example
 ```
-$ python extract_failed_tests.py --url https://storage.googleapis.com/report.html
+$ python xchtmlreport_extract_failed_tests.py --url https://storage.googleapis.com/report.html
 # Failed Tests
 ActivityStreamTest/testShortcutsToggle
 ToolbarTests/testOpenNewTabButtonOnToolbar_tabTrayExperimentOff
