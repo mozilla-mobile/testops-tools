@@ -19,7 +19,7 @@ simulator locally.
 
 ## Usage
 ```
-python extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
+python xchtmlreport_extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
 ```
 * `--url` (mandatory): Public URL of the test report
 * `--testPlan`: Test plan where the tests are located (default: `FullFunctionalTestPlan`)
