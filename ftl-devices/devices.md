@@ -57,15 +57,14 @@
 | e1q | Galaxy S24 | 34 | High |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
-| eqe | motorola edge 50 pro | 35 | Low |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
-| fogona | moto g play - 2024 | 34 | Medium |
+| fogona | moto g play - 2024 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
-| gta8wifi | Galaxy Tab A8 | 34 | Low |
+| gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
@@ -91,7 +90,6 @@
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
-| pettyl | moto e5 play | 27 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
