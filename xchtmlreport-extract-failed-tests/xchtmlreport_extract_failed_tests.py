@@ -30,11 +30,11 @@ report_doc = BeautifulSoup(response.content, "html.parser")
 device_name = "iPhone 16"
 device_os = "latest"
 try:
-  device_name = report_doc.find("h3", class_="device-name").get_text(strip=True)
-  device_os = report_doc.find("li", class_="device-os").get_text(strip=True)
-  device_os = re.sub(r"iOS ", "", device_os)
+    device_name = report_doc.find("h3", class_="device-name").get_text(strip=True)
+    device_os = report_doc.find("li", class_="device-os").get_text(strip=True)
+    device_os = re.sub(r"iOS ", "", device_os)
 except AttributeError:
-  print("Warning: Could not find device name or OS in the report. Using defaults.")
+    print("Warning: Could not find device name or OS in the report. Using defaults.")
 
 # Construct the first part of the command
 test_plan = args.testPlan 
