@@ -77,7 +77,7 @@
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
-| komodo | Pixel 9 Pro XL | 35 | Medium |
+| komodo | Pixel 9 Pro XL | 35 | Low |
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
