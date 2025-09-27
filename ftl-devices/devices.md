@@ -14,6 +14,7 @@
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
+| TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
@@ -31,7 +32,7 @@
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
-| akita | Pixel 8a | 35 | Medium |
+| akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
 | austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
