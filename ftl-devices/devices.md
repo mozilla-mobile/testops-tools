@@ -28,7 +28,7 @@
 | a15x | Samsung A15 5G | 34 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
-| a35x | Samsung A35 | 34 | Medium |
+| a35x | Samsung A35 | 34 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
@@ -77,6 +77,7 @@
 | gts9wifi | SM-X710 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
+| kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Low |
 | lion | moto g04 | 34 | Low |
