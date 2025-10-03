@@ -1,0 +1,32 @@
+name: Google Cloud Billing Slack Notifications
+
+on:
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Run API query and generate Slack payload
+        run: |
+          pip install requests
+          python gcp-billing-notify/notify_slack.py
+        env:
+          API_URL: "https://sql.telemetry.mozilla.org/api/queries/111012/results.json"
+          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
+
+      - name: Send to Slack
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          payload-file-path: "gcp-billing-notify/gcp_yearly.json"
+          payload-templated: true
+          webhook: ${{ secrets.SLACK_WEBHOOK_BILLING_ALERTS }}
+          webhook-type: incoming-webhook
