@@ -22,6 +22,7 @@ jobs:
         env:
           API_URL: "https://sql.telemetry.mozilla.org/api/queries/111012/results.json"
           API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
+          QUERY_TYPE: "monthly"
 
       - name: Send to Slack
         uses: slackapi/slack-github-action@v2.1.1
