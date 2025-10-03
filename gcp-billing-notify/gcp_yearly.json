@@ -1,0 +1,49 @@
+{
+    "attachments": [
+        {
+            "color": "${{ env.JOB_STATUS_COLOR }}",
+            "blocks": [
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": ":google-cloud: ${{ env.WORKFLOW_NAME }}",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Status: ${{ env.JOB_STATUS }}\nLogs: <${{ env.JOB_LOG_URL }}|Build Logs>\nBranch: ${{ env.BRANCH }}"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "${{ env.BILLING_SUMMARY }}"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview#Test-Operations|Mobile Test Engineering>"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
