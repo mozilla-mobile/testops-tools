@@ -98,6 +98,7 @@
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
+| r12s | SM-S721U1 | 35 | Low |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
