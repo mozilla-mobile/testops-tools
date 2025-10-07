@@ -46,6 +46,28 @@ def format_monthly_summary(rows: List[Dict]) -> str:
     return "\n".join(lines)
 
 
+def format_weekly_summary(rows: List[Dict]) -> str:
+    """Format rows into a weekly spend comparison (current vs previous)."""
+    if not rows:
+        return "_No weekly spend data available._"
+
+    # The query returns a single row with comparative fields
+    row = rows[0]
+    current = row.get("current_week_cost", 0.0)
+    previous = row.get("previous_week_cost", 0.0)
+    delta = row.get("delta", 0.0)
+    pct_change = row.get("pct_change", 0.0)
+    trend = row.get("trend", "")
+
+    lines = [
+        "*Weekly Billing Trend*",
+        f"- Current week: ${current:,.2f}",
+        f"- Previous week: ${previous:,.2f}",
+        f"- Change: {trend} {pct_change:+.2f}% (${delta:+,.2f})",
+    ]
+    return "\n".join(lines)
+
+
 def format_daily_summary(rows: List[Dict]) -> str:
     """Format rows into a daily billing breakdown."""
     lines = ["*Daily Billing Breakdown (Past 4 Days)*"]
@@ -60,7 +82,7 @@ def format_daily_summary(rows: List[Dict]) -> str:
 FORMATTERS: Dict[str, Callable[[List[Dict]], str]] = {
     "monthly": format_monthly_summary,
     "daily": format_daily_summary,
-    # "project": format_project_summary
+    "weekly": format_weekly_summary,
 }
 
 
