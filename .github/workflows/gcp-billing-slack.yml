@@ -27,7 +27,7 @@ jobs:
         run: python gcp-billing-notify/notify_slack.py
         env:
           API_URL: "https://sql.telemetry.mozilla.org/api/queries/111166/results.json"
-          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
+          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY_111166 }}
           QUERY_TYPE: "weekly"
 
       - name: Send Weekly Summary to Slack
@@ -59,7 +59,7 @@ jobs:
         run: python gcp-billing-notify/notify_slack.py
         env:
           API_URL: "https://sql.telemetry.mozilla.org/api/queries/111012/results.json"
-          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
+          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY_111012 }}
           QUERY_TYPE: "monthly"
 
       - name: Send Monthly Summary to Slack
