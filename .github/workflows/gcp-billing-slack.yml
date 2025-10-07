@@ -1,30 +1,68 @@
 name: Google Cloud Billing Slack Notifications
 
 on:
+  # Run weekly job automatically every Monday 9 AM ET (13:00 UTC)
+  schedule:
+    - cron: '0 13 * * MON'
   workflow_dispatch:
 
 jobs:
-  notify:
+  weekly_spend:
+    name: Weekly GCP Spend Trend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+          cache: "pip"
 
-      - name: Run API query and generate Slack payload
-        run: |
-          pip install requests
-          python gcp-billing-notify/notify_slack.py
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run weekly API query and generate Slack payload
+        run: python gcp-billing-notify/notify_slack.py
+        env:
+          API_URL: "https://sql.telemetry.mozilla.org/api/queries/111166/results.json"
+          API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
+          QUERY_TYPE: "weekly"
+
+      - name: Send Weekly Summary to Slack
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          payload-file-path: "gcp-billing-notify/gcp_weekly.json"
+          payload-templated: true
+          webhook: ${{ secrets.SLACK_WEBHOOK_BILLING_ALERTS }}
+          webhook-type: incoming-webhook
+
+  monthly_summary:
+    if: github.event_name == 'workflow_dispatch'
+    name: Monthly GCP Billing Report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run monthly API query and generate Slack payload
+        run: python gcp-billing-notify/notify_slack.py
         env:
           API_URL: "https://sql.telemetry.mozilla.org/api/queries/111012/results.json"
           API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY }}
           QUERY_TYPE: "monthly"
 
-      - name: Send to Slack
+      - name: Send Monthly Summary to Slack
         uses: slackapi/slack-github-action@v2.1.1
         with:
           payload-file-path: "gcp-billing-notify/gcp_yearly.json"

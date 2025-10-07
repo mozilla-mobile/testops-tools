@@ -8,6 +8,9 @@ The purpose of this repo is to house automation / notification tools for the Moz
 
 [![Monthly Monitoring Notification](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml)
 
+[![Google Cloud Billing Slack Notifications](https://github.com/mozilla-mobile/testops-tools/actions/workflows/gcp-billing-slack.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/gcp-billing-slack.yml)
+
+
 ### Android
 
 [![Check locales daily](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/android-l10n-integrity.yml)
