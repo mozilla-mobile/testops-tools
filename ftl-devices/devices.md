@@ -26,6 +26,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
+| a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a35x | Samsung A35 | 34 | Low |
@@ -39,6 +40,7 @@
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Flip 6 | 34 | Medium |
+| blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | Low |
@@ -61,8 +63,10 @@
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
+| fogo | Moto G 5G | 35 | Low |
 | fogona | moto g play - 2024 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
+| frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
@@ -85,6 +89,7 @@
 | lyriq | motorola edge 40 | 34 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
+| mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
