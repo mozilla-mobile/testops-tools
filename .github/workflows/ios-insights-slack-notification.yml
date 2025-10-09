@@ -209,7 +209,7 @@ jobs:
                     "type": "section", 
                     "text": { 
                         "type": "mrkdwn", 
-                        "text": ":firefox: iOS Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
+                        "text": ":firefox: :apple_logo: iOS Fennec UI Test Daily Digest for '"$YESTERDAY"'" 
                     } 
                 },
                 {
