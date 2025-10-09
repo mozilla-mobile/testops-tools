@@ -31,5 +31,5 @@ jobs:
         run: |-
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add testrail/last_tag.txt
-          git diff --quiet && git diff --staged --quiet || (git commit -m 'Automated update of last_tag'; git push)
+          git add testrail/latest_tags.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m 'Automated update of latest_tags'; git push)
