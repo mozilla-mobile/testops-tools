@@ -43,7 +43,7 @@
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Low |
-| cactus | Redmi 6A | 27 | Low |
+| cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
