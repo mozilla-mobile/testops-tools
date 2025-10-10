@@ -40,7 +40,7 @@
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Flip 6 | 34 | Medium |
-| blazer | Pixel 10 Pro | 36 | Low |
+| blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Low |
 | cactus | Redmi 6A | 27 | Medium |
@@ -64,7 +64,7 @@
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | Moto G 5G | 35 | Low |
-| fogona | moto g play - 2024 | 34 | Low |
+| fogona | moto g play - 2024 | 34 | Medium |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
@@ -104,6 +104,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | r12s | SM-S721U1 | 35 | Low |
+| rango | Pixel 10 Pro Fold | 36 | Low |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
