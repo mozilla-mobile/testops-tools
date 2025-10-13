@@ -1,4 +1,4 @@
 requests==2.32.5
 taskcluster
-taskcluster-taskgraph==16.1.1
+taskcluster-taskgraph==16.2.0
 taskcluster-urls==13.0.1
