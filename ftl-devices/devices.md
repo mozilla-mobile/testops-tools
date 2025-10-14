@@ -77,7 +77,7 @@
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
-| gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Low |
+| gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
 | gts9wifi | SM-X710 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | java | Motorola G20 | 30 | High |
@@ -95,7 +95,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| pa3q | Galaxy S25 Ultra | 35 | Medium |
+| pa3q | Galaxy S25 Ultra | 35 | Low |
 | panther | Pixel 7 | 33 | High |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | High |
