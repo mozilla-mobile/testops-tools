@@ -57,7 +57,7 @@
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
-| e1q | Galaxy S24 | 34 | High |
+| e1q | Galaxy S24 | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
