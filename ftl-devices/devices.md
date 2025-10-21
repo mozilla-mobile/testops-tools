@@ -8,7 +8,7 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP535DL1 | CPH2409 | 34 | Medium |
-| OP5552L1 | CPH2415 | 34 | Medium |
+| OP5552L1 | CPH2415 | 34 | Low |
 | OP5552L1 | CPH2415 | 35 | None |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
@@ -30,6 +30,7 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a35x | Samsung A35 | 34 | Low |
+| a36xq | Samsung SM-A366E | 35 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | Medium |
 | akita | Pixel 8a | 34 | High |
