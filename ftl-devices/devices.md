@@ -15,7 +15,7 @@
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
 | SO-41A | Xperia 10 II | 31 | Medium |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
-| TB370FU | Lenovo Tab P12 | 35 | Medium |
+| TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Low |
@@ -26,6 +26,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
+| a16 | Samsung SM-A165M | 35 | Low |
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
@@ -96,7 +97,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| pa3q | Galaxy S25 Ultra | 35 | Low |
+| pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | High |
