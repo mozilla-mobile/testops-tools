@@ -6,7 +6,6 @@
 | F01L | F-01L | 27 | High |
 | FRT | Nokia 1 | 27 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
-| OP515BL1 | OnePlus Nord2 5G | 33 | Low |
 | OP535DL1 | CPH2409 | 34 | Medium |
 | OP5552L1 | CPH2415 | 34 | Low |
 | OP5552L1 | CPH2415 | 35 | None |
@@ -50,7 +49,6 @@
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
-| caymanlm | VELVET | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
@@ -73,7 +71,6 @@
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
-| gtaxlwifi | Galaxy Tab A (2016) | 27 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts7lwifi | SM-T870 | 33 | Medium |
 | gts7xllite | SM-T738U | 34 | Medium |
