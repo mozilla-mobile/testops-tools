@@ -4,7 +4,6 @@
 | A402SO | Xperia 10 | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
-| FRT | Nokia 1 | 27 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP535DL1 | CPH2409 | 34 | Medium |
 | OP5552L1 | CPH2415 | 34 | Low |
