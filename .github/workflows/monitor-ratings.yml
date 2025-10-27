@@ -1,0 +1,69 @@
+name: Monitor Google Play Store Ratings
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check-ratings:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - id: org.mozilla.firefox
+            name: Firefox Release
+          - id: org.mozilla.firefox_beta
+            name: Firefox Beta
+          - id: org.mozilla.fenix
+            name: Firefox Nightly
+          - id: org.mozilla.focus
+            name: Firefox Focus
+      fail-fast: false
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - run: pip install -r ./play-ratings/requirements.txt
+      
+      - name: Restore previous rating from cache
+        id: cache-rating
+        uses: actions/cache/restore@v4.3.0
+        with:
+          path: rating-state-${{ matrix.package.id }}.json
+          key: rating-state-${{ matrix.package.id }}
+      
+      - name: Check current rating
+        id: check-rating
+        run: python ./play-ratings/check_rating.py
+        env:
+          PACKAGE_ID: ${{ matrix.package.id }}
+          PACKAGE_NAME: ${{ matrix.package.name }}
+          STATE_FILE: rating-state-${{ matrix.package.id }}.json
+      
+      - name: Send Slack notification if rating dropped
+        if: steps.check-rating.outputs.rating_dropped == 'true'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
+          PACKAGE_ID: ${{ matrix.package.id }}
+          PACKAGE_NAME: ${{ matrix.package.name }}
+          APP_NAME: ${{ steps.check-rating.outputs.app_name }}
+          OLD_RATING: ${{ steps.check-rating.outputs.old_rating }}
+          NEW_RATING: ${{ steps.check-rating.outputs.new_rating }}
+          RATING_COUNT: ${{ steps.check-rating.outputs.rating_count }}
+          VERSION: ${{ steps.check-rating.outputs.version }}
+        run: |
+          python ./play-ratings/post_slack.py
+      
+      - name: Save current rating to cache
+        if: always()
+        uses: actions/cache/save@v4.3.0
+        with:
+          path: rating-state-${{ matrix.package.id }}.json
+          key: rating-state-${{ matrix.package.id }}-${{ github.run_id }}
