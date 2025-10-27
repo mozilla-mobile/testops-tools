@@ -5,6 +5,7 @@ The purpose of this repo is to house automation / notification tools for the Moz
 ## Priority Task Monitoring
 
 ### General
+[![Monitor Google Play Store Ratings](https://github.com/mozilla-mobile/testops-tools/actions/workflows/monitor-ratings.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/monitor-ratings.yml)
 
 [![Monthly Monitoring Notification](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml)
 
