@@ -41,7 +41,7 @@ jobs:
       
       - name: Check current rating
         id: check-rating
-        run: python play-ratings/check_rating.py
+        run: python play-ratings/check_ratings.py
         env:
           PACKAGE_ID: ${{ matrix.package.id }}
           PACKAGE_NAME: ${{ matrix.package.name }}
