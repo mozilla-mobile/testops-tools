@@ -37,7 +37,9 @@ jobs:
         uses: actions/cache/restore@v4.3.0
         with:
           path: rating-state-${{ matrix.package.id }}.json
-          key: rating-state-${{ matrix.package.id }}
+          key: rating-state-${{ matrix.package.id }}-${{ github.run_id }}
+          restore-keys: |
+            rating-state-${{ matrix.package.id }}-
       
       - name: Check current rating
         id: check-rating
