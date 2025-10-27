@@ -3,7 +3,7 @@
 After the Firefox/Focus iOS tests are run on our CI/CD, a notification
 sends out to #mobile-alerts-ios channel to report the test results
 
-![Sample test report](slack_message.png)
+![Sample test report](slack-message.png)
 
 The public URL brings up a test report that looks like the following:
 
