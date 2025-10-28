@@ -19,7 +19,7 @@ simulator locally.
 
 ## Usage
 ```
-python retry-flaky-tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
+python retry-ios-tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
 ```
 * `--url` (mandatory): Public URL of the test report
 * `--testPlan`: Test plan where the tests are located (default: `FullFunctionalTestPlan`)
@@ -28,7 +28,7 @@ python retry-flaky-tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <Num
 
 ## Example
 ```
-$ python retry-flaky-tests.py --url https://storage.googleapis.com/report.html
+$ python retry-ios-tests.py --url https://storage.googleapis.com/report.html
 # Failed Tests
 ActivityStreamTest/testShortcutsToggle
 ToolbarTests/testOpenNewTabButtonOnToolbar_tabTrayExperimentOff
