@@ -1,4 +1,4 @@
-# xchtmlreport-extract
+# retry-ios-tests
 
 After the Firefox/Focus iOS tests are run on our CI/CD, a notification
 sends out to #mobile-alerts-ios channel to report the test results
