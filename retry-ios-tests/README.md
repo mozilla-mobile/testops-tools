@@ -1,4 +1,4 @@
-# xchtmlreport-extract
+# retry-ios-tests
 
 After the Firefox/Focus iOS tests are run on our CI/CD, a notification
 sends out to #mobile-alerts-ios channel to report the test results
@@ -19,7 +19,7 @@ simulator locally.
 
 ## Usage
 ```
-python xchtmlreport_extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
+python retry-ios-tests.py --url <URL> [--testPlan <TestPlan>] [--parallel <NumParallel>]
 ```
 * `--url` (mandatory): Public URL of the test report
 * `--testPlan`: Test plan where the tests are located (default: `FullFunctionalTestPlan`)
@@ -28,7 +28,7 @@ python xchtmlreport_extract_failed_tests.py --url <URL> [--testPlan <TestPlan>] 
 
 ## Example
 ```
-$ python xchtmlreport_extract_failed_tests.py --url https://storage.googleapis.com/report.html
+$ python retry-ios-tests.py --url https://storage.googleapis.com/report.html
 # Failed Tests
 ActivityStreamTest/testShortcutsToggle
 ToolbarTests/testOpenNewTabButtonOnToolbar_tabTrayExperimentOff
