@@ -52,6 +52,7 @@
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Low |
+| dm1q | Samsung S23 | 35 | Low |
 | dm2q | S23 Plus | 34 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
@@ -95,6 +96,7 @@
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
+| psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
