@@ -53,7 +53,7 @@
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
-| dm2q | S23 Plus | 34 | Medium |
+| dm2q | S23 Plus | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
