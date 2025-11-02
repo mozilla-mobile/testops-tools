@@ -31,7 +31,7 @@
 | a35x | Samsung A35 | 34 | Low |
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | Medium |
+| a54x | Galaxy A54 5G | 34 | High |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
@@ -114,7 +114,7 @@
 | tegu | Pixel 9a | 35 | Medium |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
-| tokay | Pixel 9 | 36 | Low |
+| tokay | Pixel 9 | 36 | Medium |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
