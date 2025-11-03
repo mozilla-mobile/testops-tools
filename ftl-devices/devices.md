@@ -94,7 +94,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| pa3q | Galaxy S25 Ultra | 35 | Medium |
+| pa3q | Galaxy S25 Ultra | 35 | High |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
@@ -111,7 +111,7 @@
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
-| tegu | Pixel 9a | 35 | Medium |
+| tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | tokay | Pixel 9 | 36 | Medium |
