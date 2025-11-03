@@ -34,7 +34,17 @@ def get_non_bot_members(channel):
 
 def send_selection_message(channel, user_id):
     try:
-        message = f":loudspeaker: <@{user_id}> has been selected for monitoring this month! :loudspeaker:"
+        monitoring_guide_url = (
+            "https://mozilla-hub.atlassian.net/wiki/spaces/MTE/pages/"
+            "1815281739/Monitoring+Guide+Observability+Actionability+"
+            "and+Response+Plans"
+        )
+        message = (
+            f":loudspeaker: <@{user_id}> has been selected for monitoring "
+            f"this month! :loudspeaker:\n\n"
+            f"Please review the <{monitoring_guide_url}|Monitoring Guide> "
+            f"for details."
+        )
         client.chat_postMessage(channel=channel, text=message)
         print(f"✅ Message sent: {message}")
     except SlackApiError as e:
