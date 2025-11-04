@@ -18,6 +18,7 @@
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Low |
 | a03s | Galaxy A03s | 33 | Low |
+| a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Medium |
 | a14m | SM-A145R | 34 | Low |
@@ -28,7 +29,7 @@
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
-| a35x | Samsung A35 | 34 | Low |
+| a35x | Samsung A35 | 34 | Medium |
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
@@ -104,7 +105,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | r12s | SM-S721U1 | 35 | Low |
-| rango | Pixel 10 Pro Fold | 36 | Low |
+| rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
