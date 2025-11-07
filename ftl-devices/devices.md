@@ -33,6 +33,7 @@
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
+| a56x | SM-A566E | 35 | Low |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
