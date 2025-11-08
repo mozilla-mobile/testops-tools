@@ -62,7 +62,7 @@
 | e1q | Galaxy S24 | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
-| felix | Pixel Fold | 33 | Medium |
+| felix | Pixel Fold | 33 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | Moto G 5G | 35 | Low |
