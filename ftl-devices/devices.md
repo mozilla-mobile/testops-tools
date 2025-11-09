@@ -40,7 +40,7 @@
 | austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| b5q | Galaxy Z Flip5 | 34 | High |
+| b5q | Galaxy Z Flip5 | 34 | Medium |
 | b6q | Flip 6 | 34 | Medium |
 | blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Low |
