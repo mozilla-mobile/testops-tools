@@ -51,7 +51,6 @@ def format_weekly_summary(rows: List[Dict]) -> str:
     if not rows:
         return "_No weekly spend data available._"
 
-    # The query returns a single row with comparative fields
     row = rows[0]
     current = row.get("current_week_cost", 0.0)
     previous = row.get("previous_week_cost", 0.0)
@@ -61,8 +60,8 @@ def format_weekly_summary(rows: List[Dict]) -> str:
 
     lines = [
         "*Weekly Billing Trend*",
-        f"- Current week: ${current:,.2f}",
-        f"- Previous week: ${previous:,.2f}",
+        f"- Last complete week: ${current:,.2f}",
+        f"- Week before that: ${previous:,.2f}",
         f"- Change: {trend} {pct_change:+.2f}% (${delta:+,.2f})",
     ]
     return "\n".join(lines)
