@@ -15,7 +15,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | XQ-DC54 | 34 | High |
-| XQ-DQ72 | XQ-DQ72 | 34 | High |
+| XQ-DQ72 | XQ-DQ72 | 34 | Medium |
 | a02q | Galaxy A02s | 31 | Low |
 | a03s | Galaxy A03s | 33 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -100,7 +100,7 @@
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
-| q5q | Galaxy Z Fold5 | 34 | High |
+| q5q | Galaxy Z Fold5 | 34 | Medium |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
@@ -116,7 +116,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | Medium |
 | tokay | Pixel 9 | 35 | Medium |
-| tokay | Pixel 9 | 36 | Medium |
+| tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 
