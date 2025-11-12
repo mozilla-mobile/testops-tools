@@ -52,7 +52,7 @@
 | caprip | moto g(30) | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
-| comet | Pixel 9 Pro Fold | 35 | Medium |
+| comet | Pixel 9 Pro Fold | 35 | Low |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
 | dm2q | S23 Plus | 34 | Low |
