@@ -90,7 +90,7 @@ def export_env_vars(summary_text: str, job_status: str = "SUCCESS", job_status_c
     with open(os.environ["GITHUB_ENV"], "a") as f:
         f.write(f"JOB_STATUS={job_status}\n")
         f.write(f"JOB_STATUS_COLOR={job_status_color}\n")
-        f.write("WORKFLOW_NAME=GCP Billing Report\n")
+        f.write("WORKFLOW_NAME=Mobile Infra Billing: GCP\n")
         f.write(f"BRANCH={os.getenv('GITHUB_REF_NAME', 'main')}\n")
         f.write(f"JOB_LOG_URL={os.getenv('GITHUB_SERVER_URL')}/{os.getenv('GITHUB_REPOSITORY')}/actions/runs/{os.getenv('GITHUB_RUN_ID')}\n")
         # Multiline block for summary
