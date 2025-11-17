@@ -53,7 +53,7 @@
 | caprip | moto g(30) | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
-| comet | Pixel 9 Pro Fold | 35 | Low |
+| comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
 | dm2q | S23 Plus | 34 | Low |
@@ -102,7 +102,7 @@
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
-| q5q | Galaxy Z Fold5 | 34 | Medium |
+| q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
