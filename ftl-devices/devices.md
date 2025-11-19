@@ -86,6 +86,7 @@
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Low |
+| lamul | moto g05 | 35 | Medium |
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
