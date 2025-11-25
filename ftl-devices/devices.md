@@ -6,7 +6,7 @@
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP535DL1 | CPH2409 | 34 | Medium |
-| OP5552L1 | CPH2415 | 34 | Low |
+| OP5552L1 | CPH2415 | 34 | Medium |
 | OP5552L1 | CPH2415 | 35 | None |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
