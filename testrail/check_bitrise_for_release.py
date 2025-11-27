@@ -135,7 +135,7 @@ def run_create_milestone(product, tag, rc_number: int):
         release_name = f"{release_name} build {rc_number}"
 
     print(f"Triggering milestone creation for: {release_name}")
-
+    '''
     result = subprocess.run([
         "gh", "workflow", "run", "create-milestone.yml",
         "-f", f"release-name={release_name}",
@@ -146,7 +146,7 @@ def run_create_milestone(product, tag, rc_number: int):
         print(f"❌ Failed to trigger workflow for {product}: {result.stderr}")
     else:
         print(f"✅ Milestone workflow triggered successfully for {product}")
-
+    '''
 def run_handle_new_rc(product, tag, new_build):
     """
     Called when tag is the same, but new builds appear.
