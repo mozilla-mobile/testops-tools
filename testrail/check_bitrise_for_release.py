@@ -2,11 +2,13 @@ import os
 import requests
 import subprocess
 from collections import defaultdict
+from pathlib import Path
 import json
 
 
 BITRISE_APP_ID = os.environ["BITRISE_APP_ID"]
-LAST_TAG_FILE = "latest_tags.json"
+BASE_DIR = Path(__file__).resolve().parent
+LAST_TAG_FILE = BASE_DIR / "latest_tags.json"
 
 # Filter by a specific workflow
 VALID_WORKFLOWS = {
@@ -68,7 +70,6 @@ def get_latest_successful_tag():
 
     print(f"Latest successful info detected: {latest_info}")
     return latest_info
-
 
 def read_last_tags() -> dict:
     """
@@ -145,7 +146,6 @@ def run_create_milestone(product, tag, rc_number: int):
         print(f"❌ Failed to trigger workflow for {product}: {result.stderr}")
     else:
         print(f"✅ Milestone workflow triggered successfully for {product}")
-
 
 def run_handle_new_rc(product, tag, new_build):
     """
