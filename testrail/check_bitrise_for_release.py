@@ -23,7 +23,6 @@ def get_latest_successful_tag():
     }
     response = requests.get(url, headers=headers)
     builds = response.json()["data"]
-
     successful = [
         b for b in builds
         if (b.get("status_text") or "").lower() == "success"
@@ -147,6 +146,7 @@ def run_create_milestone(product, tag, rc_number: int):
     else:
         print(f"✅ Milestone workflow triggered successfully for {product}")
 
+
 def run_handle_new_rc(product, tag, new_build):
     """
     Called when tag is the same, but new builds appear.
@@ -182,12 +182,10 @@ def main():
         if prev_tag != latest_tag:
             print(f"[{product}] New tag detected: {latest_tag} (previous: {prev_tag})")
             # Create milestone for RC1 (or whatever number len(latest_slugs) is)
-            #run_create_milestone(product, latest_tag, build_number)
             run_create_milestone(product, latest_tag, prev_rc)
 
             updated_state[product] = {
                 "tag": latest_tag,
-                #"build_slugs": latest_slugs,
                 "rc_number": latest_rc,
             }
             continue
