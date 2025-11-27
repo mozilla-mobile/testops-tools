@@ -15,7 +15,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | XQ-DC54 | 34 | High |
-| XQ-DQ72 | XQ-DQ72 | 34 | Medium |
+| XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Low |
 | a03s | Galaxy A03s | 33 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -64,7 +64,7 @@
 | e1q | Galaxy S24 | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | eos | Eos | 33 | Medium |
-| felix | Pixel Fold | 33 | Low |
+| felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | Moto G 5G | 35 | Low |
