@@ -9,7 +9,6 @@ import json
 BITRISE_APP_ID = os.environ["BITRISE_APP_ID"]
 BASE_DIR = Path(__file__).resolve().parent
 LAST_TAG_FILE = BASE_DIR / "latest_tags.json"
-print(LAST_TAG_FILE)
 
 # Filter by a specific workflow
 VALID_WORKFLOWS = {
@@ -71,7 +70,6 @@ def get_latest_successful_tag():
 
     print(f"Latest successful info detected: {latest_info}")
     return latest_info
-
 
 def read_last_tags() -> dict:
     """
@@ -137,7 +135,7 @@ def run_create_milestone(product, tag, rc_number: int):
         release_name = f"{release_name} build {rc_number}"
 
     print(f"Triggering milestone creation for: {release_name}")
-    '''
+
     result = subprocess.run([
         "gh", "workflow", "run", "create-milestone.yml",
         "-f", f"release-name={release_name}",
@@ -148,7 +146,6 @@ def run_create_milestone(product, tag, rc_number: int):
         print(f"❌ Failed to trigger workflow for {product}: {result.stderr}")
     else:
         print(f"✅ Milestone workflow triggered successfully for {product}")
-    '''
 
 def run_handle_new_rc(product, tag, new_build):
     """
