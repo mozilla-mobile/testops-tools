@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use reusable milestone action
-        uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@main
+        uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@irios-fix-create-milesone-build-name
         with:
           release-name: ${{ github.event.inputs.release-name }}
           release-tag: ${{ github.event.inputs.release-tag }}
