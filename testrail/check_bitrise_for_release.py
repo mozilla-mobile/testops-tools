@@ -136,11 +136,18 @@ def run_create_milestone(product, tag, rc_number: int):
 
     print(f"Triggering milestone creation for: {release_name}")
 
+    ref = os.environ.get("GITHUB_REF_NAME") or "main"
+    print(f"Using ref for create-milestone.yml: {ref}")
+
     result = subprocess.run([
         "gh", "workflow", "run", "create-milestone.yml",
+        "--ref", ref,
         "-f", f"release-name={release_name}",
         "-f", f"release-tag={tag}"
     ], capture_output=True, text=True)
+
+    print("gh workflow run stdout:", result.stdout)
+    print("gh workflow run stderr:", result.stderr)
 
     if result.returncode != 0:
         print(f"❌ Failed to trigger workflow for {product}: {result.stderr}")
