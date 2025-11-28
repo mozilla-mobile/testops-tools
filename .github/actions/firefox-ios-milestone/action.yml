@@ -33,10 +33,7 @@ runs:
         python-version: '3.11'
     - name: Clone testops-tools repo
       run: |
-        echo "Cloning repo ${{ github.repository }} at ref ${{ github.ref_name }}"
-        git clone --branch "${{ github.ref_name }}" "https://github.com/${{ github.repository }}.git" ../testops-tools
-
-        # git clone --branch main https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
+        git clone --branch main https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
       shell: bash
 
     - name: Install dependencies

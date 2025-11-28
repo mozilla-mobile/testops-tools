@@ -64,7 +64,7 @@ def main():
         m = re.search(r"\bbuild\s+(\d+)\b", release_name, re.IGNORECASE)
         if m:
             build_number = int(m.group(1))
-        print(f"[DEBUG] Parsed build_number: {build_number!r}")
+        print(f"Parsed build_number: {build_number!r}")
     except KeyError as e:
         raise ValueError(f"ERROR: Missing Environment Variable: {e}")
     
@@ -95,9 +95,8 @@ def main():
     if build_number and build_number > 1:
         milestone_name = f"{milestone_name} build {build_number}"
 
-    print(f"[DEBUG] Final milestone_name: {milestone_name!r}")
+    print(f"Final milestone_name: {milestone_name!r}")
     milestone_description = build_milestone_description_ios(milestone_name)
-    #milestone_description = build_milestone_description_ios(milestone_name)
 
     try:
         # Check if milestone exists
@@ -105,7 +104,7 @@ def main():
             print(f"Milestone for {milestone_name} already exists. Exiting script...")
             sys.exit()
         print(f"Create Milestone for {milestone_name}")
-        '''
+
         # Create milestone and test runs
         devices = ["iPhone 16 (iOS 18.2)", "iPad mini (6th generation) (iOS 18.2)"]
         filters = {
@@ -150,7 +149,6 @@ def main():
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
         send_success_notification_ios(success_values, SLACK_MOBILE_TESTENG_RELEASE_CHANNEL)
-        '''
     except Exception as error_message:
         send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
         
