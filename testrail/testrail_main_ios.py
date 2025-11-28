@@ -62,8 +62,8 @@ def main():
         # "Build Validation sign-off - Firefox RC 145.3 build 4"
         build_number = None
         m = re.search(r"\bbuild\s+(\d+)\b", release_name, re.IGNORECASE)
-    if m:
-        build_number = int(m.group(1))
+        if m:
+            build_number = int(m.group(1))
     except KeyError as e:
         raise ValueError(f"ERROR: Missing Environment Variable: {e}")
     
