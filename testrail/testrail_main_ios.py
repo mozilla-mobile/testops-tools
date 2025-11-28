@@ -64,6 +64,7 @@ def main():
         m = re.search(r"\bbuild\s+(\d+)\b", release_name, re.IGNORECASE)
         if m:
             build_number = int(m.group(1))
+        print(f"[DEBUG] Parsed build_number: {build_number!r}")
     except KeyError as e:
         raise ValueError(f"ERROR: Missing Environment Variable: {e}")
     
@@ -94,6 +95,7 @@ def main():
     if build_number and build_number > 1:
         milestone_name = f"{milestone_name} build {build_number}"
 
+    print(f"[DEBUG] Final milestone_name: {milestone_name!r}")
     milestone_description = build_milestone_description_ios(milestone_name)
     #milestone_description = build_milestone_description_ios(milestone_name)
 
