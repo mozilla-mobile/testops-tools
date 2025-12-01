@@ -46,7 +46,7 @@
 | b6q | Flip 6 | 34 | Medium |
 | blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Low |
-| blueline | Pixel 3 | 28 | Low |
+| blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Low |
@@ -118,7 +118,7 @@
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | tangorpro | Pixel Tablet | 33 | High |
 | tegu | Pixel 9a | 35 | Low |
-| tokay | Pixel 9 | 34 | Medium |
+| tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | Medium |
 | tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
