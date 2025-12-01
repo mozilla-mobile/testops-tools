@@ -140,10 +140,15 @@ def main():
                 case_ids=case_ids
             )
 
+        if build_number and build_number > 1:
+            slack_release_version = f"{release_version} build {build_number}"
+        else:
+            slack_release_version = release_version
+
         # Send success notification
         success_values = {
             "RELEASE_TYPE": release_type,
-            "RELEASE_VERSION": release_version,
+            "RELEASE_VERSION": slack_release_version,
             "SHIPPING_PRODUCT": shipping_product,
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
