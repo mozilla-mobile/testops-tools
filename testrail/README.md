@@ -1,3 +1,21 @@
+# Create milestone - Quick Guide
+
+The automation connects GitHub Actions → Bitrise →TestRail → Slack.
+Checks Bitrise for new successful iOS release tags.
+
+Detects whether:
+- A new mayor version was released (e.g., 145.0), or
+- A new RC build was generated (e.g., 145.3 RC4).
+- Automatically triggers milestone creation in TestRail.
+- Creates test runs for smoke tests.
+- Sends release notifications to Slack.
+
+
+![Architecture Diagram](img/Milestone_Architecture.png)
+
+Link to the documentation: https://docs.google.com/document/d/1LNhfbO7MYoY-nBRM0Dz22PO91SJjNLYyr1fhCuXNZe0/edit?tab=t.0
+
+
 # Jenkins Remote Job Trigger - Quick Guide
 
 ## Prerequisites

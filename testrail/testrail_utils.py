@@ -110,3 +110,88 @@ def build_milestone_description_ios(milestone_name):
         Verified issue:
     """
     )
+
+def trigger_jenkins_jobs(release_version, shipping_product):
+    """
+    Triggers Jenkins jobs after milestone creation
+    
+    Args:
+        release_version: Release version number (e.g., "134")
+        shipping_product: Product name ("firefox" or "focus")
+    """
+    jenkins_ssh_host = os.environ.get("JENKINS_SSH_HOST")
+    jenkins_ssh_user = os.environ.get("JENKINS_SSH_USER")
+    jenkins_ssh_key_path = os.environ.get("JENKINS_SSH_KEY_PATH")
+    
+    if not all([jenkins_ssh_host, jenkins_ssh_user, jenkins_ssh_key_path]):
+        print("WARNING: Jenkins SSH configuration not found. Skipping job triggers.")
+        print(f"  JENKINS_SSH_HOST: {jenkins_ssh_host}")
+        print(f"  JENKINS_SSH_USER: {jenkins_ssh_user}")
+        print(f"  JENKINS_SSH_KEY_PATH: {jenkins_ssh_key_path}")
+        return
+    
+    # Define jobs based on product
+    if shipping_product == "firefox":
+        jobs = [
+            "Firefox-ios-TAE",
+            "Firefox-ios-Performance-Tests"  # Ajusta al nombre real si es diferente
+        ]
+    elif shipping_product == "focus":
+        jobs = [
+            "Focus-ios-TAE",
+            "Focus-ios-Performance-Tests"  # Ajusta al nombre real si es diferente
+        ]
+    else:
+        print(f"WARNING: Unknown product '{shipping_product}'. No jobs triggered.")
+        return
+    
+    branch = f"origin/releases_v{release_version}"
+    
+    print(f"\n{'='*60}")
+    print(f"Triggering Jenkins jobs for {shipping_product}")
+    print(f"Release version: {release_version}")
+    print(f"Branch: {branch}")
+    print(f"{'='*60}\n")
+    
+    for job in jobs:
+        try:
+            ssh_command = [
+                "ssh",
+                "-i", jenkins_ssh_key_path,
+                "-o", "StrictHostKeyChecking=no",
+                "-o", "UserKnownHostsFile=/dev/null",
+                f"{jenkins_ssh_user}@{jenkins_ssh_host}",
+                f"~/jenkins-trigger.sh {job} BRANCH={branch}"
+            ]
+            
+            print(f"Triggering job: {job}")
+            print(f"  Command: {' '.join(ssh_command)}")
+            
+            result = subprocess.run(
+                ssh_command,
+                capture_output=True,
+                text=True,
+                timeout=120  # 2 minutos timeout
+            )
+            
+            if result.returncode == 0:
+                print(f"✓ Job '{job}' triggered successfully")
+                if result.stdout:
+                    print(f"  Output: {result.stdout.strip()}")
+            else:
+                print(f"✗ Failed to trigger job '{job}'")
+                print(f"  Return code: {result.returncode}")
+                if result.stderr:
+                    print(f"  Error: {result.stderr.strip()}")
+                if result.stdout:
+                    print(f"  Output: {result.stdout.strip()}")
+                    
+        except subprocess.TimeoutExpired:
+            print(f"✗ Timeout triggering job '{job}' (exceeded 120 seconds)")
+        except FileNotFoundError:
+            print(f"✗ SSH command not found. Is SSH installed?")
+            break
+        except Exception as e:
+            print(f"✗ Unexpected error triggering job '{job}': {str(e)}")
+    
+    print(f"\n{'='*60}\n")

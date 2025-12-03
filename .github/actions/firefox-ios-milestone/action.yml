@@ -23,6 +23,15 @@ inputs:
   slack_webhook_url_error_channel:
      description: "Slack Webhook Url for mobile alerts io channel"
      required: true
+  jenkins-ssh-host:
+    description: "SSH host for Jenkins Mac"
+    required: true
+  jenkins-ssh-user:
+    description: "SSH user for Jenkins Mac"
+    required: true
+  jenkins-ssh-key:
+    description: "SSH private key for Jenkins Mac"
+    required: true
     
 runs:
   using: "composite"
@@ -31,9 +40,16 @@ runs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Configure SSH for Jenkins
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ inputs.jenkins-ssh-key }}" > ~/.ssh/jenkins_key
+        chmod 600 ~/.ssh/jenkins_key
+        ssh-keyscan -H ${{ inputs.jenkins-ssh-host }} >> ~/.ssh/known_hosts
+      shell: bash
     - name: Clone testops-tools repo
       run: |
-        git clone --branch main https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
+        git clone --branch mb/jenkins-trigger https://github.com/mozilla-mobile/testops-tools.git ../testops-tools
       shell: bash
 
     - name: Install dependencies
@@ -59,8 +75,15 @@ runs:
         RELEASE_NAME: ${{ inputs.release-name }}
         RELEASE_TAG: ${{ inputs.release-tag }}
         SLACK_MOBILE_ALERTS_IOS_CHANNEL: ${{ inputs.slack_webhook_url_error_channel }}
+        JENKINS_SSH_HOST: ${{ inputs.jenkins-ssh-host }}
+        JENKINS_SSH_USER: ${{ inputs.jenkins-ssh-user }}
+        JENKINS_SSH_KEY_PATH: ~/.ssh/jenkins_key
       shell: bash
 
     - name: Delete credentials file
       run: rm -f .testrail_credentials.json
+      shell: bash
+
+    - name: Cleanup SSH key
+      run: rm -f ~/.ssh/jenkins_key
       shell: bash
