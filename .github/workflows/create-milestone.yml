@@ -14,6 +14,13 @@ jobs:
   create-milestone:
     runs-on: ubuntu-latest
     steps:
+      - name: 🕵️ Debug Secrets Check
+        run: |
+          if [ -z "${{ secrets.JENKINS_SSH_HOST }}" ]; then
+            echo "❌ ERROR: El secreto JENKINS_SSH_HOST está VACÍO o no es accesible."
+          else
+            echo "✅ El secreto JENKINS_SSH_HOST existe y tiene contenido."
+          fi
       - name: Use reusable milestone action
         uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@mb/jenkins-trigger
         with:
