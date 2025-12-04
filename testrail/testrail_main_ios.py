@@ -25,7 +25,8 @@ from testrail_utils import (
     build_milestone_name,
     get_release_type,
     get_release_version_ios,
-    load_testrail_credentials
+    load_testrail_credentials,
+    trigger_jenkins_jobs
 )
 
 from slack_notifier import (
@@ -39,6 +40,9 @@ ERROR_CHANNEL_ID = "CAFC45W5A"  # mobile-alerts-ios
 
 SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = os.environ.get("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL")
 SLACK_MOBILE_ALERTS_IOS_CHANNEL = os.environ.get("SLACK_MOBILE_ALERTS_IOS_CHANNEL")
+JENKINS_SSH_HOST = os.environ.get("JENKINS_SSH_HOST")
+JENKINS_SSH_USER = os.environ.get("JENKINS_SSH_USER")
+JENKINS_SSH_KEY_PATH = os.environ.get("JENKINS_SSH_KEY_PATH")
 
 if not SLACK_MOBILE_TESTENG_RELEASE_CHANNEL:
     raise ValueError("SLACK_MOBILE_TESTENG_RELEASE_CHANNEL not defined in the environment variable.")
@@ -86,7 +90,7 @@ def main():
     # Release information
     release_version = get_release_version_ios(release_tag)
     release_type = get_release_type(release_version)
-
+"""
     # Build milestone information
     milestone_name = build_milestone_name(
         testrail_product_type, release_type, release_version
@@ -154,8 +158,12 @@ def main():
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
         }
         send_success_notification_ios(success_values, SLACK_MOBILE_TESTENG_RELEASE_CHANNEL)
-    except Exception as error_message:
-        send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
+"""
+        print("\n--- Jenkins Job Triggers ---")
+        trigger_jenkins_jobs(release_version, shipping_product, JENKINS_SSH_USER, JENKINS_SSH_HOST, JENKINS_SSH_KEY_PATH)
+
+#    except Exception as error_message:
+#        send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
         
 if __name__ == "__main__":
     main()
