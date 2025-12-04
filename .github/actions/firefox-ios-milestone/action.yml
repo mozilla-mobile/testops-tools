@@ -42,6 +42,9 @@ runs:
         python-version: '3.11'
     - name: Configure SSH for Jenkins
       run: |
+        echo "Host: [${{ inputs.jenkins-ssh-host }}]"
+        echo "User: [${{ inputs.jenkins-ssh-user }}]"
+        if [ -z "${{ inputs.jenkins-ssh-key }}" ]; then echo "Key is empty"; else echo "Key is present"; fi
         mkdir -p ~/.ssh
         echo "${{ inputs.jenkins-ssh-key }}" > ~/.ssh/jenkins_key
         chmod 600 ~/.ssh/jenkins_key
