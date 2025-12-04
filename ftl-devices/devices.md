@@ -18,6 +18,7 @@
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Low |
 | a03s | Galaxy A03s | 33 | Low |
+| a05s | Samsung A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Medium |
@@ -45,7 +46,7 @@
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Flip 6 | 34 | Medium |
 | blazer | Pixel 10 Pro | 36 | Medium |
-| bluejay | Pixel 6a | 32 | Low |
+| bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
@@ -57,12 +58,13 @@
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
-| dm2q | S23 Plus | 34 | Low |
+| dm2q | S23 Plus | 34 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
+| e3q | Galaxy S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
@@ -101,6 +103,7 @@
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
