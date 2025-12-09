@@ -107,16 +107,29 @@ def main():
 
         # Create milestone and test runs
         devices = ["iPhone 16 (iOS 18.2)", "iPad mini (6th generation) (iOS 18.2)"]
-        filters = {
+        smoke_filters = {
             "custom_automation_status": 4, # Automation = Completed
             "custom_automation_coverage": 3, # Automation Coverage = Full
             "custom_sub_test_suites": lambda v: set(v or []) == {1, 2} # Suite Functional & Smoke&Sanity
         }
 
-        case_ids = testrail.get_case_ids_by_multiple_custom_fields(
+        smoke_case_ids = testrail.get_case_ids_by_multiple_custom_fields(
             testrail_project_id,
             testrail_test_suite_id,
-            filters
+            smoke_filters
+        )
+
+        # Filters for Full Functional Tests Suite (Functional only)
+        functional_filters = {
+            "custom_automation_status": 4, # Automation = Completed
+            "custom_automation_coverage": 3, # Automation Coverage = Full
+            "custom_sub_test_suites": lambda v: set(v or []) == {1} # Suite Functional only
+        }
+
+        functional_case_ids = testrail.get_case_ids_by_multiple_custom_fields(
+            testrail_project_id,
+            testrail_test_suite_id,
+            functional_filters
         )
 
         milestone = testrail.create_milestone(
@@ -125,11 +138,9 @@ def main():
 
         for device in devices:
             # Once we create a single script for Android and iOS
-            # we should use create_test_run instead of the send_post
-            #test_run = testrail.create_test_run(
-            #    testrail_project_id, milestone["id"], device, testrail_test_suite_id
-            #)
-            
+            # we should use create_test_run instead of the send_post 
+
+            # Create Smoke Tests Suite test runs     
             testrail.create_paginated_test_runs(
                 project_id=testrail_project_id,
                 suite_id=testrail_test_suite_id,
@@ -137,7 +148,18 @@ def main():
                 milestone_id=milestone["id"],
                 base_run_name="Smoke Tests Suite",
                 device_name=device,
-                case_ids=case_ids
+                case_ids=smoke_case_ids
+            )
+
+            # Create Full Functional Tests Suite test runs
+            testrail.create_paginated_test_runs(
+                project_id=testrail_project_id,
+                suite_id=testrail_test_suite_id,
+                release_version_id = release_version,
+                milestone_id=milestone["id"],
+                base_run_name="Full Functional Tests Suite",
+                device_name=device,
+                case_ids=functional_case_ids
             )
 
         if build_number and build_number > 1:
