@@ -182,7 +182,7 @@ def main():
         if prev_tag != latest_tag:
             print(f"[{product}] New tag detected: {latest_tag} (previous: {prev_tag})")
             # Create milestone for RC1 (or whatever number len(latest_slugs) is)
-            run_create_milestone(product, latest_tag, prev_rc)
+            run_create_milestone(product, latest_tag, latest_rc)
 
             updated_state[product] = {
                 "tag": latest_tag,
