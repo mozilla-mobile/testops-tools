@@ -137,9 +137,6 @@ def main():
         )
 
         for device in devices:
-            # Once we create a single script for Android and iOS
-            # we should use create_test_run instead of the send_post 
-
             # Create Smoke Tests Suite test runs     
             testrail.create_paginated_test_runs(
                 project_id=testrail_project_id,
