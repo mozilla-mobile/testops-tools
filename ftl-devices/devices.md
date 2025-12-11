@@ -31,6 +31,7 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
+| a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a36xq | Samsung SM-A366E | 35 | Low |
