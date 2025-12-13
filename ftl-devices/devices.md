@@ -35,6 +35,7 @@
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a36xq | Samsung SM-A366E | 35 | Low |
+| a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
 | a56x | SM-A566E | 35 | Low |
@@ -64,8 +65,9 @@
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
+| e1q | Galaxy S24 | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
-| e3q | Galaxy S24 Ultra | 36 | Low |
+| e3q | Galaxy S24 Ultra | 36 | Medium |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
@@ -114,6 +116,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | r12s | SM-S721U1 | 35 | Low |
+| r9q | Samsung Galaxy S21 FE 5G | 36 | Medium |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
@@ -127,4 +130,5 @@
 | tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
+| y2q | S20 Plus 5G | 33 | Low |
 
