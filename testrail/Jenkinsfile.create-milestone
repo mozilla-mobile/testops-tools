@@ -7,18 +7,11 @@ pipeline {
     }
 
     options {
-        // Use timestamp for console output
         timestamps()
     }
 
     environment {
-        // Override shell to use bash
-        SHELL = '/bin/bash'
-        // These credentials need to be configured in Jenkins:
-        // - 'testrail-host': TestRail host URL
-        // - 'testrail-credentials': Username/password credential for TestRail
-        // - 'slack-mobile-testeng-webhook': Slack webhook for mobile-testeng-releases channel
-        // - 'slack-mobile-alerts-ios-webhook': Slack webhook for mobile-alerts-ios channel
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
         TESTRAIL_HOST = credentials('testrail-host')
         SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
         SLACK_MOBILE_ALERTS_IOS_CHANNEL = credentials('slack-mobile-alerts-ios-webhook')
@@ -83,7 +76,6 @@ EOF
 
     post {
         always {
-            // Clean up credentials file
             sh 'rm -f .testrail_credentials.json'
         }
         success {
@@ -91,7 +83,6 @@ EOF
         }
         failure {
             echo "Failed to create milestone for ${params.RELEASE_NAME}"
-            // The Python script already sends Slack notifications on failure
         }
         cleanup {
             cleanWs()
