@@ -178,4 +178,4 @@ def main():
         #send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
         
 if __name__ == "__main__":
-    main()∫
+    main()
