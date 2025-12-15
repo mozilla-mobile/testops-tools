@@ -6,7 +6,14 @@ pipeline {
         string(name: 'RELEASE_TAG', description: 'Release tag (e.g., firefox-v145.0)')
     }
 
+    options {
+        // Use timestamp for console output
+        timestamps()
+    }
+
     environment {
+        // Override shell to use bash
+        SHELL = '/bin/bash'
         // These credentials need to be configured in Jenkins:
         // - 'testrail-host': TestRail host URL
         // - 'testrail-credentials': Username/password credential for TestRail
@@ -26,11 +33,10 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                sh '''#!/bin/bash
+                sh '''
                     set -e
                     echo "Checking Python installation..."
                     python3 --version
-
                     echo "Checking pip installation..."
                     python3 -m pip --version
                 '''
@@ -51,7 +57,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'testrail-credentials',
                                                       usernameVariable: 'TESTRAIL_USERNAME',
                                                       passwordVariable: 'TESTRAIL_PASSWORD')]) {
-                        sh '''#!/bin/bash
+                        sh '''
                             set -e
                             cat > .testrail_credentials.json <<EOF
 {

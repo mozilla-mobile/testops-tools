@@ -5,12 +5,17 @@ pipeline {
         booleanParam(name: 'DRY_RUN', defaultValue: false, description: 'Enable dry-run mode (no git commit/push)')
     }
 
+    options {
+        timestamps()
+    }
+
     triggers {
         // Run every hour on weekdays (Monday-Friday)
         cron('H * * * 1-5')
     }
 
     environment {
+        SHELL = '/bin/bash'
         GH_TOKEN = credentials('github-token')
         BITRISE_APP_ID = credentials('bitrise-app-id')
         JENKINS_URL = "${env.JENKINS_URL}"
@@ -28,11 +33,10 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                sh '''#!/bin/bash
+                sh '''
                     set -e
                     echo "Checking Python installation..."
                     python3 --version
-
                     echo "Checking pip installation..."
                     python3 -m pip --version
                 '''
@@ -62,7 +66,7 @@ pipeline {
             steps {
                 script {
                     // Configure git user for commits
-                    sh '''#!/bin/bash
+                    sh '''
                         set -e
                         git config --global user.name 'jenkins-automation'
                         git config --global user.email 'jenkins@automation.local'
@@ -75,18 +79,13 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
                                                           usernameVariable: 'GIT_USERNAME',
                                                           passwordVariable: 'GIT_PASSWORD')]) {
-                            sh '''#!/bin/bash
+                            sh '''
                                 set -e
                                 git commit -m 'Automated update of latest_tags'
-
-                                # Extract repo URL and add credentials
                                 REPO_URL=$(git config --get remote.origin.url)
-
-                                # If using HTTPS, inject credentials
                                 if [[ $REPO_URL == https://* ]]; then
                                     REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
                                 fi
-
                                 git push $REPO_URL HEAD:${GIT_BRANCH}
                             '''
                         }
