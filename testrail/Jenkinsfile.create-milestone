@@ -50,16 +50,20 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'testrail-credentials',
                                                       usernameVariable: 'TESTRAIL_USERNAME',
                                                       passwordVariable: 'TESTRAIL_PASSWORD')]) {
-                        sh '''
-                            set -e
-                            cat > .testrail_credentials.json <<EOF
+                        dir('testrail') {
+                            sh '''
+                                set -e
+                                cat > .testrail_credentials.json <<EOF
 {
   "host": "${TESTRAIL_HOST}",
   "username": "${TESTRAIL_USERNAME}",
   "password": "${TESTRAIL_PASSWORD}"
 }
 EOF
-                        '''
+                                echo "Credentials file created successfully"
+                                ls -la .testrail_credentials.json
+                            '''
+                        }
                     }
                 }
             }
@@ -76,7 +80,9 @@ EOF
 
     post {
         always {
-            sh 'rm -f .testrail_credentials.json'
+            dir('testrail') {
+                sh 'rm -f .testrail_credentials.json'
+            }
         }
         success {
             echo "Successfully created milestone for ${params.RELEASE_NAME}"
