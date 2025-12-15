@@ -1,0 +1,96 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.12'
+            args '-u root:root'
+        }
+    }
+
+    triggers {
+        // Run every hour on weekdays (Monday-Friday)
+        cron('H * * * 1-5')
+    }
+
+    environment {
+        GH_TOKEN = credentials('github-token')
+        BITRISE_APP_ID = credentials('bitrise-app-id')
+        JENKINS_URL = "${env.JENKINS_URL}"
+        JENKINS_USER = credentials('jenkins-user')
+        JENKINS_API_TOKEN = credentials('jenkins-api-token')
+        JENKINS_JOB_NAME = 'create-milestone'  // Update this to match your Jenkins job name
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('testrail') {
+                    sh 'pip install --no-cache-dir -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Run Bitrise Tag Checker') {
+            steps {
+                dir('testrail') {
+                    sh 'python check_bitrise_for_release.py'
+                }
+            }
+        }
+
+        stage('Commit and Push Changes') {
+            steps {
+                script {
+                    // Configure git user for commits
+                    sh '''
+                        git config --global user.name 'jenkins-automation'
+                        git config --global user.email 'jenkins@automation.local'
+                        git add testrail/latest_tags.json
+                    '''
+
+                    // Only commit and push if there are changes
+                    def gitStatus = sh(script: 'git diff --staged --quiet', returnStatus: true)
+                    if (gitStatus != 0) {
+                        withCredentials([usernamePassword(credentialsId: 'github-token',
+                                                          usernameVariable: 'GIT_USERNAME',
+                                                          passwordVariable: 'GIT_PASSWORD')]) {
+                            sh '''
+                                git commit -m 'Automated update of latest_tags'
+
+                                # Extract repo URL and add credentials
+                                REPO_URL=$(git config --get remote.origin.url)
+
+                                # If using HTTPS, inject credentials
+                                if [[ $REPO_URL == https://* ]]; then
+                                    REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
+                                fi
+
+                                git push $REPO_URL HEAD:${GIT_BRANCH}
+                            '''
+                        }
+                        echo 'Changes committed and pushed successfully'
+                    } else {
+                        echo 'No changes to commit'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Successfully checked Bitrise tags and updated repository'
+        }
+        failure {
+            echo 'Failed to check Bitrise tags'
+        }
+        cleanup {
+            cleanWs()
+        }
+    }
+}

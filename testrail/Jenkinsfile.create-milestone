@@ -1,0 +1,85 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.11'
+            args '-u root:root'
+        }
+    }
+
+    parameters {
+        string(name: 'RELEASE_NAME', description: 'Release name (e.g., Build Validation sign-off - Firefox RC 145.0)', mandatory: true)
+        string(name: 'RELEASE_TAG', description: 'Release tag (e.g., firefox-v145.0)', mandatory: true)
+    }
+
+    environment {
+        // These credentials need to be configured in Jenkins:
+        // - 'testrail-host': TestRail host URL
+        // - 'testrail-credentials': Username/password credential for TestRail
+        // - 'slack-mobile-testeng-webhook': Slack webhook for mobile-testeng-releases channel
+        // - 'slack-mobile-alerts-ios-webhook': Slack webhook for mobile-alerts-ios channel
+        TESTRAIL_HOST = credentials('testrail-host')
+        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL = credentials('slack-mobile-alerts-ios-webhook')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('testrail') {
+                    sh 'pip install --no-cache-dir -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Create TestRail Credentials') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'testrail-credentials',
+                                                      usernameVariable: 'TESTRAIL_USERNAME',
+                                                      passwordVariable: 'TESTRAIL_PASSWORD')]) {
+                        sh '''
+                            cat > .testrail_credentials.json <<EOF
+{
+  "host": "${TESTRAIL_HOST}",
+  "username": "${TESTRAIL_USERNAME}",
+  "password": "${TESTRAIL_PASSWORD}"
+}
+EOF
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Create Milestone') {
+            steps {
+                dir('testrail') {
+                    sh 'python testrail_main_ios.py'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up credentials file
+            sh 'rm -f .testrail_credentials.json'
+        }
+        success {
+            echo "Successfully created milestone for ${params.RELEASE_NAME}"
+        }
+        failure {
+            echo "Failed to create milestone for ${params.RELEASE_NAME}"
+            // The Python script already sends Slack notifications on failure
+        }
+        cleanup {
+            cleanWs()
+        }
+    }
+}

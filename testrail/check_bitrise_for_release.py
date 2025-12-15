@@ -1,12 +1,16 @@
 import os
 import requests
-import subprocess
 from collections import defaultdict
 from pathlib import Path
 import json
 
 
 BITRISE_APP_ID = os.environ["BITRISE_APP_ID"]
+JENKINS_URL = os.environ.get("JENKINS_URL", "")
+JENKINS_USER = os.environ.get("JENKINS_USER", "")
+JENKINS_API_TOKEN = os.environ.get("JENKINS_API_TOKEN", "")
+JENKINS_JOB_NAME = os.environ.get("JENKINS_JOB_NAME", "create-milestone")
+
 BASE_DIR = Path(__file__).resolve().parent
 LAST_TAG_FILE = BASE_DIR / "latest_tags.json"
 
@@ -136,16 +140,48 @@ def run_create_milestone(product, tag, rc_number: int):
 
     print(f"Triggering milestone creation for: {release_name}")
 
-    result = subprocess.run([
-        "gh", "workflow", "run", "create-milestone.yml",
-        "-f", f"release-name={release_name}",
-        "-f", f"release-tag={tag}"
-    ], capture_output=True, text=True)
+    # Validate required Jenkins environment variables
+    if not all([JENKINS_URL, JENKINS_USER, JENKINS_API_TOKEN]):
+        missing_vars = []
+        if not JENKINS_URL:
+            missing_vars.append("JENKINS_URL")
+        if not JENKINS_USER:
+            missing_vars.append("JENKINS_USER")
+        if not JENKINS_API_TOKEN:
+            missing_vars.append("JENKINS_API_TOKEN")
 
-    if result.returncode != 0:
-        print(f"❌ Failed to trigger workflow for {product}: {result.stderr}")
-    else:
-        print(f"✅ Milestone workflow triggered successfully for {product}")
+        error_msg = f"❌ Missing required Jenkins environment variables: {', '.join(missing_vars)}"
+        print(error_msg)
+        raise ValueError(error_msg)
+
+    # Trigger Jenkins job with parameters
+    try:
+        jenkins_job_url = f"{JENKINS_URL}/job/{JENKINS_JOB_NAME}/buildWithParameters"
+
+        params = {
+            "RELEASE_NAME": release_name,
+            "RELEASE_TAG": tag
+        }
+
+        response = requests.post(
+            jenkins_job_url,
+            params=params,
+            auth=(JENKINS_USER, JENKINS_API_TOKEN),
+            timeout=30
+        )
+
+        if response.status_code in [200, 201]:
+            print(f"✅ Jenkins job triggered successfully for {product}")
+            print(f"   Job URL: {JENKINS_URL}/job/{JENKINS_JOB_NAME}")
+        else:
+            error_msg = f"Failed to trigger Jenkins job for {product}. Status: {response.status_code}"
+            print(f"❌ {error_msg}")
+            print(f"   Response: {response.text}")
+            raise Exception(error_msg)
+    except requests.exceptions.RequestException as e:
+        error_msg = f"Error triggering Jenkins job for {product}: {str(e)}"
+        print(f"❌ {error_msg}")
+        raise
 
 def run_handle_new_rc(product, tag, new_build):
     """
