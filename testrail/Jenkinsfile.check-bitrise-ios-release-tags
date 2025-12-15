@@ -6,6 +6,10 @@ pipeline {
         }
     }
 
+    parameters {
+        booleanParam(name: 'DRY_RUN', defaultValue: false, description: 'Enable dry-run mode (no git commit/push)')
+    }
+
     triggers {
         // Run every hour on weekdays (Monday-Friday)
         cron('H * * * 1-5')
@@ -44,6 +48,9 @@ pipeline {
         }
 
         stage('Commit and Push Changes') {
+            when {
+                expression { params.DRY_RUN == false }
+            }
             steps {
                 script {
                     // Configure git user for commits
@@ -77,6 +84,24 @@ pipeline {
                     } else {
                         echo 'No changes to commit'
                     }
+                }
+            }
+        }
+
+        stage('Dry Run Summary') {
+            when {
+                expression { params.DRY_RUN == true }
+            }
+            steps {
+                script {
+                    echo '===================================='
+                    echo 'DRY RUN MODE ENABLED'
+                    echo '===================================='
+                    echo 'The following changes would be committed:'
+                    sh 'git diff testrail/latest_tags.json || echo "No changes detected"'
+                    echo '===================================='
+                    echo 'No commit or push was performed'
+                    echo '===================================='
                 }
             }
         }
