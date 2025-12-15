@@ -34,7 +34,7 @@ jobs:
       
       - name: Restore previous rating from cache
         id: cache-rating
-        uses: actions/cache/restore@v4.3.0
+        uses: actions/cache/restore@v5.0.1
         with:
           path: rating-state-${{ matrix.package.id }}.json
           key: rating-state-${{ matrix.package.id }}-${{ github.run_id }}
@@ -65,7 +65,7 @@ jobs:
       
       - name: Save current rating to cache
         if: always()
-        uses: actions/cache/save@v4.3.0
+        uses: actions/cache/save@v5.0.1
         with:
           path: rating-state-${{ matrix.package.id }}.json
           key: rating-state-${{ matrix.package.id }}-${{ github.run_id }}
