@@ -10,18 +10,17 @@ pipeline {
     }
 
     triggers {
-        // Run every hour on weekdays (Monday-Friday)
         cron('H * * * 1-5')
     }
 
     environment {
-        SHELL = '/bin/bash'
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
         GH_TOKEN = credentials('github-token')
         BITRISE_APP_ID = credentials('bitrise-app-id')
         JENKINS_URL = "${env.JENKINS_URL}"
         JENKINS_USER = credentials('jenkins-user')
         JENKINS_API_TOKEN = credentials('jenkins-api-token')
-        JENKINS_JOB_NAME = 'create-milestone'  // Update this to match your Jenkins job name
+        JENKINS_JOB_NAME = 'create-milestone'
     }
 
     stages {
@@ -65,7 +64,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Configure git user for commits
                     sh '''
                         set -e
                         git config --global user.name 'jenkins-automation'
@@ -73,7 +71,6 @@ pipeline {
                         git add testrail/latest_tags.json
                     '''
 
-                    // Only commit and push if there are changes
                     def gitStatus = sh(script: 'git diff --staged --quiet', returnStatus: true)
                     if (gitStatus != 0) {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
