@@ -72,7 +72,12 @@ EOF
         stage('Create Milestone') {
             steps {
                 dir('testrail') {
-                    sh 'python3 testrail_main_ios.py'
+                    script {
+                        def result = sh(script: 'python3 testrail_main_ios.py', returnStatus: true)
+                        if (result != 0) {
+                            error("Failed to create milestone - Python script exited with code ${result}")
+                        }
+                    }
                 }
             }
         }
