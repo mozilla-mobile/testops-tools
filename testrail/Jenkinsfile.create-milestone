@@ -89,33 +89,58 @@ EOF
                     def version = params.RELEASE_TAG.replaceAll('.*-v', 'v')
                     def branch = "origin/release/${version}"
 
-                    echo "Triggering test jobs with BRANCH: ${branch}"
+                    echo "===================================="
+                    echo "RELEASE_TAG: ${params.RELEASE_TAG}"
+                    echo "Extracted BRANCH: ${branch}"
 
-                    // Trigger all 4 jobs in parallel
-                    parallel(
-                        'Smoke Test iPad': {
-                            build job: 'firefox-ios-smoketest-ipad',
-                                  parameters: [string(name: 'BRANCH', value: branch)],
-                                  wait: false
-                        },
-                        'Smoke Test iPhone': {
-                            build job: 'firefox-ios-smoketest-iphone',
-                                  parameters: [string(name: 'BRANCH', value: branch)],
-                                  wait: false
-                        },
-                        'Full Functional iPad': {
-                            build job: 'firefox-ios-full-functional-ipad',
-                                  parameters: [string(name: 'BRANCH', value: branch)],
-                                  wait: false
-                        },
-                        'Full Functional iPhone': {
-                            build job: 'firefox-ios-full-functional-iphone',
-                                  parameters: [string(name: 'BRANCH', value: branch)],
-                                  wait: false
-                        }
-                    )
+                    // Determine product type
+                    def isFirefox = params.RELEASE_TAG.toLowerCase().contains('firefox')
+                    def isFocus = params.RELEASE_TAG.toLowerCase().contains('focus') ||
+                                  params.RELEASE_TAG.toLowerCase().contains('klar')
 
-                    echo "All test jobs triggered successfully"
+                    if (isFirefox) {
+                        echo "Product: Firefox - Triggering 4 test jobs"
+                        echo "===================================="
+
+                        // Trigger all 4 Firefox jobs in parallel
+                        parallel(
+                            'Smoke Test iPad': {
+                                build job: 'firefox-ios-smoketest-ipad',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Smoke Test iPhone': {
+                                build job: 'firefox-ios-smoketest-iphone',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Full Functional iPad': {
+                                build job: 'firefox-ios-full-functional-ipad',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Full Functional iPhone': {
+                                build job: 'firefox-ios-full-functional-iphone',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            }
+                        )
+
+                        echo "✅ All 4 Firefox test jobs triggered"
+                    } else if (isFocus) {
+                        echo "Product: Focus - Triggering 1 test job"
+                        echo "===================================="
+
+                        build job: 'focus-iOS-26',
+                              parameters: [string(name: 'BRANCH', value: branch)],
+                              wait: false
+
+                        echo "✅ Focus test job triggered"
+                    } else {
+                        echo "⚠️  Unknown product type - no test jobs triggered"
+                    }
+
+                    echo "===================================="
                 }
             }
         }
