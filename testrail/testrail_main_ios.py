@@ -174,8 +174,9 @@ def main():
         }
         #send_success_notification_ios(success_values, SLACK_MOBILE_TESTENG_RELEASE_CHANNEL)
     except Exception as error_message:
-        print("Error")
+        print(f"Error: {error_message}")
         #send_error_notification_ios(str(error_message), SLACK_MOBILE_ALERTS_IOS_CHANNEL)
-        
+        sys.exit(1)
+
 if __name__ == "__main__":
     main()
