@@ -85,11 +85,9 @@ EOF
         stage('Trigger Test Jobs') {
             steps {
                 script {
-                    // Extract version from RELEASE_TAG (e.g., firefox-v145.0 -> v145 or v145.3)
+                    // Extract version from RELEASE_TAG (e.g., firefox-v145.0 -> v145.0)
                     def version = params.RELEASE_TAG.replaceAll('.*-v', 'v')
-                    // If version has minor (e.g., v145.0), keep it, otherwise just major (v145)
-                    def branchVersion = version.contains('.0') ? version.replaceAll('\\.0$', '') : version
-                    def branch = "origin/release/${branchVersion}"
+                    def branch = "origin/release/${version}"
 
                     echo "Triggering test jobs with BRANCH: ${branch}"
 
