@@ -74,7 +74,13 @@ EOF
                 dir('testrail') {
                     script {
                         def result = sh(script: 'python3 testrail_main_ios.py', returnStatus: true)
-                        if (result != 0) {
+                        if (result == 0) {
+                            echo "✅ Milestone created successfully"
+                            env.MILESTONE_CREATED = 'true'
+                        } else if (result == 2) {
+                            echo "ℹ️  Milestone already exists - will skip test job triggers"
+                            env.MILESTONE_CREATED = 'false'
+                        } else {
                             error("Failed to create milestone - Python script exited with code ${result}")
                         }
                     }
@@ -83,6 +89,9 @@ EOF
         }
 
         stage('Trigger Test Jobs') {
+            when {
+                expression { env.MILESTONE_CREATED == 'true' }
+            }
             steps {
                 script {
                     // Extract version from RELEASE_TAG (e.g., firefox-v145.0 -> v145.0)

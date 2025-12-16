@@ -102,7 +102,8 @@ def main():
         # Check if milestone exists
         if testrail.does_milestone_exist(testrail_project_id, milestone_name):
             print(f"Milestone for {milestone_name} already exists. Exiting script...")
-            sys.exit()
+            # Exit with code 2 to indicate milestone already exists (not an error, but should skip tests)
+            sys.exit(2)
         print(f"Create Milestone for {milestone_name}")
 
         # Create milestone and test runs
