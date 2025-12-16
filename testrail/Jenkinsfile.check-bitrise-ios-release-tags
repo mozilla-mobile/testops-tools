@@ -18,8 +18,9 @@ pipeline {
         GH_TOKEN = credentials('github-token')
         BITRISE_APP_ID = credentials('bitrise-app-id')
         JENKINS_URL = "${env.JENKINS_URL}"
-        JENKINS_USER = credentials('jenkins-user')
-        JENKINS_API_TOKEN = credentials('jenkins-api-token')
+        JENKINS_API_CREDS = credentials('jenkins-api-credentials')  // Username with password credential
+        JENKINS_USER = "${JENKINS_API_CREDS_USR}"
+        JENKINS_API_TOKEN = "${JENKINS_API_CREDS_PSW}"
         JENKINS_JOB_NAME = 'create-milestone'
     }
 
