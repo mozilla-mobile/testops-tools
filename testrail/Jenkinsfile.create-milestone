@@ -1,0 +1,173 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'RELEASE_NAME', description: 'Release name (e.g., Build Validation sign-off - Firefox RC 145.0)')
+        string(name: 'RELEASE_TAG', description: 'Release tag (e.g., firefox-v145.0)')
+    }
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
+        TESTRAIL_HOST = credentials('testrail-host')
+        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL = credentials('slack-mobile-alerts-ios-webhook')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Setup Python') {
+            steps {
+                sh '''
+                    set -e
+                    echo "Checking Python installation..."
+                    python3 --version
+                    echo "Checking pip installation..."
+                    python3 -m pip --version
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('testrail') {
+                    sh 'pip3 install --no-cache-dir -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Create TestRail Credentials') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'testrail-credentials',
+                                                      usernameVariable: 'TESTRAIL_USERNAME',
+                                                      passwordVariable: 'TESTRAIL_PASSWORD')]) {
+                        dir('testrail') {
+                            sh '''
+                                set -e
+                                cat > .testrail_credentials.json <<EOF
+{
+  "host": "${TESTRAIL_HOST}",
+  "username": "${TESTRAIL_USERNAME}",
+  "password": "${TESTRAIL_PASSWORD}"
+}
+EOF
+                                echo "Credentials file created successfully"
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Create Milestone') {
+            steps {
+                dir('testrail') {
+                    script {
+                        def result = sh(script: 'python3 testrail_main_ios.py', returnStatus: true)
+                        if (result == 0) {
+                            echo "✅ Milestone created successfully"
+                            env.MILESTONE_CREATED = 'true'
+                        } else if (result == 2) {
+                            echo "ℹ️  Milestone already exists - will skip test job triggers"
+                            env.MILESTONE_CREATED = 'false'
+                        } else {
+                            error("Failed to create milestone - Python script exited with code ${result}")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Trigger Test Jobs') {
+            when {
+                expression { env.MILESTONE_CREATED == 'true' }
+            }
+            steps {
+                script {
+                    // Extract version from RELEASE_TAG (e.g., firefox-v145.0 -> v145.0)
+                    def version = params.RELEASE_TAG.replaceAll('.*-v', 'v')
+                    def branch = "origin/release/${version}"
+
+                    echo "===================================="
+                    echo "RELEASE_TAG: ${params.RELEASE_TAG}"
+                    echo "Extracted BRANCH: ${branch}"
+
+                    // Determine product type
+                    def isFirefox = params.RELEASE_TAG.toLowerCase().contains('firefox')
+                    def isFocus = params.RELEASE_TAG.toLowerCase().contains('focus') ||
+                                  params.RELEASE_TAG.toLowerCase().contains('klar')
+
+                    if (isFirefox) {
+                        echo "Product: Firefox - Triggering 4 test jobs"
+                        echo "===================================="
+
+                        // Trigger all 4 Firefox jobs in parallel
+                        parallel(
+                            'Smoke Test iPad': {
+                                build job: 'firefox-ios-smoketest-ipad',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Smoke Test iPhone': {
+                                build job: 'firefox-ios-smoketest-iphone',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Full Functional iPad': {
+                                build job: 'firefox-ios-full-functional-ipad',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            },
+                            'Full Functional iPhone': {
+                                build job: 'firefox-ios-full-functional-iphone',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
+                            }
+                        )
+
+                        echo "✅ All 4 Firefox test jobs triggered"
+                    } else if (isFocus) {
+                        echo "Product: Focus - Triggering 1 test job"
+                        echo "===================================="
+
+                        build job: 'focus-iOS-26',
+                              parameters: [string(name: 'BRANCH', value: branch)],
+                              wait: false
+
+                        echo "✅ Focus test job triggered"
+                    } else {
+                        echo "⚠️  Unknown product type - no test jobs triggered"
+                    }
+
+                    echo "===================================="
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            dir('testrail') {
+                sh 'rm -f .testrail_credentials.json'
+            }
+        }
+        success {
+            echo "Successfully created milestone for ${params.RELEASE_NAME}"
+        }
+        failure {
+            echo "Failed to create milestone for ${params.RELEASE_NAME}"
+        }
+        cleanup {
+            cleanWs()
+        }
+    }
+}
