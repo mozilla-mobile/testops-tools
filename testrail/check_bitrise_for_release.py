@@ -2,6 +2,7 @@ import os
 import requests
 from collections import defaultdict
 from pathlib import Path
+from typing import Dict, List, Any
 import json
 
 
@@ -163,13 +164,6 @@ def run_create_milestone(product, tag, rc_number: int):
             "RELEASE_TAG": tag
         }
 
-        # DEBUG: Print values (will be masked by Jenkins)
-        print(f"DEBUG: JENKINS_URL = {JENKINS_URL}")
-        print(f"DEBUG: JENKINS_JOB_NAME = {JENKINS_JOB_NAME}")
-        print(f"DEBUG: JENKINS_USER = {JENKINS_USER}")
-        print(f"DEBUG: JENKINS_API_TOKEN length = {len(JENKINS_API_TOKEN) if JENKINS_API_TOKEN else 0}")
-        print(f"DEBUG: Full URL = {jenkins_job_url}")
-
         response = requests.post(
             jenkins_job_url,
             params=params,
@@ -213,7 +207,6 @@ def main():
 
     # For each product (firefox, focus/klar, other)
     for product, info in latest_info.items():
-        print(latest_info)
         latest_tag = info["tag"]
         latest_rc = info["rc_number"]
 

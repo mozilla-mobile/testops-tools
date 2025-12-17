@@ -61,7 +61,6 @@ pipeline {
 }
 EOF
                                 echo "Credentials file created successfully"
-                                ls -la .testrail_credentials.json
                             '''
                         }
                     }

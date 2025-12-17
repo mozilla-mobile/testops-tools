@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    parameters {
-        booleanParam(name: 'DRY_RUN', defaultValue: false, description: 'Enable dry-run mode (no git commit/push)')
-    }
-
     options {
         timestamps()
     }
@@ -60,9 +56,6 @@ pipeline {
         }
 
         stage('Commit and Push Changes') {
-            when {
-                expression { params.DRY_RUN == false }
-            }
             steps {
                 script {
                     sh '''
@@ -91,24 +84,6 @@ pipeline {
                     } else {
                         echo 'No changes to commit'
                     }
-                }
-            }
-        }
-
-        stage('Dry Run Summary') {
-            when {
-                expression { params.DRY_RUN == true }
-            }
-            steps {
-                script {
-                    echo '===================================='
-                    echo 'DRY RUN MODE ENABLED'
-                    echo '===================================='
-                    echo 'The following changes would be committed:'
-                    sh 'git diff testrail/latest_tags.json || echo "No changes detected"'
-                    echo '===================================='
-                    echo 'No commit or push was performed'
-                    echo '===================================='
                 }
             }
         }
