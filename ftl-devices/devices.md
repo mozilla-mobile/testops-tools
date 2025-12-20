@@ -18,6 +18,7 @@
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
 | a02q | Galaxy A02s | 31 | Low |
 | a03s | Galaxy A03s | 33 | Low |
+| a03su | Galaxy A03s | 33 | Low |
 | a05s | Samsung A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Medium |
@@ -77,6 +78,7 @@
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
+| g0q | SM-S906U1 | 36 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
@@ -100,10 +102,12 @@
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
+| o1q | Galaxy S21 | 35 | Low |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
+| p3q | Galaxy S21 Ultra | 35 | Low |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
 | pa3q | Galaxy S25 Ultra | 36 | Low |
