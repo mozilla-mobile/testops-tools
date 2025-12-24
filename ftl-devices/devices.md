@@ -40,6 +40,7 @@
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | High |
 | a56x | SM-A566E | 35 | Low |
+| a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
@@ -47,7 +48,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
-| b6q | Flip 6 | 34 | Medium |
+| b6q | Galaxy Z Flip 6 | 34 | Medium |
 | blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
@@ -61,7 +62,7 @@
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
-| dm2q | S23 Plus | 34 | Medium |
+| dm2q | S23 Plus | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
