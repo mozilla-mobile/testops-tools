@@ -109,7 +109,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| p3q | Galaxy S21 Ultra | 35 | Low |
+| p3q | Galaxy S21 Ultra | 35 | Medium |
 | pa1q | Samsung S25 | 36 | High |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
