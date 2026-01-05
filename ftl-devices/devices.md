@@ -123,7 +123,7 @@
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | r12s | SM-S721U1 | 35 | Low |
-| r9q | Samsung Galaxy S21 FE 5G | 36 | Medium |
+| r9q | Samsung Galaxy S21 FE 5G | 36 | Low |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
