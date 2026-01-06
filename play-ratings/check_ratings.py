@@ -116,7 +116,7 @@ def parse_app_data(json_data: List, package_id: str) -> Optional[Dict[str, Any]]
 
 def get_app_rating(package_id: str, timeout: int = 15) -> Optional[Dict[str, Any]]:
     """Fetch app rating and other metadata from Google Play Store."""
-    playstore_url = f"https://play.google.com/store/apps/details?id={package_id}"
+    playstore_url = f"https://play.google.com/store/apps/details?id={package_id}&gl=US&hl=en-US"
 
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:144.0) Gecko/20100101 Firefox/144.0",
