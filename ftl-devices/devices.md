@@ -136,7 +136,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
-| tokay | Pixel 9 | 36 | Low |
+| tokay | Pixel 9 | 36 | Medium |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | S20 Plus 5G | 33 | Low |
