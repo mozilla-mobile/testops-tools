@@ -68,6 +68,10 @@ pipeline {
                     // Check for both unstaged and staged changes (aligned with GitHub Actions)
                     def hasUnstagedChanges = sh(script: 'git diff --quiet', returnStatus: true)
                     def hasStagedChanges = sh(script: 'git diff --staged --quiet', returnStatus: true)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4bf6f23 (Fix commit and push)
                     if (hasUnstagedChanges != 0 || hasStagedChanges != 0) {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
                                                           usernameVariable: 'GIT_USERNAME',
