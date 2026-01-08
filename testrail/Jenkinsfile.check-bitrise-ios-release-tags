@@ -65,8 +65,10 @@ pipeline {
                         git add testrail/latest_tags.json
                     '''
 
-                    def gitStatus = sh(script: 'git diff --staged --quiet', returnStatus: true)
-                    if (gitStatus != 0) {
+                    // Check for both unstaged and staged changes (aligned with GitHub Actions)
+                    def hasUnstagedChanges = sh(script: 'git diff --quiet', returnStatus: true)
+                    def hasStagedChanges = sh(script: 'git diff --staged --quiet', returnStatus: true)
+                    if (hasUnstagedChanges != 0 || hasStagedChanges != 0) {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
                                                           usernameVariable: 'GIT_USERNAME',
                                                           passwordVariable: 'GIT_PASSWORD')]) {
@@ -77,7 +79,9 @@ pipeline {
                                 if [[ $REPO_URL == https://* ]]; then
                                     REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
                                 fi
-                                git push $REPO_URL HEAD:${GIT_BRANCH}
+                                # Get current branch name and push to it
+                                CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+                                git push $REPO_URL HEAD:${CURRENT_BRANCH}
                             '''
                         }
                         echo 'Changes committed and pushed successfully'
