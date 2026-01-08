@@ -78,7 +78,6 @@ pipeline {
                         git config --global user.email 'jenkins@automation.local'
                         git add testrail/latest_tags.json
                     '''
-
                     withCredentials([usernamePassword(credentialsId: 'github-token',
                                                       usernameVariable: 'GIT_USERNAME',
                                                       passwordVariable: 'GIT_TOKEN')]) {
