@@ -71,13 +71,14 @@ pipeline {
                     if (hasUnstagedChanges != 0 || hasStagedChanges != 0) {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
                                                           usernameVariable: 'GIT_USERNAME',
-                                                          passwordVariable: 'GIT_PASSWORD')]) {
+                                                          passwordVariable: 'GIT_TOKEN')]) {
                             sh '''
                                 set -e
                                 git commit -m 'Automated update of latest_tags'
                                 REPO_URL=$(git config --get remote.origin.url)
                                 if [[ $REPO_URL == https://* ]]; then
-                                    REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
+                                    # Use only token for GitHub (avoids @ in username issues)
+                                    REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_TOKEN}@|")
                                 fi
                                 # Get current branch name and push to it
                                 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
