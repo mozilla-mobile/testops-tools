@@ -1,0 +1,16 @@
+[
+  {
+    "id": "N1",
+    "content": "Crash shows LoginsApiException$InvalidRecord with reason='Login already exists' in the logins storage stack (LoginStore.add / DatabaseLoginsStorage.add / SyncableLoginsStorage.add). This usually means we attempted to insert a duplicate login record into the sync/storage layer. Check for duplicate login creation flows, race conditions during sync, or missing de-duplication before calling LoginStore.add.",
+    "source": "sample-fenix-crash-2025-07-01",
+    "signature": "LoginsApiException$InvalidRecord: reason=Login already exists",
+    "match_regex": "LoginsApiException\\$InvalidRecord.*reason=Login already exists"
+  },
+  {
+    "id": "N2",
+    "content": "Crash shows IndexOutOfBoundsException in the onboarding UI flow (OnboardingScreenKt OnboardingScreen$…$emit) when reading from an ArrayList. This usually indicates that the code is accessing an onboarding page or item index that does not exist (list size changed, stale index, or mismatch between state and UI). Check that the list of onboarding items and the selected index are kept in sync and that index bounds are validated before calling ArrayList.get.",
+    "source": "sample-fenix-crash-onboarding",
+    "signature": "IndexOutOfBoundsException in OnboardingScreen ArrayList.get",
+    "match_regex": "IndexOutOfBoundsException.*OnboardingScreenKt.*ArrayList\\.get"
+  }
+]
