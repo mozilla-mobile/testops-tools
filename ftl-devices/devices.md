@@ -71,6 +71,7 @@
 | e1q | Galaxy S24 | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Medium |
+| e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Medium |
@@ -93,6 +94,7 @@
 | gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
 | gts9wifi | SM-X710 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
+| husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | High |
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
@@ -123,8 +125,9 @@
 | r0q | Galaxy S22 | 34 | High |
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
+| r11s | SM-S711N | 36 | Low |
 | r12s | SM-S721U1 | 35 | Low |
-| r9q | Samsung Galaxy S21 FE 5G | 36 | Low |
+| r9q | Samsung Galaxy S21 FE 5G | 36 | Medium |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Medium |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
@@ -132,6 +135,7 @@
 | shiba | Pixel 8 | 34 | High |
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
+| t2q | Galaxy S21 Plus | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
