@@ -36,7 +36,7 @@
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a35x | Samsung A35 | 36 | Low |
-| a36xq | Samsung SM-A366E | 35 | Low |
+| a36xq | Samsung SM-A366E | 35 | Medium |
 | a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | High |
@@ -127,7 +127,7 @@
 | r11q | SM-S711U | 34 | Medium |
 | r11s | SM-S711N | 36 | Low |
 | r12s | SM-S721U1 | 35 | Low |
-| r9q | Samsung Galaxy S21 FE 5G | 36 | Medium |
+| r9q | Samsung Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Medium |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
