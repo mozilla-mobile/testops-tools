@@ -204,6 +204,7 @@ def main():
     print("Previous state:", last_state)
 
     updated_state: Dict[str, Any] = dict(last_state)
+    has_changes = False
 
     # For each product (firefox, focus/klar, other)
     for product, info in latest_info.items():
@@ -224,6 +225,7 @@ def main():
                 "tag": latest_tag,
                 "rc_number": latest_rc,
             }
+            has_changes = True
             continue
 
         # Case 2: same tag → check for new RC(s)
@@ -231,6 +233,7 @@ def main():
             print(f"[{product}] Same tag {latest_tag}, RC increased: {prev_rc} → {latest_rc}")
             run_handle_new_rc(product, latest_tag, latest_rc)
             run_create_milestone(product, latest_tag, latest_rc)
+            has_changes = True
         else:
             print(f"[{product}] No new RC for tag {latest_tag} (rc={latest_rc}).")
 
@@ -239,8 +242,13 @@ def main():
             "rc_number": latest_rc,
         }
 
-    save_last_tags(updated_state)
-    print("✅ All new milestones triggered successfully.")
+    # Only save if there were actual changes
+    if has_changes:
+        save_last_tags(updated_state)
+        print("✅ All new milestones triggered successfully.")
+    else:
+        print("ℹ️  No new releases detected - latest_tags.json not modified.")
+
     print(f"Current {LAST_TAG_FILE} content:")
     print(json.dumps(read_last_tags(), indent=2))
 
