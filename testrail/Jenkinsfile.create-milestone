@@ -13,6 +13,10 @@ pipeline {
     environment {
         PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
         TESTRAIL_HOST = credentials('testrail-host')
+        // Slack webhooks for Python script notifications
+        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
+        SLACK_MOBILE_ALERTS_IOS_CHANNEL = credentials('slack-mobile-alerts-ios-webhook')
+        // Slack webhook for Jenkins pipeline state change notifications
         SLACK_WEBHOOK = credentials('slack-mobile-alerts-tooling-webhook')
     }
 
