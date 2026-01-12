@@ -18,6 +18,7 @@ pipeline {
         JENKINS_USER = "${JENKINS_CREDS_USR}"
         JENKINS_API_TOKEN = "${JENKINS_CREDS_PSW}"
         JENKINS_JOB_NAME = 'create-milestone'
+        SLACK_WEBHOOK = credentials('slack-mobile-alerts-tooling-webhook')
     }
 
     stages {
@@ -68,10 +69,6 @@ pipeline {
                     // Check for both unstaged and staged changes (aligned with GitHub Actions)
                     def hasUnstagedChanges = sh(script: 'git diff --quiet', returnStatus: true)
                     def hasStagedChanges = sh(script: 'git diff --staged --quiet', returnStatus: true)
-<<<<<<< HEAD
-=======
-
->>>>>>> 4bf6f23 (Fix commit and push)
                     if (hasUnstagedChanges != 0 || hasStagedChanges != 0) {
                         withCredentials([usernamePassword(credentialsId: 'github-token',
                                                           usernameVariable: 'GIT_USERNAME',
@@ -99,12 +96,60 @@ pipeline {
     }
 
     post {
+        fixed {
+            // Pipeline recovered: was failing, now passing
+            script {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":white_check_mark: *RECOVERED*: ${env.JOB_NAME}",
+                        "attachments": [{
+                            "color": "good",
+                            "fields": [
+                                {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
+                                {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
+                                {"title": "Status", "value": "SUCCESS (was FAILURE)", "short": false},
+                                {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+            echo '✅ Successfully checked Bitrise tags and updated repository (RECOVERED)'
+        }
+
+        regression {
+            // Pipeline regressed: was passing, now failing
+            script {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":x: *REGRESSION*: ${env.JOB_NAME}",
+                        "attachments": [{
+                            "color": "danger",
+                            "fields": [
+                                {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
+                                {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
+                                {"title": "Status", "value": "FAILURE (was SUCCESS)", "short": false},
+                                {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+            echo '❌ Failed to check Bitrise tags (REGRESSION)'
+        }
+
         success {
             echo 'Successfully checked Bitrise tags and updated repository'
         }
+
         failure {
             echo 'Failed to check Bitrise tags'
         }
+
         cleanup {
             cleanWs()
         }

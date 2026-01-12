@@ -13,8 +13,7 @@ pipeline {
     environment {
         PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
         TESTRAIL_HOST = credentials('testrail-host')
-        SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
-        SLACK_MOBILE_ALERTS_IOS_CHANNEL = credentials('slack-mobile-alerts-ios-webhook')
+        SLACK_WEBHOOK = credentials('slack-mobile-alerts-tooling-webhook')
     }
 
     stages {
@@ -160,12 +159,63 @@ EOF
                 sh 'rm -f .testrail_credentials.json'
             }
         }
+
+        fixed {
+            // Pipeline recovered: was failing, now passing
+            script {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":white_check_mark: *RECOVERED*: ${env.JOB_NAME}",
+                        "attachments": [{
+                            "color": "good",
+                            "fields": [
+                                {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
+                                {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
+                                {"title": "Release", "value": "${params.RELEASE_NAME}", "short": false},
+                                {"title": "Status", "value": "SUCCESS (was FAILURE)", "short": false},
+                                {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+            echo "✅ Successfully created milestone for ${params.RELEASE_NAME} (RECOVERED)"
+        }
+
+        regression {
+            // Pipeline regressed: was passing, now failing
+            script {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":x: *REGRESSION*: ${env.JOB_NAME}",
+                        "attachments": [{
+                            "color": "danger",
+                            "fields": [
+                                {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
+                                {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
+                                {"title": "Release", "value": "${params.RELEASE_NAME}", "short": false},
+                                {"title": "Status", "value": "FAILURE (was SUCCESS)", "short": false},
+                                {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+            echo "❌ Failed to create milestone for ${params.RELEASE_NAME} (REGRESSION)"
+        }
+
         success {
             echo "Successfully created milestone for ${params.RELEASE_NAME}"
         }
+
         failure {
             echo "Failed to create milestone for ${params.RELEASE_NAME}"
         }
+
         cleanup {
             cleanWs()
         }
