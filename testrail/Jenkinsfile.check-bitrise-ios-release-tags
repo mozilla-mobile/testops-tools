@@ -113,7 +113,7 @@ pipeline {
                             "fields": [
                                 {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
                                 {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
-                                {"title": "Status", "value": "SUCCESS (was FAILURE)", "short": false},
+                                {"title": "Status", "value": "SUCCESS (previous run: FAILURE)", "short": false},
                                 {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
                             ]
                         }]
@@ -136,7 +136,7 @@ pipeline {
                             "fields": [
                                 {"title": "Job", "value": "${env.JOB_NAME}", "short": true},
                                 {"title": "Build", "value": "#${env.BUILD_NUMBER}", "short": true},
-                                {"title": "Status", "value": "FAILURE (was SUCCESS)", "short": false},
+                                {"title": "Status", "value": "FAILURE (previous run: SUCCESS)", "short": false},
                                 {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
                             ]
                         }]
