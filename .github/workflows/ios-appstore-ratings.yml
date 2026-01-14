@@ -8,7 +8,7 @@ on:
 
 jobs:
   check-ratings:
-    runs-on: macos-26.0
+    runs-on: macos-26
     
     steps:
     - name: Checkout repository
@@ -52,4 +52,4 @@ jobs:
     - name: Print ratings (TODO: Slack notification)
       if: steps.ratings.outputs.status == 'failed'
       run: |
-        echo "iOS App Store Ratings Check Failed:"
+        echo "iOS App Store Ratings Check Failed"
