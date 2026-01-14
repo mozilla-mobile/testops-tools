@@ -34,7 +34,7 @@ def get_app_rating(package_id: str, timeout: int = 15) -> str :
 
 
 def main():
-    package_id = "org.mozilla.ios.Firefox"
+    package_id = "org.mozilla.ios.Firefox" # TODO: May be an environment variable
     rating = get_app_rating(package_id) 
     print(rating)
 
