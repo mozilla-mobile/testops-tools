@@ -1,0 +1,1 @@
+# Firefox iOS Appstore Rating Monitor

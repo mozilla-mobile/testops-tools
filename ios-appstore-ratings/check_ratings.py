@@ -1,0 +1,42 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+import sys
+import json
+import requests
+
+def get_app_rating(package_id: str, timeout: int = 15) -> str :
+    appstore_lookup_url = f"https://itunes.apple.com/lookup?bundleId={package_id}"
+
+    try:
+        response = requests.get(appstore_lookup_url, timeout=timeout)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"❌ Error fetching app store data: {e}")
+        sys.exit(1)
+    
+    json_data = response.json()
+    if json_data is None:
+        print(f"❌ No response from REST API")
+        sys.exit(1)
+    
+    results = json_data.get('results', [])
+    if results is None or len(results) == 0:
+        print(f"❌ No response from REST API")
+        sys.exit(1)
+    rating = results[0].get('averageUserRatingForCurrentVersion', None)
+    if rating is None:
+        print(f"❌ No rating found for app with package ID {package_id}")
+        sys.exit(1)
+
+    return rating
+
+
+def main():
+    package_id = "org.mozilla.ios.Firefox"
+    rating = get_app_rating(package_id) 
+    print(rating)
+
+if __name__ == "__main__":
+    main()
