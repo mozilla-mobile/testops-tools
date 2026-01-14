@@ -1,15 +1,16 @@
+---
 name: iOS App Store Ratings Check
 
 on:
   schedule:
     # Run daily at 9:00 AM UTC
     - cron: '0 9 * * *'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   check-ratings:
     runs-on: macos-26
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
