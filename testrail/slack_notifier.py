@@ -130,7 +130,7 @@ SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS = Template(
         "type": "header",
         "text": {
                 "type": "plain_text",
-                "text": "New Release: :apple_logo: :firefox: $SHIPPING_PRODUCT-v$RELEASE_VERSION :star:"
+                "text": "New Release: :testops-apple: :firefox: $SHIPPING_PRODUCT-v$RELEASE_VERSION :star:"
         }
     },
     { 
