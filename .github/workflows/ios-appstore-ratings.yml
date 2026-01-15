@@ -54,6 +54,10 @@ jobs:
 
     - name: Handle no rating fetched (TODO)
       if: steps.ratings.outputs.status == 'failed'
-      run: |
-        # TODO: Notify testops if the rating cannot be fetched
-        echo "iOS App Store Ratings Check Failed"
+      id: report-error
+      uses: slackapi/slack-github-action@v2.1.1
+      continue-on-error: true
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook-type: incoming-webhook
+        payload-file-path: ios-appstore-ratings/slack-error-template.json
