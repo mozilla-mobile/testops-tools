@@ -44,13 +44,16 @@ jobs:
         # Save rating for future use
         echo "output=$output" >> $GITHUB_OUTPUT
 
-    - name: Print ratings (TODO Slack notification)
+    - name: Report rating (TODO)
       if: steps.ratings.outputs.status == 'success'
       run: |
+        # TODO: Cache the rating somewhere for future comparison
+        # TODO: Notify testops or iOS dev if the rating is decreased
         echo "iOS App Store Ratings Check Succeeded:"
         echo "Rating: ${{ steps.ratings.outputs.output }}"
 
-    - name: Print ratings (TODO Slack notification)
+    - name: Handle no rating fetched (TODO)
       if: steps.ratings.outputs.status == 'failed'
       run: |
+        # TODO: Notify testops if the rating cannot be fetched
         echo "iOS App Store Ratings Check Failed"
