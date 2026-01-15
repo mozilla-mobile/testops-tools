@@ -1,0 +1,59 @@
+---
+name: iOS App Store Ratings Check
+
+on:
+  schedule:
+    # Run daily at 9:00 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  check-ratings:
+    runs-on: macos-26
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        cd ios-appstore-ratings
+        pip install -r requirements.txt
+    
+    - name: Run ratings check
+      id: ratings
+      run: |
+        set +e  # Don't exit on error
+        cd ios-appstore-ratings
+
+        # Capture both stdout and exit code
+        output=$(python3 check_ratings.py 2>&1)
+        exit_code=$?
+        
+        if [[ $exit_code -ne 0 ]]; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+        else
+            echo "status=success" >> $GITHUB_OUTPUT
+        fi
+
+        # Save rating for future use
+        echo "output=$output" >> $GITHUB_OUTPUT
+
+    - name: Report rating (TODO)
+      if: steps.ratings.outputs.status == 'success'
+      run: |
+        # TODO: Cache the rating somewhere for future comparison
+        # TODO: Notify testops or iOS dev if the rating is decreased
+        echo "iOS App Store Ratings Check Succeeded:"
+        echo "Rating: ${{ steps.ratings.outputs.output }}"
+
+    - name: Handle no rating fetched (TODO)
+      if: steps.ratings.outputs.status == 'failed'
+      run: |
+        # TODO: Notify testops if the rating cannot be fetched
+        echo "iOS App Store Ratings Check Failed"
