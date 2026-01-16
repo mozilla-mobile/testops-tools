@@ -25,7 +25,7 @@
             "text": "Logs",
             "emoji": true
           },
-          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}",
+          "url": "${{ env.JOB_URL }}",
           "action_id": "actionId-0"
         }
       ]

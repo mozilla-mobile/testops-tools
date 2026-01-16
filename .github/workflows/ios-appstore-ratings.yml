@@ -44,17 +44,46 @@ jobs:
         # Save rating for future use
         echo "output=$output" >> $GITHUB_OUTPUT
 
-    - name: Report rating (TODO)
+    # TODO: Cache the rating somewhere for future comparison
+    - name: Report rating
+      id: test-old-rating
       if: steps.ratings.outputs.status == 'success'
       run: |
-        # TODO: Cache the rating somewhere for future comparison
-        # TODO: Notify testops or iOS dev if the rating is decreased
-        echo "iOS App Store Ratings Check Succeeded:"
-        echo "Rating: ${{ steps.ratings.outputs.output }}"
+        echo "Current Rating: ${{ steps.ratings.outputs.output }}"
+        previous_rating=`cat *-rating.txt`
+        echo "Previous Rating: $previous_rating"
+        if (( $(echo "${{ steps.ratings.outputs.output }} < $previous_rating" | bc -l) )); then
+          echo "Rating has decreased from $previous_rating to ${{ steps.ratings.outputs.output }}"
+          echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
+          echo "new_rating=${{ steps.ratings.outputs.output }}" >> $GITHUB_OUTPUT
+          echo "decreased=true" >> $GITHUB_OUTPUT
+        else
+          echo "Rating has not decreased."
+        fi
+    
+    # TODO: Notify testops or iOS dev if the rating is decreased
+    - name: Report rating going down
+      if: steps.ratings.outputs.status == 'success' && steps.test-old-rating.outputs.decreased == 'true'
+      env:
+        PREVIOUS_RATING: ${{ steps.test-old-rating.outputs.previous_rating }}
+        CURRENT_RATING: ${{ steps.test-old-rating.outputs.new_rating }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook-type: incoming-webhook
+        payload-file-path: ios-appstore-ratings/slack-rate-down-template.json
 
-    - name: Handle no rating fetched (TODO)
+    - name: Store current rating
+      if: steps.ratings.outputs.status == 'success'
+      run: |
+        DATE=$(date +%Y%m%d)
+        echo "${{ steps.ratings.outputs.output }}" > ios-appstore-ratings/${DATE}-rating.txt
+
+    - name: Handle no rating fetched
       if: steps.ratings.outputs.status == 'failed'
       id: report-error
+      env:
+        JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}
       uses: slackapi/slack-github-action@v2.1.1
       continue-on-error: true
       with:
