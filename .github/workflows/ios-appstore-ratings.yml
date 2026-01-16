@@ -30,60 +30,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-    
-    - name: Run ratings check
-      id: fetch-rating
-      run: |
-        set +e  # Don't exit on error
-
-        # Capture both stdout and exit code
-        output=$(python3 check_ratings.py 2>&1)
-        exit_code=$?
-        
-        if [[ $exit_code -ne 0 ]]; then
-            echo "status=failed" >> $GITHUB_OUTPUT
-        else
-            echo "status=success" >> $GITHUB_OUTPUT
-        fi
-        echo "output=$output" >> $GITHUB_OUTPUT
-    
-    - name: Retrieve hash value of cache
-      id: retrieve-cache-hashvalue
-      if: steps.fetch-rating.outputs.status == 'success'
-      uses: actions/cache/restore@v5.0.1
-      with:
-          path: ios-appstore-ratings/hashvalue.txt
-          key: ${{ env.CACHE_PREFIX }}-hashvalue
-    
-    - name: Save hash value of cache
-      id: save-cache-hashvalue
-      if: steps.fetch-rating.outputs.status == 'success'
-      run: |
-        if [ -f hashvalue.txt ]; then
-          echo "hashvalue=$(cat hashvalue.txt)" >> $GITHUB_OUTPUT
-          echo "Found previous hash: $(cat hashvalue.txt)"
-        else
-          echo "No previous hash found"
-          echo "hashvalue=INVALID" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Restore previous rating from cache
-      id: restore-rating-cache
-      if: steps.fetch-rating.outputs.status == 'success'
-      uses: actions/cache/restore@v5.0.1
-      with:
-          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-          key: ${{ env.CACHE_PREFIX }}-never-matches
-          restore-keys: |
-            ${{ env.CACHE_PREFIX }}-${{ steps.save-cache-hashvalue.outputs.hashvalue }}
-            ${{ env.CACHE_PREFIX }}-
-
-    - name: Default previous rating if cache miss
-      id: default-previous-rating
-      if: steps.restore-rating-cache.outputs.cache-matched-key == '' && steps.fetch-rating.outputs.status == 'success'
-      run: |
-        echo "No cache found. Setting default previous rating to 0"
-        echo "0" > ${CACHE_PREFIX}-previous.txt
 
     - name: Save today's rating
       id: save-today-rating
@@ -107,14 +53,6 @@ jobs:
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
-
-    - name: Save hash value for next run
-      id: save-hashvalue-cache
-      if: steps.fetch-rating.outputs.status == 'success'
-      uses: actions/cache/save@v5.0.1
-      with:
-        path: ios-appstore-ratings/hashvalue.txt
-        key: ${{ env.CACHE_PREFIX }}-hashvalue
 
     # - name: Report rating
     #   id: test-old-rating
