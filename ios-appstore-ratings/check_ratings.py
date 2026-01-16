@@ -7,7 +7,7 @@ import json
 import requests
 
 def get_app_rating(package_id: str, timeout: int = 15) -> str :
-    appstore_lookup_url = f"https://itunes.apple.com/lookup?bundleId={package_id}"
+    appstore_lookup_url = f"https://itunes.apple.com/lookup?bundleId={package_id}&country=us"
 
     try:
         response = requests.get(appstore_lookup_url, timeout=timeout)
