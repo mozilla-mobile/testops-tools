@@ -49,8 +49,8 @@ jobs:
       run: |
         # Save rating for future use
         today=$(date +%Y%m%d)
-        echo "date=$today" >> $GITHUB_OUTPUT
-        echo "${{ steps.fetch-rating.outputs.output }}" > rating-state-$(today).txt
+        echo "date=`echo $today`" >> $GITHUB_OUTPUT
+        echo "${{ steps.fetch-rating.outputs.output }}" > rating-state-`echo $today`.txt
 
     # - name: Restore previous rating from cache
     #   id: restore-rating-cache
