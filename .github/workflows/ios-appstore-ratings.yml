@@ -1,8 +1,7 @@
 ---
-name: iOS App Store Ratings Check
+name: Monitor iOS app Store Ratings
 
 env:
-  PACKAGE_ID: "org.mozilla.ios.Firefox"
   CACHE_PREFIX: "rating-state-ios-firefox"
 
 on:
@@ -51,7 +50,7 @@ jobs:
       uses: actions/cache/restore@v5.0.1
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-          key: ${{ env.CACHE_PREFIX }}-2026-${{ github.run_id }}
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
