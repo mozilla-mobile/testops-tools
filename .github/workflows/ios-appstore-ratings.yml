@@ -1,6 +1,10 @@
 ---
 name: iOS App Store Ratings Check
 
+env:
+  PACKAGE_ID: "org.mozilla.ios.Firefox"
+  CACHE_PREFIX: "rating-state-ios-firefox"
+
 on:
   schedule:
     # Run daily at 9:00 AM UTC
@@ -48,15 +52,17 @@ jobs:
       if: steps.fetch-rating.outputs.status == 'success'
       uses: actions/cache/restore@v5.0.1
       with:
-          path: ios-appstore-ratings/rating-state-ios-firefox-previous.txt
-          key: rating-state-ios-firefox-
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
+          key: ${{ env.CACHE_PREFIX }}-
           restore-keys: |
-            rating-state-ios-firefox
+            ${{ env.CACHE_PREFIX }}
     
     - name: Verify if the old value is restored
+      id: verify-old-rating
       run: |
-        ls *.txt
-        cat *.txt
+        ls ${CACHE_PREFIX}-previous.txt
+        cat ${CACHE_PREFIX}-previous.txt
+        echo "old_rating=`cat ${CACHE_PREFIX}-previous.txt`" >> $GITHUB_OUTPUT
 
     # - name: Save today's rating
     #   id: save-today-rating
