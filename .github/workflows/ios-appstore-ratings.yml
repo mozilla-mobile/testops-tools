@@ -43,32 +43,37 @@ jobs:
         fi
         echo "output=$output" >> $GITHUB_OUTPUT
 
-    - name: Save today's rating
-      id: save-today-rating
+    - name: Restore previous rating from cache
+      id: restore-rating-cache
       if: steps.fetch-rating.outputs.status == 'success'
-      run: |
-        # Save rating for future use
-        today=$(date +%Y%m%d)
-        echo "date=`echo $today`" >> $GITHUB_OUTPUT
-        echo "${{ steps.fetch-rating.outputs.output }}" > rating-state-ios-firefox-`echo $today`.txt
-
-    # - name: Restore previous rating from cache
-    #   id: restore-rating-cache
-    #   if: steps.fetch-rating.outputs.status == 'success'
-    #   uses: actions/cache/restore@v5.0.1
-    #   with:
-    #       path: rating-state.json
-    #       key: rating-state-
-    #       restore-keys: |
-    #         rating-state-${{ matrix.package.id }}-
-
-    - name: Save current rating to cache
-      id: save-rating-cache
-      if: steps.fetch-rating.outputs.status == 'success'
-      uses: actions/cache/save@v5.0.1
+      uses: actions/cache/restore@v5.0.1
       with:
-        path: ios-appstore-ratings/rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}.txt
-        key: rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
+          path: ios-appstore-ratings/rating-state-ios-firefox-previous.txt
+          key: rating-state-ios-firefox-
+          restore-keys: |
+            rating-state-ios-firefox
+    
+    - name: Verify if the old value is restored
+      run: |
+        ls *.txt
+        cat *.txt
+
+    # - name: Save today's rating
+    #   id: save-today-rating
+    #   if: steps.fetch-rating.outputs.status == 'success'
+    #   run: |
+    #     # Save rating for future use
+    #     today=$(date +%Y%m%d)
+    #     echo "date=`echo $today`" >> $GITHUB_OUTPUT
+    #     echo "${{ steps.fetch-rating.outputs.output }}" > rating-state-ios-firefox-`echo $today`.txt
+
+    # - name: Save current rating to cache
+    #   id: save-rating-cache
+    #   if: steps.fetch-rating.outputs.status == 'success'
+    #   uses: actions/cache/save@v5.0.1
+    #   with:
+    #     path: ios-appstore-ratings/rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}.txt
+    #     key: rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
     # - name: Report rating
     #   id: test-old-rating
