@@ -101,6 +101,14 @@ jobs:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
+    - name: Save hash value for next run
+      id: save-hashvalue-cache
+      if: steps.fetch-rating.outputs.status == 'success'
+      uses: actions/cache/save@v5.0.1
+      with:
+        path: ios-appstore-ratings/hashvalue.txt
+        key: ${{ env.CACHE_PREFIX }}-hashvalue
+
     # - name: Report rating
     #   id: test-old-rating
     #   if: steps.fetch-rating.outputs.status == 'success'
