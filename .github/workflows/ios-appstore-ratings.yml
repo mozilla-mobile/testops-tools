@@ -31,6 +31,30 @@ jobs:
       run: |
         pip install -r requirements.txt
 
+    - name: Run ratings check
+      id: fetch-rating
+      run: |
+        set +e  # Don't exit on error
+        # Capture both stdout and exit code
+        today_rating=$(python3 check_ratings.py 2>&1)
+        exit_code=$?
+        
+        if [[ $exit_code -ne 0 ]]; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+        else
+            echo "status=success" >> $GITHUB_OUTPUT
+        fi
+        echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
+
+    - name: Restore previous rating from cache
+      id: cache-rating
+      uses: actions/cache/restore@v5.0.1
+      with:
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
+          key: ${{ env.CACHE_PREFIX }}-never-matches-${{ github.run_id }}
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-
+
     - name: Save today's rating
       id: save-today-rating
       if: steps.fetch-rating.outputs.status == 'success'
@@ -41,10 +65,7 @@ jobs:
         echo "Debug: github.run_id = '${{ github.run_id }}'"
         
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
-        echo "${{ steps.fetch-rating.outputs.output }}" > ${{ env.CACHE_PREFIX }}-`echo $today`.txt
-        echo "${today}-${{ github.run_id }}" > hashvalue.txt    # Explicit variable expansion
-        
-        echo "Debug: hashvalue.txt contains: $(cat hashvalue.txt)"
+        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-`echo $today`.txt
 
     - name: Save current rating to cache
       id: save-rating-cache
