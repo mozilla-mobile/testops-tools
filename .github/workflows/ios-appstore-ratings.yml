@@ -50,7 +50,7 @@ jobs:
       if: steps.ratings.outputs.status == 'success'
       run: |
         echo "Current Rating: ${{ steps.ratings.outputs.output }}"
-        previous_rating=`cat *-rating.txt`
+        previous_rating=`cat ios-appstore-ratings/*-rating.txt`
         echo "Previous Rating: $previous_rating"
         if (( $(echo "${{ steps.ratings.outputs.output }} < $previous_rating" | bc -l) )); then
           echo "Rating has decreased from $previous_rating to ${{ steps.ratings.outputs.output }}"
