@@ -50,11 +50,10 @@ jobs:
       id: cache-rating
       uses: actions/cache/restore@v5.0.1
       with:
-          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-          key: ${{ env.CACHE_PREFIX }}-never-matches-${{ github.run_id }}
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-*.txt
+          key: ${{ env.CACHE_PREFIX }}-2016-${{ github.run_id }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
-            rating-state-ios-firefox-20260116-21081702754
 
     - name: Save today's rating
       id: save-today-rating
