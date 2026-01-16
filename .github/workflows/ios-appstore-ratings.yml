@@ -35,7 +35,7 @@ jobs:
       run: |
         set +e  # Don't exit on error
         # Capture both stdout and exit code
-        today_rating=$(python3 check_ratings.py 2>&1)
+        today_rating=$(python3 check_ratings1111.py 2>&1)
         exit_code=$?
         
         if [[ $exit_code -ne 0 ]]; then
