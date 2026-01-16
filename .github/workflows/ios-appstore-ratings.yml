@@ -50,8 +50,8 @@ jobs:
       id: cache-rating
       uses: actions/cache/restore@v5.0.1
       with:
-          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-*.txt
-          key: ${{ env.CACHE_PREFIX }}-2016-${{ github.run_id }}
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
+          key: ${{ env.CACHE_PREFIX }}-2026-${{ github.run_id }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
@@ -72,7 +72,7 @@ jobs:
       if: steps.fetch-rating.outputs.status == 'success'
       uses: actions/cache/save@v5.0.1
       with:
-        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}.txt
+        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
     # - name: Report rating
