@@ -78,6 +78,7 @@ jobs:
       run: |
         DATE=$(date +%Y%m%d)
         echo "${{ steps.ratings.outputs.output }}" > ios-appstore-ratings/${DATE}-rating.txt
+        cat ios-appstore-ratings/*-rating.txt
 
     - name: Handle no rating fetched
       if: steps.ratings.outputs.status == 'failed'
