@@ -44,6 +44,7 @@ jobs:
         echo "output=$output" >> $GITHUB_OUTPUT
 
     - name: Save today's rating
+      id: save-today-rating
       if: steps.fetch-rating.outputs.status == 'success'
       run: |
         # Save rating for future use
@@ -66,8 +67,8 @@ jobs:
       if: steps.fetch-rating.outputs.status == 'success'
       uses: actions/cache/save@v5.0.1
       with:
-        path: rating-state-${{ steps.fetch-rating.outputs.date }}.txt
-        key: rating-state-${{ steps.fetch-rating.outputs.date }}-${{ github.run_id }}
+        path: rating-state-${{ steps.save-today-rating.outputs.date }}.txt
+        key: rating-state-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
     # - name: Report rating
     #   id: test-old-rating
