@@ -59,7 +59,7 @@ jobs:
       id: test-old-rating
       if: steps.fetch-rating.outputs.status == 'success'
       run: |
-        previous_rating=`cat ios-appstore-ratings/*-previous.txt`
+        previous_rating=`cat *-previous.txt`
         echo "Current Rating: ${{ steps.fetch-rating.outputs.today_rating }}"
         echo "Previous Rating: $previous_rating"
         if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
