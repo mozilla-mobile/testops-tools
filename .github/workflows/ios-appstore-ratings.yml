@@ -91,7 +91,7 @@ jobs:
       with:
         webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
         webhook-type: incoming-webhook
-        payload-file-path: slack-rate-down-template.json
+        payload-file-path: ios-appstore-ratings/slack-rate-down-template.json
         payload-templated: true
 
     - name: Save current rating to cache
