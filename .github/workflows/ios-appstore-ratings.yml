@@ -51,7 +51,6 @@ jobs:
         today=$(date +%Y%m%d)
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
         echo "${{ steps.fetch-rating.outputs.output }}" > rating-state-ios-firefox-`echo $today`.txt
-        ls *.txt
 
     # - name: Restore previous rating from cache
     #   id: restore-rating-cache
@@ -68,7 +67,7 @@ jobs:
       if: steps.fetch-rating.outputs.status == 'success'
       uses: actions/cache/save@v5.0.1
       with:
-        path: rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}.txt
+        path: ios-appstore-ratings/rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}.txt
         key: rating-state-ios-firefox-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
     # - name: Report rating
