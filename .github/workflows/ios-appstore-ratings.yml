@@ -46,6 +46,20 @@ jobs:
             echo "status=success" >> $GITHUB_OUTPUT
         fi
         echo "output=$output" >> $GITHUB_OUTPUT
+    
+    - name: Retrieve hash value of cache
+      id: retrieve-cache-hashvalue
+      if: steps.fetch-rating.outputs.status == 'success'
+      uses: actions/cache/restore@v5.0.1
+      with:
+          path: ios-appstore-ratings/hashvalue.txt
+          key: ${{ env.CACHE_PREFIX }}-hashvalue
+    
+    - name: Save hash value of cache
+      id: save-cache-hashvalue
+      if: steps.fetch-rating.outputs.status == 'success'
+      run: |
+        echo "hashvalue=`cat hashvalue.txt`" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
       id: restore-rating-cache
@@ -53,7 +67,7 @@ jobs:
       uses: actions/cache/restore@v5.0.1
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-          key: ${{ env.CACHE_PREFIX }}-never-matches-${{ github.run_id }}
+          key: ${{ env.CACHE_PREFIX }}-${{ steps.save-cache-hashvalue.outputs.hashvalue }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
@@ -70,10 +84,14 @@ jobs:
       run: |
         # Save rating for future use
         today=$(date +%Y%m%d)
+        echo "Debug: today variable = '$today'"
+        echo "Debug: github.run_id = '${{ github.run_id }}'"
+        
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
         echo "${{ steps.fetch-rating.outputs.output }}" > ${{ env.CACHE_PREFIX }}-`echo $today`.txt
-        ls ${{ env.CACHE_PREFIX}}-*.txt
-        cat ${{ env.CACHE_PREFIX}}-*.txt
+        echo "${today}-${{ github.run_id }}" > hashvalue.txt    # Explicit variable expansion
+        
+        echo "Debug: hashvalue.txt contains: $(cat hashvalue.txt)"
 
     - name: Save current rating to cache
       id: save-rating-cache
