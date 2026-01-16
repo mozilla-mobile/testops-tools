@@ -59,7 +59,13 @@ jobs:
       id: save-cache-hashvalue
       if: steps.fetch-rating.outputs.status == 'success'
       run: |
-        echo "hashvalue=`cat hashvalue.txt`" >> $GITHUB_OUTPUT
+        if [ -f hashvalue.txt ]; then
+          echo "hashvalue=$(cat hashvalue.txt)" >> $GITHUB_OUTPUT
+          echo "Found previous hash: $(cat hashvalue.txt)"
+        else
+          echo "No previous hash found"
+          echo "hashvalue=INVALID" >> $GITHUB_OUTPUT
+        fi
 
     - name: Restore previous rating from cache
       id: restore-rating-cache
@@ -67,8 +73,10 @@ jobs:
       uses: actions/cache/restore@v5.0.1
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-          key: ${{ env.CACHE_PREFIX }}-${{ steps.save-cache-hashvalue.outputs.hashvalue }}
+          key: ${{ env.CACHE_PREFIX }}-never-matches
           restore-keys: |
+            ${{ env.CACHE_PREFIX }}-${{ steps.save-cache-hashvalue.outputs.hashvalue }}
+            ${{ env.CACHE_PREFIX }}-20260116-
             ${{ env.CACHE_PREFIX }}-
 
     - name: Default previous rating if cache miss
