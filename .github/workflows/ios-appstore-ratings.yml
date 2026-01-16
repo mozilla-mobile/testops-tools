@@ -65,7 +65,7 @@ jobs:
         echo "Debug: github.run_id = '${{ github.run_id }}'"
         
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
-        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-`echo $today`.txt
+        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous.txt
 
     - name: Save current rating to cache
       id: save-rating-cache
