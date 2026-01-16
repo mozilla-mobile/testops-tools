@@ -82,7 +82,7 @@
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
-| g0q | SM-S906U1 | 36 | Low |
+| g0q | SM-S906U1 | 36 | Medium |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
@@ -107,7 +107,7 @@
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
-| o1q | Galaxy S21 | 35 | Low |
+| o1q | Galaxy S21 | 35 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
