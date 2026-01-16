@@ -55,6 +55,21 @@ jobs:
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
+    - name: Report rating
+      id: test-old-rating
+      if: steps.fetch-rating.outputs.status == 'success'
+      run: |
+        previous_rating=`cat ios-appstore-ratings/*-previous.txt`
+        echo "Current Rating: ${{ steps.fetch-rating.outputs.today_rating }}"
+        echo "Previous Rating: $previous_rating"
+        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
+          echo "Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
+          echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
+          echo "decreased=true" >> $GITHUB_OUTPUT
+        else
+          echo "Rating has not decreased."
+        fi
+
     - name: Save today's rating
       id: save-today-rating
       if: steps.fetch-rating.outputs.status == 'success'
@@ -66,6 +81,18 @@ jobs:
         
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
         echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous.txt
+    
+    - name: Report rating going down
+      if: steps.fetch-rating.outputs.status == 'success' && steps.test-old-rating.outputs.decreased == 'true'
+      env:
+        PREVIOUS_RATING: ${{ steps.test-old-rating.outputs.previous_rating }}
+        CURRENT_RATING: ${{ steps.test-old-rating.outputs.today_rating }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook-type: incoming-webhook
+        payload-file-path: slack-rate-down-template.json
+        payload-templated: true
 
     - name: Save current rating to cache
       id: save-rating-cache
@@ -74,42 +101,6 @@ jobs:
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
-
-    # - name: Report rating
-    #   id: test-old-rating
-    #   if: steps.fetch-rating.outputs.status == 'success'
-    #   run: |
-    #     echo "Current Rating: ${{ steps.fetch-ratings.outputs.output }}"
-    #     previous_rating=`cat ios-appstore-ratings/*-rating.txt`
-    #     echo "Previous Rating: $previous_rating"
-    #     if (( $(echo "${{ steps.fetch-ratingratings.outputs.output }} < $previous_rating" | bc -l) )); then
-    #       echo "Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.output }}"
-    #       echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
-    #       echo "new_rating=${{ steps.fetch-ratingratings.outputs.output }}" >> $GITHUB_OUTPUT
-    #       echo "decreased=true" >> $GITHUB_OUTPUT
-    #     else
-    #       echo "Rating has not decreased."
-    #     fi
-    
-    # # TODO: Notify testops or iOS dev if the rating is decreased
-    # - name: Report rating going down
-    #   if: steps.fetch-rating.outputs.status == 'success' && steps.test-old-rating.outputs.decreased == 'true'
-    #   env:
-    #     PREVIOUS_RATING: ${{ steps.test-old-rating.outputs.previous_rating }}
-    #     CURRENT_RATING: ${{ steps.test-old-rating.outputs.new_rating }}
-    #   uses: slackapi/slack-github-action@v2.1.1
-    #   with:
-    #     webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-    #     webhook-type: incoming-webhook
-        # payload-file-path: slack-rate-down-template.json
-
-    # - name: Save current rating to cache
-    #   id: save-rating-cache
-    #   if: steps.fetch-rating.outputs.status == 'success'
-    #   uses: actions/cache/save@v5.0.1
-    #   with:
-    #     path: rating-state-${{ matrix.package.id }}.json
-    #     key: rating-state-${{ matrix.package.id }}-${{ github.run_id }}
 
     # - name: Handle no rating fetched
     #   if: steps.fetch-rating.outputs.status == 'failed'
