@@ -102,14 +102,15 @@ jobs:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
-    # - name: Handle no rating fetched
-    #   if: steps.fetch-rating.outputs.status == 'failed'
-    #   id: report-error
-    #   env:
-    #     JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}
-    #   uses: slackapi/slack-github-action@v2.1.1
-    #   continue-on-error: true
-    #   with:
-    #     webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-    #     webhook-type: incoming-webhook
-        # payload-file-path: slack-error-template.json
+    - name: Handle no rating fetched
+      if: steps.fetch-rating.outputs.status == 'failed'
+      id: report-error
+      env:
+        JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}
+      uses: slackapi/slack-github-action@v2.1.1
+      continue-on-error: true
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook-type: incoming-webhook
+        payload-file-path: ios-appstore-ratings/slack-error-template.json
+        payload-templated: true
