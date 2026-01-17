@@ -55,7 +55,7 @@ jobs:
         previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
-        echo "  App: Firefox iOS"
+        echo "📱 App: Firefox iOS"
         echo "📊 Previous Rating: $previous_rating"
         
         if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
