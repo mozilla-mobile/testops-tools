@@ -5,6 +5,7 @@
 import sys
 import json
 import requests
+import argparse
 
 def get_app_rating(package_id: str, timeout: int = 15) -> str :
     appstore_lookup_url = f"https://itunes.apple.com/lookup?bundleId={package_id}"
@@ -34,8 +35,12 @@ def get_app_rating(package_id: str, timeout: int = 15) -> str :
 
 
 def main():
-    package_id = "org.mozilla.ios.Firefox" # TODO: May be an environment variable
-    rating = get_app_rating(package_id) 
+    parser = argparse.ArgumentParser(description='Check iOS app store rating')
+    parser.add_argument('package_id', help='Bundle ID of the iOS app (e.g., org.mozilla.ios.Firefox)')
+    
+    args = parser.parse_args()
+    
+    rating = get_app_rating(args.package_id) 
     print(rating)
 
 if __name__ == "__main__":

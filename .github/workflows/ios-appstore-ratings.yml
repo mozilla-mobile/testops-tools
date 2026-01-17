@@ -34,7 +34,7 @@ jobs:
     - name: Run ratings check  
       id: fetch-rating
       run: |
-        today_rating=$(python3 check_ratings.py)
+        today_rating=$(python3 check_ratings.py "${{ env.PACKAGE_NAME }}")
         echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
@@ -48,6 +48,9 @@ jobs:
     - name: Check current rating
       id: check-current-rating
       run: |
+        echo "Checking rating for: Firefox iOS"
+        echo "Package ID: ${{ env.PACKAGE_NAME }}"
+        echo "Run ID: ${{ github.run_id }}"
         echo "======================================================================"
         previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
 
