@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "The rating for Firefox iOS cannot be fetched. Please see "
+        "text": "The rating for Firefox iOS cannot be fetched. Please check the job logs for more details."
       }
     },
     {
