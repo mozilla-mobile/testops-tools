@@ -56,7 +56,7 @@ jobs:
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
         echo "📱 App: Firefox iOS"
-        echo "📊 Previous Rating: $previous_rating"
+        echo "📊 Previous Rating: $previous_rating ⭐"
         
         if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
           echo "⚠️ Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
