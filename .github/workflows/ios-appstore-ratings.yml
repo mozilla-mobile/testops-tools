@@ -3,6 +3,7 @@ name: Monitor iOS App Store Ratings
 
 env:
   CACHE_PREFIX: "rating-state-ios-firefox"
+  PACKAGE_NAME: "org.mozilla.ios.Firefox"
 
 on:
   schedule:
@@ -37,46 +38,41 @@ jobs:
         echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
-      id: cache-rating
-      if: success()
       uses: actions/cache/restore@v5.0.1
       with:
-          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
           key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
-    - name: Report rating
-      id: test-old-rating
-      if: success()
+    - name: Check current rating
+      id: check-current-rating
       run: |
-        previous_rating=`cat *-previous.txt`
-        echo "Current Rating: ${{ steps.fetch-rating.outputs.today_rating }}"
-        echo "Previous Rating: $previous_rating"
-        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
-          echo "Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
-          echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
-          echo "decreased=true" >> $GITHUB_OUTPUT
-        else
-          echo "Rating has not been decreased."
-        fi
+        echo "======================================================================"
+        previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
 
-    - name: Save today's rating
-      id: save-today-rating
-      if: success()
-      run: |
-        # Save rating for future use
-        today=$(date +%Y%m%d)
-        echo "Debug: today variable = '$today'"
-        echo "Debug: github.run_id = '${{ github.run_id }}'"
+        echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
+        echo "  App: Firefox iOS"
+        echo "📊 Previous Rating: $previous_rating"
         
+        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
+          echo "⚠️ Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
+          echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
+          echo "rating_dropped=true" >> $GITHUB_OUTPUT
+        else
+          echo "✅ No notification needed"
+        fi
+        
+        echo "✅ Saved current state to ${{ env.CACHE_PREFIX }}-previous-rating.txt"
+        today=$(date +%Y%m%d)
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
-        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous.txt
-    
-    - name: Report rating going down
-      if: success() && steps.test-old-rating.outputs.decreased == 'true'
+        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous-rating.txt
+        echo "======================================================================"
+
+    - name: Send Slack notification if rating dropped
+      if: steps.check-current-rating.outputs.rating_dropped == 'true'
       env:
-        PREVIOUS_RATING: ${{ steps.test-old-rating.outputs.previous_rating }}
+        PREVIOUS_RATING: ${{ steps.check-current-rating.outputs.previous_rating }}
         CURRENT_RATING: ${{ steps.fetch-rating.outputs.today_rating }}
       uses: slackapi/slack-github-action@v2.1.1
       with:
@@ -86,16 +82,13 @@ jobs:
         payload-templated: true
 
     - name: Save current rating to cache
-      id: save-rating-cache
-      if: success()
       uses: actions/cache/save@v5.0.1
       with:
-        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
-        key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
+        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
+        key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
-    - name: Handle no rating fetched
+    - name: Report error if the job fails
       if: failure()
-      id: report-error
       env:
         JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       uses: slackapi/slack-github-action@v2.1.1
