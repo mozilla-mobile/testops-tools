@@ -30,23 +30,15 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run ratings check
+    - name: Run ratings check  
       id: fetch-rating
       run: |
-        set +e  # Don't exit on error
-        # Capture both stdout and exit code
-        today_rating=$(python3 check_ratings1111.py 2>&1)
-        exit_code=$?
-        
-        if [[ $exit_code -ne 0 ]]; then
-            echo "status=failed" >> $GITHUB_OUTPUT
-        else
-            echo "status=success" >> $GITHUB_OUTPUT
-        fi
+        today_rating=$(python3 check_ratings.py)
         echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
       id: cache-rating
+      if: success()
       uses: actions/cache/restore@v5.0.1
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
@@ -56,7 +48,7 @@ jobs:
 
     - name: Report rating
       id: test-old-rating
-      if: steps.fetch-rating.outputs.status == 'success'
+      if: success()
       run: |
         previous_rating=`cat *-previous.txt`
         echo "Current Rating: ${{ steps.fetch-rating.outputs.today_rating }}"
@@ -66,12 +58,12 @@ jobs:
           echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
           echo "decreased=true" >> $GITHUB_OUTPUT
         else
-          echo "Rating has not decreased."
+          echo "Rating has not been decreased."
         fi
 
     - name: Save today's rating
       id: save-today-rating
-      if: steps.fetch-rating.outputs.status == 'success'
+      if: success()
       run: |
         # Save rating for future use
         today=$(date +%Y%m%d)
@@ -82,7 +74,7 @@ jobs:
         echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous.txt
     
     - name: Report rating going down
-      if: steps.fetch-rating.outputs.status == 'success' && steps.test-old-rating.outputs.decreased == 'true'
+      if: success() && steps.test-old-rating.outputs.decreased == 'true'
       env:
         PREVIOUS_RATING: ${{ steps.test-old-rating.outputs.previous_rating }}
         CURRENT_RATING: ${{ steps.fetch-rating.outputs.today_rating }}
@@ -95,19 +87,18 @@ jobs:
 
     - name: Save current rating to cache
       id: save-rating-cache
-      if: steps.fetch-rating.outputs.status == 'success'
+      if: success()
       uses: actions/cache/save@v5.0.1
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.save-today-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Handle no rating fetched
-      if: steps.fetch-rating.outputs.status == 'failed'
+      if: failure()
       id: report-error
       env:
-        JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}
+        JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       uses: slackapi/slack-github-action@v2.1.1
-      continue-on-error: true
       with:
         webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
         webhook-type: incoming-webhook
