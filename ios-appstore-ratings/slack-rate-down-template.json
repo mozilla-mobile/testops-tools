@@ -4,7 +4,7 @@
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": ":warning: :firefox: :testops-apple: iOS Appstore Rating Decreased",
+        "text": ":warning: :firefox: :testops-apple: iOS Appstore Rating Dropped",
         "emoji": true
       }
     },
@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "The rating for Firefox iOS has decreased from *${{ env.PREVIOUS_RATING }}* to *${{ env.CURRENT_RATING }}*."
+        "text": "The rating for Firefox iOS has dropped from *${{ env.PREVIOUS_RATING }}* to *${{ env.CURRENT_RATING }}*."
       }
     },
     {

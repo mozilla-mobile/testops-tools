@@ -12,7 +12,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "The job failed. Please check the job logs for more details."
+        "text": "Job failed. Please check the job logs for more details."
       }
     },
     {
