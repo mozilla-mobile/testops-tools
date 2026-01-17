@@ -1,5 +1,5 @@
 ---
-name: Monitor iOS app Store Ratings
+name: Monitor iOS App Store Ratings
 
 env:
   CACHE_PREFIX: "rating-state-ios-firefox"
