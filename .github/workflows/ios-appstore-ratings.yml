@@ -3,7 +3,6 @@ name: Monitor iOS App Store Ratings
 
 env:
   CACHE_PREFIX: "rating-state-ios-firefox"
-  PACKAGE_NAME: "org.mozilla.ios.Firefox"
 
 on:
   schedule:
@@ -14,6 +13,11 @@ on:
 jobs:
   check-ratings:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - id: "org.mozilla.ios.Firefox"
+            name: Firefox
     defaults:
       run:
         working-directory: ios-appstore-ratings
@@ -26,7 +30,8 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-    
+        cache: 'pip'  
+
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
@@ -34,7 +39,7 @@ jobs:
     - name: Run ratings check  
       id: fetch-rating
       run: |
-        today_rating=$(python3 check_ratings.py "${{ env.PACKAGE_NAME }}")
+        today_rating=$(python3 check_ratings.py "${{ matrix.package.id }}")
         echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
@@ -49,7 +54,7 @@ jobs:
       id: check-current-rating
       run: |
         echo "Checking rating for: Firefox iOS"
-        echo "Package ID: ${{ env.PACKAGE_NAME }}"
+        echo "Package ID: ${{ matrix.package.id }}"
         echo "Run ID: ${{ github.run_id }}"
         echo "======================================================================"
         previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
