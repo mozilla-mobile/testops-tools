@@ -13,7 +13,7 @@ on:
 
 jobs:
   check-ratings:
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ios-appstore-ratings
@@ -38,7 +38,7 @@ jobs:
         echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
-      uses: actions/cache/restore@v5.0.1
+      uses: actions/cache/restore@v5.0.2
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
           key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
@@ -85,7 +85,7 @@ jobs:
         payload-templated: true
 
     - name: Save current rating to cache
-      uses: actions/cache/save@v5.0.1
+      uses: actions/cache/save@v5.0.2
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
