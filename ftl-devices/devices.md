@@ -68,7 +68,7 @@
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
-| e1q | Galaxy S24 | 36 | Low |
+| e1q | Galaxy S24 | 36 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Medium |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
