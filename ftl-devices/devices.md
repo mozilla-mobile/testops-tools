@@ -32,7 +32,7 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
-| a34x | Samsung SM-A346N | 36 | Medium |
+| a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a35x | Samsung A35 | 36 | Low |
@@ -82,7 +82,7 @@
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
-| g0q | SM-S906U1 | 36 | Medium |
+| g0q | SM-S906U1 | 36 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
