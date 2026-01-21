@@ -60,6 +60,7 @@ jobs:
         echo "Run ID: ${{ github.run_id }}"
         echo "======================================================================"
         previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
+        echo "previous_rating=`cat *-previous-rating.txt`" >> $GITHUB_OUTPUT
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
         echo "📱 App: ${{ matrix.package.name }}"
