@@ -11,6 +11,7 @@
   ],
   "attachments": [
     {
+      "color": "warning",
       "blocks": [
         {
           "type": "table",
