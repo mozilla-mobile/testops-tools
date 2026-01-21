@@ -82,11 +82,11 @@
               }
             ],
             [
-              { "type": "raw_text", "text": "${firefox_name}" },
-              { "type": "raw_text", "text": "${firefox_rating_text}" },
-              { "type": "raw_text", "text": "${firefox_rating_overall_text}" },
-              { "type": "raw_text", "text": "${string(firefox_count)}" },
-              { "type": "raw_text", "text": "${firefox_version}" }
+              { "type": "raw_text", "text": "${{ env.APP_NAME }}" },
+              { "type": "raw_text", "text": "${{ env.CURRENT_RATING }}" },
+              { "type": "raw_text", "text": "${{ env.PREVIOUS_RATING }}" },
+              { "type": "raw_text", "text": "${{ env.RATING_COUNT }}" },
+              { "type": "raw_text", "text": "${{ env.VERSION }}" }
             ]
           ]
         }
