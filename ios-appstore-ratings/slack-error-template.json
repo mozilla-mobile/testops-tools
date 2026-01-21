@@ -1,22 +1,37 @@
 {
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": ":x: :firefox: :testops-apple: iOS Appstore Rating (US)",
+        "emoji": true
+      }
+    }
+  ],
   "attachments": [
     {
-      "color": "danger",
       "blocks": [
-        {
-          "type": "header",
-          "text": {
-            "type": "plain_text",
-            "text": ":x: :firefox: :testops-apple: iOS Appstore Rating (US)",
-            "emoji": true
-          }
-        },
         {
           "type": "section",
           "text": {
             "type": "mrkdwn",
             "text": "The job has failed. Please check the logs for more details."
           }
+        },
+        {
+          "type": "actions",
+          "elements": [
+            {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "View Logs"
+              },
+              "url": "${{ env.JOB_URL }}",
+              "style": "primary"
+            }
+          ]
         },
         {
           "type": "divider"

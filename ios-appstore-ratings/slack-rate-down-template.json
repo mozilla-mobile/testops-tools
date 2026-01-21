@@ -1,16 +1,17 @@
 {
+  "blocks": [
+    {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":warning: :firefox: :testops-apple: iOS Appstore Rating Dropped",            
+          "emoji": true
+        }
+    }
+  ],
   "attachments": [
     {
-      "color": "warning",
       "blocks": [
-        {
-          "type": "header",
-          "text": {
-            "type": "plain_text",
-            "text": ":warning: :firefox: :testops-apple: iOS Appstore Rating Dropped",
-            "emoji": true
-          }
-        },
         {
           "type": "table",
           "rows": [
