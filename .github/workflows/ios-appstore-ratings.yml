@@ -63,8 +63,8 @@ jobs:
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
         echo "📱 App: Firefox iOS"
-        echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }} ⭐"
-        echo "  Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }} ⭐"
+        echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }}"
+        echo "📝 Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }}"
         echo "📊 Previous Rating: $previous_rating ⭐"
         
         if (( $(echo "${{ steps.fetch-rating.outputs.today_rating }} < $previous_rating" | bc -l) )); then
