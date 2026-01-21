@@ -32,7 +32,7 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
-| a34x | Samsung SM-A346N | 36 | Medium |
+| a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a35x | Samsung A35 | 36 | Low |
@@ -68,7 +68,7 @@
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
-| e1q | Galaxy S24 | 36 | Low |
+| e1q | Galaxy S24 | 36 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Medium |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
@@ -107,7 +107,7 @@
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
-| o1q | Galaxy S21 | 35 | Low |
+| o1q | Galaxy S21 | 35 | Medium |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
@@ -117,6 +117,7 @@
 | pa2q | Samsung S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
 | pa3q | Galaxy S25 Ultra | 36 | Medium |
+| pa3qxxx | Samsung S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
