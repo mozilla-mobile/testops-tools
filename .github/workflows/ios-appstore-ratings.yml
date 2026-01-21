@@ -39,8 +39,10 @@ jobs:
     - name: Run ratings check  
       id: fetch-rating
       run: |
-        today_rating=$(python3 check_ratings.py "${{ matrix.package.id }}")
-        echo "today_rating=$today_rating" >> $GITHUB_OUTPUT
+        python3 check_ratings.py --package_id "${{ matrix.package.id }}"
+        echo "today_rating=`cat rating.txt`" >> $GITHUB_OUTPUT
+        echo "today_rating_count=`cat rating_count.txt`" >> $GITHUB_OUTPUT
+        echo "today_version=`cat version.txt`" >> $GITHUB_OUTPUT
 
     - name: Restore previous rating from cache
       uses: actions/cache/restore@v5.0.2
@@ -61,9 +63,11 @@ jobs:
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
         echo "📱 App: Firefox iOS"
+        echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }} ⭐"
+        echo "  Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }} ⭐"
         echo "📊 Previous Rating: $previous_rating ⭐"
         
-        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating}} < $previous_rating" | bc -l) )); then
+        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating }} < $previous_rating" | bc -l) )); then
           echo "⚠️ Rating has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
           echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
           echo "rating_dropped=true" >> $GITHUB_OUTPUT
