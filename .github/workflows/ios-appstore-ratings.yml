@@ -83,7 +83,7 @@ jobs:
         echo "======================================================================"
 
     - name: Send Slack notification if rating dropped
-      # if: steps.check-current-rating.outputs.rating_dropped == 'true'
+      if: steps.check-current-rating.outputs.rating_dropped == 'true'
       env:
         PREVIOUS_RATING: ${{ steps.check-current-rating.outputs.previous_rating }}
         CURRENT_RATING: ${{ steps.fetch-rating.outputs.today_rating }}
@@ -104,7 +104,7 @@ jobs:
         key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Report error if the job fails
-      # if: failure()
+      if: failure()
       env:
         JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       uses: slackapi/slack-github-action@v2.1.1
