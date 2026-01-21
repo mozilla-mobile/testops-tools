@@ -7,28 +7,88 @@
         "text": ":warning: :firefox: :testops-apple: iOS Appstore Rating Dropped",
         "emoji": true
       }
-    },
+    }
+  ],
+  "attachments": [
     {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "The rating for Firefox iOS has dropped from *${{ env.PREVIOUS_RATING }}* to *${{ env.CURRENT_RATING }}*."
-      }
-    },
-    {
-      "type": "divider"
-    },
-    {
-      "type": "context",
-      "elements": [
+      "color": "red",
+      "blocks": [
         {
-          "type": "image",
-          "image_url": "https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_72.png",
-          "alt_text": "TestOps logo"
-        },
-        {
-          "type": "mrkdwn",
-          "text": "Created by Mobile Test Engineering"
+          "type": "table",
+          "rows": [
+            [
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "App", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Current Rating",
+                        "style": { "bold": true }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Last Rating",
+                        "style": { "bold": true }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "Reviews", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "Version", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              { "type": "raw_text", "text": "${firefox_name}" },
+              { "type": "raw_text", "text": "${firefox_rating_text}" },
+              { "type": "raw_text", "text": "${firefox_rating_overall_text}" },
+              { "type": "raw_text", "text": "${string(firefox_count)}" },
+              { "type": "raw_text", "text": "${firefox_version}" }
+            ]
+          ]
         }
       ]
     }
