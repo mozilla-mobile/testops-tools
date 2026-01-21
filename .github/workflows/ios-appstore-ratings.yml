@@ -82,7 +82,7 @@ jobs:
         echo "======================================================================"
 
     - name: Send Slack notification if rating dropped
-      if: steps.check-current-rating.outputs.rating_dropped == 'true'
+      # if: steps.check-current-rating.outputs.rating_dropped == 'true'
       env:
         PREVIOUS_RATING: ${{ steps.check-current-rating.outputs.previous_rating }}
         CURRENT_RATING: ${{ steps.fetch-rating.outputs.today_rating }}
