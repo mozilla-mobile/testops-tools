@@ -51,7 +51,7 @@
                     "elements": [
                       {
                         "type": "text",
-                        "text": "Last Rating",
+                        "text": "Previous Rating",
                         "style": { "bold": true }
                       }
                     ]
@@ -89,6 +89,25 @@
               { "type": "raw_text", "text": "${{ env.VERSION }}" }
             ]
           ]
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_72.png",
+          "alt_text": "TestOps logo"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "Created by Mobile Test Engineering"
         }
       ]
     }
