@@ -43,11 +43,20 @@ jobs:
         echo "today_rating=`cat rating.txt`" >> $GITHUB_OUTPUT
         echo "today_rating_count=`cat rating_count.txt`" >> $GITHUB_OUTPUT
         echo "today_version=`cat version.txt`" >> $GITHUB_OUTPUT
+        echo "overall_rating=`cat overall_rating.txt`" >> $GITHUB_OUTPUT
 
-    - name: Restore previous rating from cache
+    - name: Restore previous day's rating from cache
       uses: actions/cache/restore@v5.0.2
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-
+  
+    - name: Restore previous overall rating from cache
+      uses: actions/cache/restore@v5.0.2
+      with:
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
           key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
@@ -61,8 +70,11 @@ jobs:
         echo "======================================================================"
         previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
         echo "previous_rating=`cat *-previous-rating.txt`" >> $GITHUB_OUTPUT
+        previous_overall_rating=`cat *-previous-overall-rating.txt 2>/dev/null || echo "0"`
+        echo "previous_overall_rating=`cat *-previous-overall-rating.txt`" >> $GITHUB_OUTPUT
 
         echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
+        echo "✅ Overall Rating: ${{ steps.fetch-rating.outputs.overall_rating }} ⭐"
         echo "📱 App: ${{ matrix.package.name }}"
         echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }}"
         echo "📝 Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }}"
@@ -101,6 +113,12 @@ jobs:
       uses: actions/cache/save@v5.0.2
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
+        key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
+
+    - name: Save overall rating to cache
+      uses: actions/cache/save@v5.0.2
+      with:
+        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
         key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Report error if the job fails

@@ -41,6 +41,12 @@ def main():
     app_info = get_reviews_json(args.package_id, country=args.country)
     rating_count = app_info.get('userRatingCount', None)
     rating = app_info.get('averageUserRatingForCurrentVersion', None)
+    rating_overall = app_info.get('averageUserRating', None)
+    # Truncate to 2 decimal places if not None
+    if rating is not None:
+        rating = f"{float(rating):.2f}"
+    if rating_overall is not None:
+        rating_overall = f"{float(rating_overall):.2f}"
     version = app_info.get('version', None)
     print(f"⭐ Rating: {rating} | 🗳️ Number of Ratings: {rating_count} | 🏷️ Version: {version}")
     
@@ -49,6 +55,8 @@ def main():
         f.write(str(rating))
     with open("rating_count.txt", "w") as f:
         f.write(str(rating_count))
+    with open("rating_overall.txt", "w") as f:
+        f.write(str(rating_overall))  
     with open("version.txt", "w") as f:
         f.write(str(version))   
 
