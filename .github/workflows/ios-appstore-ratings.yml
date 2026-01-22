@@ -84,20 +84,19 @@ jobs:
           echo "⚠️ Rating for this version has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
           echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
           echo "rating_dropped=true" >> $GITHUB_OUTPUT
-        if (( $(echo "${{ steps.fetch-rating.outputs.overall_rating }} < $previous_overall_rating" | bc -l) )); then
+        elif (( $(echo "${{ steps.fetch-rating.outputs.overall_rating }} < $previous_overall_rating" | bc -l) )); then
           echo "⚠️ Overall rating has decreased from $previous_overall_rating to ${{ steps.fetch-rating.outputs.overall_rating }}"
           echo "previous_overall_rating=$previous_overall_rating" >> $GITHUB_OUTPUT
           echo "rating_dropped=true" >> $GITHUB_OUTPUT
         else
           echo "✅ No notification needed"
         fi
-        
-        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous-rating.txt
-        echo "${{ steps.fetch-rating.outputs.overall_rating }}" > ${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
+
         echo "✅ Saved current state to ${{ env.CACHE_PREFIX }}-previous-rating.txt and ${{ env.CACHE_PREFIX }}-previous-overall-rating.txt"
         today=$(date +%Y%m%d)
         echo "date=`echo $today`" >> $GITHUB_OUTPUT
         echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous-rating.txt
+        echo "${{ steps.fetch-rating.outputs.overall_rating }}" > ${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
         echo "======================================================================"
 
     - name: Send Slack notification if rating dropped
