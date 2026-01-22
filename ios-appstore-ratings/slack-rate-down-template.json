@@ -36,7 +36,7 @@
                     "elements": [
                       {
                         "type": "text",
-                        "text": "Current Rating",
+                        "text": "Current Version",
                         "style": { "bold": true }
                       }
                     ]
@@ -51,7 +51,7 @@
                     "elements": [
                       {
                         "type": "text",
-                        "text": "Previous Rating",
+                        "text": "Overall Rating",
                         "style": { "bold": true }
                       }
                     ]
@@ -84,7 +84,7 @@
             [
               { "type": "raw_text", "text": "${{ env.APP_NAME }}" },
               { "type": "raw_text", "text": "${{ env.CURRENT_RATING }}" },
-              { "type": "raw_text", "text": "${{ env.PREVIOUS_RATING }}" },
+              { "type": "raw_text", "text": "${{ env.OVERALL_RATING }}" },
               { "type": "raw_text", "text": "${{ env.RATING_COUNT }}" },
               { "type": "raw_text", "text": "${{ env.VERSION }}" }
             ]
