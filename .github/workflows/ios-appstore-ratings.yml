@@ -43,7 +43,7 @@ jobs:
         echo "today_rating=`cat rating.txt`" >> $GITHUB_OUTPUT
         echo "today_rating_count=`cat rating_count.txt`" >> $GITHUB_OUTPUT
         echo "today_version=`cat version.txt`" >> $GITHUB_OUTPUT
-        echo "overall_rating=`cat overall_rating.txt`" >> $GITHUB_OUTPUT
+        echo "overall_rating=`cat rating_overall.txt`" >> $GITHUB_OUTPUT
 
     - name: Restore previous day's rating from cache
       uses: actions/cache/restore@v5.0.2
