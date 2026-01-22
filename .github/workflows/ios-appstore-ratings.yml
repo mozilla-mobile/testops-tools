@@ -49,7 +49,7 @@ jobs:
       uses: actions/cache/restore@v5.0.2
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
-          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-rating
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
   
@@ -57,7 +57,7 @@ jobs:
       uses: actions/cache/restore@v5.0.2
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
-          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-overall-rating
           restore-keys: |
             ${{ env.CACHE_PREFIX }}-
 
@@ -79,6 +79,7 @@ jobs:
         echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }}"
         echo "📝 Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }}"
         echo "📊 Previous Rating: $previous_rating ⭐"
+        echo "📊 Previous Overall Rating: $previous_overall_rating ⭐"
         
         if (( $(echo "${{ steps.fetch-rating.outputs.today_rating }} < $previous_rating" | bc -l) )); then
           echo "⚠️ Rating for this version has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
@@ -118,13 +119,13 @@ jobs:
       uses: actions/cache/save@v5.0.2
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
-        key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
+        key: ${{ env.CACHE_PREFIX }}-previous-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Save overall rating to cache
       uses: actions/cache/save@v5.0.2
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
-        key: ${{ env.CACHE_PREFIX }}-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
+        key: ${{ env.CACHE_PREFIX }}-previous-overall-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Report error if the job fails
       if: failure()
