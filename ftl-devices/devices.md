@@ -7,7 +7,6 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP535DL1 | CPH2409 | 34 | Medium |
 | OP5552L1 | CPH2415 | 34 | Medium |
-| OP5552L1 | CPH2415 | 35 | None |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
@@ -16,8 +15,6 @@
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
 | XQ-DC54 | XQ-DC54 | 34 | High |
 | XQ-DQ72 | XQ-DQ72 | 34 | High |
-| a02q | Galaxy A02s | 31 | Low |
-| a03s | Galaxy A03s | 33 | Low |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Samsung A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -36,7 +33,7 @@
 | a35x | Samsung A35 | 34 | Medium |
 | a35x | Samsung A35 | 35 | Low |
 | a35x | Samsung A35 | 36 | Low |
-| a36xq | Samsung SM-A366E | 35 | Medium |
+| a36xq | Samsung SM-A366E | 35 | Low |
 | a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
 | a54x | Galaxy A54 5G | 34 | High |
@@ -61,14 +58,15 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
-| crownqlteue | Galaxy Note9 | 29 | Low |
 | dm1q | Samsung S23 | 35 | Low |
+| dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm2q | S23 Plus | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
 | e1q | Galaxy S24 | 36 | Medium |
+| e2q | Galaxy S24 + | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Medium |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
