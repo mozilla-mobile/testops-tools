@@ -4,14 +4,14 @@
         "type": "header",
         "text": {
           "type": "plain_text",
-          "text": ":firefox: :testops-apple: iOS Appstore Rating (US) Dropped",            
+          "text": ":testops-apple: iOS Appstore Rating (US) Dropped",            
           "emoji": true
         }
     }
   ],
   "attachments": [
     {
-      "color": "warning",
+      "color": "#ECB22E",
       "blocks": [
         {
           "type": "table",

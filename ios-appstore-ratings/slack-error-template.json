@@ -4,14 +4,14 @@
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": ":x: :firefox: :testops-apple: iOS Appstore Rating (US)",
+        "text": ":testops-apple: iOS Appstore Rating (US)",
         "emoji": true
       }
     }
   ],
   "attachments": [
     {
-      "color": "danger",
+      "color": "#E01E5A",
       "blocks": [
         {
           "type": "section",
