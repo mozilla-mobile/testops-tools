@@ -40,10 +40,10 @@ jobs:
       id: fetch-rating
       run: |
         python3 check_ratings.py --package_id "${{ matrix.package.id }}"
-        echo "today_rating=`cat rating.txt`" >> $GITHUB_OUTPUT
-        echo "today_rating_count=`cat rating_count.txt`" >> $GITHUB_OUTPUT
-        echo "today_version=`cat version.txt`" >> $GITHUB_OUTPUT
-        echo "overall_rating=`cat rating_overall.txt`" >> $GITHUB_OUTPUT
+        echo "today_rating=`jq -r '.rating' value.json`" >> $GITHUB_OUTPUT
+        echo "today_rating_count=`jq -r '.rating_count' value.json`" >> $GITHUB_OUTPUT
+        echo "today_version=`jq -r '.version' value.json`" >> $GITHUB_OUTPUT
+        echo "overall_rating=`jq -r '.rating_overall' value.json`" >> $GITHUB_OUTPUT
 
     - name: Restore previous day's rating from cache
       uses: actions/cache/restore@v5.0.2

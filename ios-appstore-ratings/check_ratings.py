@@ -48,17 +48,18 @@ def main():
     if rating_overall is not None:
         rating_overall = f"{float(rating_overall):.2f}"
     version = app_info.get('version', None)
-    print(f"⭐ Rating: {rating} | 🗳️ Number of Ratings: {rating_count} | 🏷️ Version: {version}")
+    print(f"⭐ Rating: {rating} | 🌟 Overall Rating: {rating_overall} | 🗳️ Number of Ratings: {rating_count} | 🏷️ Version: {version}")
     
-    # Write each value to a separate file
-    with open("rating.txt", "w") as f:
-        f.write(str(rating))
-    with open("rating_count.txt", "w") as f:
-        f.write(str(rating_count))
-    with open("rating_overall.txt", "w") as f:
-        f.write(str(rating_overall))  
-    with open("version.txt", "w") as f:
-        f.write(str(version))   
+    # Write all values to a JSON file
+    data = {
+        "rating": rating,
+        "rating_count": rating_count,
+        "rating_overall": rating_overall,
+        "version": version
+    }
+    
+    with open("value.json", "w") as f:
+        json.dump(data, f, indent=2)   
 
 if __name__ == "__main__":
     main()
