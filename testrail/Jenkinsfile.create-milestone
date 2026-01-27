@@ -98,6 +98,15 @@ EOF
                 script {
                     // Extract version from RELEASE_TAG (e.g., firefox-v145.0 -> v145.0)
                     def version = params.RELEASE_TAG.replaceAll('.*-v', 'v')
+
+                    // Truncate version to major.minor if it has more than 2 components
+                    // e.g., v147.2.1 -> v147.2, v145.0 -> v145.0
+                    def versionParts = version.tokenize('.')
+                    if (versionParts.size() > 2) {
+                        version = "${versionParts[0]}.${versionParts[1]}"
+                        echo "ℹ️  Version truncated from ${params.RELEASE_TAG.replaceAll('.*-v', 'v')} to ${version}"
+                    }
+
                     def branch = "origin/release/${version}"
 
                     echo "===================================="
