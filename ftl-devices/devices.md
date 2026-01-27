@@ -68,7 +68,7 @@
 | e1q | Galaxy S24 | 36 | Medium |
 | e2q | Galaxy S24 + | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
-| e3q | Galaxy S24 Ultra | 36 | Medium |
+| e3q | Galaxy S24 Ultra | 36 | Low |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
