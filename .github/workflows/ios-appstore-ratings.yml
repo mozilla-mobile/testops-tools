@@ -110,7 +110,7 @@ jobs:
         APP_NAME: ${{ matrix.package.name }}
       uses: slackapi/slack-github-action@v2.1.1
       with:
-        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
         webhook-type: incoming-webhook
         payload-file-path: ios-appstore-ratings/slack-rate-down-template.json
         payload-templated: true
@@ -133,7 +133,7 @@ jobs:
         JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       uses: slackapi/slack-github-action@v2.1.1
       with:
-        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
         webhook-type: incoming-webhook
         payload-file-path: ios-appstore-ratings/slack-error-template.json
         payload-templated: true
