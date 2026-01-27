@@ -5,9 +5,12 @@
 import sys
 import json
 import requests
+import argparse
 
-def get_app_rating(package_id: str, timeout: int = 15) -> str :
-    appstore_lookup_url = f"https://itunes.apple.com/lookup?bundleId={package_id}&country=us"
+ITUNES_LOOKUP_URL = "https://itunes.apple.com/lookup"
+
+def get_reviews_json(package_id: str, country: str = "us", timeout: int = 15) -> dict :
+    appstore_lookup_url = f"{ITUNES_LOOKUP_URL}?bundleId={package_id}&country={country}"
 
     try:
         response = requests.get(appstore_lookup_url, timeout=timeout)
@@ -25,18 +28,38 @@ def get_app_rating(package_id: str, timeout: int = 15) -> str :
     if results is None or len(results) == 0:
         print(f"❌ No response from REST API")
         sys.exit(1)
-    rating = results[0].get('averageUserRatingForCurrentVersion', None)
-    if rating is None:
-        print(f"❌ No rating found for app with package ID {package_id}")
-        sys.exit(1)
-
-    return rating
-
+    
+    return results[0]
 
 def main():
-    package_id = "org.mozilla.ios.Firefox" # TODO: May be an environment variable
-    rating = get_app_rating(package_id) 
-    print(rating)
+    parser = argparse.ArgumentParser(description='Check iOS app store rating')
+    parser.add_argument('--package_id', required=True, help='Bundle ID of the iOS app (e.g., org.mozilla.ios.Firefox)')
+    parser.add_argument('--country', default='us', help='Country code for the App Store (default: us)')
+
+    args = parser.parse_args()
+    
+    app_info = get_reviews_json(args.package_id, country=args.country)
+    rating_count = app_info.get('userRatingCount', None)
+    rating = app_info.get('averageUserRatingForCurrentVersion', None)
+    rating_overall = app_info.get('averageUserRating', None)
+    # Truncate to 2 decimal places if not None
+    if rating is not None:
+        rating = f"{float(rating):.2f}"
+    if rating_overall is not None:
+        rating_overall = f"{float(rating_overall):.2f}"
+    version = app_info.get('version', None)
+    print(f"⭐ Rating: {rating} | 🌟 Overall Rating: {rating_overall} | 🗳️ Number of Ratings: {rating_count} | 🏷️ Version: {version}")
+    
+    # Write all values to a JSON file
+    data = {
+        "rating": rating,
+        "rating_count": rating_count,
+        "rating_overall": rating_overall,
+        "version": version
+    }
+    
+    with open("value.json", "w") as f:
+        json.dump(data, f, indent=2)   
 
 if __name__ == "__main__":
     main()

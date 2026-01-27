@@ -1,5 +1,8 @@
 ---
-name: iOS App Store Ratings Check
+name: Monitor iOS App Store Ratings
+
+env:
+  CACHE_PREFIX: "rating-state-ios-firefox"
 
 on:
   schedule:
@@ -9,7 +12,15 @@ on:
 
 jobs:
   check-ratings:
-    runs-on: macos-26
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - id: "org.mozilla.ios.Firefox"
+            name: Firefox iOS
+    defaults:
+      run:
+        working-directory: ios-appstore-ratings
 
     steps:
     - name: Checkout repository
@@ -19,41 +30,110 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-    
+        cache: 'pip'  
+
     - name: Install dependencies
       run: |
-        cd ios-appstore-ratings
         pip install -r requirements.txt
-    
-    - name: Run ratings check
-      id: ratings
-      run: |
-        set +e  # Don't exit on error
-        cd ios-appstore-ratings
 
-        # Capture both stdout and exit code
-        output=$(python3 check_ratings.py 2>&1)
-        exit_code=$?
+    - name: Run ratings check  
+      id: fetch-rating
+      run: |
+        python3 check_ratings.py --package_id "${{ matrix.package.id }}"
+        echo "today_rating=`jq -r '.rating' value.json`" >> $GITHUB_OUTPUT
+        echo "today_rating_count=`jq -r '.rating_count' value.json`" >> $GITHUB_OUTPUT
+        echo "today_version=`jq -r '.version' value.json`" >> $GITHUB_OUTPUT
+        echo "overall_rating=`jq -r '.rating_overall' value.json`" >> $GITHUB_OUTPUT
+
+    - name: Restore previous day's rating from cache
+      uses: actions/cache/restore@v5.0.2
+      with:
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-rating
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-
+  
+    - name: Restore previous overall rating from cache
+      uses: actions/cache/restore@v5.0.2
+      with:
+          path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
+          key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-overall-rating
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-
+
+    - name: Check current rating
+      id: check-current-rating
+      run: |
+        echo "Checking rating for: Firefox iOS"
+        echo "Package ID: ${{ matrix.package.id }}"
+        echo "Run ID: ${{ github.run_id }}"
+        echo "======================================================================"
+        previous_rating=`cat *-previous-rating.txt 2>/dev/null || echo "0"`
+        echo "previous_rating=`cat *-previous-rating.txt`" >> $GITHUB_OUTPUT
+        previous_overall_rating=`cat *-previous-overall-rating.txt 2>/dev/null || echo "0"`
+        echo "previous_overall_rating=`cat *-previous-overall-rating.txt`" >> $GITHUB_OUTPUT
+
+        echo "✅ Current Rating: ${{ steps.fetch-rating.outputs.today_rating }} ⭐"
+        echo "✅ Overall Rating: ${{ steps.fetch-rating.outputs.overall_rating }} ⭐"
+        echo "📱 App: ${{ matrix.package.name }}"
+        echo "🏷️ Version: ${{ steps.fetch-rating.outputs.today_version }}"
+        echo "📝 Number of Reviews: ${{ steps.fetch-rating.outputs.today_rating_count }}"
+        echo "📊 Previous Rating: $previous_rating ⭐"
+        echo "📊 Previous Overall Rating: $previous_overall_rating ⭐"
         
-        if [[ $exit_code -ne 0 ]]; then
-            echo "status=failed" >> $GITHUB_OUTPUT
+        if (( $(echo "${{ steps.fetch-rating.outputs.today_rating }} < $previous_rating" | bc -l) )); then
+          echo "⚠️ Rating for this version has decreased from $previous_rating to ${{ steps.fetch-rating.outputs.today_rating }}"
+          echo "previous_rating=$previous_rating" >> $GITHUB_OUTPUT
+          echo "rating_dropped=true" >> $GITHUB_OUTPUT
+        elif (( $(echo "${{ steps.fetch-rating.outputs.overall_rating }} < $previous_overall_rating" | bc -l) )); then
+          echo "⚠️ Overall rating has decreased from $previous_overall_rating to ${{ steps.fetch-rating.outputs.overall_rating }}"
+          echo "previous_overall_rating=$previous_overall_rating" >> $GITHUB_OUTPUT
+          echo "rating_dropped=true" >> $GITHUB_OUTPUT
         else
-            echo "status=success" >> $GITHUB_OUTPUT
+          echo "✅ No notification needed"
         fi
 
-        # Save rating for future use
-        echo "output=$output" >> $GITHUB_OUTPUT
+        echo "✅ Saved current state to ${{ env.CACHE_PREFIX }}-previous-rating.txt and ${{ env.CACHE_PREFIX }}-previous-overall-rating.txt"
+        today=$(date +%Y%m%d)
+        echo "date=`echo $today`" >> $GITHUB_OUTPUT
+        echo "${{ steps.fetch-rating.outputs.today_rating }}" > ${{ env.CACHE_PREFIX }}-previous-rating.txt
+        echo "${{ steps.fetch-rating.outputs.overall_rating }}" > ${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
+        echo "======================================================================"
 
-    - name: Report rating (TODO)
-      if: steps.ratings.outputs.status == 'success'
-      run: |
-        # TODO: Cache the rating somewhere for future comparison
-        # TODO: Notify testops or iOS dev if the rating is decreased
-        echo "iOS App Store Ratings Check Succeeded:"
-        echo "Rating: ${{ steps.ratings.outputs.output }}"
+    - name: Send Slack notification if rating dropped
+      if: steps.check-current-rating.outputs.rating_dropped == 'true'
+      env:
+        OVERALL_RATING: ${{ steps.fetch-rating.outputs.overall_rating }}
+        CURRENT_RATING: ${{ steps.fetch-rating.outputs.today_rating }}
+        VERSION: ${{ steps.fetch-rating.outputs.today_version }}
+        RATING_COUNT: ${{ steps.fetch-rating.outputs.today_rating_count }}
+        APP_NAME: ${{ matrix.package.name }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
+        webhook-type: incoming-webhook
+        payload-file-path: ios-appstore-ratings/slack-rate-down-template.json
+        payload-templated: true
 
-    - name: Handle no rating fetched (TODO)
-      if: steps.ratings.outputs.status == 'failed'
-      run: |
-        # TODO: Notify testops if the rating cannot be fetched
-        echo "iOS App Store Ratings Check Failed"
+    - name: Save current rating to cache
+      uses: actions/cache/save@v5.0.2
+      with:
+        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
+        key: ${{ env.CACHE_PREFIX }}-previous-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
+
+    - name: Save overall rating to cache
+      uses: actions/cache/save@v5.0.2
+      with:
+        path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
+        key: ${{ env.CACHE_PREFIX }}-previous-overall-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
+
+    - name: Report error if the job fails
+      if: failure()
+      env:
+        JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
+        webhook-type: incoming-webhook
+        payload-file-path: ios-appstore-ratings/slack-error-template.json
+        payload-templated: true

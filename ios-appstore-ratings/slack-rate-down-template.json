@@ -1,0 +1,113 @@
+{
+  "blocks": [
+    {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":testops-apple: iOS Appstore Rating (US) Dropped",            
+          "emoji": true
+        }
+    }
+  ],
+  "attachments": [
+    {
+      "color": "#ECB22E",
+      "blocks": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "App", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Current Version",
+                        "style": { "bold": true }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "Overall Rating",
+                        "style": { "bold": true }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "Reviews", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      { "type": "text", "text": "Version", "style": { "bold": true } }
+                    ]
+                  }
+                ]
+              }
+            ],
+            [
+              { "type": "raw_text", "text": "${{ env.APP_NAME }}" },
+              { "type": "raw_text", "text": "${{ env.CURRENT_RATING }}" },
+              { "type": "raw_text", "text": "${{ env.OVERALL_RATING }}" },
+              { "type": "raw_text", "text": "${{ env.RATING_COUNT }}" },
+              { "type": "raw_text", "text": "${{ env.VERSION }}" }
+            ]
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "context",
+          "elements": [
+            {
+              "type": "image",
+              "image_url": "https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_72.png",
+              "alt_text": "TestOps logo"
+            },
+            {
+              "type": "mrkdwn",
+              "text": "Created by Mobile Test Engineering"
+            }
+          ]
+        } 
+      ]
+    }
+  ]
+}
