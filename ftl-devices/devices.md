@@ -24,6 +24,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
+| a15x | Samsung A15 5G | 36 | Low |
 | a16 | Samsung SM-A165M | 35 | Low |
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
@@ -44,12 +45,14 @@
 | arcfox | motorola razr plus 2024 | 34 | Medium |
 | austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
+| b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
 | blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
+| c1q | Galaxy Note 20 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Medium |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
@@ -126,7 +129,8 @@
 | r11q | SM-S711U | 34 | Medium |
 | r11s | SM-S711N | 36 | Low |
 | r12s | SM-S721U1 | 35 | Low |
-| r9q | Samsung Galaxy S21 FE 5G | 36 | Low |
+| r8q | Galaxy S20 FE 5G | 33 | Low |
+| r9q | Samsung Galaxy S21 FE 5G | 36 | Medium |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Medium |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
