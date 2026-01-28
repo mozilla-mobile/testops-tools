@@ -107,7 +107,7 @@ def main():
         print(f"Create Milestone for {milestone_name}")
 
         # Create milestone and test runs
-        devices = ["iPhone 16 (iOS 18.2)", "iPad mini (6th generation) (iOS 18.2)"]
+        devices = ["iPhone 17 (iOS 26.2)", "iPad mini (6th generation) (iOS 26.2)"]
         smoke_filters = {
             "custom_automation_status": 4, # Automation = Completed
             "custom_automation_coverage": 3, # Automation Coverage = Full
