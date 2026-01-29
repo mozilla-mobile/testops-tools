@@ -47,7 +47,7 @@ jobs:
           ROOT="firefox-ios/firefox-ios-tests/Tests/XCUITests"
           DOMAIN="mozilla.testrail.io"
 
-          python test-fixtures/testrail_scan_missing_urls.py \
+          python testrail/testrail_scan_missing_urls.py \
             --root "$ROOT" \
             --testrail-domain "$DOMAIN" \
             > testrail_missing_report.txt
