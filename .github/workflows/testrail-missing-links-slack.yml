@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
-            - name: Run detector (auto-discover root) and prepare Slack content
+      - name: Run detector (auto-discover root) and prepare Slack content
         id: scan
         shell: bash
         run: |
@@ -95,7 +95,6 @@ jobs:
               echo "EOF"
             } >> $GITHUB_ENV
           fi
-
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
