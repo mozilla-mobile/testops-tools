@@ -38,20 +38,34 @@ jobs:
         run: |
           echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
-      - name: Run detector and prepare Slack content
+            - name: Run detector (auto-discover root) and prepare Slack content
         id: scan
         shell: bash
         run: |
           set -euo pipefail
 
-          ROOT="firefox-ios/firefox-ios-tests/Tests/XCUITests"
           DOMAIN="mozilla.testrail.io"
 
-          python testrail/testrail_scan_missing_urls.py \
-            --root "$ROOT" \
+          # Try to find a directory containing "XCUITests" (case sensitive)
+          FOUND_ROOT=$(find firefox-ios -type d -iname '*XCUITests*' -print -quit || true)
+
+          if [ -z "$FOUND_ROOT" ]; then
+            echo "ERROR: could not find an XCUITests directory under firefox-ios"
+            echo "Contents of firefox-ios top-level:"
+            ls -la firefox-ios || true
+            exit 2
+          fi
+
+          echo "Using discovered ROOT: $FOUND_ROOT"
+          echo "ROOT=$FOUND_ROOT" >> $GITHUB_ENV
+
+          # Run the script using the discovered root
+          python test-fixtures/testrail_scan_missing_urls.py \
+            --root "$FOUND_ROOT" \
             --testrail-domain "$DOMAIN" \
             > testrail_missing_report.txt
 
+          # rest of the existing processing (same as before)...
           grep -E '^- ' testrail_missing_report.txt > missing_items.txt || true
 
           MISSING_COUNT=$(wc -l < missing_items.txt | tr -d ' ')
@@ -81,6 +95,7 @@ jobs:
               echo "EOF"
             } >> $GITHUB_ENV
           fi
+
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
