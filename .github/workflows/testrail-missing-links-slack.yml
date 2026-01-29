@@ -60,7 +60,7 @@ jobs:
           echo "ROOT=$FOUND_ROOT" >> $GITHUB_ENV
 
           # Run the script using the discovered root
-          python test-fixtures/testrail_scan_missing_urls.py \
+          python testrail/testrail_scan_missing_urls.py \
             --root "$FOUND_ROOT" \
             --testrail-domain "$DOMAIN" \
             > testrail_missing_report.txt
