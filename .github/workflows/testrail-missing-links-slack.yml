@@ -100,7 +100,7 @@ jobs:
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
-          payload-file-path: "test-fixtures/ci/slack-testrail-missing-links.json"
+          payload-file-path: ".github/slack/testrail-missing-links.json"
           payload-templated: true
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
