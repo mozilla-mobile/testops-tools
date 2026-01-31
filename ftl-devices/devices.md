@@ -70,6 +70,7 @@
 | e1q | Galaxy S24 | 34 | Medium |
 | e1q | Galaxy S24 | 36 | Medium |
 | e2q | Galaxy S24 + | 36 | Low |
+| e2s | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Low |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
@@ -108,7 +109,7 @@
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 | 34 | Medium |
-| o1q | Galaxy S21 | 35 | Medium |
+| o1q | Galaxy S21 | 35 | Low |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
@@ -143,7 +144,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
-| tokay | Pixel 9 | 36 | Medium |
+| tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | S20 Plus 5G | 33 | Low |
