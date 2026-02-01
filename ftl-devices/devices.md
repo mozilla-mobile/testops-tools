@@ -45,7 +45,7 @@
 | arcfox | motorola razr plus 2024 | 34 | Medium |
 | austin | moto g 5G (2022) | 33 | Medium |
 | b0q | Galaxy S22 Ultra | 33 | High |
-| b0q | Galaxy S22 Ultra | 36 | Low |
+| b0q | Galaxy S22 Ultra | 36 | Medium |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
