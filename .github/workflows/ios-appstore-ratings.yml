@@ -46,7 +46,7 @@ jobs:
         echo "overall_rating=`jq -r '.rating_overall' value.json`" >> $GITHUB_OUTPUT
 
     - name: Restore previous day's rating from cache
-      uses: actions/cache/restore@v5.0.2
+      uses: actions/cache/restore@v5.0.3
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
           key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-rating
@@ -54,7 +54,7 @@ jobs:
             ${{ env.CACHE_PREFIX }}-
   
     - name: Restore previous overall rating from cache
-      uses: actions/cache/restore@v5.0.2
+      uses: actions/cache/restore@v5.0.3
       with:
           path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
           key: ${{ env.CACHE_PREFIX }}-${{ github.run_id }}-previous-overall-rating
@@ -116,13 +116,13 @@ jobs:
         payload-templated: true
 
     - name: Save current rating to cache
-      uses: actions/cache/save@v5.0.2
+      uses: actions/cache/save@v5.0.3
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-rating.txt
         key: ${{ env.CACHE_PREFIX }}-previous-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
 
     - name: Save overall rating to cache
-      uses: actions/cache/save@v5.0.2
+      uses: actions/cache/save@v5.0.3
       with:
         path: ios-appstore-ratings/${{ env.CACHE_PREFIX }}-previous-overall-rating.txt
         key: ${{ env.CACHE_PREFIX }}-previous-overall-rating-${{ steps.check-current-rating.outputs.date }}-${{ github.run_id }}
