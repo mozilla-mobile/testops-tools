@@ -84,7 +84,7 @@ jobs:
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.1
         with:
           payload-file-path: "test-fixtures/ci/slack-testrail-missing-links.json"
           payload-templated: true
