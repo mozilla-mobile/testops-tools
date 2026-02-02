@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout testops-tools
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout firefox-ios
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: mozilla-mobile/firefox-ios
           path: firefox-ios
