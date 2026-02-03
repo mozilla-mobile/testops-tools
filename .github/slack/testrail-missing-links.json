@@ -8,25 +8,16 @@
     {
       "type": "section",
       "fields": [
-        { "type": "mrkdwn", "text": "*Repo:*\n${{ github.repository }}" },
-        { "type": "mrkdwn", "text": "*Missing:*\n${{ env.MISSING_COUNT }}" }
+        { "type": "mrkdwn", "text": "*Missing tests:*\n${{ env.MISSING_COUNT }}" },
+        { "type": "mrkdwn", "text": "*Workflow run:*\n${{ env.JOB_LOG_URL }}" }
       ]
     },
+    { "type": "divider" },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Job log:*\n${{ env.JOB_LOG_URL }}"
-      }
-    },
-    {
-      "type": "divider"
-    },
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST }}"
+        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST_ESCAPED }}"
       }
     }
   ]
