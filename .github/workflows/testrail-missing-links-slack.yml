@@ -146,6 +146,14 @@ jobs:
 
                     echo "Payload preview:"
                     head -n 40 payload.json
+      - name: Upload missing list artifact
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: testrail-missing-tests
+          path: |
+            missing_items.txt
+            testrail_missing_report.txt
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
