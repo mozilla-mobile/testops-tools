@@ -72,14 +72,18 @@ jobs:
           echo "missing_count=$MISSING_COUNT" >> $GITHUB_OUTPUT
 
           if [ "$MISSING_COUNT" -gt 0 ]; then
-            MAX_LINES=40
-            head -n "$MAX_LINES" missing_items.txt \
-              | awk '{sub(/^- /,""); print "• " $0}' \
-              > missing_bullets.txt
+            MAX_LINES=15
 
-            if [ "$MISSING_COUNT" -gt "$MAX_LINES" ]; then
-              echo "• …and $((MISSING_COUNT - MAX_LINES)) more" >> missing_bullets.txt
-            fi
+          # Extract only the test name (everything after the double space)
+          head -n "$MAX_LINES" missing_items.txt \
+            | sed 's/^.*  //' \
+            | awk '{print "• " $0}' \
+            > missing_bullets.txt
+
+          if [ "$MISSING_COUNT" -gt "$MAX_LINES" ]; then
+            echo "• …and $((MISSING_COUNT - MAX_LINES)) more (see workflow run)" >> missing_bullets.txt
+          fi
+
 
             {
               echo "MISSING_COUNT=$MISSING_COUNT"
