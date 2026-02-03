@@ -144,11 +144,21 @@ jobs:
                     head -n 40 payload.json
 
       - name: Send Slack notification (only if missing links exist)
-        #if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
           payload-file-path: "payload.json"
           payload-templated: false
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
+          errors: true
+      - name: Debug Slack webhook presence (no secrets printed)
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        run: |
+          if [ -z "${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}" ]; then
+            echo "Slack webhook secret is NOT available in this run."
+            exit 1
+          else
+            echo "Slack webhook secret is available."
+          fi
 
