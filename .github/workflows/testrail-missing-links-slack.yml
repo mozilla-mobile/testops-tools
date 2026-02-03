@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
-      - name: Run detector (auto-discover root) and prepare Slack content
+      - name: Run detector (auto-discover root)
         id: scan
         shell: bash
         run: |
@@ -96,11 +96,59 @@ jobs:
             } >> $GITHUB_ENV
           fi
 
+      - name: Build Slack payload JSON (safe)
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Use the list we already built
+          MISSING_COUNT="${MISSING_COUNT:-0}"
+          if [ -f missing_bullets.txt ]; then
+            MISSING_LIST=$(cat missing_bullets.txt)
+          else
+            MISSING_LIST="${MISSING_LIST:-None 🎉}"
+          fi
+
+          REPO="${GITHUB_REPOSITORY}"
+          JOB_URL="${JOB_LOG_URL}"
+
+          export MISSING_COUNT MISSING_LIST REPO JOB_URL
+
+          python - <<'PY'
+          import os, json
+          repo = os.environ["REPO"]
+          count = os.environ["MISSING_COUNT"]
+          job = os.environ["JOB_URL"]
+          missing = os.environ["MISSING_LIST"]
+
+          payload = {
+            "text": "XCUITests missing TestRail URLs",
+            "blocks": [
+              {"type":"header","text":{"type":"plain_text","text":"❌ XCUITests missing TestRail URLs"}},
+              {"type":"section","fields":[
+                {"type":"mrkdwn","text":f"*Repo:*\n{repo}"},
+                {"type":"mrkdwn","text":f"*Missing tests:*\n{count}"}
+              ]},
+              {"type":"section","text":{"type":"mrkdwn","text":f"*Workflow run:*\n{job}"}},
+              {"type":"divider"},
+              {"type":"section","text":{"type":"mrkdwn","text":f"*Tests that need a TestRail URL:*\n{missing}"}}
+            ]
+          }
+
+          with open("payload.json", "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+          PY
+
+                    echo "Payload preview:"
+                    head -n 40 payload.json
+
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
-          payload-file-path: ".github/slack/testrail-missing-links.json"
-          payload-templated: true
+          payload-file-path: "payload.json"
+          payload-templated: false
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
+
