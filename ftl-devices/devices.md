@@ -37,7 +37,7 @@
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | High |
-| a54x | Galaxy A54 5G | 34 | High |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | a56x | SM-A566E | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
@@ -114,7 +114,7 @@
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
-| p3q | Galaxy S21 Ultra | 35 | Medium |
+| p3q | Galaxy S21 Ultra | 35 | Low |
 | pa1q | Samsung S25 | 36 | High |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
