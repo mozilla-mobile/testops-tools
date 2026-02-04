@@ -38,55 +38,94 @@ jobs:
         run: |
           echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
-      - name: Run detector and prepare Slack content
+      - name: Run detector (auto-discover root) and prepare Slack content
         id: scan
         shell: bash
         run: |
           set -euo pipefail
 
-          ROOT="firefox-ios/firefox-ios-tests/Tests/XCUITests"
           DOMAIN="mozilla.testrail.io"
 
-          python test-fixtures/testrail_scan_missing_urls.py \
-            --root "$ROOT" \
+          FOUND_ROOT=$(find firefox-ios -type d -iname '*XCUITests*' -print -quit || true)
+          if [ -z "$FOUND_ROOT" ]; then
+            echo "ERROR: could not find an XCUITests directory under firefox-ios"
+            echo "Contents of firefox-ios top-level:"
+            ls -la firefox-ios || true
+            exit 2
+          fi
+
+          echo "Using discovered ROOT: $FOUND_ROOT"
+          echo "ROOT=$FOUND_ROOT" >> $GITHUB_ENV
+
+          # Run the script
+          python testrail/testrail_scan_missing_urls.py \
+            --root "$FOUND_ROOT" \
             --testrail-domain "$DOMAIN" \
             > testrail_missing_report.txt
 
+          # Extract the test lines
           grep -E '^- ' testrail_missing_report.txt > missing_items.txt || true
 
           MISSING_COUNT=$(wc -l < missing_items.txt | tr -d ' ')
           echo "missing_count=$MISSING_COUNT" >> $GITHUB_OUTPUT
+          echo "MISSING_COUNT=$MISSING_COUNT" >> $GITHUB_ENV
 
+          # Build a compact Slack list (test names only) to avoid Slack payload limits
+          MAX_LINES=15
           if [ "$MISSING_COUNT" -gt 0 ]; then
-            MAX_LINES=40
             head -n "$MAX_LINES" missing_items.txt \
-              | awk '{sub(/^- /,""); print "• " $0}' \
+              | sed 's/^.*  //' \
+              | awk '{print "• " $0}' \
               > missing_bullets.txt
 
             if [ "$MISSING_COUNT" -gt "$MAX_LINES" ]; then
-              echo "• …and $((MISSING_COUNT - MAX_LINES)) more" >> missing_bullets.txt
+              echo "• …and $((MISSING_COUNT - MAX_LINES)) more (see workflow run)" >> missing_bullets.txt
             fi
-
-            {
-              echo "MISSING_COUNT=$MISSING_COUNT"
-              echo "MISSING_LIST<<EOF"
-              cat missing_bullets.txt
-              echo "EOF"
-            } >> $GITHUB_ENV
           else
-            echo "MISSING_COUNT=0" >> $GITHUB_ENV
-            {
-              echo "MISSING_LIST<<EOF"
-              echo "None 🎉"
-              echo "EOF"
-            } >> $GITHUB_ENV
+            echo "None 🎉" > missing_bullets.txt
           fi
+
+      - name: Prepare Slack-safe list (escape newlines)
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Convert literal newlines into "\n" so JSON templating remains valid
+          LIST=$(python -c "import sys; print(sys.stdin.read().replace('\n','\\\\n').strip())" < missing_bullets.txt)
+          echo "MISSING_LIST_ESCAPED=$LIST" >> $GITHUB_ENV
+
+      - name: Publish summary (visible in GitHub UI)
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## TestRail URL check (XCUITests)"
+            echo ""
+            echo "- **Missing count:** ${MISSING_COUNT:-0}"
+            echo "- **Repo scanned:** mozilla-mobile/firefox-ios"
+            echo "- **Root:** ${ROOT:-<unknown>}"
+            echo "- **Workflow run:** ${JOB_LOG_URL}"
+            echo ""
+
+            if [ -f missing_items.txt ] && [ "$(wc -l < missing_items.txt | tr -d ' ')" -gt 0 ]; then
+              echo "### Tests missing TestRail URL"
+              echo ""
+              echo "> Showing up to 50 test names"
+              echo ""
+              echo '```'
+              head -n 50 missing_items.txt | sed 's/^.*  //'
+              echo '```'
+            else
+              echo "✅ No missing TestRail URLs found."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          payload-file-path: "test-fixtures/ci/slack-testrail-missing-links.json"
+          payload-file-path: ".github/slack/testrail-missing-links.json"
           payload-templated: true
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
+          errors: true
