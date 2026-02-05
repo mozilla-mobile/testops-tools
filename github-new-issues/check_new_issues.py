@@ -105,19 +105,28 @@ def create_slack_json_message(issues: list) -> dict:
 def main():
     new_github_issues = get_new_issues_json('mozilla', 'firefox-ios')
 
-    print(f"📊 Found {len(new_github_issues)} new issues in the last 24 hours")
-    print()
+    # Prepare output text
+    output_text = f"📊 Found {len(new_github_issues)} new issues in the last 24 hours\n\n"
     
     for issue in new_github_issues:
-        print(f"Title: {issue['title']}")
-        print(f"Link: {issue['url']}")
-        print("-" * 80)
+        output_text += f"Title: {issue['title']}\n"
+        output_text += f"Link: {issue['url']}\n"
+        output_text += "-" * 80 + "\n"
     
+    # Print to console
+    print(output_text)
+    
+    # Write to text file
+    with open('github-new-issues-report.txt', 'w', encoding='utf-8') as f:
+        f.write(output_text)
+    
+    # Generate Slack message
     slack_message = create_slack_json_message(new_github_issues)
     
     with open('github-new-issues-slack.json', 'w') as f:
         json.dump(slack_message, f, indent=2)
     
+    print(f"✅ Report written to github-new-issues-report.txt")
     print(f"✅ Slack message written to github-new-issues-slack.json")
 
 if __name__ == "__main__":

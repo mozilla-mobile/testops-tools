@@ -1,0 +1,45 @@
+name: GitHub New Issues Daily Check
+
+on:
+  schedule:
+    # Run daily at 9:00 AM UTC (adjust timezone as needed)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-new-issues:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: github-new-issues
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run new issues check
+      run: python check_new_issues.py
+
+    - name: Send Slack notification
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        payload-file-path: github-new-issues-slack.json
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: github-issues-report
+        path: |
+          github-new-issues-report.txt
+        retention-days: 7
