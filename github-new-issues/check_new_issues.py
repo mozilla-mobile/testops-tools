@@ -96,7 +96,7 @@ def create_slack_json_message(issues: list) -> dict:
         "elements": [
             {
                 "type": "mrkdwn",
-                "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
+                "text": ":testops-notify: Created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
             }
         ]
     })
