@@ -13,7 +13,7 @@ def get_new_issues_json(repo_owner: str, repo_name: str, timeout: int = 15) -> l
     yesterday = datetime.now(UTC) - timedelta(days=1)
     since_timestamp = yesterday.strftime('%Y-%m-%dT%H:%M:%SZ')
     
-    github_issues_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/issues?state=open&since={since_timestamp}"
+    github_issues_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/issues?state=open&per_page=100&since={since_timestamp}"
 
     try:
         response = requests.get(github_issues_url, timeout=timeout)
