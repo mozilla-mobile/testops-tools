@@ -42,6 +42,8 @@ def extract_title_and_url(issues_json: list) -> list:
     return issues_list
 
 def create_slack_json_message(issues: list) -> dict:
+    current_date = datetime.now(UTC).strftime('%Y-%m-%d')
+    
     if not issues:
         return {
             "blocks": [
@@ -49,7 +51,7 @@ def create_slack_json_message(issues: list) -> dict:
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": ":white_check_mark: No New GitHub Issues in the last 24 hours",
+                        "text": f":white_check_mark: No New GitHub Issues ({current_date})",
                         "emoji": True
                     }
                 },
@@ -66,12 +68,13 @@ def create_slack_json_message(issues: list) -> dict:
         }
     
     # Create blocks with each issue as a section
+    current_date = datetime.now(UTC).strftime('%Y-%m-%d')
     blocks = [
         {
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": f":github: {len(issues)} New GitHub Issues (last 24 hours)",
+                "text": f":github: New GitHub Issues ({current_date})",
                 "emoji": True
             }
         }
