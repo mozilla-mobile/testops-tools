@@ -29,6 +29,7 @@ jobs:
           API_URL: "https://sql.telemetry.mozilla.org/api/queries/111166/results.json"
           API_KEY: ${{ secrets.REDASH_BILLING_QUERIES_API_KEY_111166 }}
           QUERY_TYPE: "weekly"
+          TASK_DELTA_QUERY_URL: "https://sql.telemetry.mozilla.org/queries/114534#280741"
 
       - name: Send Weekly Summary to Slack
         uses: slackapi/slack-github-action@v2.1.1
