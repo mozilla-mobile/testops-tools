@@ -64,6 +64,11 @@ def format_weekly_summary(rows: List[Dict]) -> str:
         f"- Week before that: ${previous:,.2f}",
         f"- Change: {trend} {pct_change:+.2f}% (${delta:+,.2f})",
     ]
+
+    task_delta_query_url = os.getenv("TASK_DELTA_QUERY_URL")
+    if task_delta_query_url:
+        lines.append(f"\n<{task_delta_query_url}|View CI Task Volume Changes>")
+
     return "\n".join(lines)
 
 
