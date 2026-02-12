@@ -20,14 +20,17 @@
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Medium |
+| a13 | Galaxy A13 | 34 | Low |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
+| a14xmtfn | Galaxy A14 5G | 35 | Low |
 | a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
 | a15x | Samsung A15 5G | 36 | Low |
 | a16 | Samsung SM-A165M | 35 | Low |
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
+| a21 | Galaxy A21 | 31 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
 | a34x | Samsung SM-A346N | 36 | Low |
@@ -63,6 +66,7 @@
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
+| dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | S23 Plus | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
@@ -73,6 +77,7 @@
 | e2s | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
 | e3q | Galaxy S24 Ultra | 36 | Low |
+| e3qcsx | Galaxy S24 Ultra | 36 | Low |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
@@ -117,6 +122,7 @@
 | p3q | Galaxy S21 Ultra | 35 | Low |
 | pa1q | Samsung S25 | 36 | High |
 | pa2q | Samsung S25+ | 36 | Low |
+| pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
 | pa3q | Galaxy S25 Ultra | 36 | Medium |
 | pa3qxxx | Samsung S25 Ultra | 36 | Low |
