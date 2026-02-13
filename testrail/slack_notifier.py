@@ -165,6 +165,20 @@ SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS = Template(
         }
     },
     {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": ":white_check_mark: Automated Full Functional Test - iPhone 16 (iOS 18.2)"
+        }
+    },
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": ":white_check_mark: Automated Full Functional Test - iPad mini (6th generation) (iOS 18.2)"
+        }
+    },
+    {
         "type": "divider"
     },
     {
