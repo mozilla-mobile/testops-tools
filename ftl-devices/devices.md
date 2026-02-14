@@ -9,7 +9,8 @@
 | OP5552L1 | CPH2415 | 34 | Medium |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
-| SH-01L | AQUOS sense2 SH-01L | 28 | Medium |
+| SC-53C | Galaxy A53 5G | 36 | None |
+| SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Medium |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
@@ -23,6 +24,7 @@
 | a13 | Galaxy A13 | 34 | Low |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
+| a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | Low |
 | a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
@@ -30,6 +32,7 @@
 | a16 | Samsung SM-A165M | 35 | Low |
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
+| a16x | Samsung A16 5G | 36 | Low |
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
