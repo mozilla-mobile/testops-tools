@@ -14,10 +14,17 @@ TEST_FUNC_RE = re.compile(r"^\s*func\s+(test[A-Za-z0-9_]+)\s*\(")
 #   // Smoke TAE
 SMOKE_RE = re.compile(r"^\s*//\s*smoke(test)?\b.*$", re.IGNORECASE)
 
-# Directories to ignore entirely
-IGNORED_DIRS = {
+# Patterns to ignore (both as directory names and file prefixes)
+IGNORED_PATTERNS = {
+    "A11y",
     "ExperimentIntegrationTests",
     "PerformanceTests",
+}
+
+# Specific file names to ignore
+IGNORED_FILES = {
+    "SiteLoadTest.swift",
+    "ScreenGraphTest.swift",
 }
 
 
@@ -68,21 +75,17 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None) -> b
 
 
 def should_ignore_file(path: Path) -> bool:
-    # Ignore accessibility tests
-    if path.name.startswith("A11y"):
+    # Ignore specific file names
+    if path.name in IGNORED_FILES:
         return True
 
-    # Ignore performance test files by name (e.g. PerformanceTests.swift)
-    if path.name.startswith("PerformanceTests"):
-        return True
-
-    # Ignore performance test files by name (e.g. PerformanceTests.swift)
-    if path.name.startswith("ExperimentIntegrationTests"):
-        return True
-
-    # Ignore specific directories anywhere in the path
-    for part in path.parts:
-        if part in IGNORED_DIRS:
+    # Ignore files by prefix or directories by name
+    for pattern in IGNORED_PATTERNS:
+        # Check if filename starts with pattern
+        if path.name.startswith(pattern):
+            return True
+        # Check if any directory in path matches pattern
+        if pattern in path.parts:
             return True
 
     return False
