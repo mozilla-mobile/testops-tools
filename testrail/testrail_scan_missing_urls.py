@@ -165,12 +165,23 @@ def main() -> int:
         return 0
 
     print(f"\n❌ Found {len(all_missing)} tests missing TestRail URLs:\n")
+    print(f"\n❌ Found {len(all_missing)} tests missing TestRail URLs:\n")
+
+    # Solo los nombres
+    test_names = [item.test_name for item in all_missing]
+
+    # Lista bonita para Slack (bullets + backticks)
+    missing_list = "\n".join(f"• `{t}`" for t in test_names)
+
+    # Esto lo leerá GitHub Actions como outputs/env multilínea
+    print("MISSING_COUNT=" + str(len(test_names)))
+    print("MISSING_LIST<<EOF")
+    print(missing_list)
+    print("EOF")
+
+    # (opcional) también lo imprimes “humano” para el log
     for item in all_missing:
-        p1 = item.prev1.strip() or "<empty>"
-        p2 = item.prev2.strip() or "<empty>"
         print(f"- {item.file}:{item.line_no}  {item.test_name}")
-        print(f"  prev1: {p1}")
-        print(f"  prev2: {p2}")
 
     return 1 if args.fail else 0
 

@@ -17,7 +17,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST_ESCAPED }}"
+        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST }}"
       }
     }
   ]
