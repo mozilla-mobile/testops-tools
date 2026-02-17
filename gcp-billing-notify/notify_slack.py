@@ -46,10 +46,12 @@ def format_monthly_summary(rows: List[Dict]) -> str:
     return "\n".join(lines)
 
 
-def format_weekly_summary(rows: List[Dict]) -> str:
-    """Format rows into an ALERT/NO ALERT weekly budget status."""
+def format_weekly_summary(rows: List[Dict]) -> tuple[str, str]:
+    """Format rows into an ALERT/NO ALERT weekly budget status.
+    Returns (summary_text, billing_color) tuple.
+    """
     if not rows:
-        return "_No weekly spend data available._"
+        return "_No weekly spend data available._", "#2EB886"
 
     row = rows[0]
     current          = row.get("current_week_cost", 0.0)
@@ -74,7 +76,10 @@ def format_weekly_summary(rows: List[Dict]) -> str:
     if task_delta_query_url:
         lines.append(f"\n<{task_delta_query_url}|View CI Task Volume Changes>")
 
-    return "\n".join(lines)
+    # Red if either metric is over budget, green if both within budget
+    billing_color = "#ff0000" if (over_weekly or over_ytd) else "#36a64f"
+
+    return "\n".join(lines), billing_color
 
 
 def format_daily_summary(rows: List[Dict]) -> str:
@@ -118,9 +123,15 @@ def main():
 
     if query_type not in FORMATTERS:
         raise ValueError(f"Unsupported query type: {query_type}")
-    summary_text = FORMATTERS[query_type](rows)
 
-    export_env_vars(summary_text)
+    result = FORMATTERS[query_type](rows)
+
+    # Weekly formatter returns (text, billing_color) tuple
+    if isinstance(result, tuple):
+        summary_text, billing_color = result
+        export_env_vars(summary_text, job_status_color=billing_color)
+    else:
+        export_env_vars(result)
 
 
 if __name__ == "__main__":
