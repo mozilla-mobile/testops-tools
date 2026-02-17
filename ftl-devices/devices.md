@@ -75,7 +75,7 @@
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
-| e1q | Galaxy S24 | 36 | Medium |
+| e1q | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24 + | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Medium |
@@ -153,7 +153,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
-| tokay | Pixel 9 | 36 | Low |
+| tokay | Pixel 9 | 36 | Medium |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | S20 Plus 5G | 33 | Low |
