@@ -47,22 +47,27 @@ def format_monthly_summary(rows: List[Dict]) -> str:
 
 
 def format_weekly_summary(rows: List[Dict]) -> str:
-    """Format rows into a weekly spend comparison (current vs previous)."""
+    """Format rows into an ALERT/NO ALERT weekly budget status."""
     if not rows:
         return "_No weekly spend data available._"
 
     row = rows[0]
-    current = row.get("current_week_cost", 0.0)
-    previous = row.get("previous_week_cost", 0.0)
-    delta = row.get("delta", 0.0)
-    pct_change = row.get("pct_change", 0.0)
-    trend = row.get("trend", "")
+    current          = row.get("current_week_cost", 0.0)
+    weekly_budget    = row.get("weekly_budget", 0.0)
+    over_weekly      = row.get("over_weekly_budget", False)
+    ytd_actual       = row.get("ytd_actual", 0.0)
+    ytd_budget       = row.get("ytd_budget", 0.0)
+    over_ytd         = row.get("over_ytd_budget", False)
+
+    weekly_emoji  = "🔴" if over_weekly else "✅"
+    weekly_status = "OVER BUDGET" if over_weekly else "WITHIN BUDGET"
+    ytd_emoji     = "🔴" if over_ytd else "✅"
+    ytd_status    = "OVER BUDGET" if over_ytd else "WITHIN BUDGET"
 
     lines = [
-        "*Weekly Billing Trend*",
-        f"- Last complete week: ${current:,.2f}",
-        f"- Week before that: ${previous:,.2f}",
-        f"- Change: {trend} {pct_change:+.2f}% (${delta:+,.2f})",
+        "*Weekly Billing Status*",
+        f"- Previous week {weekly_emoji} *{weekly_status}*: budget ${weekly_budget:,.2f}, actual ${current:,.2f}",
+        f"- YTD {ytd_emoji} *{ytd_status}*: budget ${ytd_budget:,.2f}, actual ${ytd_actual:,.2f}",
     ]
 
     task_delta_query_url = os.getenv("TASK_DELTA_QUERY_URL")
