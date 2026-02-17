@@ -14,10 +14,17 @@ TEST_FUNC_RE = re.compile(r"^\s*func\s+(test[A-Za-z0-9_]+)\s*\(")
 #   // Smoke TAE
 SMOKE_RE = re.compile(r"^\s*//\s*smoke(test)?\b.*$", re.IGNORECASE)
 
-# Directories to ignore entirely
-IGNORED_DIRS = {
+# Patterns to ignore (both as directory names and file prefixes)
+IGNORED_PATTERNS = {
+    "A11y",
     "ExperimentIntegrationTests",
     "PerformanceTests",
+}
+
+# Specific file names to ignore
+IGNORED_FILES = {
+    "SiteLoadTest.swift",
+    "ScreenGraphTest.swift",
 }
 
 
@@ -68,21 +75,17 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None) -> b
 
 
 def should_ignore_file(path: Path) -> bool:
-    # Ignore accessibility tests
-    if path.name.startswith("A11y"):
+    # Ignore specific file names
+    if path.name in IGNORED_FILES:
         return True
 
-    # Ignore performance test files by name (e.g. PerformanceTests.swift)
-    if path.name.startswith("PerformanceTests"):
-        return True
-
-    # Ignore performance test files by name (e.g. PerformanceTests.swift)
-    if path.name.startswith("ExperimentIntegrationTests"):
-        return True
-
-    # Ignore specific directories anywhere in the path
-    for part in path.parts:
-        if part in IGNORED_DIRS:
+    # Ignore files by prefix or directories by name
+    for pattern in IGNORED_PATTERNS:
+        # Check if filename starts with pattern
+        if path.name.startswith(pattern):
+            return True
+        # Check if any directory in path matches pattern
+        if pattern in path.parts:
             return True
 
     return False
@@ -162,12 +165,23 @@ def main() -> int:
         return 0
 
     print(f"\n❌ Found {len(all_missing)} tests missing TestRail URLs:\n")
+    print(f"\n❌ Found {len(all_missing)} tests missing TestRail URLs:\n")
+
+    # Solo los nombres
+    test_names = [item.test_name for item in all_missing]
+
+    # Lista bonita para Slack (bullets + backticks)
+    missing_list = "\n".join(f"• `{t}`" for t in test_names)
+
+    # Esto lo leerá GitHub Actions como outputs/env multilínea
+    print("MISSING_COUNT=" + str(len(test_names)))
+    print("MISSING_LIST<<EOF")
+    print(missing_list)
+    print("EOF")
+
+    # (opcional) también lo imprimes “humano” para el log
     for item in all_missing:
-        p1 = item.prev1.strip() or "<empty>"
-        p2 = item.prev2.strip() or "<empty>"
         print(f"- {item.file}:{item.line_no}  {item.test_name}")
-        print(f"  prev1: {p1}")
-        print(f"  prev2: {p2}")
 
     return 1 if args.fail else 0
 

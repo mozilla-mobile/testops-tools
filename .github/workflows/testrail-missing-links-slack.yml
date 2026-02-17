@@ -85,14 +85,16 @@ jobs:
             echo "None 🎉" > missing_bullets.txt
           fi
 
-      - name: Prepare Slack-safe list (escape newlines)
+      - name: Prepare Slack list (multiline)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
         shell: bash
         run: |
           set -euo pipefail
-          # Convert literal newlines into "\n" so JSON templating remains valid
-          LIST=$(python -c "import sys; print(sys.stdin.read().replace('\n','\\\\n').strip())" < missing_bullets.txt)
-          echo "MISSING_LIST_ESCAPED=$LIST" >> $GITHUB_ENV
+          {
+            echo "MISSING_LIST<<EOF"
+            cat missing_bullets.txt
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       - name: Publish summary (visible in GitHub UI)
         if: always()
