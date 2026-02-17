@@ -62,9 +62,9 @@ def format_weekly_summary(rows: List[Dict]) -> tuple[str, str]:
     over_ytd         = row.get("over_ytd_budget", False)
 
     weekly_emoji  = "🔴" if over_weekly else "✅"
-    weekly_status = "OVER BUDGET" if over_weekly else "WITHIN BUDGET"
+    weekly_status = "OFF PACE" if over_weekly else "ON PACE"
     ytd_emoji     = "🔴" if over_ytd else "✅"
-    ytd_status    = "OVER BUDGET" if over_ytd else "WITHIN BUDGET"
+    ytd_status    = "OFF PACE" if over_ytd else "ON PACE"
 
     lines = [
         "*Weekly Billing Status*",
