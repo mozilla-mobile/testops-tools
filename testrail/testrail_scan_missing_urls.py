@@ -13,8 +13,8 @@ from typing import Iterator
 # Swift: func testName()
 SWIFT_TEST_FUNC_RE = re.compile(r"^\s*func\s+(test[A-Za-z0-9_]+)\s*\(")
 
-# Kotlin: fun testName() or @Test annotation
-KOTLIN_TEST_FUNC_RE = re.compile(r"^\s*fun\s+(test[A-Za-z0-9_]+)\s*\(")
+# Kotlin: Any function (we rely on @Test annotation to identify tests)
+KOTLIN_TEST_FUNC_RE = re.compile(r"^\s*fun\s+([A-Za-z0-9_]+)\s*\(")
 KOTLIN_TEST_ANNOTATION_RE = re.compile(r"^\s*@Test\b")
 
 # Accept both:
@@ -352,6 +352,10 @@ def scan_file(
             # If we were expecting a test function after @Test, reset
             if pending_test_annotation and line.strip() and not line.strip().startswith("//"):
                 pending_test_annotation = False
+            continue
+
+        # For Android, only process functions that have @Test annotation
+        if platform == "android" and not pending_test_annotation:
             continue
 
         found_tests += 1
