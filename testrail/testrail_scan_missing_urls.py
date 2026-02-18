@@ -28,8 +28,14 @@ IOS_IGNORED_DIRS = {
     "PerformanceTests",
 }
 
+# Specific files to ignore (iOS)
+IOS_IGNORED_FILES = {
+    "ScreenGraphTest.swift",
+    "SiteLoadTest.swift",
+}
+
 # Directories to ignore entirely (Android)
-ANDROID_IGNORED_DIRS: set[str] = set()
+ANDROID_IGNORED_DIRS = set()
 
 
 @dataclass(frozen=True)
@@ -234,18 +240,36 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         if is_testrail_url_line(prev1, testrail_domain):
             return True
 
+        # If prev1 is a Smoke marker, skip over any intermediate comments
+        # to find the TestRail URL
         if SMOKE_RE.match(prev1):
-            if func_idx < 2:
-                return False
-            prev2 = lines[func_idx - 2]
-            return is_testrail_url_line(prev2, testrail_domain)
+            idx = func_idx - 2  # Start from line before Smoke marker
+            while idx >= 0:
+                line = lines[idx].strip()
+                # Skip empty lines
+                if not line:
+                    idx -= 1
+                    continue
+                # If we find a TestRail URL, we're linked
+                if is_testrail_url_line(lines[idx], testrail_domain):
+                    return True
+                # If we hit a non-comment line (not starting with //), stop
+                if not line.startswith("//"):
+                    return False
+                # Skip over regular comments and keep looking
+                idx -= 1
+            return False
 
         return False
 
 
-def should_ignore_file(path: Path, ignored_dirs: set[str], platform: str) -> bool:
+def should_ignore_file(path: Path, ignored_dirs: set, platform: str) -> bool:
     # Platform-specific ignore patterns
     if platform == "ios":
+        # Ignore specific files by name
+        if path.name in IOS_IGNORED_FILES:
+            return True
+
         # Ignore accessibility tests
         if path.name.startswith("A11y"):
             return True
