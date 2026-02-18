@@ -105,18 +105,3 @@ jobs:
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
           branch: ${{ github.ref_name }}
-
-      - name: Notify Slack (Success)
-        uses: slackapi/slack-github-action@v2.1.1
-        if: ${{ success() }}
-        with:
-           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-success.json
-           payload-templated: true 
-           webhook:  ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
-           webhook-type: incoming-webhook
-        env:
-          uploaded: ${{ steps.upload-file.outputs.uploaded }}
-          server_url: ${{ github.server_url }}
-          repository: ${{ github.repository }}
-          run_id: ${{ github.run_id }}
-          branch: ${{ github.ref_name }}
