@@ -232,33 +232,57 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         return False
 
     else:  # iOS/Swift
-        prev1 = lines[func_idx - 1]
+        prev1 = lines[func_idx - 1].strip()
 
-        if prev1.strip() == "":
+        if not prev1:
             return False
 
-        if is_testrail_url_line(prev1, testrail_domain):
+        # Direct TestRail URL above function
+        if is_testrail_url_line(lines[func_idx - 1], testrail_domain):
             return True
 
-        # If prev1 is a Smoke marker, skip over any intermediate comments
+        # Check if we need to skip over comments (single-line or multi-line)
         # to find the TestRail URL
-        if SMOKE_RE.match(prev1):
-            idx = func_idx - 2  # Start from line before Smoke marker
+        idx = func_idx - 1
+        in_multiline_comment = False
+
+        # If prev1 is closing a multiline comment or is a Smoke marker,
+        # we need to search upward
+        if prev1.endswith("*/") or prev1.startswith("*") or SMOKE_RE.match(lines[func_idx - 1]):
+            # Skip upward over comments
             while idx >= 0:
                 line = lines[idx].strip()
+
                 # Skip empty lines
                 if not line:
                     idx -= 1
                     continue
-                # If we find a TestRail URL, we're linked
+
+                # Check if this line is a TestRail URL
                 if is_testrail_url_line(lines[idx], testrail_domain):
                     return True
-                # If we hit a non-comment line (not starting with //), stop
-                if not line.startswith("//"):
-                    return False
-                # Skip over regular comments and keep looking
-                idx -= 1
-            return False
+
+                # Handle multiline comment end: */
+                if line.endswith("*/"):
+                    in_multiline_comment = True
+                    idx -= 1
+                    continue
+
+                # Inside multiline comment: lines starting with * or /**
+                if in_multiline_comment:
+                    if line.startswith("/**") or line.startswith("/*"):
+                        # Found start of multiline comment, exit it
+                        in_multiline_comment = False
+                    idx -= 1
+                    continue
+
+                # Single-line comments starting with //
+                if line.startswith("//"):
+                    idx -= 1
+                    continue
+
+                # Hit a non-comment line, stop searching
+                return False
 
         return False
 
