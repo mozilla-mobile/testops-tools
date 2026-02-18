@@ -139,15 +139,28 @@ jobs:
             if [ -f missing_items.txt ] && [ "$(wc -l < missing_items.txt | tr -d ' ')" -gt 0 ]; then
               echo "### Tests missing TestRail URL"
               echo ""
-              echo "> Showing up to 50 test names"
+              TOTAL_MISSING=$(wc -l < missing_items.txt | tr -d ' ')
+              if [ "$TOTAL_MISSING" -gt 100 ]; then
+                echo "> Showing first 100 of $TOTAL_MISSING tests. Download the artifact for the complete list."
+              else
+                echo "> Showing all $TOTAL_MISSING tests"
+              fi
               echo ""
               echo '```'
-              head -n 50 missing_items.txt | sed 's/^.*  //'
+              head -n 100 missing_items.txt | sed 's/^.*  //'
               echo '```'
             else
               echo "✅ No missing TestRail URLs found."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload missing tests report
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-testrail-urls-${{ matrix.platform }}
+          path: missing_items.txt
+          retention-days: 30
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
