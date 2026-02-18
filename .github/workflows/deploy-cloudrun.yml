@@ -1,0 +1,70 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]   # change if you deploy from a different branch
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # IMPORTANT: set this to your GitHub Environment name (e.g., "dev", "prod", "vertex-hack")
+    environment: vertex-hack
+
+    env:
+      # Repo/global (or environment) variables
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      GCP_REGION: ${{ vars.GCP_REGION }}
+      CLOUD_RUN_SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+
+      # Image naming (Artifact Registry)
+      AR_REPO: ${{ vars.AR_REPO }}              # e.g. "llm"
+      AR_IMAGE: ${{ vars.AR_IMAGE }}            # e.g. "gemini-llm"
+      IMAGE_URI: ${{ vars.GCP_REGION }}-docker.p
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Authenticate to Google Cloud (JSON key)
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Configure gcloud project
+        run: gcloud --quiet config set project "${GCP_PROJECT_ID}"
+
+      - name: Build container image with Cloud Build
+        run: |
+          set -euo pipefail
+          gcloud builds submit --tag "${IMAGE_URI}"
+
+      - name: Deploy to Cloud Run
+        run: |
+          set -euo pipefail
+
+          # Build env var string from GitHub Environment variables
+          ENV_VARS="PIPELINE_MODE=${{ vars.PIPELINE_MODE }},ENABLE_BQ_WRITE=${{ vars.ENABLE_BQ_WRITE }},BQ_DATASET=${{ vars.BQ_DATASET }},BQ_NOTES_TABLE=${{ vars.BQ_NOTES_TABLE }},VERTEX_LOCATION=${{ vars.VERTEX_LOCATION }},VERTEX_EMBEDDING_MODEL=${{ vars.VERTEX_EMBEDDING_MODEL }},VERTEX_LLM_MODEL=${{ vars.VERTEX_LLM_MODEL }},LOG_LEVEL=${{ vars.LOG_LEVEL }},DEBUG_RAG=${{ vars.DEBUG_RAG }}"
+
+          gcloud run deploy "${CLOUD_RUN_SERVICE}" \
+            --image "${IMAGE_URI}" \
+            --region "${GCP_REGION}" \
+            --platform managed \
+            --set-env-vars "${ENV_VARS}"
+
+      - name: Show service URL
+        run: |
+          set -euo pipefail
+          gcloud run services describe "${CLOUD_RUN_SERVICE}" \
+            --region "${GCP_REGION}" \
+            --format="value(status.url)"

@@ -1,7 +1,9 @@
-# Vim artifacts
-*.sw?
-.*.sw?
-*~ 
-4913
-
-.DS_Store
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv
+venv
+.git
+.pytest_cache

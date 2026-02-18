@@ -4,3 +4,5 @@ google-cloud-aiplatform
 google-cloud-storage
 pydantic
 python-multipart
+google-cloud-bigquery
+google-cloud-core
