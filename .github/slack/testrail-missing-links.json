@@ -1,9 +1,9 @@
 {
-  "text": "XCUITests missing TestRail URLs",
+  "text": "${{ env.PLATFORM_NAME }} - Missing TestRail URLs",
   "blocks": [
     {
       "type": "header",
-      "text": { "type": "plain_text", "text": "❌ XCUITests missing TestRail URLs" }
+      "text": { "type": "plain_text", "text": "❌ ${{ env.PLATFORM_NAME }} - Missing TestRail URLs" }
     },
     {
       "type": "section",
