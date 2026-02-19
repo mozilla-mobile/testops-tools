@@ -1,4 +1,5 @@
 {
+    "channel": "${{ secrets.SLACK_MOBILE_TOOLING_CHANNEL_ID }}",
     "blocks": [
       {
         "type": "header",
