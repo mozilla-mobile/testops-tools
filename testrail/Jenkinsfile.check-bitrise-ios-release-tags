@@ -86,8 +86,9 @@ pipeline {
                             git commit -m 'Automated update of latest_tags'
                             REPO_URL=$(git config --get remote.origin.url)
                             if [[ $REPO_URL == https://* ]]; then
-                                # Use only token for GitHub (avoids @ in username issues)
-                                REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_TOKEN}@|")
+                                # Extract the host and path, rebuild with token
+                                REPO_PATH="${REPO_URL#https://}"
+                                REPO_URL="https://${GIT_TOKEN}@${REPO_PATH}"
                             fi
                             # Push to main branch (Jenkins runs in detached HEAD state)
                             git push $REPO_URL HEAD:refs/heads/main
