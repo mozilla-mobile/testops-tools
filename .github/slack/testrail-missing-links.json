@@ -12,13 +12,5 @@
         { "type": "mrkdwn", "text": "*Workflow run:*\n${{ env.JOB_LOG_URL }}" }
       ]
     },
-    { "type": "divider" },
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST }}"
-      }
-    }
   ]
 }

@@ -97,32 +97,6 @@ jobs:
           echo "missing_count=$MISSING_COUNT" >> $GITHUB_OUTPUT
           echo "MISSING_COUNT=$MISSING_COUNT" >> $GITHUB_ENV
 
-          # Build a compact Slack list (test names only) to avoid Slack payload limits
-          MAX_LINES=15
-          if [ "$MISSING_COUNT" -gt 0 ]; then
-            head -n "$MAX_LINES" missing_items.txt \
-              | sed 's/^.*  //' \
-              | awk '{print "• " $0}' \
-              > missing_bullets.txt
-
-            if [ "$MISSING_COUNT" -gt "$MAX_LINES" ]; then
-              echo "• …and $((MISSING_COUNT - MAX_LINES)) more (see workflow run)" >> missing_bullets.txt
-            fi
-          else
-            echo "None 🎉" > missing_bullets.txt
-          fi
-
-      - name: Prepare Slack list (multiline)
-        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          {
-            echo "MISSING_LIST<<EOF"
-            cat missing_bullets.txt
-            echo "EOF"
-          } >> $GITHUB_ENV
-
       - name: Publish summary (visible in GitHub UI)
         if: always()
         shell: bash
