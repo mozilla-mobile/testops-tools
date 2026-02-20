@@ -11,6 +11,6 @@
         { "type": "mrkdwn", "text": "*Missing tests:*\n${{ env.MISSING_COUNT }}" },
         { "type": "mrkdwn", "text": "*Workflow run:*\n${{ env.JOB_LOG_URL }}" }
       ]
-    },
+    }
   ]
 }
