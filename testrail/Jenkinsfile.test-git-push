@@ -41,7 +41,8 @@ pipeline {
                             echo "🧪 Testing push to branch: ${TEST_BRANCH}"
 
                             # Configure git to use token via credential helper (avoids URL encoding issues)
-                            git config --local credential.helper '!f() { echo "username=${GIT_TOKEN}"; echo "password=x-oauth-basic"; }; f'
+                            # For GitHub PAT: use GitHub username from credential with token as password
+                            git config --local credential.helper '!f() { echo "username=${GIT_USERNAME}"; echo "password=${GIT_TOKEN}"; }; f'
 
                             # Push using credential helper
                             git push https://github.com/mozilla-mobile/testops-tools.git "HEAD:refs/heads/${TEST_BRANCH}"
