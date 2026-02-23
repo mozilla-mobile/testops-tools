@@ -29,7 +29,9 @@ pipeline {
                     '''
 
                     // Test the new authentication method
-                    withCredentials([string(credentialsId: 'github-token', variable: 'GIT_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'github-token',
+                                                      usernameVariable: 'GIT_USERNAME',
+                                                      passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
                             set -e
                             git commit -m 'Test:验证 git push con token'
