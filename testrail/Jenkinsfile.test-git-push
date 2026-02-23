@@ -34,14 +34,17 @@ pipeline {
                                                       passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
                             set -e
-                            git commit -m 'Test:验证 git push con token'
+                            git commit -m 'Test: git push con token'
 
                             # Create test branch with timestamp
                             TEST_BRANCH="test-git-push-$(date +%Y%m%d-%H%M%S)"
                             echo "🧪 Testing push to branch: ${TEST_BRANCH}"
 
-                            # Test the token authentication
-                            git push "https://${GIT_TOKEN}@github.com/mozilla-mobile/testops-tools.git" "HEAD:refs/heads/${TEST_BRANCH}"
+                            # URL-encode the token to handle special characters
+                            ENCODED_TOKEN=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${GIT_TOKEN}', safe=''))")
+
+                            # Test the token authentication with encoded token
+                            git push "https://${ENCODED_TOKEN}@github.com/mozilla-mobile/testops-tools.git" "HEAD:refs/heads/${TEST_BRANCH}"
 
                             echo "✅ Successfully pushed to test branch: ${TEST_BRANCH}"
                             echo "🔗 View at: https://github.com/mozilla-mobile/testops-tools/tree/${TEST_BRANCH}"
