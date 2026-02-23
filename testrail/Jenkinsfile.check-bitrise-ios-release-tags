@@ -78,19 +78,12 @@ pipeline {
                         git config --global user.email 'jenkins@automation.local'
                         git add testrail/latest_tags.json
                     '''
-                    withCredentials([usernamePassword(credentialsId: 'github-token',
-                                                      usernameVariable: 'GIT_USERNAME',
-                                                      passwordVariable: 'GIT_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GIT_TOKEN')]) {
                         sh '''
                             set -e
                             git commit -m 'Automated update of latest_tags'
-                            REPO_URL=$(git config --get remote.origin.url)
-                            if [[ $REPO_URL == https://* ]]; then
-                                # Use only token for GitHub (avoids @ in username issues)
-                                REPO_URL=$(echo $REPO_URL | sed "s|https://|https://${GIT_TOKEN}@|")
-                            fi
-                            # Push to main branch (Jenkins runs in detached HEAD state)
-                            git push $REPO_URL HEAD:refs/heads/main
+                            # Use token-only authentication (no username needed for GitHub PAT)
+                            git push "https://${GIT_TOKEN}@github.com/mozilla-mobile/testops-tools.git" HEAD:refs/heads/main
                         '''
                     }
                     echo 'Changes committed and pushed successfully'
