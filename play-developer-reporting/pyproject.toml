@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "play-vitals-metrics"
+version = "0.1.0"
+description = "Query Google Play Developer Reporting API for Android vitals metrics"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MPL-2.0"
+authors = [{ name = "Mozilla Mobile Test Engineering" }]
+
+dependencies = [
+    "google-auth>=2.0",
+    "google-api-python-client>=2.190.0",
+    "tabulate>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+fetch-metrics = "fetch_metrics:main"
+
+[tool.setuptools]
+py-modules = ["fetch_metrics"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true

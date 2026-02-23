@@ -1,0 +1,23 @@
+name: Play Developer Reporting
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        working-directory: play-developer-reporting
+        run: docker build -t play-vitals .
+
+      - name: Run
+        run: |
+          docker run play-vitals
