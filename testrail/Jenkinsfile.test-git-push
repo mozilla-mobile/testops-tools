@@ -40,12 +40,22 @@ pipeline {
                             TEST_BRANCH="test-git-push-$(date +%Y%m%d-%H%M%S)"
                             echo "🧪 Testing push to branch: ${TEST_BRANCH}"
 
-                            # Configure git to use token via credential helper (avoids URL encoding issues)
-                            # For GitHub PAT: use GitHub username from credential with token as password
-                            git config --local credential.helper '!f() { echo "username=${GIT_USERNAME}"; echo "password=${GIT_TOKEN}"; }; f'
+                            # DEBUG: Check what we have (token will be masked by Jenkins)
+                            echo "DEBUG: Username = ${GIT_USERNAME}"
+                            echo "DEBUG: Token length = ${#GIT_TOKEN}"
 
-                            # Push using credential helper
-                            git push https://github.com/mozilla-mobile/testops-tools.git "HEAD:refs/heads/${TEST_BRANCH}"
+                            # Configure git to use token via credential helper
+                            # The helper must consume stdin before outputting credentials
+                            git config --local credential.helper '!f() {
+                                while IFS= read -r line; do
+                                    test -z "$line" && break
+                                done
+                                echo "username=${GIT_USERNAME}"
+                                echo "password=${GIT_TOKEN}"
+                            }; f'
+
+                            # Enable git credential debug
+                            GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push https://github.com/mozilla-mobile/testops-tools.git "HEAD:refs/heads/${TEST_BRANCH}"
 
                             echo "✅ Successfully pushed to test branch: ${TEST_BRANCH}"
                             echo "🔗 View at: https://github.com/mozilla-mobile/testops-tools/tree/${TEST_BRANCH}"
