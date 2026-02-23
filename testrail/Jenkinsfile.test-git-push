@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Test Git Push with Token') {
+            steps {
+                script {
+                    // Create a test file to commit
+                    sh '''
+                        set -e
+                        echo "Test commit at $(date)" > testrail/test-push.txt
+                        git config --global user.name 'jenkins-automation'
+                        git config --global user.email 'jenkins@automation.local'
+                        git add testrail/test-push.txt
+                    '''
+
+                    // Test the new authentication method
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GIT_TOKEN')]) {
+                        sh '''
+                            set -e
+                            git commit -m 'Test:验证 git push con token'
+
+                            # Create test branch with timestamp
+                            TEST_BRANCH="test-git-push-$(date +%Y%m%d-%H%M%S)"
+                            echo "🧪 Testing push to branch: ${TEST_BRANCH}"
+
+                            # Test the token authentication
+                            git push "https://${GIT_TOKEN}@github.com/mozilla-mobile/testops-tools.git" "HEAD:refs/heads/${TEST_BRANCH}"
+
+                            echo "✅ Successfully pushed to test branch: ${TEST_BRANCH}"
+                            echo "🔗 View at: https://github.com/mozilla-mobile/testops-tools/tree/${TEST_BRANCH}"
+                        '''
+                    }
+                    echo '✅ Git push test completed successfully!'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Test passed - git push with token works!'
+        }
+
+        failure {
+            echo '❌ Test failed - check the logs for errors'
+        }
+
+        cleanup {
+            cleanWs()
+        }
+    }
+}
