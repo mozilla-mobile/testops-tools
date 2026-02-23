@@ -1,4 +1,4 @@
-name: Detect firefox-ios XCUITests missing TestRail URL (Slack)
+name: Detect missing TestRail URLs (iOS & Android) (Slack)
 
 permissions: read-all
 
@@ -15,30 +15,50 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false  # Continue running other jobs even if one fails
+      matrix:
+        include:
+          - platform: ios
+            repo: mozilla-mobile/firefox-ios
+            repo_path: firefox-ios
+            test_path_pattern: "*XCUITests*"
+            platform_name: "iOS/Swift (XCUITests)"
+          - platform: android
+            repo: mozilla-firefox/firefox
+            repo_path: firefox
+            test_path: "mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui"
+            platform_name: "Android/Kotlin"
 
     steps:
       - name: Checkout testops-tools
         uses: actions/checkout@v6
 
-      - name: Checkout firefox-ios
+      - name: Checkout ${{ matrix.platform }} repo
         uses: actions/checkout@v6
         with:
-          repository: mozilla-mobile/firefox-ios
-          path: firefox-ios
+          repository: ${{ matrix.repo }}
+          path: ${{ matrix.repo_path }}
           fetch-depth: 1
-          ref: main
+          ref: ${{ matrix.platform == 'ios' && 'main' || '' }}
+          sparse-checkout: ${{ matrix.platform == 'android' && matrix.test_path || '' }}
+          sparse-checkout-cone-mode: false
 
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Set job log URL
         if: always()
         run: |
           echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+          echo "PLATFORM_NAME=${{ matrix.platform_name }}" >> $GITHUB_ENV
 
-      - name: Run detector (auto-discover root) and prepare Slack content
+      - name: Run detector and prepare Slack content
         id: scan
         shell: bash
         run: |
@@ -46,20 +66,27 @@ jobs:
 
           DOMAIN="mozilla.testrail.io"
 
-          FOUND_ROOT=$(find firefox-ios -type d -iname '*XCUITests*' -print -quit || true)
-          if [ -z "$FOUND_ROOT" ]; then
-            echo "ERROR: could not find an XCUITests directory under firefox-ios"
-            echo "Contents of firefox-ios top-level:"
-            ls -la firefox-ios || true
-            exit 2
+          if [ "${{ matrix.platform }}" = "ios" ]; then
+            # Auto-discover iOS test root
+            FOUND_ROOT=$(find ${{ matrix.repo_path }} -type d -iname '${{ matrix.test_path_pattern }}' -print -quit || true)
+            if [ -z "$FOUND_ROOT" ]; then
+              echo "ERROR: could not find test directory under ${{ matrix.repo_path }}"
+              ls -la ${{ matrix.repo_path }} || true
+              exit 2
+            fi
+            TEST_ROOT="$FOUND_ROOT"
+          else
+            # Use explicit Android path
+            TEST_ROOT="${{ matrix.repo_path }}/${{ matrix.test_path }}"
           fi
 
-          echo "Using discovered ROOT: $FOUND_ROOT"
-          echo "ROOT=$FOUND_ROOT" >> $GITHUB_ENV
+          echo "Using test root: $TEST_ROOT"
+          echo "ROOT=$TEST_ROOT" >> $GITHUB_ENV
 
           # Run the script
           python testrail/testrail_scan_missing_urls.py \
-            --root "$FOUND_ROOT" \
+            --platform ${{ matrix.platform }} \
+            --root "$TEST_ROOT" \
             --testrail-domain "$DOMAIN" \
             > testrail_missing_report.txt
 
@@ -70,41 +97,15 @@ jobs:
           echo "missing_count=$MISSING_COUNT" >> $GITHUB_OUTPUT
           echo "MISSING_COUNT=$MISSING_COUNT" >> $GITHUB_ENV
 
-          # Build a compact Slack list (test names only) to avoid Slack payload limits
-          MAX_LINES=15
-          if [ "$MISSING_COUNT" -gt 0 ]; then
-            head -n "$MAX_LINES" missing_items.txt \
-              | sed 's/^.*  //' \
-              | awk '{print "• " $0}' \
-              > missing_bullets.txt
-
-            if [ "$MISSING_COUNT" -gt "$MAX_LINES" ]; then
-              echo "• …and $((MISSING_COUNT - MAX_LINES)) more (see workflow run)" >> missing_bullets.txt
-            fi
-          else
-            echo "None 🎉" > missing_bullets.txt
-          fi
-
-      - name: Prepare Slack list (multiline)
-        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          {
-            echo "MISSING_LIST<<EOF"
-            cat missing_bullets.txt
-            echo "EOF"
-          } >> $GITHUB_ENV
-
       - name: Publish summary (visible in GitHub UI)
         if: always()
         shell: bash
         run: |
           {
-            echo "## TestRail URL check (XCUITests)"
+            echo "## TestRail URL check (${{ matrix.platform_name }})"
             echo ""
             echo "- **Missing count:** ${MISSING_COUNT:-0}"
-            echo "- **Repo scanned:** mozilla-mobile/firefox-ios"
+            echo "- **Repo scanned:** ${{ matrix.repo }}"
             echo "- **Root:** ${ROOT:-<unknown>}"
             echo "- **Workflow run:** ${JOB_LOG_URL}"
             echo ""
@@ -112,15 +113,28 @@ jobs:
             if [ -f missing_items.txt ] && [ "$(wc -l < missing_items.txt | tr -d ' ')" -gt 0 ]; then
               echo "### Tests missing TestRail URL"
               echo ""
-              echo "> Showing up to 50 test names"
+              TOTAL_MISSING=$(wc -l < missing_items.txt | tr -d ' ')
+              if [ "$TOTAL_MISSING" -gt 100 ]; then
+                echo "> Showing first 100 of $TOTAL_MISSING tests. Download the artifact for the complete list."
+              else
+                echo "> Showing all $TOTAL_MISSING tests"
+              fi
               echo ""
               echo '```'
-              head -n 50 missing_items.txt | sed 's/^.*  //'
+              head -n 100 missing_items.txt | sed 's/^.*  //'
               echo '```'
             else
               echo "✅ No missing TestRail URLs found."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload missing tests report
+        if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-testrail-urls-${{ matrix.platform }}
+          path: missing_items.txt
+          retention-days: 30
 
       - name: Send Slack notification (only if missing links exist)
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}

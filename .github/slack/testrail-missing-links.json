@@ -1,9 +1,9 @@
 {
-  "text": "XCUITests missing TestRail URLs",
+  "text": "${{ env.PLATFORM_NAME }} - Missing TestRail URLs",
   "blocks": [
     {
       "type": "header",
-      "text": { "type": "plain_text", "text": "❌ XCUITests missing TestRail URLs" }
+      "text": { "type": "plain_text", "text": "❌ ${{ env.PLATFORM_NAME }} - Missing TestRail URLs" }
     },
     {
       "type": "section",
@@ -11,14 +11,6 @@
         { "type": "mrkdwn", "text": "*Missing tests:*\n${{ env.MISSING_COUNT }}" },
         { "type": "mrkdwn", "text": "*Workflow run:*\n${{ env.JOB_LOG_URL }}" }
       ]
-    },
-    { "type": "divider" },
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "*Tests needing a TestRail URL:*\n${{ env.MISSING_LIST }}"
-      }
     }
   ]
 }
