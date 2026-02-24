@@ -152,7 +152,7 @@
 | tangorpro | Pixel Tablet | 33 | High |
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
-| tokay | Pixel 9 | 35 | High |
+| tokay | Pixel 9 | 35 | Medium |
 | tokay | Pixel 9 | 36 | Medium |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
