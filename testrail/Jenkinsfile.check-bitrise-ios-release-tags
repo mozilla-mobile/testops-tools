@@ -84,14 +84,20 @@ pipeline {
                         sh '''
                             set -e
                             git commit -m 'Automated update of latest_tags'
+                            # Configure git to use token via credential helper (avoids URL encoding issues)
+                            git config --local credential.helper '!f() {
+                                while IFS= read -r line; do
+                                    test -z "$line" && break
+                                done
+                                echo "username=${GIT_USERNAME}"
+                                echo "password=${GIT_TOKEN}"
+                            }; f'
+
+                            # Get the repository URL from remote origin (no hardcoding)
                             REPO_URL=$(git config --get remote.origin.url)
-                            if [[ $REPO_URL == https://* ]]; then
-                                # Extract the host and path, rebuild with token
-                                REPO_PATH="${REPO_URL#https://}"
-                                REPO_URL="https://${GIT_TOKEN}@${REPO_PATH}"
-                            fi
+
                             # Push to main branch (Jenkins runs in detached HEAD state)
-                            git push $REPO_URL HEAD:refs/heads/main
+                            git push "$REPO_URL" HEAD:refs/heads/main
                         '''
                     }
                     echo 'Changes committed and pushed successfully'
