@@ -3,6 +3,11 @@ name: Gemini-LLM GCS Artifact Test
 on:
   workflow_dispatch:
     inputs:
+      seed_notes:
+        description: "Seed notes.json into BigQuery before analysis"
+        required: false
+        type: boolean
+        default: false
       use_prod_service_url:
         description: "Call the Cloud Run service after downloading artifacts"
         required: false
@@ -20,7 +25,7 @@ permissions:
   contents: read
 
 env:
-  GCP_PROJECT_ID: moz-testops-tools 
+  GCP_PROJECT_ID: moz-mobile-tools
   SERVICE_URL: ${{ secrets.LLM_PROD_SERVICE_URL }}
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
@@ -28,7 +33,39 @@ env:
   LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
+  seed-notes:
+    if: ${{ inputs.seed_notes == true }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r llm-cloud-run/requirements.txt
+
+      - name: Authenticate to Google Cloud (JSON key)
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_VERTEX_AI }}
+
+      - name: Seed notes into BigQuery
+        working-directory: llm-cloud-run
+        env:
+          GCP_PROJECT: moz-mobile-tools
+          BQ_PROJECT: moz-mobile-tools
+          BQ_DATASET: vertex_ai_tool
+        run: python seed_notes.py
+
   manual-run:
+    needs: [seed-notes]
+    # Always run this job, even when seed-notes is skipped
+    if: ${{ always() && !failure() && !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:
