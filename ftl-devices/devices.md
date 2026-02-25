@@ -67,6 +67,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
+| cuscoi | motorola edge 50 fusion | 35 | Low |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
@@ -146,6 +147,7 @@
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
+| stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Medium |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | t2q | Galaxy S21 Plus | 35 | Low |
