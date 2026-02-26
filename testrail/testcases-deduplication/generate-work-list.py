@@ -2,12 +2,21 @@
 """
 Generate prioritized work list for reviewing duplicates
 """
+import json
+import os
 import pandas as pd
 
 def generate_work_list():
     # Load data
     exact = pd.read_csv('duplicates_exact.csv')
     similar = pd.read_csv('similar_pairs.csv')
+
+    # Load total case count from stats file (written by find-duplicates.py)
+    total_cases = 0
+    if os.path.exists('analysis_stats.json'):
+        with open('analysis_stats.json') as f:
+            stats = json.load(f)
+        total_cases = stats.get('total_cases', 0)
 
     print("=" * 80)
     print("WORK LIST - TEST CASE DEDUPLICATION")
@@ -115,7 +124,12 @@ def generate_work_list():
     print("-" * 80)
     print(f"Phase 1 (Exact):      ~{total_to_archive} cases")
     print(f"Phase 2 (Similar):    ~60-80 cases")
-    print(f"GRAND TOTAL:          ~{total_to_archive + 70} cases ({((total_to_archive + 70) / 1578 * 100):.1f}% reduction)")
+    estimated_total = total_to_archive + 70
+    if total_cases > 0:
+        pct = estimated_total / total_cases * 100
+        print(f"GRAND TOTAL:          ~{estimated_total} cases ({pct:.1f}% reduction out of {total_cases} total)")
+    else:
+        print(f"GRAND TOTAL:          ~{estimated_total} cases")
     print()
     print("⏱️  Estimated time: 1-2 weeks")
     print("=" * 80)

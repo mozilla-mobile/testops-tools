@@ -1,3 +1,5 @@
+import argparse
+import json
 import pandas as pd
 import re
 import unicodedata
@@ -8,7 +10,6 @@ from sklearn.neighbors import NearestNeighbors
 
 
 # ---------- Configuration ----------
-INPUT_XLSX = "/Users/mbarone/Downloads/firefox_for_ios4.xlsx"  # File exported from testrail
 EXACT_OUTPUT = "duplicates_exact.csv"
 SIMILAR_OUTPUT = "similar_pairs.csv"
 
@@ -215,9 +216,17 @@ def load_and_normalize(path: str) -> pd.DataFrame:
     step_lists = []
     expected_lists = []
 
-    # Store CaseID and Title for later use
+    # Store CaseID, Title, and Section for later use
     raw["_case_id"] = raw[case_id_col]
     raw["_title"] = raw[title_col]
+
+    # Extract Section column (TestRail exports use "Section" or "Section Hierarchy")
+    if "Section" in raw.columns:
+        raw["_section"] = raw["Section"].fillna("").astype(str)
+    elif "Section Hierarchy" in raw.columns:
+        raw["_section"] = raw["Section Hierarchy"].fillna("").astype(str)
+    else:
+        raw["_section"] = ""
 
     for _, row in raw.iterrows():
         # Try different sources for steps in priority order:
@@ -289,6 +298,7 @@ def compute_semantic_pairs(df: pd.DataFrame) -> pd.DataFrame:
     texts = df["canonical_full_text"].tolist()
     case_ids = df["_case_id"].tolist()
     titles = df["_title"].fillna("").tolist()
+    sections = df["_section"].fillna("").tolist()
 
     # Local sentence-transformers model
     print("Loading embeddings model...")
@@ -332,8 +342,10 @@ def compute_semantic_pairs(df: pd.DataFrame) -> pd.DataFrame:
             rows.append({
                 "case_id_1": case_ids[i],
                 "title_1": titles[i],
+                "section_1": sections[i],
                 "case_id_2": case_ids[j],
                 "title_2": titles[j],
+                "section_2": sections[j],
                 "similarity": round(float(sim), 4),
                 "step_overlap": round(float(overlap), 4),
                 "relation": label,
@@ -345,10 +357,57 @@ def compute_semantic_pairs(df: pd.DataFrame) -> pd.DataFrame:
 
 # ---------- Main ----------
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Detect duplicate and similar test cases from a TestRail Excel export."
+    )
+    parser.add_argument(
+        "input_xlsx",
+        help="Path to the TestRail Excel export (.xlsx)",
+    )
+    parser.add_argument(
+        "--exact-output",
+        default=EXACT_OUTPUT,
+        help=f"Output CSV for exact duplicates (default: {EXACT_OUTPUT})",
+    )
+    parser.add_argument(
+        "--similar-output",
+        default=SIMILAR_OUTPUT,
+        help=f"Output CSV for similar pairs (default: {SIMILAR_OUTPUT})",
+    )
+    parser.add_argument(
+        "--dup-threshold",
+        type=float,
+        default=SEMANTIC_DUP_THRESHOLD,
+        help=f"Semantic similarity threshold for 'duplicate' label (default: {SEMANTIC_DUP_THRESHOLD})",
+    )
+    parser.add_argument(
+        "--sim-threshold",
+        type=float,
+        default=SEMANTIC_SIM_THRESHOLD,
+        help=f"Minimum similarity threshold to report a pair (default: {SEMANTIC_SIM_THRESHOLD})",
+    )
+    parser.add_argument(
+        "--overlap-threshold",
+        type=float,
+        default=STEP_OVERLAP_THRESHOLD,
+        help=f"Step overlap threshold for 'shares_most_steps' flag (default: {STEP_OVERLAP_THRESHOLD})",
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+
+    # Apply CLI overrides to module-level thresholds
+    global SEMANTIC_DUP_THRESHOLD, SEMANTIC_SIM_THRESHOLD, STEP_OVERLAP_THRESHOLD
+    SEMANTIC_DUP_THRESHOLD = args.dup_threshold
+    SEMANTIC_SIM_THRESHOLD = args.sim_threshold
+    STEP_OVERLAP_THRESHOLD = args.overlap_threshold
+
     try:
         print("Loading and normalizing data...")
-        df = load_and_normalize(INPUT_XLSX)
+        df = load_and_normalize(args.input_xlsx)
 
         print(f"Total test cases loaded: {len(df)}")
 
@@ -359,21 +418,30 @@ def main():
         print("Searching for exact duplicates...")
         exact_dups = find_exact_duplicates(df)
         if not exact_dups.empty:
-            exact_dups[["_case_id", "_title", "duplicate_group_id"]].to_csv(EXACT_OUTPUT, index=False)
-            print(f"Exact duplicates saved to {EXACT_OUTPUT}")
+            exact_dups[["_case_id", "_title", "_section", "duplicate_group_id"]].to_csv(args.exact_output, index=False)
+            print(f"Exact duplicates saved to {args.exact_output}")
         else:
             print("No exact duplicates found.")
 
         print("Searching for similar tests (semantic + steps)...")
         similar_pairs = compute_semantic_pairs(df)
         if not similar_pairs.empty:
-            similar_pairs.to_csv(SIMILAR_OUTPUT, index=False)
-            print(f"Similar pairs saved to {SIMILAR_OUTPUT}")
+            similar_pairs.to_csv(args.similar_output, index=False)
+            print(f"Similar pairs saved to {args.similar_output}")
         else:
             print("No similar pairs found with the defined thresholds.")
 
+        # Save stats for downstream scripts
+        stats = {
+            "total_cases": len(df),
+            "input_file": args.input_xlsx,
+        }
+        with open("analysis_stats.json", "w") as f:
+            json.dump(stats, f, indent=2)
+        print(f"Stats saved to analysis_stats.json")
+
     except FileNotFoundError:
-        print(f"Error: Input file '{INPUT_XLSX}' not found.")
+        print(f"Error: Input file '{args.input_xlsx}' not found.")
     except KeyError as e:
         print(f"Error: Required column not found in Excel file: {e}")
     except Exception as e:
