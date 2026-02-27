@@ -38,7 +38,7 @@ class Settings:
 
     # LLM + Embeddings
     gemini_model: str = _env("GEMINI_MODEL", "gemini-2.5-flash-lite") or "gemini-2.5-flash-lite"
-    embedding_model: str = _env("EMBEDDING_MODEL", "text-embedding-004") or "text-embedding-004"
+    embedding_model: str = _env("EMBEDDING_MODEL", "text-embedding-005") or "text-embedding-005"
 
     # Optional: cap how many notes to load into memory cache
     bq_max_notes: int = int(_env("BQ_MAX_NOTES", "5000") or "5000")
