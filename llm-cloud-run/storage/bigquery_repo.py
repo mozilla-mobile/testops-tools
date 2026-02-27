@@ -59,7 +59,33 @@ class BigQueryNotesRepository:
             )
         return notes
 
-    def insert_note(self, *, note_id: str, content: str, source: str | None = None) -> None:
+    def note_exists(self, note_id: str) -> bool:
+        """Check whether a note with the given ID already exists."""
+        s = self.settings
+        table_id = self._table(s.bq_notes_table)
+
+        query = f"""
+        SELECT 1 FROM `{table_id}`
+        WHERE {s.notes_id_col} = @note_id
+        LIMIT 1
+        """
+        job = self.client.query(
+            query,
+            job_config=bigquery.QueryJobConfig(
+                query_parameters=[bigquery.ScalarQueryParameter("note_id", "STRING", note_id)]
+            ),
+        )
+        return len(list(job.result())) > 0
+
+    def insert_note(
+        self,
+        *,
+        note_id: str,
+        content: str,
+        source: str | None = None,
+        signature: str | None = None,
+        match_regex: str | None = None,
+    ) -> None:
         s = self.settings
         table_id = self._table(s.bq_notes_table)
 
@@ -68,6 +94,11 @@ class BigQueryNotesRepository:
             s.notes_content_col: content,
             s.notes_source_col: source,
         }
+        if signature is not None:
+            row["signature"] = signature
+        if match_regex is not None:
+            row["match_regex"] = match_regex
+
         errors = self.client.insert_rows_json(table_id, [row])
         if errors:
             raise RuntimeError(f"BigQuery insert_note errors: {errors}")

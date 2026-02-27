@@ -3,6 +3,7 @@
 
 Reads each note, generates an embedding via Vertex AI, and inserts both
 the note and its embedding into the configured BigQuery tables.
+Skips notes that already exist (idempotent).
 
 Usage (requires GCP credentials via ADC or service account):
 
@@ -56,14 +57,24 @@ def seed(
     dry_run: bool = False,
 ) -> None:
     total = len(notes)
+    skipped = 0
+    inserted = 0
     logger.info("Seeding %d note(s) (dry_run=%s)", total, dry_run)
 
     for idx, note in enumerate(notes, start=1):
         note_id = note["id"]
         content = note["content"]
         source = note.get("source")
+        signature = note.get("signature")
+        match_regex = note.get("match_regex")
 
         logger.info("[%d/%d] Processing note %s …", idx, total, note_id)
+
+        # ── idempotency check ───────────────────────────────────────
+        if not dry_run and repo.note_exists(note_id):
+            logger.info("  Note %s already exists, skipping.", note_id)
+            skipped += 1
+            continue
 
         # ── generate embedding ──────────────────────────────────────
         logger.info("  Generating embedding (%s) …", settings.embedding_model)
@@ -78,17 +89,25 @@ def seed(
             logger.info("  [DRY-RUN] Would insert note and embedding for %s", note_id)
             continue
 
-        repo.insert_note(note_id=note_id, content=content, source=source)
+        repo.insert_note(
+            note_id=note_id,
+            content=content,
+            source=source,
+            signature=signature,
+            match_regex=match_regex,
+        )
         logger.info("  Inserted note %s", note_id)
 
         repo.insert_embedding(note_id=note_id, embedding=embedding)
         logger.info("  Inserted embedding for %s", note_id)
 
+        inserted += 1
+
         # Be polite to the Vertex AI quota (embedding API).
         if idx < total:
             time.sleep(0.25)
 
-    logger.info("Done – %d note(s) processed.", total)
+    logger.info("Done – %d inserted, %d skipped, %d total.", inserted, skipped, total)
 
 
 def main() -> None:
