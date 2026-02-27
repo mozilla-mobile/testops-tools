@@ -26,6 +26,7 @@ permissions:
 
 env:
   GCP_PROJECT_ID: moz-mobile-tools
+  BQ_DATASET: vertex_ai_tool
   SERVICE_URL: ${{ secrets.LLM_PROD_SERVICE_URL }}
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
@@ -57,10 +58,85 @@ jobs:
       - name: Seed notes into BigQuery
         working-directory: llm-cloud-run
         env:
-          GCP_PROJECT: moz-mobile-tools
-          BQ_PROJECT: moz-mobile-tools
-          BQ_DATASET: vertex_ai_tool
+          GCP_PROJECT: ${{ env.GCP_PROJECT_ID }}
+          BQ_PROJECT: ${{ env.GCP_PROJECT_ID }}
+          BQ_DATASET: ${{ env.BQ_DATASET }}
         run: python seed_notes.py
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Validate seeded data
+        run: |
+          set -euo pipefail
+
+          PROJECT="${GCP_PROJECT_ID}"
+          DATASET="${BQ_DATASET}"
+          NOTES_TABLE="${PROJECT}.${DATASET}.demo_Notes"
+          EMBEDDINGS_TABLE="${PROJECT}.${DATASET}.demo_NoteEmbeddings"
+
+          echo "::group::Checking demo_Notes"
+
+          NOTES_COUNT=$(bq query --nouse_legacy_sql --format=json \
+            "SELECT COUNT(*) AS cnt FROM \`${NOTES_TABLE}\`" | jq -r '.[0].cnt')
+          echo "Notes count: ${NOTES_COUNT}"
+
+          if [ "${NOTES_COUNT}" -eq 0 ]; then
+            echo "::error::demo_Notes is empty — seed did not write any rows"
+            exit 1
+          fi
+
+          NOTES_MISSING_FIELDS=$(bq query --nouse_legacy_sql --format=json \
+            "SELECT note_id FROM \`${NOTES_TABLE}\`
+             WHERE content IS NULL
+                OR signature IS NULL
+                OR match_regex IS NULL" | jq -r 'length')
+          echo "Notes with missing fields: ${NOTES_MISSING_FIELDS}"
+
+          if [ "${NOTES_MISSING_FIELDS}" -gt 0 ]; then
+            echo "::warning::${NOTES_MISSING_FIELDS} note(s) have NULL content, signature, or match_regex"
+          fi
+
+          echo "::endgroup::"
+
+          echo "::group::Checking demo_NoteEmbeddings"
+
+          EMB_COUNT=$(bq query --nouse_legacy_sql --format=json \
+            "SELECT COUNT(*) AS cnt FROM \`${EMBEDDINGS_TABLE}\`" | jq -r '.[0].cnt')
+          echo "Embeddings count: ${EMB_COUNT}"
+
+          if [ "${EMB_COUNT}" -eq 0 ]; then
+            echo "::error::demo_NoteEmbeddings is empty — seed did not write embeddings"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          echo "::group::Checking notes ↔ embeddings join"
+
+          ORPHAN_NOTES=$(bq query --nouse_legacy_sql --format=json \
+            "SELECT n.note_id
+             FROM \`${NOTES_TABLE}\` n
+             LEFT JOIN \`${EMBEDDINGS_TABLE}\` e ON n.note_id = e.note_id
+             WHERE e.note_id IS NULL" | jq -r 'length')
+          echo "Notes without embeddings: ${ORPHAN_NOTES}"
+
+          if [ "${ORPHAN_NOTES}" -gt 0 ]; then
+            echo "::error::${ORPHAN_NOTES} note(s) have no matching embedding"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          {
+            echo "### ✅ Seed Validation Passed"
+            echo ""
+            echo "- **Notes:** ${NOTES_COUNT}"
+            echo "- **Embeddings:** ${EMB_COUNT}"
+            echo "- **Orphan notes (no embedding):** ${ORPHAN_NOTES}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   manual-run:
     needs: [seed-notes]
