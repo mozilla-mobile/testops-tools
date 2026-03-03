@@ -130,7 +130,7 @@ jobs:
 
       - name: Upload missing tests report
         if: ${{ steps.scan.outputs.missing_count != '0' && !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: missing-testrail-urls-${{ matrix.platform }}
           path: missing_items.txt
