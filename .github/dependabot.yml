@@ -37,3 +37,7 @@ updates:
     directory: "telemetry-expiry"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "uv"
+    directory: "play-developer-reporting"
+    schedule:
+      interval: "weekly"
