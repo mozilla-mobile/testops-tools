@@ -47,6 +47,51 @@ top = 10
 resolve_versions = true
 
 [[queries]]
+name = "firefox-nightly-crashrate"
+package = "org.mozilla.fenix"
+metric_set = "crashrate"
+days = 1
+top = 10
+resolve_versions = false
+
+[[queries]]
+name = "firefox-nightly-anrrate"
+package = "org.mozilla.fenix"
+metric_set = "anrrate"
+days = 1
+top = 10
+resolve_versions = false
+
+[[queries]]
+name = "firefox-nightly-lmkrate"
+package = "org.mozilla.fenix"
+metric_set = "lmkrate"
+days = 1
+top = 10
+resolve_versions = false
+
+[[queries]]
+name = "focus-crashrate"
+package = "org.mozilla.focus"
+metric_set = "crashrate"
+days = 1
+top = 10
+
+[[queries]]
+name = "focus-anrrate"
+package = "org.mozilla.focus"
+metric_set = "anrrate"
+days = 1
+top = 10
+
+[[queries]]
+name = "focus-lmkrate"
+package = "org.mozilla.focus"
+metric_set = "lmkrate"
+days = 1
+top = 10
+
+[[queries]]
 name = "firefox-release-anomalies"
 package = "org.mozilla.firefox"
 anomalies = true
@@ -55,5 +100,17 @@ days = 7
 [[queries]]
 name = "firefox-beta-anomalies"
 package = "org.mozilla.firefox_beta"
+anomalies = true
+days = 7
+
+[[queries]]
+name = "firefox-nightly-anomalies"
+package = "org.mozilla.fenix"
+anomalies = true
+days = 7
+
+[[queries]]
+name = "focus-anomalies"
+package = "org.mozilla.focus"
 anomalies = true
 days = 7

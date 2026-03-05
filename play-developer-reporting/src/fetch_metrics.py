@@ -41,6 +41,7 @@ V1_BASE = 0b1111000001000000000000000000000
 MIN_VERSION_CODE = 2016123584
 
 PRODUCT_DETAILS_URL = "https://product-details.mozilla.org/1.0/mobile_android.json"
+MOBILE_DETAILS_URL = "https://product-details.mozilla.org/1.0/mobile_details.json"
 REPORTING_SCOPE = "https://www.googleapis.com/auth/playdeveloperreporting"
 
 # Pre-computed UTC epoch for the V1 version code cutoff date.
@@ -142,6 +143,7 @@ def fetch_release_versions(
 def resolve_version_name(
     build_dt: datetime,
     releases: list[tuple[date, str]],
+    nightly_version: str | None = None,
 ) -> str:
     """Find the Firefox version that a build belongs to.
 
@@ -161,9 +163,10 @@ def resolve_version_name(
         if rel_date >= build_d:
             return version
 
-    # Build is newer than all known releases — infer the next major version.
-    # This typically happens for beta/nightly builds that are ahead of
-    # the latest stable release.
+    # Build is newer than all known releases — use nightly version if
+    # available (for org.mozilla.fenix), otherwise infer next major.
+    if nightly_version:
+        return nightly_version
     if releases:
         latest_version = releases[-1][1]
         try:
@@ -174,25 +177,42 @@ def resolve_version_name(
     return "unknown"
 
 
+def fetch_nightly_version() -> str | None:
+    """Fetch the current Firefox nightly version from mobile_details.json."""
+    try:
+        with urllib.request.urlopen(MOBILE_DETAILS_URL, timeout=15) as resp:
+            data = json.loads(resp.read())
+        return data.get("nightly_version") or data.get("alpha_version")
+    except Exception:
+        return None
+
+
 class VersionResolver:
     """Lazily resolves version codes to human-readable Firefox versions."""
 
-    def __init__(self, include_betas: bool = False):
+    def __init__(self, include_betas: bool = False, package: str = ""):
         self._releases: list[tuple[date, str]] | None = None
         self._include_betas = include_betas
+        self._package = package
+        self._nightly_version: str | None = None
 
     def _ensure_releases(self):
         if self._releases is None:
             self._releases = fetch_release_versions(
                 include_betas=self._include_betas
             )
+            # For nightly packages, fetch the current nightly version
+            if self._package == "org.mozilla.fenix":
+                self._nightly_version = fetch_nightly_version()
 
     def resolve(self, version_code: int) -> tuple[str, str]:
         """Return (version_name, cpu_arch) for a version code."""
         self._ensure_releases()
         try:
             _build_id, arch, build_dt = reverse_version_code(version_code)
-            version = resolve_version_name(build_dt, self._releases)
+            version = resolve_version_name(
+                build_dt, self._releases, self._nightly_version
+            )
             return version, arch
         except Exception:
             return "unknown", "unknown"
@@ -1050,7 +1070,7 @@ def main():
         # Set up version resolver if requested
         if args.resolve_versions:
             is_beta = "beta" in args.package
-            resolver = VersionResolver(include_betas=is_beta)
+            resolver = VersionResolver(include_betas=is_beta, package=args.package)
         else:
             resolver = None
 
