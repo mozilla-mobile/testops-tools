@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "play-vitals-metrics"
-version = "0.1.0"
+version = "0.5.0"
 description = "Query Google Play Developer Reporting API for Android vitals metrics"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,9 +12,9 @@ license = "MPL-2.0"
 authors = [{ name = "Mozilla Mobile Test Engineering" }]
 
 dependencies = [
-    "google-auth>=2.0",
+    "google-auth>=2.48.0",
     "google-api-python-client>=2.190.0",
-    "tabulate>=0.9.0",
+    "tabulate>=0.10.0",
 ]
 
 [project.optional-dependencies]
@@ -40,3 +40,6 @@ select = ["E", "F", "W", "I", "UP", "B"]
 python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
+
+[tool.flake8]
+extend-ignore = ["W503"]

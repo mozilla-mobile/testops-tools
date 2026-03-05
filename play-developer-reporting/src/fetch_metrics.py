@@ -2,21 +2,25 @@
 """
 Query Google Play Developer Reporting API for various vitals metrics.
 
-Requires authentication: 
+Requires authentication:
   gcloud auth application-default login --scopes=https://www.googleapis.com/auth/playdeveloperreporting
 """
 
 import argparse
+import calendar
+import csv
 import json
-import math
+import os
 import sys
 import time
 import urllib.request
-from datetime import date, datetime, timedelta, UTC
-from typing import Dict, List, Any, Optional, Tuple
+from datetime import date, datetime, timedelta, timezone
+from typing import Any
 
 import google.auth
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from tabulate import tabulate
 
 
 # ---------------------------------------------------------------------------
@@ -37,9 +41,15 @@ V1_BASE = 0b1111000001000000000000000000000
 MIN_VERSION_CODE = 2016123584
 
 PRODUCT_DETAILS_URL = "https://product-details.mozilla.org/1.0/mobile_android.json"
+REPORTING_SCOPE = "https://www.googleapis.com/auth/playdeveloperreporting"
+
+# Pre-computed UTC epoch for the V1 version code cutoff date.
+_V1_CUTOFF_EPOCH: int = calendar.timegm(
+    time.strptime(str(V1_CUTOFF), "%Y%m%d%H%M%S")
+)
 
 
-def reverse_version_code(version_code: int) -> Tuple[str, str, datetime]:
+def reverse_version_code(version_code: int) -> tuple[str, str, datetime]:
     """Reverse a Fenix v1 android:versionCode to build info.
 
     Format: 0111 1000 0010 tttt tttt tttt tttt txpg
@@ -63,18 +73,17 @@ def reverse_version_code(version_code: int) -> Tuple[str, str, datetime]:
 
     hours = stripped >> 3
 
-    fmt = "%Y%m%d%H%M%S"
-    cutoff_time = time.mktime(time.strptime(str(V1_CUTOFF), fmt))
-    build_time = cutoff_time + (hours * 3600)
-    build_dt = datetime.fromtimestamp(build_time)
-    build_id = build_dt.strftime(fmt)
+    build_dt = datetime.fromtimestamp(
+        _V1_CUTOFF_EPOCH + hours * 3600, tz=timezone.utc
+    )
+    build_id = build_dt.strftime("%Y%m%d%H%M%S")
 
     return build_id, arch, build_dt
 
 
 def fetch_release_versions(
     include_betas: bool = False,
-) -> List[Tuple[date, str]]:
+) -> list[tuple[date, str]]:
     """Fetch Firefox for Android release history from Mozilla product-details.
 
     Returns a sorted list of (release_date, version) for releases.
@@ -132,7 +141,7 @@ def fetch_release_versions(
 
 def resolve_version_name(
     build_dt: datetime,
-    releases: List[Tuple[date, str]],
+    releases: list[tuple[date, str]],
 ) -> str:
     """Find the Firefox version that a build belongs to.
 
@@ -148,7 +157,7 @@ def resolve_version_name(
     build_d = build_dt.date()
 
     # Find the first release on or after the build date
-    for i, (rel_date, version) in enumerate(releases):
+    for rel_date, version in releases:
         if rel_date >= build_d:
             return version
 
@@ -169,7 +178,7 @@ class VersionResolver:
     """Lazily resolves version codes to human-readable Firefox versions."""
 
     def __init__(self, include_betas: bool = False):
-        self._releases: Optional[List[Tuple[date, str]]] = None
+        self._releases: list[tuple[date, str]] | None = None
         self._include_betas = include_betas
 
     def _ensure_releases(self):
@@ -178,7 +187,7 @@ class VersionResolver:
                 include_betas=self._include_betas
             )
 
-    def resolve(self, version_code: int) -> Tuple[str, str]:
+    def resolve(self, version_code: int) -> tuple[str, str]:
         """Return (version_name, cpu_arch) for a version code."""
         self._ensure_releases()
         try:
@@ -264,6 +273,17 @@ METRIC_SETS = {
             "distinctUsers",
         ],
         "display_name": "Frozen Frame Rate",
+    },
+    "lmkrate": {
+        "endpoint": "lmkrate",
+        "metric_set_suffix": "lmkRateMetricSet",
+        "metrics": [
+            "userPerceivedLmkRate",
+            "userPerceivedLmkRate7dUserWeighted",
+            "userPerceivedLmkRate28dUserWeighted",
+            "distinctUsers",
+        ],
+        "display_name": "Low Memory Kill Rate",
     },
 }
 
@@ -382,20 +402,27 @@ Examples:
 
 
 def authenticate():
-    """Authenticate with Google Cloud."""
-    creds, project_id = google.auth.default(
-        scopes=["https://www.googleapis.com/auth/playdeveloperreporting"]
-    )
+    """Authenticate with Google Cloud.
+
+    Checks GOOGLE_SA_VITALS_JSON first (CI/production — service account key
+    JSON as a string). Falls back to ADC for local development.
+    """
+    raw = os.environ.get("GOOGLE_SA_VITALS_JSON")
+    if raw:
+        info = json.loads(raw)
+        return service_account.Credentials.from_service_account_info(
+            info, scopes=[REPORTING_SCOPE]
+        )
+    creds, _ = google.auth.default(scopes=[REPORTING_SCOPE])
     return creds
 
 
 def build_query_body(
-    metric_set_config: Dict[str, Any],
-    metrics: List[str],
-    dimensions: List[str],
+    metrics: list[str],
+    dimensions: list[str],
     days: int,
     page_size: int,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Build the query request body."""
     # Try to get the most recent data, will auto-retry with older dates if needed
     end_date = date.today()
@@ -424,10 +451,10 @@ def build_query_body(
 def query_vitals(
     service,
     package_name: str,
-    metric_set_config: Dict[str, Any],
-    body: Dict[str, Any],
+    metric_set_config: dict[str, Any],
+    body: dict[str, Any],
     max_retries: int = 5,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Query the vitals API with automatic retry for freshness errors.
 
     Handles pagination via ``nextPageToken`` so that all rows are returned
@@ -439,9 +466,9 @@ def query_vitals(
     # Get the endpoint dynamically
     endpoint = getattr(service.vitals(), endpoint_name)()
 
-    all_rows: List[Dict[str, Any]] = []
-    page_token: Optional[str] = None
-    first_response: Optional[Dict[str, Any]] = None
+    all_rows: list[dict[str, Any]] = []
+    page_token: str | None = None
+    first_response: dict[str, Any] | None = None
 
     while True:
         request_body = dict(body)
@@ -502,7 +529,7 @@ def query_vitals(
                         )
                         continue
 
-                raise e
+                raise
 
         if response is None:
             raise Exception("Failed to query after multiple retries")
@@ -525,12 +552,12 @@ def query_vitals(
 
 
 def filter_and_sort_rows(
-    rows: List[Dict[str, Any]],
-    top_n: Optional[int] = None,
-    min_users: Optional[int] = None,
+    rows: list[dict[str, Any]],
+    top_n: int | None = None,
+    min_users: int | None = None,
     exclude_zero: bool = False,
-    version_codes: Optional[List[str]] = None,
-) -> List[Dict[str, Any]]:
+    version_codes: list[str] | None = None,
+) -> list[dict[str, Any]]:
     """Filter and sort result rows."""
 
     # Helper to extract the integer versionCode from a row
@@ -585,7 +612,7 @@ def filter_and_sort_rows(
             row
             for row in filtered_rows
             if any(
-                ("Rate" in m["metric"] or "rate" in m["metric"])
+                "rate" in m["metric"].lower()
                 and "decimalValue" in m
                 and float(m["decimalValue"]["value"]) > 0
                 for m in row.get("metrics", [])
@@ -617,15 +644,15 @@ def filter_and_sort_rows(
     return filtered_rows
 
 
-def format_metric_value(metric: Dict[str, Any], metric_name: str) -> str:
+def format_metric_value(metric: dict[str, Any], metric_name: str) -> str:
     """Format a metric value for display."""
     if "decimalValue" in metric:
         value = float(metric["decimalValue"]["value"])
         # If it's a rate metric (not distinctUsers), format as percentage
-        if "Rate" in metric_name or "rate" in metric_name.lower():
+        if "rate" in metric_name.lower():
             return f"{value * 100:.2f}%"
         # For user counts, format as integer with commas
-        elif "Users" in metric_name or "users" in metric_name.lower():
+        elif "users" in metric_name.lower():
             return f"{int(value):,}"
         else:
             return f"{value:.4f}"
@@ -635,21 +662,17 @@ def format_metric_value(metric: Dict[str, Any], metric_name: str) -> str:
 
 
 def output_pretty(
-    response: Dict[str, Any],
-    metric_set_config: Dict[str, Any],
+    response: dict[str, Any],
+    metric_set_config: dict[str, Any],
     package_name: str,
     days: int,
-    top_n: int = None,
-    min_users: int = None,
+    top_n: int | None = None,
+    min_users: int | None = None,
     exclude_zero: bool = False,
-    version_codes: List[str] = None,
-    resolver: Optional[VersionResolver] = None,
+    version_codes: list[str] | None = None,
+    resolver: VersionResolver | None = None,
 ):
     """Output results in pretty tabular format."""
-    from tabulate import tabulate
-
-    end_date = date.today()
-    start_date = end_date - timedelta(days=days)
 
     print(
         f"\n{metric_set_config['display_name']} — {package_name} (last {days} day(s))\n"
@@ -666,6 +689,13 @@ def output_pretty(
     if not rows:
         print("No data matches the specified filters.\n")
         return
+
+    # Compute total distinct users for userShare calculation
+    total_users = 0
+    for row in rows:
+        for m in row.get("metrics", []):
+            if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                total_users += float(m["decimalValue"]["value"])
 
     # Build table rows
     table_rows = []
@@ -688,6 +718,13 @@ def output_pretty(
         for m in row.get("metrics", []):
             metric_values[m["metric"]] = format_metric_value(m, m["metric"])
 
+        # Compute user share
+        row_users = 0
+        for m in row.get("metrics", []):
+            if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                row_users = float(m["decimalValue"]["value"])
+        user_share = f"{row_users / total_users * 100:.1f}%" if total_users > 0 else "N/A"
+
         # Build the table row
         table_row = []
         if row_date:
@@ -709,6 +746,7 @@ def output_pretty(
             if metric_name in metric_values:
                 table_row.append(metric_values[metric_name])
 
+        table_row.append(user_share)
         table_rows.append(table_row)
 
     # Build headers
@@ -729,23 +767,60 @@ def output_pretty(
             met["metric"] == m for met in first_row.get("metrics", [])
         )
     )
+    headers.append("userShare")
+
+    # Compute weighted aggregate summary row
+    # Weighted average of rate metrics across all displayed versions
+    rate_totals = {}  # metric_name -> weighted sum
+    for row in rows:
+        row_users = 0
+        row_metrics = {}
+        for m in row.get("metrics", []):
+            if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                row_users = float(m["decimalValue"]["value"])
+            elif "decimalValue" in m:
+                row_metrics[m["metric"]] = float(m["decimalValue"]["value"])
+        for mname, mval in row_metrics.items():
+            rate_totals.setdefault(mname, 0.0)
+            rate_totals[mname] += mval * row_users
+
+    # Build summary row
+    num_dim_cols = len(dim_names)
+    if first_row.get("startTime"):
+        num_dim_cols += 1  # date column
+    if resolver and "versionCode" in dim_names:
+        num_dim_cols += 2  # firefoxVersion, cpuArch
+
+    summary_row = [""] * (num_dim_cols - 1) + ["AGGREGATE"]
+    for metric_name in metric_set_config["metrics"]:
+        if not any(met["metric"] == metric_name for met in first_row.get("metrics", [])):
+            continue
+        if metric_name == "distinctUsers":
+            summary_row.append(f"{int(total_users):,}")
+        elif total_users > 0 and metric_name in rate_totals:
+            weighted_avg = rate_totals[metric_name] / total_users
+            summary_row.append(f"{weighted_avg * 100:.2f}%")
+        else:
+            summary_row.append("N/A")
+    summary_row.append("100.0%")
+
+    table_rows.append([""] * len(headers))  # blank separator
+    table_rows.append(summary_row)
 
     print(tabulate(table_rows, headers=headers))
 
 
 def output_csv(
-    response: Dict[str, Any],
-    metric_set_config: Dict[str, Any],
+    response: dict[str, Any],
+    metric_set_config: dict[str, Any],
     package_name: str,
-    top_n: int = None,
-    min_users: int = None,
+    top_n: int | None = None,
+    min_users: int | None = None,
     exclude_zero: bool = False,
-    version_codes: List[str] = None,
-    resolver: Optional[VersionResolver] = None,
+    version_codes: list[str] | None = None,
+    resolver: VersionResolver | None = None,
 ):
     """Output results in CSV format."""
-    import csv
-    import sys
 
     rows = response.get("rows", [])
     if not rows:
@@ -799,11 +874,46 @@ def output_csv(
         writer.writerow(dim_values + extra_values + metric_values)
 
 
-def output_json(response: Dict[str, Any]):
-    """Output results in JSON format."""
-    import json
+def output_json(
+    response: dict[str, Any],
+    metric_set_config: dict[str, Any] | None = None,
+    top_n: int | None = None,
+    min_users: int | None = None,
+    exclude_zero: bool = False,
+    version_codes: list[str] | None = None,
+):
+    """Output results in JSON format, with an aggregate summary."""
 
-    print(json.dumps(response, indent=2))
+    rows = response.get("rows", [])
+    if metric_set_config and rows:
+        rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes)
+
+    # Compute aggregate weighted metrics
+    total_users = 0
+    rate_totals = {}  # metric_name -> weighted sum
+    for row in rows:
+        row_users = 0
+        row_metrics = {}
+        for m in row.get("metrics", []):
+            if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                row_users = float(m["decimalValue"]["value"])
+            elif "decimalValue" in m:
+                row_metrics[m["metric"]] = float(m["decimalValue"]["value"])
+        total_users += row_users
+        for mname, mval in row_metrics.items():
+            rate_totals.setdefault(mname, 0.0)
+            rate_totals[mname] += mval * row_users
+
+    aggregate = {"distinctUsers": total_users}
+    for mname, weighted_sum in rate_totals.items():
+        aggregate[mname] = weighted_sum / total_users if total_users > 0 else 0.0
+
+    output = dict(response)
+    if rows:
+        output["rows"] = rows
+    output["aggregate"] = aggregate
+
+    print(json.dumps(output, indent=2))
 
 
 # ---------------------------------------------------------------------------
@@ -822,15 +932,15 @@ def query_anomalies(
     service,
     package_name: str,
     days: int,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """List anomalies for a package, filtered to the last *days* days."""
-    start_dt = datetime.now(UTC) - timedelta(days=days)
+    start_dt = datetime.now(timezone.utc) - timedelta(days=days)
     start_rfc = start_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
     filter_str = f'activeBetween("{start_rfc}", UNBOUNDED)'
 
     parent = f"apps/{package_name}"
-    all_anomalies: List[Dict[str, Any]] = []
-    page_token: Optional[str] = None
+    all_anomalies: list[dict[str, Any]] = []
+    page_token: str | None = None
 
     while True:
         req = service.anomalies().list(
@@ -849,13 +959,12 @@ def query_anomalies(
 
 
 def output_anomalies(
-    anomalies: List[Dict[str, Any]],
+    anomalies: list[dict[str, Any]],
     package_name: str,
     days: int,
-    resolver: Optional["VersionResolver"] = None,
+    resolver: VersionResolver | None = None,
 ):
     """Pretty-print anomalies."""
-    from tabulate import tabulate
 
     if not anomalies:
         print(f"\nNo anomalies detected for {package_name} in the last {days} day(s).\n")
@@ -965,7 +1074,7 @@ def main():
 
         # Build query
         body = build_query_body(
-            metric_set_config, metrics, args.dimensions, args.days, args.page_size
+            metrics, args.dimensions, args.days, args.page_size
         )
 
         # Execute query
@@ -1001,7 +1110,14 @@ def main():
                 resolver,
             )
         elif args.output_format == "json":
-            output_json(response)
+            output_json(
+                response,
+                metric_set_config,
+                args.top,
+                args.min_users,
+                args.exclude_zero,
+                version_codes,
+            )
 
     except google.auth.exceptions.DefaultCredentialsError:
         print(
