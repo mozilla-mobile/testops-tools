@@ -1,0 +1,53 @@
+# queries.yaml
+queries:
+  - name: firefox-release-crashrate
+    package: org.mozilla.firefox
+    metric_set: crashrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-release-anrrate
+    package: org.mozilla.firefox
+    metric_set: anrrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-release-lmkrate
+    package: org.mozilla.firefox
+    metric_set: lmkrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-beta-crashrate
+    package: org.mozilla.firefox_beta
+    metric_set: crashrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-beta-anrrate
+    package: org.mozilla.firefox_beta
+    metric_set: anrrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-beta-lmkrate
+    package: org.mozilla.firefox_beta
+    metric_set: lmkrate
+    days: 1
+    top: 10
+    resolve_versions: true
+
+  - name: firefox-release-anomalies
+    package: org.mozilla.firefox
+    anomalies: true
+    days: 7
+
+  - name: firefox-beta-anomalies
+    package: org.mozilla.firefox_beta
+    anomalies: true
+    days: 7
