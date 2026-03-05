@@ -881,12 +881,27 @@ def output_json(
     min_users: int | None = None,
     exclude_zero: bool = False,
     version_codes: list[str] | None = None,
+    resolver: VersionResolver | None = None,
 ):
     """Output results in JSON format, with an aggregate summary."""
 
     rows = response.get("rows", [])
     if metric_set_config and rows:
         rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes)
+
+    # Inject resolved version info into each row
+    if resolver:
+        for row in rows:
+            for d in row.get("dimensions", []):
+                if d["dimension"] == "versionCode":
+                    try:
+                        vc = int(d.get("stringValue", d.get("int64Value", "0")))
+                        version_name, arch = resolver.resolve(vc)
+                        row["firefoxVersion"] = version_name
+                        row["cpuArch"] = arch
+                    except (ValueError, TypeError):
+                        row["firefoxVersion"] = "unknown"
+                        row["cpuArch"] = "unknown"
 
     # Compute aggregate weighted metrics
     total_users = 0
@@ -1117,6 +1132,7 @@ def main():
                 args.min_users,
                 args.exclude_zero,
                 version_codes,
+                resolver,
             )
 
     except google.auth.exceptions.DefaultCredentialsError:

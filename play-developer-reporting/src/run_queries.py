@@ -2,11 +2,28 @@
 """Execute queries from a TOML manifest."""
 import argparse
 import json
-import os
 import subprocess
 import sys
 import tomllib
 from pathlib import Path
+
+
+def simplify_row(row: dict) -> dict:
+    """Extract a compact representation of a row for the summary."""
+    result = {}
+    if "firefoxVersion" in row:
+        result["firefoxVersion"] = row["firefoxVersion"]
+    if "cpuArch" in row:
+        result["cpuArch"] = row["cpuArch"]
+
+    for d in row.get("dimensions", []):
+        result[d["dimension"]] = d.get("stringValue", d.get("int64Value", ""))
+
+    for m in row.get("metrics", []):
+        if "decimalValue" in m:
+            result[m["metric"]] = float(m["decimalValue"]["value"])
+
+    return result
 
 
 def main():
@@ -62,12 +79,25 @@ def main():
         (output_dir / f"{name}.json").write_text(
             json.dumps(data, indent=2)
         )
+
+        # Extract date from first row
+        raw_rows = data.get("rows", data.get("anomalies", []))
+        first_row = raw_rows[0] if raw_rows else {}
+        start_time = first_row.get("startTime", {})
+        date_str = ""
+        if start_time:
+            date_str = f"{start_time.get('year', '')}-{start_time.get('month', 0):02d}-{start_time.get('day', 0):02d}"
+
         results[name] = {
             "status": "ok",
-            "row_count": len(data.get("rows", data.get("anomalies", []))),
+            "date": date_str,
+            "package": query["package"],
+            "metric_set": query.get("metric_set", "anomalies"),
+            "row_count": len(raw_rows),
             "aggregate": data.get("aggregate"),
+            "rows": [simplify_row(r) for r in raw_rows],
         }
-        print(f"  OK ({results[name]['row_count']} rows)", file=sys.stderr)
+        print(f"  OK ({len(raw_rows)} rows)", file=sys.stderr)
 
     # Write summary manifest
     (output_dir / "summary.json").write_text(
