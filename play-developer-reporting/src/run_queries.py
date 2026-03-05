@@ -1,22 +1,21 @@
 # src/run_queries.py
-"""Execute queries from a YAML manifest."""
+"""Execute queries from a TOML manifest."""
 import argparse
 import json
 import os
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
-
-import yaml
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", default="queries.yaml")
+    parser.add_argument("--manifest", default="queries.toml")
     parser.add_argument("--output-dir", default="/tmp/vitals-output")
     args = parser.parse_args()
 
-    manifest = yaml.safe_load(Path(args.manifest).read_text())
+    manifest = tomllib.load(Path(args.manifest).open("rb"))
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
