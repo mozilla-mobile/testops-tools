@@ -3,4 +3,4 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY src/ src/
 RUN uv sync --frozen
-CMD ["uv", "run", "python", "src/fetch_metrics.py", "--package", "org.mozilla.firefox", "--metric-set", "crashrate", "--resolve-versions", "--top", "10"]
+CMD ["uv", "run", "python", "src/run_queries.py", "--manifest", "src/queries.yaml"]
