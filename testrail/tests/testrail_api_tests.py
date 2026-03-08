@@ -298,6 +298,8 @@ class TestTestRail(unittest.TestCase):
         # Test Setup
         project = self.test_data["project"]["test_project_mobile"]
         test_suite = project["test_suite"]
+        # test runs require a milestone to be created first
+        # check if we have a cached milstone to use before creating a new one
         if len(self.created_test_data["milestones"]) > 0:
             milestone = self.created_test_data["milestones"][0]
         else:
