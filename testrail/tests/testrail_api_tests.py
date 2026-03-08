@@ -324,6 +324,7 @@ class TestTestRail(unittest.TestCase):
         print(f"{self.created_test_data=}")
     
         # Test Assertion
+        # verify response and test_run is not empty
         self.assertIsInstance(test_run, dict)
         self.assertTrue(bool(test_run))
         for key, value in test_run.items():
