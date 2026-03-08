@@ -257,79 +257,79 @@ class TestTestRail(unittest.TestCase):
                 self.assertIsInstance(value, expected_type)
 
     def test_create_test_run_signature(self):
-    # Test Run Response Signature
-    expected_response_signature = {
-        "id": int,
-        "suite_id": int,
-        "name": str,
-        "description": Optional[str],
-        "milestone_id": int,
-        "assignedto_id": Optional[int],
-        "include_all": bool,
-        "is_completed": bool,
-        "completed_on": Optional[int],
-        "is_archived": bool,
-        "archived_on": Optional[int],
-        "dataset_id": Optional[int],
-        "config": Optional[str],
-        "config_ids": list,
-        "passed_count": int,
-        "blocked_count": int,
-        "untested_count": int,
-        "retest_count": int,
-        "failed_count": int,
-        "custom_status1_count": int,
-        "custom_status2_count": int,
-        "custom_status3_count": int,
-        "custom_status4_count": int,
-        "custom_status5_count": int,
-        "custom_status6_count": int,
-        "custom_status7_count": int,
-        "project_id": int,
-        "plan_id": Optional[int],
-        "created_on": int,
-        "updated_on": int,
-        "refs": Optional[str],
-        "created_by": int,
-        "start_on": Optional[int],
-        "due_on": Optional[int],
-        "url": str,
-    }
-    # Test Setup
-    project = self.test_data["project"]["test_project_mobile"]
-    test_suite = project["test_suite"]
-    if len(self.created_test_data["milestones"]) > 0:
-        milestone = self.created_test_data["milestones"][0]
-    else:
+        # Test Run Response Signature
+        expected_response_signature = {
+            "id": int,
+            "suite_id": int,
+            "name": str,
+            "description": Optional[str],
+            "milestone_id": int,
+            "assignedto_id": Optional[int],
+            "include_all": bool,
+            "is_completed": bool,
+            "completed_on": Optional[int],
+            "is_archived": bool,
+            "archived_on": Optional[int],
+            "dataset_id": Optional[int],
+            "config": Optional[str],
+            "config_ids": list,
+            "passed_count": int,
+            "blocked_count": int,
+            "untested_count": int,
+            "retest_count": int,
+            "failed_count": int,
+            "custom_status1_count": int,
+            "custom_status2_count": int,
+            "custom_status3_count": int,
+            "custom_status4_count": int,
+            "custom_status5_count": int,
+            "custom_status6_count": int,
+            "custom_status7_count": int,
+            "project_id": int,
+            "plan_id": Optional[int],
+            "created_on": int,
+            "updated_on": int,
+            "refs": Optional[str],
+            "created_by": int,
+            "start_on": Optional[int],
+            "due_on": Optional[int],
+            "url": str,
+        }
+        # Test Setup
         project = self.test_data["project"]["test_project_mobile"]
-        milestone = self.testrail.create_milestone(
+        test_suite = project["test_suite"]
+        if len(self.created_test_data["milestones"]) > 0:
+            milestone = self.created_test_data["milestones"][0]
+        else:
+            project = self.test_data["project"]["test_project_mobile"]
+            milestone = self.testrail.create_milestone(
+                project["id"],
+                self.test_data["milestone_name"],
+                self.test_data["milestone_description"],
+            )
+            self.created_test_data["milestones"].append(milestone)
+    
+        # Test Steps
+        test_run = self.testrail.create_test_run(
             project["id"],
-            self.test_data["milestone_name"],
-            self.test_data["milestone_description"],
+            milestone["id"],
+            self.test_data["test_run_name"],
+            test_suite["id"],
         )
-        self.created_test_data["milestones"].append(milestone)
-
-    # Test Steps
-    test_run = self.testrail.create_test_run(
-        project["id"],
-        milestone["id"],
-        self.test_data["test_run_name"],
-        test_suite["id"],
-    )
-    self.created_test_data["test_runs"].append(test_run)
-    print(f"{test_run=}")
-    print(f"{self.created_test_data=}")
-
-    # Test Assertion
-    self.assertIsInstance(test_run, dict)
-    self.assertTrue(bool(test_run))
-    for key, value in test_run.items():
-        expected_type = expected_response_signature.get(key)
-        actual_type = type(value)
-        if value is not None and expected_type is not None:
-            resolved_type = resolve_type(expected_type)
-            print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
-            self.assertIsInstance(value, resolved_type)
+        self.created_test_data["test_runs"].append(test_run)
+        print(f"{test_run=}")
+        print(f"{self.created_test_data=}")
+    
+        # Test Assertion
+        self.assertIsInstance(test_run, dict)
+        self.assertTrue(bool(test_run))
+        for key, value in test_run.items():
+            expected_type = expected_response_signature.get(key)
+            actual_type = type(value)
+            if value is not None and expected_type is not None:
+                resolved_type = resolve_type(expected_type)
+                print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
+                self.assertIsInstance(value, resolved_type)
 
     def test_update_test_run_tests(self):
         test_run = 101414 # "Test Run" from "Test Project - Mobile"
