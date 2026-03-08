@@ -67,7 +67,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
-| cuscoi | motorola edge 50 fusion | 35 | Low |
+| cuscoi | motorola edge 50 fusion | 35 | Medium |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
@@ -94,6 +94,7 @@
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
 | g0q | SM-S906U1 | 36 | Low |
+| gnevan | moto g stylus (2023) | 33 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
@@ -136,6 +137,7 @@
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
+| r0qcsx | Samsung S22 | 36 | Low |
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Medium |
 | r11s | SM-S711N | 36 | Low |
