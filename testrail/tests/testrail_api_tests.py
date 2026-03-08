@@ -318,6 +318,7 @@ class TestTestRail(unittest.TestCase):
             self.test_data["test_run_name"],
             test_suite["id"],
         )
+        # add test_run to created_test_data for cleanup later
         self.created_test_data["test_runs"].append(test_run)
         print(f"{test_run=}")
         print(f"{self.created_test_data=}")
