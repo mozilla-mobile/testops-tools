@@ -1,5 +1,4 @@
 {
-    "channel": "${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_ID }}",
     "text": "TestRail Backup Failed (${{ env.branch }}) - GitHub Actions Job: ${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}",
     "blocks": [
       {
