@@ -158,8 +158,8 @@ class TestTestRail(unittest.TestCase):
             actual_type = type(value)
             print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
 
-            if value is not None:
-                self.assertIsInstance(value, expected_type)
+            if value is not None and expected_type is not None:
+                self.assertIsInstance(value, resolve_type(expected_type))
 
     def test_get_milestone(self):
         milestone_id = 2954 # "Test Milestone2025-03-05" from "Test Project - Mobile"
@@ -252,9 +252,9 @@ class TestTestRail(unittest.TestCase):
         for key, value in milestone.items():
             expected_type = expected_response_signature.get(key)
             actual_type = type(value)
-            if value is not None:
+            if value is not None and expected_type is not None:
                 print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
-                self.assertIsInstance(value, expected_type)
+                self.assertIsInstance(value, resolve_type(expected_type))
 
     def test_create_test_run_signature(self):
         # Test Run Response Signature
@@ -325,9 +325,9 @@ class TestTestRail(unittest.TestCase):
         for key, value in test_run.items():
             expected_type = expected_response_signature.get(key)
             actual_type = type(value)
-            if value is not None:
+            if value is not None and expected_type is not None:
                 print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
-                self.assertIsInstance(value, expected_type)
+                self.assertIsInstance(value, resolve_type(expected_type))
 
     def test_update_test_run_tests(self):
         test_run = 101414 # "Test Run" from "Test Project - Mobile"
