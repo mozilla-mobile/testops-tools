@@ -304,3 +304,13 @@ class TestRail:
             return True
 
         return [case for case in all_cases if satisfies_all(case)]
+
+    def _delete_milestone(self, milestone_id):
+        if not milestone_id:
+            raise ValueError("Milestone ID must be provided.")
+        return self.client.send_post(f"delete_milestone/{milestone_id}", {})
+
+    def _delete_test_run(self, test_run_id):
+        if not test_run_id:
+            raise ValueError("Test run ID must be provided.")
+        return self.client.send_post(f"delete_run/{test_run_id}", {})
