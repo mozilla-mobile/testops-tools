@@ -97,7 +97,7 @@ jobs:
         if: ${{ success() }}
         with:
           method: chat.postMessage
-          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          token: ${{ secrets.SLACK_TESTOPS_BOT_OAUTH_TOKEN }}
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-pass.json
           payload-templated: true
         env:
@@ -111,7 +111,7 @@ jobs:
         if: ${{ failure() }}
         with:
           method: chat.postMessage
-          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          token: ${{ secrets.SLACK_TESTOPS_BOT_OAUTH_TOKEN }}
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
           payload-templated: true
         env:
