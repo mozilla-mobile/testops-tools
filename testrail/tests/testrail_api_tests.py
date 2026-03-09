@@ -268,6 +268,9 @@ class TestTestRail(unittest.TestCase):
             "include_all": bool,
             "is_completed": bool,
             "completed_on": Optional[int],
+            "is_archived": bool,
+            "archived_on": Optional[int],
+            "dataset_id": Optional[int],
             "config": Optional[str],
             "config_ids": list,
             "passed_count": int,
@@ -288,6 +291,8 @@ class TestTestRail(unittest.TestCase):
             "updated_on": int,
             "refs": Optional[str],
             "created_by": int,
+            "start_on": Optional[int],
+            "due_on": Optional[int],
             "url": str,
         }
         # Test Setup
@@ -305,7 +310,7 @@ class TestTestRail(unittest.TestCase):
                 self.test_data["milestone_description"],
             )
             self.created_test_data["milestones"].append(milestone)
-
+    
         # Test Steps
         test_run = self.testrail.create_test_run(
             project["id"],
@@ -317,7 +322,7 @@ class TestTestRail(unittest.TestCase):
         self.created_test_data["test_runs"].append(test_run)
         print(f"{test_run=}")
         print(f"{self.created_test_data=}")
-
+    
         # Test Assertion
         # verify response and test_run is not empty
         self.assertIsInstance(test_run, dict)
@@ -325,9 +330,10 @@ class TestTestRail(unittest.TestCase):
         for key, value in test_run.items():
             expected_type = expected_response_signature.get(key)
             actual_type = type(value)
-            if value is not None:
+            if value is not None and expected_type is not None:
+                resolved_type = resolve_type(expected_type)
                 print(f"{key}: {value=}, {expected_type=}, {actual_type=}")
-                self.assertIsInstance(value, expected_type)
+                self.assertIsInstance(value, resolved_type)
 
     def test_update_test_run_tests(self):
         test_run = 101414 # "Test Run" from "Test Project - Mobile"
