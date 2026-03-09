@@ -82,6 +82,23 @@ class TestTestRail(unittest.TestCase):
         )
         self.created_test_data = {"milestones": [], "test_runs": []}
 
+    def tearDown(self):
+        # Clean up test runs first (before milestones, since runs are linked)
+        for test_run in self.created_test_data.get("test_runs", []):
+            try:
+                self.testrail._delete_test_run(test_run["id"])
+                print(f"Cleaned up test run: {test_run['id']}")
+            except Exception as e:
+                print(f"Warning: Failed to delete test run {test_run['id']}: {e}")
+
+        # Clean up milestones
+        for milestone in self.created_test_data.get("milestones", []):
+            try:
+                self.testrail._delete_milestone(milestone["id"])
+                print(f"Cleaned up milestone: {milestone['id']}")
+            except Exception as e:
+                print(f"Warning: Failed to delete milestone {milestone['id']}: {e}")
+
     def test_get_test_cases_signature(self):
         # test 'cases' signature
         expected_cases_signature = {
@@ -336,20 +353,40 @@ class TestTestRail(unittest.TestCase):
                 self.assertIsInstance(value, resolved_type)
 
     def test_update_test_run_tests(self):
-        test_run = 101414 # "Test Run" from "Test Project - Mobile"
+        # Create a fresh milestone and test run to avoid depending on
+        # pre-existing run state (completed runs reject updates with 403)
+        project = self.test_data["project"]["test_project_mobile"]
+        test_suite = project["test_suite"]
+
+        milestone = self.testrail.create_milestone(
+            project["id"],
+            f"test_update_run_{datetime.utcnow()}",
+            "Temporary milestone for update_test_run_tests",
+        )
+        self.created_test_data["milestones"].append(milestone)
+
+        test_run = self.testrail.create_test_run(
+            project["id"],
+            milestone["id"],
+            "Update Test Run",
+            test_suite["id"],
+        )
+        self.created_test_data["test_runs"].append(test_run)
+
         test_status = 1  # Passed
-        tests = self.testrail._get_tests(test_run)
+        tests = self.testrail._get_tests(test_run["id"])
         for test in tests:
             print(f"{test['id']=} {test['status_id']=}")
 
-        response = self.testrail.update_test_run_tests(test_run, test_status)
+        response = self.testrail.update_test_run_tests(test_run["id"], test_status)
         for updated_test in response:
             print(f"{updated_test=}, {updated_test['status_id']=}")
 
-        tests_after_update = self.testrail._get_tests(test_run)
+        tests_after_update = self.testrail._get_tests(test_run["id"])
 
         for test in tests_after_update:
             print(f"{test['id']=} {test['status_id']=}")
+            self.assertEqual(test["status_id"], test_status)
 
     def test_taskcluster_android_workflow(self):
         # Test Setup
