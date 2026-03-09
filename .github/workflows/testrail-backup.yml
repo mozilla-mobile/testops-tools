@@ -92,14 +92,6 @@ jobs:
           ls *.csv > files.txt
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
 
-      - name: Debug job status 
-        if: always()
-        run: |
-          echo "Job status: ${{ job.status }}"
-          echo "Success: ${{ success() }}"
-          echo "Failure: ${{ failure() }}"
-          echo "Cancelled: ${{ cancelled() }}"
-
       - name: Notify Slack (Success)
         uses: slackapi/slack-github-action@v2.1.1
         if: ${{ success() }}
