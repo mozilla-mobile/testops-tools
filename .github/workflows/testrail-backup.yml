@@ -96,7 +96,7 @@ jobs:
         uses: slackapi/slack-github-action@v2.1.1
         if: ${{ success() }}
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           webhook-type: incoming-webhook
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-pass.json
           payload-templated: true
@@ -110,7 +110,7 @@ jobs:
         uses: slackapi/slack-github-action@v2.1.1
         if: ${{ failure() }}
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           webhook-type: incoming-webhook
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-fail.json
           payload-templated: true
@@ -124,7 +124,7 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook: ${{ secrets.SLACK_MOBILE_ALERTS_SANDBOX_CHANNEL }}
           webhook-type: incoming-webhook
           payload: |
             {
