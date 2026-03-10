@@ -187,6 +187,74 @@ def fetch_nightly_version() -> str | None:
         return None
 
 
+def build_nightly_timeline(
+    releases: list[tuple[date, str]],
+    current_nightly: str | None,
+) -> list[tuple[date, str]]:
+    """Build a timeline of nightly version transitions from beta b1 dates.
+
+    When X.0b1 is released, nightly bumps from X.0a1 to (X+1).0a1.
+    Returns a sorted list of (merge_date, nightly_version) where each
+    entry means "from this date onward, nightly was this version".
+    """
+    # Find all b1 releases — each marks when nightly bumped to the next major
+    b1_dates = {}  # major -> date
+    for rel_date, version in releases:
+        if "b1" in version and version.endswith("b1"):
+            try:
+                major = int(version.split(".")[0])
+                b1_dates[major] = rel_date
+            except (ValueError, IndexError):
+                continue
+
+    # Build timeline: when X.0b1 ships on date D, nightly becomes (X+1).0a1
+    timeline = []
+    for major, merge_date in sorted(b1_dates.items()):
+        nightly_version = f"{major + 1}.0a1"
+        timeline.append((merge_date, nightly_version))
+
+    # If we have the current nightly version but it's not yet in the timeline
+    # (the latest b1 hasn't been released yet), add it using the last known
+    # merge date or today as fallback
+    if current_nightly and timeline:
+        latest_in_timeline = timeline[-1][1]
+        if current_nightly != latest_in_timeline:
+            # Current nightly is newer — the merge must have happened
+            # after the last b1 we know about. Use the last b1 date
+            # as an approximation (it's close enough).
+            try:
+                current_major = int(current_nightly.split(".")[0])
+                prev_b1_major = current_major - 1
+                if prev_b1_major in b1_dates:
+                    timeline.append((b1_dates[prev_b1_major], current_nightly))
+                    timeline.sort(key=lambda x: x[0])
+            except (ValueError, IndexError):
+                pass
+
+    return timeline
+
+
+def resolve_nightly_version(
+    build_dt: datetime,
+    timeline: list[tuple[date, str]],
+    current_nightly: str | None,
+) -> str:
+    """Resolve a nightly build timestamp to its nightly version.
+
+    Walks the timeline backwards to find which nightly cycle the build
+    belongs to.
+    """
+    build_d = build_dt.date()
+
+    # Walk backwards through timeline to find the matching cycle
+    for merge_date, nightly_version in reversed(timeline):
+        if build_d >= merge_date:
+            return nightly_version
+
+    # Build is older than our timeline — fall back to current or unknown
+    return current_nightly or "unknown"
+
+
 class VersionResolver:
     """Lazily resolves version codes to human-readable Firefox versions."""
 
@@ -195,21 +263,33 @@ class VersionResolver:
         self._include_betas = include_betas
         self._package = package
         self._nightly_version: str | None = None
+        self._nightly_timeline: list[tuple[date, str]] | None = None
 
     def _ensure_releases(self):
         if self._releases is None:
-            self._releases = fetch_release_versions(
-                include_betas=self._include_betas
-            )
-            # For nightly packages, fetch the current nightly version
+            # For nightly, always fetch betas too (needed for merge dates)
+            include_betas = self._include_betas or self._package == "org.mozilla.fenix"
+            self._releases = fetch_release_versions(include_betas=include_betas)
+
             if self._package == "org.mozilla.fenix":
                 self._nightly_version = fetch_nightly_version()
+                self._nightly_timeline = build_nightly_timeline(
+                    self._releases, self._nightly_version
+                )
 
     def resolve(self, version_code: int) -> tuple[str, str]:
         """Return (version_name, cpu_arch) for a version code."""
         self._ensure_releases()
         try:
             _build_id, arch, build_dt = reverse_version_code(version_code)
+
+            # For nightly, use the merge-date timeline
+            if self._package == "org.mozilla.fenix" and self._nightly_timeline:
+                version = resolve_nightly_version(
+                    build_dt, self._nightly_timeline, self._nightly_version
+                )
+                return version, arch
+
             version = resolve_version_name(
                 build_dt, self._releases, self._nightly_version
             )
