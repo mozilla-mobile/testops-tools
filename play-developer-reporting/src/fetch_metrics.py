@@ -685,9 +685,11 @@ def filter_and_sort_rows(
                     pass
         return 0
 
-    # Drop builds older than MIN_VERSION_CODE (pre-2026)
+    # Drop Fenix v1 builds older than MIN_VERSION_CODE (pre-2026).
+    # Non-Fenix packages (e.g. Focus) use smaller version codes and are kept.
     filtered_rows = [
-        row for row in rows if _get_vc(row) >= MIN_VERSION_CODE
+        row for row in rows
+        if _get_vc(row) < V1_BASE or _get_vc(row) >= MIN_VERSION_CODE
     ]
 
     # Filter by specific version codes
@@ -1037,8 +1039,7 @@ def output_json(
         aggregate[mname] = weighted_sum / total_users if total_users > 0 else 0.0
 
     output = dict(response)
-    if rows:
-        output["rows"] = rows
+    output["rows"] = rows
     output["aggregate"] = aggregate
 
     print(json.dumps(output, indent=2))
