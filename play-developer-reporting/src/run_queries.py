@@ -65,6 +65,23 @@ def _fmt_users(value: float | None) -> str:
     return f"{int(value):,}" if value is not None else "—"
 
 
+def _trend(current: float | None, baseline: float | None) -> str:
+    """Return a trend arrow comparing current rate to its 28-day baseline.
+
+    ↑ = more than 10% above baseline (elevated, warrants attention)
+    ↓ = more than 10% below baseline (improving)
+    → = within 10% of baseline (stable)
+    """
+    if current is None or baseline is None or baseline == 0:
+        return ""
+    delta = (current - baseline) / baseline
+    if delta > 0.10:
+        return " ↑"
+    if delta < -0.10:
+        return " ↓"
+    return " →"
+
+
 def _top_version(result: dict) -> str:
     """Return the Firefox version label for the row with the most active users."""
     rows = result.get("rows", [])
@@ -86,9 +103,10 @@ def generate_markdown(results: dict) -> str:
         f"## Android Vitals — {date_str}",
         "",
         "> Weighted aggregate rates across all active versions for the most recent available day.",
+        "> Trend: ↑ >10% above 28-day avg · ↓ >10% below · → stable",
         "",
-        "| Product | Top Version | Crash Rate | Crash 28d | ANR Rate | LMK Rate | Active Users |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
+        "| Product | Top Version | Crash Rate | ANR Rate | LMK Rate | Active Users |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
 
     for group in PRODUCT_GROUPS:
@@ -96,14 +114,19 @@ def generate_markdown(results: dict) -> str:
         anr_agg   = (results.get(group["anrrate"])   or {}).get("aggregate") or {}
         lmk_agg   = (results.get(group["lmkrate"])   or {}).get("aggregate") or {}
 
-        version   = _top_version(results.get(group["crashrate"]) or {})
-        crash     = _pct(crash_agg.get("crashRate"))
-        crash_28d = _pct(crash_agg.get("crashRate28dUserWeighted"))
-        anr       = _pct(anr_agg.get("anrRate"))
-        lmk       = _pct(lmk_agg.get("userPerceivedLmkRate"))
-        users     = _fmt_users(crash_agg.get("distinctUsers"))
+        version = _top_version(results.get(group["crashrate"]) or {})
+        crash   = _pct(crash_agg.get("crashRate")) + _trend(
+            crash_agg.get("crashRate"), crash_agg.get("crashRate28dUserWeighted")
+        )
+        anr     = _pct(anr_agg.get("anrRate")) + _trend(
+            anr_agg.get("anrRate"), anr_agg.get("anrRate28dUserWeighted")
+        )
+        lmk     = _pct(lmk_agg.get("userPerceivedLmkRate")) + _trend(
+            lmk_agg.get("userPerceivedLmkRate"), lmk_agg.get("userPerceivedLmkRate28dUserWeighted")
+        )
+        users   = _fmt_users(crash_agg.get("distinctUsers"))
 
-        lines.append(f"| {group['label']} | {version} | {crash} | {crash_28d} | {anr} | {lmk} | {users} |")
+        lines.append(f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |")
 
     lines += ["", "### Anomalies (last 7 days)", ""]
 
