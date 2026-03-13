@@ -55,7 +55,7 @@
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
-| blazer | Pixel 10 Pro | 36 | Medium |
+| blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | c1q | Galaxy Note 20 5G | 33 | Low |
@@ -129,7 +129,7 @@
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
-| pa3q | Galaxy S25 Ultra | 36 | Medium |
+| pa3q | Galaxy S25 Ultra | 36 | Low |
 | pa3qxxx | Samsung S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
