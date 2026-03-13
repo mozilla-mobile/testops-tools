@@ -20,6 +20,7 @@ from typing import Any
 import google.auth
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from tabulate import tabulate
 
 
@@ -584,6 +585,18 @@ def query_vitals(
                 ).execute()
                 break
             except Exception as e:
+                # Transient HTTP errors — exponential backoff, no date adjustment
+                if isinstance(e, HttpError) and e.resp.status in (429, 500, 503):
+                    if retry < max_retries - 1:
+                        wait = 2 ** retry
+                        print(
+                            f"HTTP {e.resp.status}, retrying in {wait}s...",
+                            file=sys.stderr,
+                        )
+                        time.sleep(wait)
+                        continue
+                    raise
+
                 error_str = str(e)
                 if (
                     "timeline_spec.start_date" in error_str
@@ -672,9 +685,11 @@ def filter_and_sort_rows(
                     pass
         return 0
 
-    # Drop builds older than MIN_VERSION_CODE (pre-2026)
+    # Drop Fenix v1 builds older than MIN_VERSION_CODE (pre-2026).
+    # Non-Fenix packages (e.g. Focus) use smaller version codes and are kept.
     filtered_rows = [
-        row for row in rows if _get_vc(row) >= MIN_VERSION_CODE
+        row for row in rows
+        if _get_vc(row) < V1_BASE or _get_vc(row) >= MIN_VERSION_CODE
     ]
 
     # Filter by specific version codes
@@ -1024,8 +1039,7 @@ def output_json(
         aggregate[mname] = weighted_sum / total_users if total_users > 0 else 0.0
 
     output = dict(response)
-    if rows:
-        output["rows"] = rows
+    output["rows"] = rows
     output["aggregate"] = aggregate
 
     print(json.dumps(output, indent=2))
@@ -1064,7 +1078,7 @@ def query_anomalies(
             pageSize=100,
             **({"pageToken": page_token} if page_token else {}),
         )
-        resp = req.execute()
+        resp = req.execute(num_retries=3)
         all_anomalies.extend(resp.get("anomalies", []))
         page_token = resp.get("nextPageToken")
         if not page_token:

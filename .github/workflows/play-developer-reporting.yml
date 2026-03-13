@@ -21,6 +21,11 @@ jobs:
         env:
           GOOGLE_SA_VITALS_JSON: ${{ secrets.GOOGLE_SA_VITALS_JSON }}
         run: |
+          mkdir -p /tmp/vitals-output
           docker run \
+            -v /tmp/vitals-output:/tmp/vitals-output \
             -e GOOGLE_SA_VITALS_JSON="$GOOGLE_SA_VITALS_JSON" \
             play-vitals
+
+      - name: Summary
+        run: cat /tmp/vitals-output/summary.md >> $GITHUB_STEP_SUMMARY
