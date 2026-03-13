@@ -1,5 +1,6 @@
 # src/run_queries.py
 """Execute queries from a TOML manifest."""
+
 import argparse
 import json
 import subprocess
@@ -11,29 +12,29 @@ PRODUCT_GROUPS = [
     {
         "label": "Firefox Release",
         "crashrate": "firefox-release-crashrate",
-        "anrrate":   "firefox-release-anrrate",
-        "lmkrate":   "firefox-release-lmkrate",
+        "anrrate": "firefox-release-anrrate",
+        "lmkrate": "firefox-release-lmkrate",
         "anomalies": "firefox-release-anomalies",
     },
     {
         "label": "Firefox Beta",
         "crashrate": "firefox-beta-crashrate",
-        "anrrate":   "firefox-beta-anrrate",
-        "lmkrate":   "firefox-beta-lmkrate",
+        "anrrate": "firefox-beta-anrrate",
+        "lmkrate": "firefox-beta-lmkrate",
         "anomalies": "firefox-beta-anomalies",
     },
     {
         "label": "Firefox Nightly",
         "crashrate": "firefox-nightly-crashrate",
-        "anrrate":   "firefox-nightly-anrrate",
-        "lmkrate":   "firefox-nightly-lmkrate",
+        "anrrate": "firefox-nightly-anrrate",
+        "lmkrate": "firefox-nightly-lmkrate",
         "anomalies": "firefox-nightly-anomalies",
     },
     {
         "label": "Firefox Focus",
         "crashrate": "focus-crashrate",
-        "anrrate":   "focus-anrrate",
-        "lmkrate":   "focus-lmkrate",
+        "anrrate": "focus-anrrate",
+        "lmkrate": "focus-lmkrate",
         "anomalies": "focus-anomalies",
     },
 ]
@@ -94,8 +95,11 @@ def _top_version(result: dict) -> str:
 def generate_markdown(results: dict) -> str:
     # Determine data date from the first successful crashrate result
     date_str = next(
-        (results[g["crashrate"]]["date"] for g in PRODUCT_GROUPS
-         if g["crashrate"] in results and results[g["crashrate"]].get("date")),
+        (
+            results[g["crashrate"]]["date"]
+            for g in PRODUCT_GROUPS
+            if g["crashrate"] in results and results[g["crashrate"]].get("date")
+        ),
         "unknown",
     )
 
@@ -111,22 +115,27 @@ def generate_markdown(results: dict) -> str:
 
     for group in PRODUCT_GROUPS:
         crash_agg = (results.get(group["crashrate"]) or {}).get("aggregate") or {}
-        anr_agg   = (results.get(group["anrrate"])   or {}).get("aggregate") or {}
-        lmk_agg   = (results.get(group["lmkrate"])   or {}).get("aggregate") or {}
+        anr_agg = (results.get(group["anrrate"]) or {}).get("aggregate") or {}
+        lmk_agg = (results.get(group["lmkrate"]) or {}).get("aggregate") or {}
 
         version = _top_version(results.get(group["crashrate"]) or {})
-        crash   = _pct(crash_agg.get("crashRate")) + _trend(
-            crash_agg.get("crashRate"), crash_agg.get("crashRate28dUserWeighted")
+        crash = _pct(crash_agg.get("userPerceivedCrashRate")) + _trend(
+            crash_agg.get("userPerceivedCrashRate"),
+            crash_agg.get("userPerceivedCrashRate28dUserWeighted"),
         )
-        anr     = _pct(anr_agg.get("anrRate")) + _trend(
-            anr_agg.get("anrRate"), anr_agg.get("anrRate28dUserWeighted")
+        anr = _pct(anr_agg.get("userPerceivedAnrRate")) + _trend(
+            anr_agg.get("userPerceivedAnrRate"),
+            anr_agg.get("userPerceivedAnrRate28dUserWeighted"),
         )
-        lmk     = _pct(lmk_agg.get("userPerceivedLmkRate")) + _trend(
-            lmk_agg.get("userPerceivedLmkRate"), lmk_agg.get("userPerceivedLmkRate28dUserWeighted")
+        lmk = _pct(lmk_agg.get("userPerceivedLmkRate")) + _trend(
+            lmk_agg.get("userPerceivedLmkRate"),
+            lmk_agg.get("userPerceivedLmkRate28dUserWeighted"),
         )
-        users   = _fmt_users(crash_agg.get("distinctUsers"))
+        users = _fmt_users(crash_agg.get("distinctUsers"))
 
-        lines.append(f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |")
+        lines.append(
+            f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |"
+        )
 
     lines += ["", "### Anomalies (last 7 days)", ""]
 
@@ -160,9 +169,16 @@ def main():
     any_failed = False
     for query in manifest["queries"]:
         name = query["name"]
-        cmd = ["uv", "run", "python", "src/fetch_metrics.py",
-               "--package", query["package"],
-               "--output-format", "json"]
+        cmd = [
+            "uv",
+            "run",
+            "python",
+            "src/fetch_metrics.py",
+            "--package",
+            query["package"],
+            "--output-format",
+            "json",
+        ]
 
         if query.get("anomalies"):
             cmd.append("--anomalies")
@@ -196,9 +212,7 @@ def main():
             continue
 
         # Write individual result
-        (output_dir / f"{name}.json").write_text(
-            json.dumps(data, indent=2)
-        )
+        (output_dir / f"{name}.json").write_text(json.dumps(data, indent=2))
 
         # Extract date from first row
         raw_rows = data.get("rows", data.get("anomalies", []))
