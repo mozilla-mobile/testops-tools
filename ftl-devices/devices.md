@@ -26,7 +26,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | Low |
-| a15 | Samsung A15 | 34 | Medium |
+| a15 | Samsung A15 | 34 | Low |
 | a15x | Samsung A15 5G | 34 | Low |
 | a15x | Samsung A15 5G | 36 | Low |
 | a16 | Samsung SM-A165M | 35 | Low |
@@ -34,7 +34,7 @@
 | a16x | Samsung A16 5G | 34 | Low |
 | a16x | Samsung A16 5G | 36 | Low |
 | a21 | Galaxy A21 | 31 | Low |
-| a25x | SM-A256U1 | 34 | Medium |
+| a25x | SM-A256U1 | 34 | Low |
 | a26x | Samsung SM-A266B | 36 | Low |
 | a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Medium |
@@ -67,7 +67,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
-| cuscoi | motorola edge 50 fusion | 35 | Medium |
+| cuscoi | motorola edge 50 fusion | 35 | Low |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
@@ -90,6 +90,7 @@
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | Moto G 5G | 35 | Low |
 | fogona | moto g play - 2024 | 34 | Medium |
+| fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | SM-S906U1 | 34 | Medium |
