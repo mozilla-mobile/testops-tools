@@ -1,6 +1,5 @@
 # src/run_queries.py
 """Execute queries from a TOML manifest."""
-
 import argparse
 import json
 import subprocess
@@ -12,29 +11,29 @@ PRODUCT_GROUPS = [
     {
         "label": "Firefox Release",
         "crashrate": "firefox-release-crashrate",
-        "anrrate": "firefox-release-anrrate",
-        "lmkrate": "firefox-release-lmkrate",
+        "anrrate":   "firefox-release-anrrate",
+        "lmkrate":   "firefox-release-lmkrate",
         "anomalies": "firefox-release-anomalies",
     },
     {
         "label": "Firefox Beta",
         "crashrate": "firefox-beta-crashrate",
-        "anrrate": "firefox-beta-anrrate",
-        "lmkrate": "firefox-beta-lmkrate",
+        "anrrate":   "firefox-beta-anrrate",
+        "lmkrate":   "firefox-beta-lmkrate",
         "anomalies": "firefox-beta-anomalies",
     },
     {
         "label": "Firefox Nightly",
         "crashrate": "firefox-nightly-crashrate",
-        "anrrate": "firefox-nightly-anrrate",
-        "lmkrate": "firefox-nightly-lmkrate",
+        "anrrate":   "firefox-nightly-anrrate",
+        "lmkrate":   "firefox-nightly-lmkrate",
         "anomalies": "firefox-nightly-anomalies",
     },
     {
         "label": "Firefox Focus",
         "crashrate": "focus-crashrate",
-        "anrrate": "focus-anrrate",
-        "lmkrate": "focus-lmkrate",
+        "anrrate":   "focus-anrrate",
+        "lmkrate":   "focus-lmkrate",
         "anomalies": "focus-anomalies",
     },
 ]
@@ -83,30 +82,35 @@ def _trend(current: float | None, baseline: float | None) -> str:
     return " →"
 
 
-def _top_version(result: dict) -> str:
-    """Return the Firefox version label for the row with the most active users."""
+def _top_version_row(result: dict) -> dict:
+    """Return the row with the most active users."""
     rows = result.get("rows", [])
     if not rows:
-        return "—"
-    best = max(rows, key=lambda r: r.get("distinctUsers", 0))
-    return best.get("firefoxVersion") or "—"
+        return {}
+    return max(rows, key=lambda r: r.get("distinctUsers", 0))
+
+
+def _find_version_row(result: dict, version_code: str) -> dict:
+    """Find a row matching a specific version code, or fall back to the top row."""
+    for row in result.get("rows", []):
+        if row.get("versionCode") == version_code:
+            return row
+    # Version code not found (e.g. different user sets for LMK) — use top row
+    return _top_version_row(result)
 
 
 def generate_markdown(results: dict) -> str:
     # Determine data date from the first successful crashrate result
     date_str = next(
-        (
-            results[g["crashrate"]]["date"]
-            for g in PRODUCT_GROUPS
-            if g["crashrate"] in results and results[g["crashrate"]].get("date")
-        ),
+        (results[g["crashrate"]]["date"] for g in PRODUCT_GROUPS
+         if g["crashrate"] in results and results[g["crashrate"]].get("date")),
         "unknown",
     )
 
     lines = [
         f"## Android Vitals — {date_str}",
         "",
-        "> Weighted aggregate rates across all active versions for the most recent available day.",
+        "> Rates for the top version (by active users) for the most recent available day.",
         "> Trend: ↑ >10% above 28-day avg · ↓ >10% below · → stable",
         "",
         "| Product | Top Version | Crash Rate | ANR Rate | LMK Rate | Active Users |",
@@ -114,28 +118,32 @@ def generate_markdown(results: dict) -> str:
     ]
 
     for group in PRODUCT_GROUPS:
-        crash_agg = (results.get(group["crashrate"]) or {}).get("aggregate") or {}
-        anr_agg = (results.get(group["anrrate"]) or {}).get("aggregate") or {}
-        lmk_agg = (results.get(group["lmkrate"]) or {}).get("aggregate") or {}
+        crash_result = results.get(group["crashrate"]) or {}
+        anr_result   = results.get(group["anrrate"])   or {}
+        lmk_result   = results.get(group["lmkrate"])   or {}
 
-        version = _top_version(results.get(group["crashrate"]) or {})
-        crash = _pct(crash_agg.get("userPerceivedCrashRate")) + _trend(
-            crash_agg.get("userPerceivedCrashRate"),
-            crash_agg.get("userPerceivedCrashRate28dUserWeighted"),
-        )
-        anr = _pct(anr_agg.get("userPerceivedAnrRate")) + _trend(
-            anr_agg.get("userPerceivedAnrRate"),
-            anr_agg.get("userPerceivedAnrRate28dUserWeighted"),
-        )
-        lmk = _pct(lmk_agg.get("userPerceivedLmkRate")) + _trend(
-            lmk_agg.get("userPerceivedLmkRate"),
-            lmk_agg.get("userPerceivedLmkRate28dUserWeighted"),
-        )
-        users = _fmt_users(crash_agg.get("distinctUsers"))
+        # Find the top version from crashrate (largest user base)
+        top_row = _top_version_row(crash_result)
+        version_code = top_row.get("versionCode", "")
+        version = top_row.get("firefoxVersion") or "—"
+        users = _fmt_users(top_row.get("distinctUsers"))
 
-        lines.append(
-            f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |"
+        # Pull the same version's metrics from each metric set
+        crash_row = top_row  # already from crashrate
+        anr_row   = _find_version_row(anr_result, version_code)
+        lmk_row   = _find_version_row(lmk_result, version_code)
+
+        crash = _pct(crash_row.get("userPerceivedCrashRate")) + _trend(
+            crash_row.get("userPerceivedCrashRate"), crash_row.get("userPerceivedCrashRate28dUserWeighted")
         )
+        anr = _pct(anr_row.get("userPerceivedAnrRate")) + _trend(
+            anr_row.get("userPerceivedAnrRate"), anr_row.get("userPerceivedAnrRate28dUserWeighted")
+        )
+        lmk = _pct(lmk_row.get("userPerceivedLmkRate")) + _trend(
+            lmk_row.get("userPerceivedLmkRate"), lmk_row.get("userPerceivedLmkRate28dUserWeighted")
+        )
+
+        lines.append(f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |")
 
     lines += ["", "### Anomalies (last 7 days)", ""]
 
@@ -169,16 +177,9 @@ def main():
     any_failed = False
     for query in manifest["queries"]:
         name = query["name"]
-        cmd = [
-            "uv",
-            "run",
-            "python",
-            "src/fetch_metrics.py",
-            "--package",
-            query["package"],
-            "--output-format",
-            "json",
-        ]
+        cmd = ["uv", "run", "python", "src/fetch_metrics.py",
+               "--package", query["package"],
+               "--output-format", "json"]
 
         if query.get("anomalies"):
             cmd.append("--anomalies")
@@ -212,7 +213,9 @@ def main():
             continue
 
         # Write individual result
-        (output_dir / f"{name}.json").write_text(json.dumps(data, indent=2))
+        (output_dir / f"{name}.json").write_text(
+            json.dumps(data, indent=2)
+        )
 
         # Extract date from first row
         raw_rows = data.get("rows", data.get("anomalies", []))
