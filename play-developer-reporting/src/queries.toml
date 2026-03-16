@@ -52,7 +52,7 @@ package = "org.mozilla.fenix"
 metric_set = "crashrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
 
 [[queries]]
 name = "firefox-nightly-anrrate"
@@ -60,7 +60,7 @@ package = "org.mozilla.fenix"
 metric_set = "anrrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
 
 [[queries]]
 name = "firefox-nightly-lmkrate"
@@ -68,7 +68,7 @@ package = "org.mozilla.fenix"
 metric_set = "lmkrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
 
 [[queries]]
 name = "focus-crashrate"
