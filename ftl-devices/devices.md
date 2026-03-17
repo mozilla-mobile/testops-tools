@@ -20,7 +20,7 @@
 | a05s | Samsung A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Medium |
-| a12 | Galaxy A12 | 31 | Medium |
+| a12 | Galaxy A12 | 31 | Low |
 | a13 | Galaxy A13 | 34 | Low |
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
@@ -79,7 +79,7 @@
 | e1q | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24 + | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
-| e3q | Galaxy S24 Ultra | 34 | Medium |
+| e3q | Galaxy S24 Ultra | 34 | Low |
 | e3q | Galaxy S24 Ultra | 36 | Low |
 | e3qcsx | Galaxy S24 Ultra | 36 | Low |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
@@ -126,7 +126,7 @@
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | p3q | Galaxy S21 Ultra | 35 | Low |
-| pa1q | Samsung S25 | 36 | High |
+| pa1q | Samsung S25 | 36 | Medium |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
