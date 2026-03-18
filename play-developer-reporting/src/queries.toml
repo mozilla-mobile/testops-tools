@@ -5,6 +5,7 @@ metric_set = "crashrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-release-anrrate"
@@ -13,6 +14,7 @@ metric_set = "anrrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-release-lmkrate"
@@ -21,6 +23,7 @@ metric_set = "lmkrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-beta-crashrate"
@@ -29,6 +32,7 @@ metric_set = "crashrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-beta-anrrate"
@@ -37,6 +41,7 @@ metric_set = "anrrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-beta-lmkrate"
@@ -45,6 +50,7 @@ metric_set = "lmkrate"
 days = 1
 top = 10
 resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-nightly-crashrate"
@@ -52,7 +58,8 @@ package = "org.mozilla.fenix"
 metric_set = "crashrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-nightly-anrrate"
@@ -60,7 +67,8 @@ package = "org.mozilla.fenix"
 metric_set = "anrrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "firefox-nightly-lmkrate"
@@ -68,7 +76,8 @@ package = "org.mozilla.fenix"
 metric_set = "lmkrate"
 days = 1
 top = 10
-resolve_versions = false
+resolve_versions = true
+compare_days = 28
 
 [[queries]]
 name = "focus-crashrate"
@@ -76,6 +85,7 @@ package = "org.mozilla.focus"
 metric_set = "crashrate"
 days = 1
 top = 10
+compare_days = 28
 
 [[queries]]
 name = "focus-anrrate"
@@ -83,6 +93,7 @@ package = "org.mozilla.focus"
 metric_set = "anrrate"
 days = 1
 top = 10
+compare_days = 28
 
 [[queries]]
 name = "focus-lmkrate"
@@ -90,6 +101,7 @@ package = "org.mozilla.focus"
 metric_set = "lmkrate"
 days = 1
 top = 10
+compare_days = 28
 
 [[queries]]
 name = "firefox-release-anomalies"

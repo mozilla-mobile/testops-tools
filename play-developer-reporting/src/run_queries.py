@@ -7,6 +7,37 @@ import sys
 import tomllib
 from pathlib import Path
 
+PRODUCT_GROUPS = [
+    {
+        "label": "Firefox Release",
+        "crashrate": "firefox-release-crashrate",
+        "anrrate":   "firefox-release-anrrate",
+        "lmkrate":   "firefox-release-lmkrate",
+        "anomalies": "firefox-release-anomalies",
+    },
+    {
+        "label": "Firefox Beta",
+        "crashrate": "firefox-beta-crashrate",
+        "anrrate":   "firefox-beta-anrrate",
+        "lmkrate":   "firefox-beta-lmkrate",
+        "anomalies": "firefox-beta-anomalies",
+    },
+    {
+        "label": "Firefox Nightly",
+        "crashrate": "firefox-nightly-crashrate",
+        "anrrate":   "firefox-nightly-anrrate",
+        "lmkrate":   "firefox-nightly-lmkrate",
+        "anomalies": "firefox-nightly-anomalies",
+    },
+    {
+        "label": "Firefox Focus",
+        "crashrate": "focus-crashrate",
+        "anrrate":   "focus-anrrate",
+        "lmkrate":   "focus-lmkrate",
+        "anomalies": "focus-anomalies",
+    },
+]
+
 
 def simplify_row(row: dict) -> dict:
     """Extract a compact representation of a row for the summary."""
@@ -24,6 +55,141 @@ def simplify_row(row: dict) -> dict:
             result[m["metric"]] = float(m["decimalValue"]["value"])
 
     return result
+
+
+def _pct(value: float | None) -> str:
+    return f"{value * 100:.2f}%" if value is not None else "—"
+
+
+def _fmt_users(value: float | None) -> str:
+    return f"{int(value):,}" if value is not None else "—"
+
+
+def _delta(current: float | None, previous: float | None) -> str:
+    """Format the delta between current and previous 28-day rates as ±X.XX%."""
+    if current is None or previous is None:
+        return "—"
+    diff = current - previous
+    sign = "+" if diff >= 0 else ""
+    return f"{sign}{diff * 100:.2f}%"
+
+
+def _trend(current: float | None, baseline: float | None) -> str:
+    """Return a trend arrow comparing current rate to its 28-day baseline.
+
+    ↑ = more than 10% above baseline (elevated, warrants attention)
+    ↓ = more than 10% below baseline (improving)
+    → = within 10% of baseline (stable)
+    """
+    if current is None or baseline is None or baseline == 0:
+        return ""
+    delta = (current - baseline) / baseline
+    if delta > 0.10:
+        return " ↑"
+    if delta < -0.10:
+        return " ↓"
+    return " →"
+
+
+def _top_version_row(result: dict) -> dict:
+    """Return the row with the most active users."""
+    rows = result.get("rows", [])
+    if not rows:
+        return {}
+    return max(rows, key=lambda r: r.get("distinctUsers", 0))
+
+
+def _find_version_row(result: dict, version_code: str) -> dict:
+    """Find a row matching a specific version code, or fall back to the top row."""
+    for row in result.get("rows", []):
+        if row.get("versionCode") == version_code:
+            return row
+    # Version code not found (e.g. different user sets for LMK) — use top row
+    return _top_version_row(result)
+
+
+def generate_markdown(results: dict) -> str:
+    # Determine data date from the first successful crashrate result
+    date_str = next(
+        (results[g["crashrate"]]["date"] for g in PRODUCT_GROUPS
+         if g["crashrate"] in results and results[g["crashrate"]].get("date")),
+        "unknown",
+    )
+
+    lines = [
+        f"## Android Vitals — {date_str}",
+        "",
+        "> Rates for the top version (by active users) for the most recent available day.",
+        "> Trend: ↑ >10% above 28-day avg · ↓ >10% below · → stable",
+        "> vs. 28d: change in 28-day weighted rate vs. previous 28-day period",
+        "",
+        "| Product | Top Version | Crash Rate | vs. 28d | ANR Rate | vs. 28d | LMK Rate | vs. 28d | Active Users |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+
+    for group in PRODUCT_GROUPS:
+        crash_result = results.get(group["crashrate"]) or {}
+        anr_result   = results.get(group["anrrate"])   or {}
+        lmk_result   = results.get(group["lmkrate"])   or {}
+
+        # Find the top version from crashrate (largest user base)
+        top_row = _top_version_row(crash_result)
+        version_code = top_row.get("versionCode", "")
+        version = top_row.get("firefoxVersion") or "—"
+        users = _fmt_users(top_row.get("distinctUsers"))
+
+        # Pull the same version's metrics from each metric set
+        crash_row = top_row  # already from crashrate
+        anr_row   = _find_version_row(anr_result, version_code)
+        lmk_row   = _find_version_row(lmk_result, version_code)
+
+        # Current rates with trend arrows
+        crash = _pct(crash_row.get("userPerceivedCrashRate")) + _trend(
+            crash_row.get("userPerceivedCrashRate"), crash_row.get("userPerceivedCrashRate28dUserWeighted")
+        )
+        anr = _pct(anr_row.get("userPerceivedAnrRate")) + _trend(
+            anr_row.get("userPerceivedAnrRate"), anr_row.get("userPerceivedAnrRate28dUserWeighted")
+        )
+        lmk = _pct(lmk_row.get("userPerceivedLmkRate")) + _trend(
+            lmk_row.get("userPerceivedLmkRate"), lmk_row.get("userPerceivedLmkRate28dUserWeighted")
+        )
+
+        # Deltas vs. previous 28-day period
+        crash_compare = crash_result.get("compare_aggregate") or {}
+        anr_compare   = anr_result.get("compare_aggregate") or {}
+        lmk_compare   = lmk_result.get("compare_aggregate") or {}
+
+        crash_delta = _delta(
+            crash_row.get("userPerceivedCrashRate28dUserWeighted"),
+            crash_compare.get("userPerceivedCrashRate28dUserWeighted"),
+        )
+        anr_delta = _delta(
+            anr_row.get("userPerceivedAnrRate28dUserWeighted"),
+            anr_compare.get("userPerceivedAnrRate28dUserWeighted"),
+        )
+        lmk_delta = _delta(
+            lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
+            lmk_compare.get("userPerceivedLmkRate28dUserWeighted"),
+        )
+
+        lines.append(f"| {group['label']} | {version} | {crash} | {crash_delta} | {anr} | {anr_delta} | {lmk} | {lmk_delta} | {users} |")
+
+    lines += ["", "### Anomalies (last 7 days)", ""]
+
+    any_anomalies = False
+    for group in PRODUCT_GROUPS:
+        count = (results.get(group["anomalies"]) or {}).get("row_count", 0)
+        if count:
+            any_anomalies = True
+            noun = "anomaly" if count == 1 else "anomalies"
+            lines.append(f"- **{group['label']}**: {count} {noun} detected")
+
+    if not any_anomalies:
+        lines.append("No anomalies detected.")
+
+    lines += ["", f"*Data date: {date_str} · Generated by play-developer-reporting*"]
+
+    return "\n".join(lines)
 
 
 def main():
@@ -57,6 +223,8 @@ def main():
             cmd.append("--resolve-versions")
         if query.get("min_users"):
             cmd.extend(["--min-users", str(query["min_users"])])
+        if query.get("compare_days"):
+            cmd.extend(["--compare-days", str(query["compare_days"])])
 
         print(f"Running: {name}", file=sys.stderr)
         result = subprocess.run(cmd, capture_output=True, text=True)
@@ -95,14 +263,15 @@ def main():
             "metric_set": query.get("metric_set", "anomalies"),
             "row_count": len(raw_rows),
             "aggregate": data.get("aggregate"),
+            "compare_aggregate": data.get("compare_aggregate"),
             "rows": [simplify_row(r) for r in raw_rows],
         }
         print(f"  OK ({len(raw_rows)} rows)", file=sys.stderr)
 
-    # Write summary manifest
-    (output_dir / "summary.json").write_text(
-        json.dumps(results, indent=2)
-    )
+    # Write summary manifest and markdown
+    (output_dir / "summary.json").write_text(json.dumps(results, indent=2))
+    (output_dir / "summary.md").write_text(generate_markdown(results))
+
     print(json.dumps(results, indent=2))
     if any_failed:
         sys.exit(1)
