@@ -1,0 +1,40 @@
+name: Firefox iOS Security Monitor Rotation
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'  # 1st of every month at 9 AM UTC
+  workflow_dispatch:
+
+jobs:
+  notify:
+    name: Pick security monitor and notify Slack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r slack-reminders/requirements.txt
+
+      - name: Pick name from sheet
+        run: python slack-reminders/firefox-ios-security-monitor.py
+        env:
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+
+      - name: Set month env var
+        run: echo "month=$(date +'%B %Y')" >> $GITHUB_ENV
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          payload-file-path: slack-reminders/ios-security-rotation.json
+          payload-templated: true
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
