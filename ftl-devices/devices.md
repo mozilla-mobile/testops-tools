@@ -1,6 +1,6 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
-| 1610 | vivo 1610 | 23 | Medium |
+| 1610 | vivo 1610 | 23 | Low |
 | A402SO | Xperia 10 | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
