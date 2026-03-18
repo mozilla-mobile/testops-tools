@@ -93,7 +93,7 @@ jobs:
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
 
       - name: Notify Slack (Fail)
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.1
         if: ${{ failure() }}
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_MOBILE_ALERTS_TOOLING }}

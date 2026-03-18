@@ -32,7 +32,7 @@ jobs:
           TASK_DELTA_QUERY_URL: "https://sql.telemetry.mozilla.org/queries/114534#280741"
 
       - name: Send Weekly Summary to Slack
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.1
         with:
           payload-file-path: "gcp-billing-notify/gcp_weekly.json"
           payload-templated: true
@@ -64,7 +64,7 @@ jobs:
           QUERY_TYPE: "monthly"
 
       - name: Send Monthly Summary to Slack
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.1
         with:
           payload-file-path: "gcp-billing-notify/gcp_yearly.json"
           payload-templated: true
