@@ -493,6 +493,13 @@ Examples:
     )
 
     parser.add_argument(
+        "--compare-days",
+        type=int,
+        help="Compare current rates against a snapshot from N days ago "
+        "(e.g., --compare-days 28 shows delta vs. previous 28-day period)",
+    )
+
+    parser.add_argument(
         "--anomalies",
         action="store_true",
         help="List detected anomalies (crash rate / ANR rate spikes) instead of "
@@ -528,6 +535,43 @@ def build_query_body(
     # Try to get the most recent data, will auto-retry with older dates if needed
     end_date = date.today()
     start_date = end_date - timedelta(days=days)
+
+    return {
+        "timelineSpec": {
+            "aggregationPeriod": "DAILY",
+            "startTime": {
+                "year": start_date.year,
+                "month": start_date.month,
+                "day": start_date.day,
+            },
+            "endTime": {
+                "year": end_date.year,
+                "month": end_date.month,
+                "day": end_date.day,
+            },
+        },
+        "metrics": metrics,
+        "dimensions": dimensions,
+        "pageSize": page_size,
+    }
+
+
+def build_compare_query_body(
+    metrics: list[str],
+    dimensions: list[str],
+    compare_days: int,
+    window_days: int,
+    page_size: int,
+) -> dict[str, Any]:
+    """Build a query body for the comparison period.
+
+    The comparison window mirrors the current query's window, shifted back by
+    ``compare_days``.  For example, with ``window_days=28`` and
+    ``compare_days=28``, this returns the period (today-56) to (today-28),
+    which can be compared against the current period (today-28) to (today).
+    """
+    end_date = date.today() - timedelta(days=compare_days)
+    start_date = end_date - timedelta(days=window_days)
 
     return {
         "timelineSpec": {
@@ -786,6 +830,7 @@ def output_pretty(
     exclude_zero: bool = False,
     version_codes: list[str] | None = None,
     resolver: VersionResolver | None = None,
+    compare_response: dict[str, Any] | None = None,
 ):
     """Output results in pretty tabular format."""
 
@@ -922,6 +967,53 @@ def output_pretty(
     table_rows.append([""] * len(headers))  # blank separator
     table_rows.append(summary_row)
 
+    # Comparison rows: PRIOR PERIOD and Δ
+    if compare_response:
+        compare_rows = compare_response.get("rows", [])
+        if metric_set_config and compare_rows:
+            compare_rows = filter_and_sort_rows(
+                compare_rows, top_n, min_users, exclude_zero, version_codes
+            )
+
+        comp_total_users = 0.0
+        comp_rate_totals: dict[str, float] = {}
+        for row in compare_rows:
+            row_users = 0.0
+            row_metrics: dict[str, float] = {}
+            for m in row.get("metrics", []):
+                if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                    row_users = float(m["decimalValue"]["value"])
+                elif "decimalValue" in m:
+                    row_metrics[m["metric"]] = float(m["decimalValue"]["value"])
+            comp_total_users += row_users
+            for mname, mval in row_metrics.items():
+                comp_rate_totals.setdefault(mname, 0.0)
+                comp_rate_totals[mname] += mval * row_users
+
+        prior_row = [""] * (num_dim_cols - 1) + ["PRIOR"]
+        delta_row  = [""] * (num_dim_cols - 1) + ["Δ"]
+        for metric_name in metric_set_config["metrics"]:
+            if not any(met["metric"] == metric_name for met in first_row.get("metrics", [])):
+                continue
+            if metric_name == "distinctUsers":
+                prior_row.append(f"{int(comp_total_users):,}")
+                delta_row.append("")
+            elif comp_total_users > 0 and metric_name in comp_rate_totals:
+                prior_avg = comp_rate_totals[metric_name] / comp_total_users
+                prior_row.append(f"{prior_avg * 100:.2f}%")
+                # Delta in percentage points (pp)
+                curr_avg = rate_totals.get(metric_name, 0.0) / total_users if total_users > 0 else 0.0
+                delta_pp = (curr_avg - prior_avg) * 100
+                sign = "+" if delta_pp >= 0 else ""
+                delta_row.append(f"{sign}{delta_pp:.2f}pp")
+            else:
+                prior_row.append("N/A")
+                delta_row.append("N/A")
+        prior_row.append("")
+        delta_row.append("")
+        table_rows.append(prior_row)
+        table_rows.append(delta_row)
+
     print(tabulate(table_rows, headers=headers))
 
 
@@ -997,6 +1089,7 @@ def output_json(
     exclude_zero: bool = False,
     version_codes: list[str] | None = None,
     resolver: VersionResolver | None = None,
+    compare_response: dict[str, Any] | None = None,
 ):
     """Output results in JSON format, with an aggregate summary."""
 
@@ -1038,9 +1131,42 @@ def output_json(
     for mname, weighted_sum in rate_totals.items():
         aggregate[mname] = weighted_sum / total_users if total_users > 0 else 0.0
 
+    # Compute comparison aggregate if provided
+    compare_aggregate = None
+    if compare_response:
+        compare_rows = compare_response.get("rows", [])
+        if metric_set_config and compare_rows:
+            compare_rows = filter_and_sort_rows(compare_rows, top_n, min_users, exclude_zero, version_codes)
+        comp_total_users = 0
+        comp_rate_totals = {}
+        for row in compare_rows:
+            row_users = 0
+            row_metrics = {}
+            for m in row.get("metrics", []):
+                if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                    row_users = float(m["decimalValue"]["value"])
+                elif "decimalValue" in m:
+                    row_metrics[m["metric"]] = float(m["decimalValue"]["value"])
+            comp_total_users += row_users
+            for mname, mval in row_metrics.items():
+                comp_rate_totals.setdefault(mname, 0.0)
+                comp_rate_totals[mname] += mval * row_users
+
+        compare_aggregate = {"distinctUsers": comp_total_users}
+        for mname, weighted_sum in comp_rate_totals.items():
+            compare_aggregate[mname] = weighted_sum / comp_total_users if comp_total_users > 0 else 0.0
+
+        # Extract comparison date
+        if compare_rows:
+            st = compare_rows[0].get("startTime", {})
+            if st:
+                compare_aggregate["date"] = f"{st.get('year', '')}-{st.get('month', 0):02d}-{st.get('day', 0):02d}"
+
     output = dict(response)
     output["rows"] = rows
     output["aggregate"] = aggregate
+    if compare_aggregate:
+        output["compare_aggregate"] = compare_aggregate
 
     print(json.dumps(output, indent=2))
 
@@ -1209,6 +1335,22 @@ def main():
         # Execute query
         response = query_vitals(service, args.package, metric_set_config, body)
 
+        # Execute comparison query if requested
+        compare_response = None
+        if args.compare_days:
+            compare_body = build_compare_query_body(
+                metrics, args.dimensions, args.compare_days, args.days, args.page_size
+            )
+            try:
+                compare_response = query_vitals(
+                    service, args.package, metric_set_config, compare_body
+                )
+            except Exception as e:
+                print(
+                    f"Warning: comparison query failed ({e}), skipping.",
+                    file=sys.stderr,
+                )
+
         # Parse version codes if provided
         version_codes = None
         if args.version_code:
@@ -1226,6 +1368,7 @@ def main():
                 args.exclude_zero,
                 version_codes,
                 resolver,
+                compare_response,
             )
         elif args.output_format == "csv":
             output_csv(
@@ -1247,6 +1390,7 @@ def main():
                 args.exclude_zero,
                 version_codes,
                 resolver,
+                compare_response,
             )
 
     except google.auth.exceptions.DefaultCredentialsError:

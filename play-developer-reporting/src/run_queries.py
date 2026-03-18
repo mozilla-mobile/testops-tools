@@ -65,6 +65,15 @@ def _fmt_users(value: float | None) -> str:
     return f"{int(value):,}" if value is not None else "—"
 
 
+def _delta(current: float | None, previous: float | None) -> str:
+    """Format the delta between current and previous 28-day rates as ±X.XX%."""
+    if current is None or previous is None:
+        return "—"
+    diff = current - previous
+    sign = "+" if diff >= 0 else ""
+    return f"{sign}{diff * 100:.2f}%"
+
+
 def _trend(current: float | None, baseline: float | None) -> str:
     """Return a trend arrow comparing current rate to its 28-day baseline.
 
@@ -112,9 +121,10 @@ def generate_markdown(results: dict) -> str:
         "",
         "> Rates for the top version (by active users) for the most recent available day.",
         "> Trend: ↑ >10% above 28-day avg · ↓ >10% below · → stable",
+        "> vs. 28d: change in 28-day weighted rate vs. previous 28-day period",
         "",
-        "| Product | Top Version | Crash Rate | ANR Rate | LMK Rate | Active Users |",
-        "| --- | --- | --- | --- | --- | --- |",
+        "| Product | Top Version | Crash Rate | vs. 28d | ANR Rate | vs. 28d | LMK Rate | vs. 28d | Active Users |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
 
     for group in PRODUCT_GROUPS:
@@ -133,6 +143,7 @@ def generate_markdown(results: dict) -> str:
         anr_row   = _find_version_row(anr_result, version_code)
         lmk_row   = _find_version_row(lmk_result, version_code)
 
+        # Current rates with trend arrows
         crash = _pct(crash_row.get("userPerceivedCrashRate")) + _trend(
             crash_row.get("userPerceivedCrashRate"), crash_row.get("userPerceivedCrashRate28dUserWeighted")
         )
@@ -143,7 +154,25 @@ def generate_markdown(results: dict) -> str:
             lmk_row.get("userPerceivedLmkRate"), lmk_row.get("userPerceivedLmkRate28dUserWeighted")
         )
 
-        lines.append(f"| {group['label']} | {version} | {crash} | {anr} | {lmk} | {users} |")
+        # Deltas vs. previous 28-day period
+        crash_compare = crash_result.get("compare_aggregate") or {}
+        anr_compare   = anr_result.get("compare_aggregate") or {}
+        lmk_compare   = lmk_result.get("compare_aggregate") or {}
+
+        crash_delta = _delta(
+            crash_row.get("userPerceivedCrashRate28dUserWeighted"),
+            crash_compare.get("userPerceivedCrashRate28dUserWeighted"),
+        )
+        anr_delta = _delta(
+            anr_row.get("userPerceivedAnrRate28dUserWeighted"),
+            anr_compare.get("userPerceivedAnrRate28dUserWeighted"),
+        )
+        lmk_delta = _delta(
+            lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
+            lmk_compare.get("userPerceivedLmkRate28dUserWeighted"),
+        )
+
+        lines.append(f"| {group['label']} | {version} | {crash} | {crash_delta} | {anr} | {anr_delta} | {lmk} | {lmk_delta} | {users} |")
 
     lines += ["", "### Anomalies (last 7 days)", ""]
 
@@ -194,6 +223,8 @@ def main():
             cmd.append("--resolve-versions")
         if query.get("min_users"):
             cmd.extend(["--min-users", str(query["min_users"])])
+        if query.get("compare_days"):
+            cmd.extend(["--compare-days", str(query["compare_days"])])
 
         print(f"Running: {name}", file=sys.stderr)
         result = subprocess.run(cmd, capture_output=True, text=True)
@@ -232,6 +263,7 @@ def main():
             "metric_set": query.get("metric_set", "anomalies"),
             "row_count": len(raw_rows),
             "aggregate": data.get("aggregate"),
+            "compare_aggregate": data.get("compare_aggregate"),
             "rows": [simplify_row(r) for r in raw_rows],
         }
         print(f"  OK ({len(raw_rows)} rows)", file=sys.stderr)
