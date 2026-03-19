@@ -39,16 +39,6 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_FIREFOX_IOS_DEV }}
           webhook-type: incoming-webhook
 
-      # TODO: Let's set the channel topic later
-      # - name: Set channel topic
-      #   uses: slackapi/slack-github-action@v2.1.1
-      #   with:
-      #     method: conversations.setTopic
-      #     token: ${{ secrets.SLACK_BOT_TOKEN }}
-      #     payload: |
-      #       channel: "${{ secrets.SLACK_CHANNEL_ID_MOBILE_ALERTS_SANDBOX }}"
-      #       topic: "Security Monitor (${{ env.month }}): ${{ env.security_monitor_name }}"
-
       - name: Commit updated rotation state
         run: |
           git config user.name "github-actions[bot]"
