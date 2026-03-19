@@ -1,0 +1,20 @@
+{
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": ":lock: *iOS Security Monitor \u2014 ${{ env.month }}*\n\nThis month's security monitor is *${{ env.security_monitor_name }}*\n\n<https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2426896410/iOS+Security+Monitor+Role|iOS Security Monitor Role>"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview#Test-Operations|Mobile Test Engineering>"
+        }
+      ]
+    }
+  ]
+}

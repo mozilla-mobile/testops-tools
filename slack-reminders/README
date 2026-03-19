@@ -1,0 +1,6 @@
+Firefox iOS security monitor
+* Read from "iOS Security Rotation"
+https://docs.google.com/spreadsheets/d/1wztmBmuPsRng43u29WLplWd2kq4zhh17eioYEMEgXiE/edit?gid=1924036859#gid=1924036859
+* Read the name from security_monitor_state.txt. Get the next person in the list.
+* Send notification to #firefox-ios-dev
+* TODO: Update channel topic
