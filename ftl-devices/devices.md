@@ -6,7 +6,7 @@
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | OP535DL1 | CPH2409 | 34 | Low |
-| OP5552L1 | CPH2415 | 34 | Medium |
+| OP5552L1 | CPH2415 | 34 | Low |
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | SC-53C | Galaxy A53 5G | 36 | Low |
@@ -29,10 +29,12 @@
 | a15 | Samsung A15 | 34 | Low |
 | a15x | Samsung A15 5G | 34 | Low |
 | a15x | Samsung A15 5G | 36 | Low |
+| a15xtfn | Galaxy A15 5G | 36 | Low |
 | a16 | Samsung SM-A165M | 35 | Low |
 | a16x | Samsung A16 5G | 35 | Low |
 | a16x | Samsung A16 5G | 34 | Low |
 | a16x | Samsung A16 5G | 36 | Low |
+| a16xeea | Samsung A16 5G | 35 | Low |
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | SM-A256U1 | 34 | Low |
 | a26x | Samsung SM-A266B | 36 | Low |
@@ -49,12 +51,13 @@
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
-| austin | moto g 5G (2022) | 33 | Medium |
+| austin | moto g 5G (2022) | 33 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
+| b6qsqw | Galaxy Z Flip 6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
