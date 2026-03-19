@@ -27,4 +27,6 @@ if __name__ == "__main__":
     github_env = os.environ.get("GITHUB_ENV")
     if github_env:
         with open(github_env, "a") as f:
+            # For testing, let the Slack message to ping me
+            picked = "Clare So"
             f.write(f"security_monitor_name={picked}\n")
