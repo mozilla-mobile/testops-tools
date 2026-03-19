@@ -36,7 +36,7 @@ jobs:
         with:
           payload-file-path: slack-reminders/ios-security-rotation.json
           payload-templated: true
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_FIREFOX_IOS_DEV }}
           webhook-type: incoming-webhook
 
       # TODO: Let's set the channel topic later
@@ -54,5 +54,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add slack-reminders/security_monitor_state.txt
-          git commit -m "chore: update security monitor rotation state to $(cat slack-reminders/security_monitor_state.txt)"
+          git commit -m "chore: Update security monitor rotation state
           git push
