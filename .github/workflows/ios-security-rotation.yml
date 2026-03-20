@@ -1,8 +1,8 @@
 name: Firefox iOS Security Monitor Rotation
 
 on:
-  schedule:
-    - cron: '0 9 15-21 * 1'  # Third Monday of every month at 9 AM UTC
+  # schedule:
+  #   - cron: '0 9 15-21 * 1'  # Third Monday of every month at 9 AM UTC
   workflow_dispatch:
 
 jobs:
