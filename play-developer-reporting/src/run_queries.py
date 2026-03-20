@@ -91,6 +91,43 @@ def _trend(current: float | None, baseline: float | None) -> str:
     return " →"
 
 
+def _narrative_summary(results: dict) -> str:
+    """One-line digest of notable changes across all products.
+
+    Flags any metric whose 28-day weighted rate moved more than 10% relative
+    to the prior 28-day period (matching the ↑↓ threshold used in the table).
+    """
+    concerns: list[str] = []
+    improvements: list[str] = []
+
+    checks = [
+        ("crashrate",  "userPerceivedCrashRate28dUserWeighted",  "crash"),
+        ("anrrate",    "userPerceivedAnrRate28dUserWeighted",     "ANR"),
+        ("lmkrate",    "userPerceivedLmkRate28dUserWeighted",     "LMK"),
+    ]
+
+    for group in PRODUCT_GROUPS:
+        for result_key, metric_key, label in checks:
+            result = results.get(group[result_key]) or {}
+            top_row = _top_version_row(result)
+            current = top_row.get(metric_key)
+            prior = (result.get("compare_aggregate") or {}).get(metric_key)
+            if current is None or prior is None or prior == 0:
+                continue
+            relative = (current - prior) / prior
+            if relative > 0.10:
+                concerns.append(f"{group['label']} {label} ↑")
+            elif relative < -0.10:
+                improvements.append(f"{group['label']} {label} ↓")
+
+    parts = []
+    if concerns:
+        parts.append("⚠️  " + "  ·  ".join(concerns))
+    if improvements:
+        parts.append("✅  " + "  ·  ".join(improvements))
+    return "  ·  ".join(parts) if parts else "All products stable across crash, ANR, and LMK rates 🟢"
+
+
 def _top_version_row(result: dict) -> dict:
     """Return the row with the most active users."""
     rows = result.get("rows", [])
@@ -192,6 +229,119 @@ def generate_markdown(results: dict) -> str:
     return "\n".join(lines)
 
 
+def generate_slack_payload(results: dict) -> dict:
+    """Build a Slack Block Kit payload (Proposal 3 format) from query results."""
+    date_str = next(
+        (results[g["crashrate"]]["date"] for g in PRODUCT_GROUPS
+         if g["crashrate"] in results and results[g["crashrate"]].get("date")),
+        "unknown",
+    )
+
+    rows = []
+    for group in PRODUCT_GROUPS:
+        crash_result = results.get(group["crashrate"]) or {}
+        anr_result   = results.get(group["anrrate"])   or {}
+        lmk_result   = results.get(group["lmkrate"])   or {}
+
+        top_row      = _top_version_row(crash_result)
+        version_code = top_row.get("versionCode", "")
+        version      = top_row.get("firefoxVersion") or "—"
+        users        = _fmt_users(top_row.get("distinctUsers"))
+
+        anr_row = _find_version_row(anr_result, version_code)
+        lmk_row = _find_version_row(lmk_result, version_code)
+
+        crash_cmp = crash_result.get("compare_aggregate") or {}
+        anr_cmp   = anr_result.get("compare_aggregate")   or {}
+        lmk_cmp   = lmk_result.get("compare_aggregate")   or {}
+
+        rows.append({
+            "product":  group["label"],
+            "version":  version,
+            "crash":    _pct(top_row.get("userPerceivedCrashRate")) + _trend(
+                top_row.get("userPerceivedCrashRate"),
+                top_row.get("userPerceivedCrashRate28dUserWeighted"),
+            ),
+            "crash28d": _delta(
+                top_row.get("userPerceivedCrashRate28dUserWeighted"),
+                crash_cmp.get("userPerceivedCrashRate28dUserWeighted"),
+            ),
+            "anr":      _pct(anr_row.get("userPerceivedAnrRate")) + _trend(
+                anr_row.get("userPerceivedAnrRate"),
+                anr_row.get("userPerceivedAnrRate28dUserWeighted"),
+            ),
+            "anr28d":   _delta(
+                anr_row.get("userPerceivedAnrRate28dUserWeighted"),
+                anr_cmp.get("userPerceivedAnrRate28dUserWeighted"),
+            ),
+            "lmk":      _pct(lmk_row.get("userPerceivedLmkRate")) + _trend(
+                lmk_row.get("userPerceivedLmkRate"),
+                lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
+            ),
+            "lmk28d":   _delta(
+                lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
+                lmk_cmp.get("userPerceivedLmkRate28dUserWeighted"),
+            ),
+            "users":    users,
+        })
+
+    anomaly_lines = [
+        f"• *{g['label']}*: {(results.get(g['anomalies']) or {}).get('row_count')} anomaly/anomalies detected"
+        for g in PRODUCT_GROUPS
+        if (results.get(g["anomalies"]) or {}).get("row_count", 0) > 0
+    ]
+    anomaly_text = "\n".join(anomaly_lines) if anomaly_lines else "No anomalies detected."
+
+    return {
+        "blocks": [
+            {
+                "type": "header",
+                "text": {"type": "plain_text", "text": f"Android Vitals \u2014 {date_str}"},
+            },
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": _narrative_summary(results)},
+            },
+            {"type": "divider"},
+            {
+                "type": "table",
+                "columns": [
+                    {"key": "product",  "header": "Product",      "width": 2},
+                    {"key": "version",  "header": "Version",       "width": 1},
+                    {"key": "crash",    "header": "Crash Rate",    "width": 1},
+                    {"key": "crash28d", "header": "vs. 28d",       "width": 1},
+                    {"key": "anr",      "header": "ANR Rate",      "width": 1},
+                    {"key": "anr28d",   "header": "vs. 28d",       "width": 1},
+                    {"key": "lmk",      "header": "LMK Rate",      "width": 1},
+                    {"key": "lmk28d",   "header": "vs. 28d",       "width": 1},
+                    {"key": "users",    "header": "Active Users",  "width": 1},
+                ],
+                "rows": rows,
+            },
+            {"type": "divider"},
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"*Anomalies (last 7 days)*\n{anomaly_text}"},
+            },
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "mrkdwn",
+                        "text": (
+                            "\u2191 >10% above 28-day avg  \u00b7  "
+                            "\u2193 >10% below  \u00b7  "
+                            "\u2192 stable  \u00b7  "
+                            f"Data date: {date_str}  \u00b7  "
+                            "<https://play.google.com/console|Open Play Console>"
+                        ),
+                    }
+                ],
+            },
+        ]
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", default="queries.toml")
@@ -268,9 +418,10 @@ def main():
         }
         print(f"  OK ({len(raw_rows)} rows)", file=sys.stderr)
 
-    # Write summary manifest and markdown
+    # Write summary manifest, markdown, and Slack payload
     (output_dir / "summary.json").write_text(json.dumps(results, indent=2))
     (output_dir / "summary.md").write_text(generate_markdown(results))
+    (output_dir / "slack_payload.json").write_text(json.dumps(generate_slack_payload(results), indent=2))
 
     print(json.dumps(results, indent=2))
     if any_failed:
