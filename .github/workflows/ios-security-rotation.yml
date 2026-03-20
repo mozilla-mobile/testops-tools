@@ -45,5 +45,5 @@ jobs:
         with:
           payload-file-path: slack-reminders/ios-security-rotation.json
           payload-templated: true
-          webhook: ${{ secrets.SLACK_WEBHOOK_FIREFOX_IOS_DEV }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
