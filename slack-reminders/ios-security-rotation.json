@@ -4,7 +4,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": ":lock: *iOS Security Monitor \u2014 ${{ env.date }}*\n\nStarting today's security monitor is *@${{ env.security_monitor_name }}*\n\n<https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2426896410/iOS+Security+Monitor+Role|iOS Security Monitor Role>"
+        "text": ":lock: *iOS Security Monitor \u2014 ${{ env.date }}*\n\nThe current security monitor is now *@${{ env.security_monitor_name }}*\n\n<https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2426896410/iOS+Security+Monitor+Role|iOS Security Monitor Role>"
       }
     },
     {
