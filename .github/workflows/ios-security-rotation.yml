@@ -1,8 +1,8 @@
 name: Firefox iOS Security Monitor Rotation
 
 on:
-  # schedule:
-  #   - cron: '0 9 15-21 * 1'  # Third Monday of every month at 9 AM UTC
+  schedule:
+    - cron: '0 9 * * 1-5'  # Every weekday at 9 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -23,26 +23,27 @@ jobs:
       - name: Install dependencies
         run: pip install -r slack-reminders/requirements.txt
 
-      - name: Pick name from sheet
-        run: python slack-reminders/firefox-ios-security-monitor.py
+      - name: Pick name from schedule
+        id: pick
+        run: |
+          name=$(python slack-reminders/firefox-ios-security-monitor.py)
+          echo "security_monitor_name=$name" >> $GITHUB_OUTPUT
+          echo "date=$(date +'%B %d, %Y')" >> $GITHUB_OUTPUT
+
+      - name: Print current assignee if no rotation today
+        if: steps.pick.outputs.security_monitor_name == ''
+        run: |
+          current=$(python slack-reminders/firefox-ios-security-monitor.py --current)
+          echo "No rotation today. Current security monitor: $current"
+
+      - name: Send Slack notification if there is a new assignee starting today
+        if: steps.pick.outputs.security_monitor_name != ''
         env:
-          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-
-      - name: Set month env var
-        run: echo "month=$(date +'%B %Y')" >> $GITHUB_ENV
-
-      - name: Send Slack notification
+          security_monitor_name: ${{ steps.pick.outputs.security_monitor_name }}
+          date: ${{ steps.pick.outputs.date }}
         uses: slackapi/slack-github-action@v2.1.1
         with:
           payload-file-path: slack-reminders/ios-security-rotation.json
           payload-templated: true
-          webhook: ${{ secrets.SLACK_WEBHOOK_FIREFOX_IOS_DEV }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
-
-      - name: Commit updated rotation state
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add slack-reminders/security_monitor_state.txt
-          git commit -m "chore: Update security monitor rotation state
-          git push
