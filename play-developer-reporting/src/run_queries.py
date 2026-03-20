@@ -237,7 +237,33 @@ def generate_slack_payload(results: dict) -> dict:
         "unknown",
     )
 
-    rows = []
+    def _bold_cell(text: str) -> dict:
+        return {
+            "type": "rich_text",
+            "elements": [{"type": "rich_text_section", "elements": [
+                {"type": "text", "text": text, "style": {"bold": True}}
+            ]}],
+        }
+
+    def _raw_cell(text: str) -> dict:
+        return {"type": "raw_text", "text": text}
+
+    def _metric_cell(rate, baseline, cmp_baseline) -> dict:
+        pct = _pct(rate)
+        trend = _trend(rate, baseline)
+        delta = _delta(baseline, cmp_baseline)
+        return _raw_cell(f"{pct} {trend} ({delta})")
+
+    header_row = [
+        _bold_cell("Product"),
+        _bold_cell("Version"),
+        _bold_cell("Crash (vs. 28d)"),
+        _bold_cell("ANR (vs. 28d)"),
+        _bold_cell("LMK (vs. 28d)"),
+        _bold_cell("Active Users"),
+    ]
+
+    rows = [header_row]
     for group in PRODUCT_GROUPS:
         crash_result = results.get(group["crashrate"]) or {}
         anr_result   = results.get(group["anrrate"])   or {}
@@ -255,35 +281,26 @@ def generate_slack_payload(results: dict) -> dict:
         anr_cmp   = anr_result.get("compare_aggregate")   or {}
         lmk_cmp   = lmk_result.get("compare_aggregate")   or {}
 
-        rows.append({
-            "product":  group["label"],
-            "version":  version,
-            "crash":    _pct(top_row.get("userPerceivedCrashRate")) + _trend(
+        rows.append([
+            _raw_cell(group["label"]),
+            _raw_cell(version),
+            _metric_cell(
                 top_row.get("userPerceivedCrashRate"),
-                top_row.get("userPerceivedCrashRate28dUserWeighted"),
-            ),
-            "crash28d": _delta(
                 top_row.get("userPerceivedCrashRate28dUserWeighted"),
                 crash_cmp.get("userPerceivedCrashRate28dUserWeighted"),
             ),
-            "anr":      _pct(anr_row.get("userPerceivedAnrRate")) + _trend(
+            _metric_cell(
                 anr_row.get("userPerceivedAnrRate"),
-                anr_row.get("userPerceivedAnrRate28dUserWeighted"),
-            ),
-            "anr28d":   _delta(
                 anr_row.get("userPerceivedAnrRate28dUserWeighted"),
                 anr_cmp.get("userPerceivedAnrRate28dUserWeighted"),
             ),
-            "lmk":      _pct(lmk_row.get("userPerceivedLmkRate")) + _trend(
+            _metric_cell(
                 lmk_row.get("userPerceivedLmkRate"),
-                lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
-            ),
-            "lmk28d":   _delta(
                 lmk_row.get("userPerceivedLmkRate28dUserWeighted"),
                 lmk_cmp.get("userPerceivedLmkRate28dUserWeighted"),
             ),
-            "users":    users,
-        })
+            _raw_cell(users),
+        ])
 
     anomaly_lines = [
         f"• *{g['label']}*: {(results.get(g['anomalies']) or {}).get('row_count')} anomaly/anomalies detected"
@@ -305,18 +322,15 @@ def generate_slack_payload(results: dict) -> dict:
             {"type": "divider"},
             {
                 "type": "table",
-                "columns": [
-                    {"key": "product",  "header": "Product",      "width": 2},
-                    {"key": "version",  "header": "Version",       "width": 1},
-                    {"key": "crash",    "header": "Crash Rate",    "width": 1},
-                    {"key": "crash28d", "header": "vs. 28d",       "width": 1},
-                    {"key": "anr",      "header": "ANR Rate",      "width": 1},
-                    {"key": "anr28d",   "header": "vs. 28d",       "width": 1},
-                    {"key": "lmk",      "header": "LMK Rate",      "width": 1},
-                    {"key": "lmk28d",   "header": "vs. 28d",       "width": 1},
-                    {"key": "users",    "header": "Active Users",  "width": 1},
-                ],
                 "rows": rows,
+                "column_settings": [
+                    {"align": "left"},
+                    {"align": "left"},
+                    {"align": "right"},
+                    {"align": "right"},
+                    {"align": "right"},
+                    {"align": "right"},
+                ],
             },
             {"type": "divider"},
             {
