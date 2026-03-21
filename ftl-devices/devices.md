@@ -15,7 +15,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | XQ-DC54 | 34 | High |
-| XQ-DQ72 | XQ-DQ72 | 34 | High |
+| XQ-DQ72 | XQ-DQ72 | 34 | Medium |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Samsung A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -62,7 +62,7 @@
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
 | c1q | Galaxy Note 20 5G | 33 | Low |
-| cactus | Redmi 6A | 27 | Medium |
+| cactus | Redmi 6A | 27 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
