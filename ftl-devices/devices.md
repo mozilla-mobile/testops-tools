@@ -103,7 +103,7 @@
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
-| gts7lwifi | SM-T870 | 33 | Medium |
+| gts7lwifi | SM-T870 | 33 | Low |
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
