@@ -39,7 +39,7 @@
 | a25x | SM-A256U1 | 34 | Low |
 | a26x | Samsung SM-A266B | 36 | Low |
 | a34x | Samsung SM-A346N | 36 | Low |
-| a35x | Samsung A35 | 34 | Medium |
+| a35x | Samsung A35 | 34 | Low |
 | a35x | Samsung A35 | 35 | Low |
 | a35x | Samsung A35 | 36 | Low |
 | a36xq | Samsung SM-A366E | 35 | Low |
@@ -70,7 +70,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
-| cuscoi | motorola edge 50 fusion | 35 | Low |
+| cuscoi | motorola edge 50 fusion | 35 | Medium |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
@@ -100,7 +100,7 @@
 | g0q | SM-S906U1 | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
-| gta8wifi | Galaxy Tab A8 | 34 | Medium |
+| gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts7lwifi | SM-T870 | 33 | Low |
@@ -163,6 +163,6 @@
 | tokay | Pixel 9 | 35 | Medium |
 | tokay | Pixel 9 | 36 | Medium |
 | xcover7 | SM-G556B | 34 | Low |
-| xcoverpro | Galaxy XCover Pro | 33 | Medium |
+| xcoverpro | Galaxy XCover Pro | 33 | Low |
 | y2q | S20 Plus 5G | 33 | Low |
 
