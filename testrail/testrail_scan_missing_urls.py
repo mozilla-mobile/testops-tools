@@ -246,9 +246,9 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         idx = func_idx - 1
         in_multiline_comment = False
 
-        # If prev1 is closing a multiline comment or is a Smoke marker,
-        # we need to search upward
-        if prev1.endswith("*/") or prev1.startswith("*") or SMOKE_RE.match(lines[func_idx - 1]):
+        # If prev1 is closing a multiline comment or is any comment line (// ...),
+        # we need to search upward for the TestRail URL
+        if prev1.endswith("*/") or prev1.startswith("*") or prev1.startswith("//"):
             # Skip upward over comments
             while idx >= 0:
                 line = lines[idx].strip()
