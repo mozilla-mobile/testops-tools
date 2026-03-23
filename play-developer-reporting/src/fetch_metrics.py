@@ -172,7 +172,7 @@ def resolve_version_name(
         latest_version = releases[-1][1]
         try:
             major = int(latest_version.split(".")[0])
-            return f"{major + 1}.0b"
+            return f"{major + 1}.0RC"
         except (ValueError, IndexError):
             return latest_version
     return "unknown"
