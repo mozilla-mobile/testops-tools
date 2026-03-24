@@ -20,9 +20,6 @@ jobs:
           python-version: '3.13'
           cache: 'pip'
 
-      - name: Install dependencies
-        run: pip install -r slack-reminders/requirements.txt
-
       - name: Pick name from schedule
         id: pick
         run: |
