@@ -56,6 +56,7 @@
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
+| b5qsqw | Galaxy Z Flip 5 | 36 | Low |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
 | b6qsqw | Galaxy Z Flip 6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
@@ -69,7 +70,7 @@
 | caprip | moto g(30) | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
-| comet | Pixel 9 Pro Fold | 35 | Medium |
+| comet | Pixel 9 Pro Fold | 35 | Low |
 | cuscoi | motorola edge 50 fusion | 35 | Medium |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
@@ -99,7 +100,7 @@
 | g0q | SM-S906U1 | 34 | Medium |
 | g0q | SM-S906U1 | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
-| gta7lite | Galaxy Tab A7 Lite | 34 | Medium |
+| gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | SM-X210 | 34 | Medium |
 | gts3lltevzw | Galaxy Tab S3 | 28 | Low |
