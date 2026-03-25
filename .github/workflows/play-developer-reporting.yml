@@ -29,3 +29,10 @@ jobs:
 
       - name: Summary
         run: cat /tmp/vitals-output/summary.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Slack
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: /tmp/vitals-output/slack_payload.json
