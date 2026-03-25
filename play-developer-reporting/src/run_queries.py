@@ -129,11 +129,11 @@ def _narrative_summary(results: dict) -> str:
 
 
 def _top_version_row(result: dict) -> dict:
-    """Return the row with the most active users."""
+    """Return the row with the highest (latest) version code."""
     rows = result.get("rows", [])
     if not rows:
         return {}
-    return max(rows, key=lambda r: r.get("distinctUsers", 0))
+    return max(rows, key=lambda r: r.get("versionCode", 0))
 
 
 def _find_version_row(result: dict, version_code: str) -> dict:
