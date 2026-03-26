@@ -45,7 +45,7 @@
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | Medium |
+| a54x | Galaxy A54 5G | 34 | Low |
 | a56x | SM-A566E | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
@@ -69,7 +69,7 @@
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
-| comet | Pixel 9 Pro Fold | 34 | Medium |
+| comet | Pixel 9 Pro Fold | 34 | Low |
 | comet | Pixel 9 Pro Fold | 35 | Low |
 | cuscoi | motorola edge 50 fusion | 35 | Medium |
 | dm1q | Samsung S23 | 35 | Low |
@@ -144,7 +144,7 @@
 | r0q | Galaxy S22 | 34 | High |
 | r0qcsx | Samsung S22 | 36 | Low |
 | r11 | Google Pixel Watch | 30 | Medium |
-| r11q | SM-S711U | 34 | Medium |
+| r11q | SM-S711U | 34 | Low |
 | r11s | SM-S711N | 36 | Low |
 | r12s | SM-S721U1 | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
