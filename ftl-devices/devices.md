@@ -68,7 +68,7 @@
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
-| cheetah | Pixel 7 Pro | 33 | Medium |
+| cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | Low |
 | comet | Pixel 9 Pro Fold | 35 | Low |
 | cuscoi | motorola edge 50 fusion | 35 | Medium |
