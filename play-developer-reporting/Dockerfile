@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.10.11-python3.12-trixie
+FROM ghcr.io/astral-sh/uv:0.11.1-python3.12-trixie
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY src/ src/
