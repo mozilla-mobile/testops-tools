@@ -11,7 +11,7 @@
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
-| SO-41A | Xperia 10 II | 31 | Medium |
+| SO-41A | Xperia 10 II | 31 | Low |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | XQ-DC54 | 34 | High |
