@@ -343,6 +343,21 @@ def generate_slack_payload(results: dict) -> dict:
                     }
                 ],
             },
+            {"type": "divider"},
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "image",
+                        "image_url": "https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_72.png",
+                        "alt_text": "TestOps logo",
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": "Created by Mobile Test Engineering",
+                    },
+                ],
+            },
         ]
     }
 
@@ -380,6 +395,8 @@ def main():
             cmd.extend(["--min-users", str(query["min_users"])])
         if query.get("compare_days"):
             cmd.extend(["--compare-days", str(query["compare_days"])])
+        if query.get("sort_by"):
+            cmd.extend(["--sort-by", query["sort_by"]])
 
         print(f"Running: {name}", file=sys.stderr)
         result = subprocess.run(cmd, capture_output=True, text=True)
