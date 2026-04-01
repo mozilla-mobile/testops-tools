@@ -73,17 +73,17 @@ jobs:
           echo "filename=$filename" >> $GITHUB_ENV
           echo "subdir=$subdir" >> $GITHUB_ENV
 
-      # - name: Establish Google Cloud connection
-      #   uses: google-github-actions/auth@v3
-      #   with:
-      #     credentials_json: ${{ secrets.GCLOUD_AUTH }}
+      - name: Establish Google Cloud connection
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
 
-      # - name: Upload CSV files to GCP bucket
-      #   id: upload-file
-      #   uses: google-github-actions/upload-cloud-storage@v3
-      #   with:
-      #     path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
-      #     destination: ${{ env.BUCKET }}/${{ env.subdir }}
+      - name: Upload CSV files to GCP bucket
+        id: upload-file
+        uses: google-github-actions/upload-cloud-storage@v3
+        with:
+          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+          destination: ${{ env.BUCKET }}/${{ env.subdir }}
 
       - name: Output URL to Github Actions summary
         run: |
