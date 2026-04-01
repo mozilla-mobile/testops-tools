@@ -99,10 +99,7 @@ jobs:
           echo "Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
           [ -f test-counts.json ] || echo '{}' > test-counts.json
           cd $filename
-          header="*Test Case Counts (Full Functional Tests Suite)*"
-          table_header=$(printf "%-20s %8s  %-10s" "Suite" "Count" "Change")
-          table_sep=$(printf "%-20s %8s  %-10s" "--------------------" "--------" "----------")
-          rows=""
+          blocks=$(jq -n '[{"type":"header","text":{"type":"plain_text","text":"Test Case Counts — Full Functional Tests Suite"}}]')
           counts_json='{}'
           for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite"; do
             csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
@@ -121,13 +118,17 @@ jobs:
               else
                 change="-"
               fi
-              rows="${rows}"$'\n'"$(printf "%-20s %8s  %-10s" "$project" "$count" "$change")"
+              section=$(jq -n \
+                --arg suite "$project" \
+                --arg count "$count" \
+                --arg change "$change" \
+                '{"type":"section","text":{"type":"mrkdwn","text":("*" + $suite + "*")},"fields":[{"type":"mrkdwn","text":("*Count*\n" + $count)},{"type":"mrkdwn","text":("*Change*\n" + $change)}]}')
+              blocks=$(echo "$blocks" | jq --argjson s "$section" '. + [$s]')
               counts_json=$(echo "$counts_json" | jq --arg key "$display" --argjson val "$count" '. + {($key): $val}')
             fi
           done
-          message="${header}"$'\n'"$(printf '```')"$'\n'"${table_header}"$'\n'"${table_sep}${rows}"$'\n'"$(printf '```')"
           echo "$counts_json" > ../test-counts.json
-          jq -n --arg text "$message" '{"text": $text}' > ../slack-counts.json
+          jq -n --argjson blocks "$blocks" '{"blocks": $blocks}' > ../slack-counts.json
 
       - name: Commit updated test counts
         run: |
