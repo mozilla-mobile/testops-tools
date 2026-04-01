@@ -102,7 +102,8 @@ jobs:
             if [ -n "$csvfile" ]; then
               count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
               echo "* ${suite}: ${count} test cases" >> $GITHUB_STEP_SUMMARY
-              message="${message}\n• ${suite}: ${count} test cases"
+              display=$(echo "$suite" | sed 's/_/ - /')
+              message="${message}"$'\n'"• ${display}: ${count} test cases"
             fi
           done
           jq -n --arg text "$message" '{"text": $text}' > ../slack-counts.json
