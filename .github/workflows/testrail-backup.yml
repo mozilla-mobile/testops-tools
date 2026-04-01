@@ -96,7 +96,7 @@ jobs:
 
       - name: Output test case counts to Github Actions summary
         run: |
-          echo "Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
+          echo ":testops-testrail: Full Functional Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
           [ -f test-counts.json ] || echo '{}' > test-counts.json
           cd $filename
           table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Count"},{"type":"raw_text","text":"Change"}]]'
