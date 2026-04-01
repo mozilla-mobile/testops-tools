@@ -10,7 +10,6 @@ pipeline {
     }
 
     environment {
-        PATH+EXTRA = "/opt/homebrew/bin"
         GH_TOKEN = credentials('github-token')
         BITRISE_APP_ID = credentials('bitrise-app-id')
         JENKINS_URL = "${env.JENKINS_URL}"
@@ -30,20 +29,24 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                sh '''
-                    set -e
-                    echo "Checking Python installation..."
-                    python3 --version
-                    echo "Checking pip installation..."
-                    python3 -m pip --version
-                '''
+                withEnv(["PATH=/opt/homebrew/bin:${env.PATH}"]) {
+                    sh '''
+                        set -e
+                        echo "Checking Python installation..."
+                        python3 --version
+                        echo "Checking pip installation..."
+                        python3 -m pip --version
+                    '''
+                }
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 dir('testrail') {
-                    sh 'pip3 install --no-cache-dir -r requirements.txt'
+                    withEnv(["PATH=/opt/homebrew/bin:${env.PATH}"]) {
+                        sh 'pip3 install --no-cache-dir -r requirements.txt'
+                    }
                 }
             }
         }
