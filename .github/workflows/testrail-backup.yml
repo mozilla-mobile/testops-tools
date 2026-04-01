@@ -114,8 +114,8 @@ jobs:
               prev=$(jq -r --arg key "$display" '.[$key] // empty' ../test-counts.json)
               if [ -n "$prev" ]; then
                 delta=$((count - prev))
-                if [ $delta -gt 0 ]; then change="+${delta}"
-                elif [ $delta -lt 0 ]; then change="${delta}"
+                if [ $delta -gt 0 ]; then change="↑ +${delta}"
+                elif [ $delta -lt 0 ]; then change="↓ ${delta}"
                 else change="no change"
                 fi
               else
