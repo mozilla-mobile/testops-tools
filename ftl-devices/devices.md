@@ -51,6 +51,7 @@
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
+| aruba | moto e20 | 30 | Low |
 | austin | moto g 5G (2022) | 33 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
@@ -71,7 +72,7 @@
 | cheetah | Pixel 7 Pro | 33 | Low |
 | comet | Pixel 9 Pro Fold | 34 | Low |
 | comet | Pixel 9 Pro Fold | 35 | Low |
-| cuscoi | motorola edge 50 fusion | 35 | Medium |
+| cuscoi | motorola edge 50 fusion | 35 | Low |
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
@@ -108,7 +109,7 @@
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
-| gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
+| gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Low |
 | gts9wifi | SM-X710 | 34 | Medium |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
@@ -155,7 +156,7 @@
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
 | stallion | Pixel 10a | 36 | Medium |
-| starlte | Galaxy S9 | 29 | Medium |
+| starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | t2q | Galaxy S21 Plus | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
