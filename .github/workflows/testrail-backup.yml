@@ -128,7 +128,8 @@ jobs:
             fi
           done
           echo "$counts_json" > ../test-counts.json
-          jq -n --argjson rows "$table_rows" '{"blocks":[{"type":"header","text":{"type":"plain_text","text":"Test Case Counts — Full Functional Tests Suite"}},{"type":"table","rows":$rows}]}' > ../slack-counts.json
+          today=$(date "+%Y-%m-%d")
+          jq -n --argjson rows "$table_rows" --arg date "$today" '{"blocks":[{"type":"header","text":{"type":"plain_text","text":("Test Case Counts — " + $date)}},{"type":"table","rows":$rows}]}' > ../slack-counts.json
 
       - name: Commit updated test counts
         run: |
