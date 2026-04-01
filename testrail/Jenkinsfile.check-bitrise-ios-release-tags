@@ -69,50 +69,43 @@ pipeline {
             environment {
                 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
             }
-            when {
-                expression {
-                    // Only run if latest_tags.json was modified by the script
+            steps {
+                script {
                     def changed = sh(script: 'git diff --quiet testrail/latest_tags.json', returnStatus: true)
                     if (changed != 0) {
                         echo "✅ New version detected - latest_tags.json was modified"
-                        return true
-                    } else {
-                        echo "ℹ️  No new versions detected - skipping commit and push"
-                        return false
-                    }
-                }
-            }
-            steps {
-                script {
-                    sh '''
-                        set -e
-                        git config --global user.name 'jenkins-automation'
-                        git config --global user.email 'jenkins@automation.local'
-                        git add testrail/latest_tags.json
-                    '''
-                    withCredentials([usernamePassword(credentialsId: 'github-token',
-                                                      usernameVariable: 'GIT_USERNAME',
-                                                      passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
                             set -e
-                            git commit -m 'Automated update of latest_tags'
-                            # Configure git to use token via credential helper (avoids URL encoding issues)
-                            git config --local credential.helper '!f() {
-                                while IFS= read -r line; do
-                                    test -z "$line" && break
-                                done
-                                echo "username=${GIT_USERNAME}"
-                                echo "password=${GIT_TOKEN}"
-                            }; f'
-
-                            # Get the repository URL from remote origin (no hardcoding)
-                            REPO_URL=$(git config --get remote.origin.url)
-
-                            # Push to main branch (Jenkins runs in detached HEAD state)
-                            git push "$REPO_URL" HEAD:refs/heads/main
+                            git config --global user.name 'jenkins-automation'
+                            git config --global user.email 'jenkins@automation.local'
+                            git add testrail/latest_tags.json
                         '''
+                        withCredentials([usernamePassword(credentialsId: 'github-token',
+                                                          usernameVariable: 'GIT_USERNAME',
+                                                          passwordVariable: 'GIT_TOKEN')]) {
+                            sh '''
+                                set -e
+                                git commit -m 'Automated update of latest_tags'
+                                # Configure git to use token via credential helper (avoids URL encoding issues)
+                                git config --local credential.helper '!f() {
+                                    while IFS= read -r line; do
+                                        test -z "$line" && break
+                                    done
+                                    echo "username=${GIT_USERNAME}"
+                                    echo "password=${GIT_TOKEN}"
+                                }; f'
+
+                                # Get the repository URL from remote origin (no hardcoding)
+                                REPO_URL=$(git config --get remote.origin.url)
+
+                                # Push to main branch (Jenkins runs in detached HEAD state)
+                                git push "$REPO_URL" HEAD:refs/heads/main
+                            '''
+                        }
+                        echo 'Changes committed and pushed successfully'
+                    } else {
+                        echo "ℹ️  No new versions detected - skipping commit and push"
                     }
-                    echo 'Changes committed and pushed successfully'
                 }
             }
         }
