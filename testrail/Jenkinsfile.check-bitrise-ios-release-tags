@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
+        PATH+EXTRA = "/opt/homebrew/bin"
         GH_TOKEN = credentials('github-token')
         BITRISE_APP_ID = credentials('bitrise-app-id')
         JENKINS_URL = "${env.JENKINS_URL}"
