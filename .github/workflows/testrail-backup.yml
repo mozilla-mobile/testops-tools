@@ -94,15 +94,25 @@ jobs:
 
       - name: Output test case counts to Github Actions summary
         run: |
-          echo "## Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
+          echo "Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
           cd $filename
+          message="Test Case Counts (Full Functional Tests Suite)"
           for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite" "Focus for iOS_Full Functional Tests Suite" "Focus for Android_Full Functional Tests Suite"; do
             csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
             if [ -n "$csvfile" ]; then
               count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
-              echo "* **${suite}**: ${count} test cases" >> $GITHUB_STEP_SUMMARY
+              echo "* ${suite}: ${count} test cases" >> $GITHUB_STEP_SUMMARY
+              message="${message}\n• ${suite}: ${count} test cases"
             fi
           done
+          jq -n --arg text "$message" '{"text": $text}' > ../slack-counts.json
+
+      - name: Notify Slack - Test case counts
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-counts.json
 
       - name: Notify Slack (Fail)
         uses: slackapi/slack-github-action@v3.0.1
