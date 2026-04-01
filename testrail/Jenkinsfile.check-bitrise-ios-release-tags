@@ -66,10 +66,13 @@ pipeline {
         }
 
         stage('Commit and Push Changes') {
+            environment {
+                PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+            }
             when {
                 expression {
                     // Only run if latest_tags.json was modified by the script
-                    def changed = sh(script: '/usr/bin/git diff --quiet testrail/latest_tags.json', returnStatus: true)
+                    def changed = sh(script: 'git diff --quiet testrail/latest_tags.json', returnStatus: true)
                     if (changed != 0) {
                         echo "✅ New version detected - latest_tags.json was modified"
                         return true
@@ -81,7 +84,6 @@ pipeline {
             }
             steps {
                 script {
-                    withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                     sh '''
                         set -e
                         git config --global user.name 'jenkins-automation'
@@ -111,7 +113,6 @@ pipeline {
                         '''
                     }
                     echo 'Changes committed and pushed successfully'
-                    } // withEnv
                 }
             }
         }
@@ -120,8 +121,7 @@ pipeline {
     post {
         fixed {
             // Pipeline recovered: was failing, now passing
-            script {
-                withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
+            withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                 sh """
                     curl -X POST ${SLACK_WEBHOOK} \
                     -H 'Content-Type: application/json' \
@@ -138,15 +138,13 @@ pipeline {
                         }]
                     }'
                 """
-                } // withEnv
             }
             echo '✅ Successfully checked Bitrise tags and updated repository (RECOVERED)'
         }
 
         regression {
             // Pipeline regressed: was passing, now failing
-            script {
-                withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
+            withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                 sh """
                     curl -X POST ${SLACK_WEBHOOK} \
                     -H 'Content-Type: application/json' \
@@ -163,7 +161,6 @@ pipeline {
                         }]
                     }'
                 """
-                } // withEnv
             }
             echo '❌ Failed to check Bitrise tags (REGRESSION)'
         }
