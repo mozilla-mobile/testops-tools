@@ -45,7 +45,11 @@ pipeline {
             steps {
                 dir('testrail') {
                     withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
-                        sh 'pip3 install --no-cache-dir -r requirements.txt'
+                        sh '''
+                            set -e
+                            python3 -m venv .venv
+                            .venv/bin/pip install --no-cache-dir -r requirements.txt
+                        '''
                     }
                 }
             }
@@ -54,7 +58,7 @@ pipeline {
         stage('Run Bitrise Tag Checker') {
             steps {
                 dir('testrail') {
-                    sh 'python3 check_bitrise_for_release.py'
+                    sh '.venv/bin/python3 check_bitrise_for_release.py'
                 }
             }
         }
