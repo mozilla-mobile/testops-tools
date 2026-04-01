@@ -71,17 +71,17 @@ jobs:
           echo "filename=$filename" >> $GITHUB_ENV
           echo "subdir=$subdir" >> $GITHUB_ENV
 
-      - name: Establish Google Cloud connection
-        uses: google-github-actions/auth@v3
-        with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH }}
+      # - name: Establish Google Cloud connection
+      #   uses: google-github-actions/auth@v3
+      #   with:
+      #     credentials_json: ${{ secrets.GCLOUD_AUTH }}
     
-      - name: Upload CSV files to GCP bucket
-        id: upload-file
-        uses: google-github-actions/upload-cloud-storage@v3
-        with:
-          path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
-          destination: ${{ env.BUCKET }}/${{ env.subdir }}
+      # - name: Upload CSV files to GCP bucket
+      #   id: upload-file
+      #   uses: google-github-actions/upload-cloud-storage@v3
+      #   with:
+      #     path: ${{ env.DEFAULT_DIR }}/${{ env.filename }}.tgz
+      #     destination: ${{ env.BUCKET }}/${{ env.subdir }}
 
       - name: Output URL to Github Actions summary
         run: |
@@ -91,6 +91,18 @@ jobs:
           cd $filename
           ls *.csv > files.txt
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
+
+      - name: Output test case counts to Github Actions summary
+        run: |
+          echo "## Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
+          cd $filename
+          for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite" "Focus for iOS_Full Functional Tests Suite" "Focus for Android_Full Functional Tests Suite"; do
+            csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
+            if [ -n "$csvfile" ]; then
+              count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
+              echo "* **${suite}**: ${count} test cases" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
 
       - name: Notify Slack (Fail)
         uses: slackapi/slack-github-action@v3.0.1
