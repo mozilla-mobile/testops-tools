@@ -29,7 +29,7 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                withEnv(["PATH=/opt/homebrew/bin:${env.PATH}"]) {
+                withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                     sh '''
                         set -e
                         echo "Checking Python installation..."
@@ -44,7 +44,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('testrail') {
-                    withEnv(["PATH=/opt/homebrew/bin:${env.PATH}"]) {
+                    withEnv(["PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"]) {
                         sh 'pip3 install --no-cache-dir -r requirements.txt'
                     }
                 }
