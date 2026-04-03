@@ -56,7 +56,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| b5q | Galaxy Z Flip5 | 34 | High |
+| b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip 5 | 36 | Low |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
 | b6qsqw | Galaxy Z Flip 6 | 36 | Low |
@@ -163,7 +163,7 @@
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | Medium |
 | tokay | Pixel 9 | 35 | Medium |
-| tokay | Pixel 9 | 36 | Medium |
+| tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Low |
 | y2q | S20 Plus 5G | 33 | Low |
