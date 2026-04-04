@@ -1,0 +1,114 @@
+rules:
+  # BrowserKit Components
+  - prefix: "BrowserKit/Sources/OnboardingKit/"
+    components: ["onboarding"]
+  - prefix: "BrowserKit/Sources/Common/Theming/"
+    components: ["theming"]
+  - prefix: "BrowserKit/Sources/ToolbarKit/"
+    components: ["toolbar", "navigation"]
+  - prefix: "BrowserKit/Sources/MenuKit/"
+    components: ["menus", "ui_components"]
+  - prefix: "BrowserKit/Sources/ComponentLibrary/"
+    components: ["ui_components", "library"]
+  - prefix: "BrowserKit/Sources/TabDataStore/"
+    components: ["tabs", "data_persistence"]
+  - prefix: "BrowserKit/Sources/WebEngine/"
+    components: ["browser_core", "web_rendering"]
+  - prefix: "BrowserKit/Sources/UnifiedSearchKit/"
+    components: ["search", "awesomebar"]
+  - prefix: "BrowserKit/Sources/VoiceSearchKit/"
+    components: ["search", "voice_input"]
+  - prefix: "BrowserKit/Sources/SummarizeKit/"
+    components: ["ai_features", "content_processing"]
+  - prefix: "BrowserKit/Sources/ContentBlockingGenerator/"
+    components: ["privacy", "content_blocking"]
+  - prefix: "BrowserKit/Sources/SiteImageView/"
+    components: ["favicons", "ui_components"]
+  - prefix: "BrowserKit/Sources/Redux/"
+    components: ["state_management", "architecture"]
+  - prefix: "BrowserKit/Sources/ActionExtensionKit/"
+    components: ["extensions", "share_actions"]
+  - prefix: "BrowserKit/Sources/JWTKit/"
+    components: ["authentication", "security"]
+  - prefix: "BrowserKit/Sources/Common/"
+    components: ["utilities", "shared_code"]
+  - prefix: "BrowserKit/Sources/Shared/"
+    components: ["utilities", "shared_code"]
+
+  # Firefox-iOS Client - Frontend Features
+  - prefix: "firefox-ios/Client/Frontend/Home/Homepage/"
+    components: ["homepage"]
+  - prefix: "firefox-ios/Client/Frontend/Browser/"
+    components: ["browser_core", "tabs"]
+  - prefix: "firefox-ios/Client/Frontend/Browser/Tabs/"
+    components: ["tabs", "tab_management"]
+  - prefix: "firefox-ios/Client/Frontend/Browser/Toolbars/"
+    components: ["toolbar", "navigation"]
+  - prefix: "firefox-ios/Client/Frontend/Settings/"
+    components: ["settings", "preferences"]
+  - prefix: "firefox-ios/Client/Frontend/Library/"
+    components: ["bookmarks", "history", "reading_list"]
+  - prefix: "firefox-ios/Client/Frontend/UserContent/"
+    components: ["content_scripts", "user_scripts"]
+  - prefix: "firefox-ios/Client/Frontend/Login/"
+    components: ["password_management", "autofill"]
+  - prefix: "firefox-ios/Client/Frontend/Download/"
+    components: ["downloads", "file_management"]
+  - prefix: "firefox-ios/Client/Frontend/Share/"
+    components: ["sharing", "extensions"]
+  - prefix: "firefox-ios/Client/Frontend/ContextMenu/"
+    components: ["menus", "context_actions"]
+  - prefix: "firefox-ios/Client/Frontend/Fakespot/"
+    components: ["shopping", "ai_features"]
+  - prefix: "firefox-ios/Client/Frontend/ZoomPage/"
+    components: ["accessibility", "zoom"]
+  - prefix: "firefox-ios/Client/Frontend/Translation/"
+    components: ["translation", "ai_features"]
+  - prefix: "firefox-ios/Client/Frontend/QRCode/"
+    components: ["qr_scanner", "camera"]
+
+  # Firefox-iOS Client - Core Systems
+  - prefix: "firefox-ios/Client/Application/"
+    components: ["app_lifecycle", "initialization"]
+  - prefix: "firefox-ios/Client/TabManagement/"
+    components: ["tabs", "tab_management"]
+  - prefix: "firefox-ios/Client/Coordinators/"
+    components: ["navigation", "architecture"]
+  - prefix: "firefox-ios/Client/Redux/"
+    components: ["state_management", "architecture"]
+  - prefix: "firefox-ios/Client/ContentBlocker/"
+    components: ["privacy", "content_blocking"]
+  - prefix: "firefox-ios/Client/Extensions/"
+    components: ["extensions", "app_extensions"]
+  - prefix: "firefox-ios/Client/FeatureFlags/"
+    components: ["feature_flags", "configuration"]
+  - prefix: "firefox-ios/Client/Nimbus/"
+    components: ["experiments", "ab_testing"]
+  - prefix: "firefox-ios/Client/Glean/"
+    components: ["telemetry", "analytics"]
+  - prefix: "firefox-ios/Client/Telemetry/"
+    components: ["telemetry", "analytics"]
+  - prefix: "firefox-ios/Client/Helpers/"
+    components: ["utilities", "helpers"]
+  - prefix: "firefox-ios/Client/Utils/"
+    components: ["utilities", "helpers"]
+  - prefix: "firefox-ios/Client/Assets/"
+    components: ["resources", "assets"]
+  - prefix: "firefox-ios/Client/Configuration/"
+    components: ["configuration", "build_settings"]
+
+  # Firefox-iOS Widgets and Extensions
+  - prefix: "firefox-ios/WidgetKit/"
+    components: ["widgets"]
+  - prefix: "firefox-ios/Widgets/"
+    components: ["widgets", "home_screen"]
+
+  # Rust Components
+  - prefix: "MozillaRustComponents/"
+    components: ["rust_components", "sync", "networking"]
+
+  # Focus-iOS
+  - prefix: "focus-ios/Blockzilla/"
+    components: ["focus_browser", "privacy"]
+  - prefix: "focus-ios/"
+    components: ["focus_browser", "privacy"]
