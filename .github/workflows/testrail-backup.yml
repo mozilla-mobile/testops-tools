@@ -19,6 +19,8 @@ jobs:
   test:
     name: Backup test suites
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: ${{ env.DEFAULT_DIR }}
@@ -75,7 +77,7 @@ jobs:
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.GCLOUD_AUTH }}
-    
+
       - name: Upload CSV files to GCP bucket
         id: upload-file
         uses: google-github-actions/upload-cloud-storage@v3
@@ -91,6 +93,58 @@ jobs:
           cd $filename
           ls *.csv > files.txt
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
+
+      - name: Output test case counts to Github Actions summary
+        run: |
+          echo "Full Functional Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
+          [ -f test-counts.json ] || echo '{}' > test-counts.json
+          cd $filename
+          table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Count"},{"type":"raw_text","text":"Change"}]]'
+          counts_json='{}'
+          for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite"; do
+            csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
+            if [ -n "$csvfile" ]; then
+              count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
+              echo "* ${suite}: ${count} test cases" >> $GITHUB_STEP_SUMMARY
+              display=$(echo "$suite" | sed 's/_/ - /')
+              project=$(echo "$suite" | sed 's/_Full Functional Tests Suite//')
+              prev=$(jq -r --arg key "$display" '.[$key] // empty' ../test-counts.json)
+              if [ -n "$prev" ]; then
+                delta=$((count - prev))
+                if [ $delta -gt 0 ]; then change="↑ +${delta}"
+                elif [ $delta -lt 0 ]; then change="↓ ${delta}"
+                else change="no change"
+                fi
+              else
+                change="-"
+              fi
+              row=$(jq -n \
+                --arg suite "$project" \
+                --arg count "$count" \
+                --arg change "$change" \
+                '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$count},{"type":"raw_text","text":$change}]')
+              table_rows=$(echo "$table_rows" | jq --argjson row "$row" '. + [$row]')
+              counts_json=$(echo "$counts_json" | jq --arg key "$display" --argjson val "$count" '. + {($key): $val}')
+            fi
+          done
+          echo "$counts_json" > ../test-counts.json
+          today=$(date "+%Y-%m-%d")
+          jq -n --argjson rows "$table_rows" --arg date "$today" '{"blocks":[{"type":"header","text":{"type":"plain_text","text":(":testops-testrail:Full Functional Test Case Counts — " + $date)}},{"type":"table","rows":$rows}]}' > ../slack-counts.json
+
+      - name: Commit updated test counts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add test-counts.json
+          git diff --staged --quiet || git commit -m "Update test case counts [skip ci]"
+          git push
+
+      - name: Notify Slack - Test case counts
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-counts.json
 
       - name: Notify Slack (Fail)
         uses: slackapi/slack-github-action@v3.0.1
