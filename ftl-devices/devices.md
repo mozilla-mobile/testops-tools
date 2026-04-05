@@ -65,7 +65,7 @@
 | blueline | Pixel 3 | 28 | Medium |
 | c1q | Galaxy Note 20 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Low |
-| caiman | Pixel 9 Pro | 34 | Medium |
+| caiman | Pixel 9 Pro | 34 | Low |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
@@ -76,7 +76,7 @@
 | dm1q | Samsung S23 | 35 | Low |
 | dm1q-SM-S911U | Samsung S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
-| dm2q | S23 Plus | 34 | Medium |
+| dm2q | S23 Plus | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
@@ -94,7 +94,7 @@
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | Moto G 5G | 35 | Low |
-| fogona | moto g play - 2024 | 34 | Medium |
+| fogona | moto g play - 2024 | 34 | Low |
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
