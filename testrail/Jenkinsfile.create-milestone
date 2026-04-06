@@ -11,7 +11,7 @@ pipeline {
     }
 
     environment {
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
+        PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
         TESTRAIL_HOST = credentials('testrail-host')
         // Slack webhooks for Python script notifications
         SLACK_MOBILE_TESTENG_RELEASE_CHANNEL = credentials('slack-mobile-testeng-webhook')
@@ -42,7 +42,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('testrail') {
-                    sh 'pip3 install --no-cache-dir -r requirements.txt'
+                    sh '''
+                        set -e
+                        python3 -m venv .venv
+                        .venv/bin/pip install --no-cache-dir -r requirements.txt
+                    '''
                 }
             }
         }
@@ -75,7 +79,7 @@ EOF
             steps {
                 dir('testrail') {
                     script {
-                        def result = sh(script: 'python3 testrail_main_ios.py', returnStatus: true)
+                        def result = sh(script: '.venv/bin/python3 testrail_main_ios.py', returnStatus: true)
                         if (result == 0) {
                             echo "✅ Milestone created successfully"
                             env.MILESTONE_CREATED = 'true'
