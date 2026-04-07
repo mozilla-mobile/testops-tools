@@ -468,6 +468,13 @@ Examples:
     )
 
     parser.add_argument(
+        "--sort-by",
+        choices=["versionCode", "distinctUsers"],
+        default="versionCode",
+        help="Sort rows by versionCode (default, newest first) or distinctUsers (most users first)",
+    )
+
+    parser.add_argument(
         "--min-users",
         type=int,
         help="Filter out versions with fewer than N distinct users",
@@ -714,6 +721,7 @@ def filter_and_sort_rows(
     min_users: int | None = None,
     exclude_zero: bool = False,
     version_codes: list[str] | None = None,
+    sort_by: str = "versionCode",
 ) -> list[dict[str, Any]]:
     """Filter and sort result rows."""
 
@@ -778,23 +786,33 @@ def filter_and_sort_rows(
             )
         ]
 
-    # Sort by build date (descending) decoded from version code.
-    # This ensures correct ordering across both the v1 and Gradle
-    # version code schemes.
-    def get_build_timestamp(row):
-        for dim in row.get("dimensions", []):
-            if dim["dimension"] == "versionCode":
-                try:
-                    vc = int(
-                        dim.get("stringValue") or dim.get("int64Value", 0)
-                    )
-                    _bid, _arch, build_dt = reverse_version_code(vc)
-                    return build_dt.timestamp()
-                except (ValueError, TypeError):
-                    return 0.0
-        return 0.0
-
-    filtered_rows.sort(key=get_build_timestamp, reverse=True)
+    if sort_by == "distinctUsers":
+        def get_distinct_users(row):
+            for m in row.get("metrics", []):
+                if m["metric"] == "distinctUsers" and "decimalValue" in m:
+                    try:
+                        return float(m["decimalValue"]["value"])
+                    except (ValueError, TypeError):
+                        pass
+            return 0.0
+        filtered_rows.sort(key=get_distinct_users, reverse=True)
+    else:
+        # Sort by build date (descending) decoded from version code.
+        # This ensures correct ordering across both the v1 and Gradle
+        # version code schemes.
+        def get_build_timestamp(row):
+            for dim in row.get("dimensions", []):
+                if dim["dimension"] == "versionCode":
+                    try:
+                        vc = int(
+                            dim.get("stringValue") or dim.get("int64Value", 0)
+                        )
+                        _bid, _arch, build_dt = reverse_version_code(vc)
+                        return build_dt.timestamp()
+                    except (ValueError, TypeError):
+                        return 0.0
+            return 0.0
+        filtered_rows.sort(key=get_build_timestamp, reverse=True)
 
     # Limit to top N
     if top_n is not None and top_n > 0:
@@ -831,6 +849,7 @@ def output_pretty(
     version_codes: list[str] | None = None,
     resolver: VersionResolver | None = None,
     compare_response: dict[str, Any] | None = None,
+    sort_by: str = "versionCode",
 ):
     """Output results in pretty tabular format."""
 
@@ -844,7 +863,7 @@ def output_pretty(
         return
 
     # Apply filters and sorting
-    rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes)
+    rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes, sort_by)
 
     if not rows:
         print("No data matches the specified filters.\n")
@@ -972,7 +991,7 @@ def output_pretty(
         compare_rows = compare_response.get("rows", [])
         if metric_set_config and compare_rows:
             compare_rows = filter_and_sort_rows(
-                compare_rows, top_n, min_users, exclude_zero, version_codes
+                compare_rows, top_n, min_users, exclude_zero, version_codes, sort_by
             )
 
         comp_total_users = 0.0
@@ -1026,6 +1045,7 @@ def output_csv(
     exclude_zero: bool = False,
     version_codes: list[str] | None = None,
     resolver: VersionResolver | None = None,
+    sort_by: str = "versionCode",
 ):
     """Output results in CSV format."""
 
@@ -1035,7 +1055,7 @@ def output_csv(
         return
 
     # Apply filters and sorting
-    rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes)
+    rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes, sort_by)
 
     if not rows:
         print("No data matches the specified filters.", file=sys.stderr)
@@ -1090,12 +1110,13 @@ def output_json(
     version_codes: list[str] | None = None,
     resolver: VersionResolver | None = None,
     compare_response: dict[str, Any] | None = None,
+    sort_by: str = "versionCode",
 ):
     """Output results in JSON format, with an aggregate summary."""
 
     rows = response.get("rows", [])
     if metric_set_config and rows:
-        rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes)
+        rows = filter_and_sort_rows(rows, top_n, min_users, exclude_zero, version_codes, sort_by)
 
     # Inject resolved version info into each row
     if resolver:
@@ -1136,7 +1157,7 @@ def output_json(
     if compare_response:
         compare_rows = compare_response.get("rows", [])
         if metric_set_config and compare_rows:
-            compare_rows = filter_and_sort_rows(compare_rows, top_n, min_users, exclude_zero, version_codes)
+            compare_rows = filter_and_sort_rows(compare_rows, top_n, min_users, exclude_zero, version_codes, sort_by)
         comp_total_users = 0
         comp_rate_totals = {}
         for row in compare_rows:
@@ -1369,6 +1390,7 @@ def main():
                 version_codes,
                 resolver,
                 compare_response,
+                args.sort_by,
             )
         elif args.output_format == "csv":
             output_csv(
@@ -1380,6 +1402,7 @@ def main():
                 args.exclude_zero,
                 version_codes,
                 resolver,
+                args.sort_by,
             )
         elif args.output_format == "json":
             output_json(
@@ -1391,6 +1414,7 @@ def main():
                 version_codes,
                 resolver,
                 compare_response,
+                args.sort_by,
             )
 
     except google.auth.exceptions.DefaultCredentialsError:

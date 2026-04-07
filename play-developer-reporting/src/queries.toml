@@ -85,6 +85,7 @@ package = "org.mozilla.focus"
 metric_set = "crashrate"
 days = 1
 top = 10
+sort_by = "distinctUsers"
 compare_days = 28
 
 [[queries]]
@@ -93,6 +94,7 @@ package = "org.mozilla.focus"
 metric_set = "anrrate"
 days = 1
 top = 10
+sort_by = "distinctUsers"
 compare_days = 28
 
 [[queries]]
@@ -101,6 +103,7 @@ package = "org.mozilla.focus"
 metric_set = "lmkrate"
 days = 1
 top = 10
+sort_by = "distinctUsers"
 compare_days = 28
 
 [[queries]]

@@ -1,6 +1,8 @@
 name: Play Developer Reporting
 
 on:
+  schedule: 
+    - cron: 0 13 * * 1-5 # Every weekday at 9:00 AM
   workflow_dispatch:
 
 permissions:
@@ -29,3 +31,10 @@ jobs:
 
       - name: Summary
         run: cat /tmp/vitals-output/summary.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Slack
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
+          webhook-type: incoming-webhook
+          payload-file-path: /tmp/vitals-output/slack_payload.json
