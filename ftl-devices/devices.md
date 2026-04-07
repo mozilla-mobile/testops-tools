@@ -143,18 +143,21 @@
 | q5q | Galaxy Z Fold5 | 34 | High |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
+| r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Samsung S22 | 36 | Low |
 | r11 | Google Pixel Watch | 30 | Medium |
 | r11q | SM-S711U | 34 | Low |
 | r11s | SM-S711N | 36 | Low |
 | r12s | SM-S721U1 | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
+| r8qksx | Galaxy S20 FE 5G | 33 | Low |
 | r9q | Samsung Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | Medium |
 | shiba | Pixel 8 | 34 | High |
+| shiba | Pixel 8 | 36 | Medium |
 | stallion | Pixel 10a | 36 | Medium |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21 Plus | 34 | Medium |
