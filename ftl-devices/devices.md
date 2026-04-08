@@ -69,7 +69,7 @@
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
-| cheetah | Pixel 7 Pro | 33 | Low |
+| cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Low |
 | comet | Pixel 9 Pro Fold | 35 | Low |
 | cuscoi | motorola edge 50 fusion | 35 | Low |
@@ -131,7 +131,7 @@
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | p3q | Galaxy S21 Ultra | 35 | Low |
-| pa1q | Samsung S25 | 36 | Medium |
+| pa1q | Samsung S25 | 36 | Low |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
