@@ -2,7 +2,7 @@ name: Play Developer Reporting
 
 on:
   schedule: 
-    - cron: 0 13 * * 1-5 # Every weekday at 9:00 AM
+    - cron: "0 13 * * 1-5"
   workflow_dispatch:
 
 permissions:
