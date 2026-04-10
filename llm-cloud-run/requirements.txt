@@ -1,6 +1,7 @@
 fastapi
 uvicorn[standard]
 google-cloud-aiplatform
+google-genai
 google-cloud-storage
 pydantic
 python-multipart
