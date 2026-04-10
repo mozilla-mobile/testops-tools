@@ -37,7 +37,7 @@ class Settings:
     snippet_chars: int = int(_env("RAG_SNIPPET_CHARS", "800") or "800")
 
     # LLM + Embeddings
-    gemini_model: str = _env("GEMINI_MODEL", "gemini-2.5-flash-lite") or "gemini-2.5-flash-lite"
+    gemini_model: str = _env("GEMINI_MODEL", "gemini-3.1-flash-lite-preview") or "gemini-3.1-flash-lite-preview"
     embedding_model: str = _env("EMBEDDING_MODEL", "text-embedding-005") or "text-embedding-005"
 
     # Optional: cap how many notes to load into memory cache
