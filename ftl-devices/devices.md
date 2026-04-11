@@ -25,7 +25,7 @@
 | a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
-| a14xmtfn | Galaxy A14 5G | 35 | Low |
+| a14xmtfn | Galaxy A14 5G | 35 | None |
 | a15 | Samsung A15 | 34 | Low |
 | a15x | Samsung A15 5G | 34 | Low |
 | a15x | Samsung A15 5G | 36 | Low |
