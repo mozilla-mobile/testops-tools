@@ -56,7 +56,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| b5q | Galaxy Z Flip5 | 34 | Medium |
+| b5q | Galaxy Z Flip5 | 34 | High |
 | b5qsqw | Galaxy Z Flip 5 | 36 | Low |
 | b6q | Galaxy Z Flip 6 | 34 | Medium |
 | b6qsqw | Galaxy Z Flip 6 | 36 | Low |
@@ -155,7 +155,7 @@
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
-| shiba | Pixel 8 | 35 | Medium |
+| shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | Medium |
 | shiba | Pixel 8 | 36 | Medium |
 | stallion | Pixel 10a | 36 | Medium |
