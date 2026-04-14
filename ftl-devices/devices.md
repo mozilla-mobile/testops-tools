@@ -37,7 +37,7 @@
 | a16xeea | Samsung A16 5G | 35 | Low |
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | SM-A256U1 | 34 | Low |
-| a26x | Samsung SM-A266B | 36 | Low |
+| a26x | Samsung SM-A266B | 36 | None |
 | a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Low |
 | a35x | Samsung A35 | 35 | Low |
