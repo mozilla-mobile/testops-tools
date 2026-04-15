@@ -22,7 +22,7 @@
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Low |
 | a13 | Galaxy A13 | 34 | Low |
-| a14m | SM-A145R | 34 | Low |
+| a14m | SM-A145R | 34 | None |
 | a14xm | Galaxy A14 | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | None |
@@ -57,9 +57,9 @@
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
 | b5q | Galaxy Z Flip5 | 34 | High |
-| b5qsqw | Galaxy Z Flip 5 | 36 | Low |
-| b6q | Galaxy Z Flip 6 | 34 | Medium |
-| b6qsqw | Galaxy Z Flip 6 | 36 | Low |
+| b5qsqw | Galaxy Z Flip5 | 36 | Low |
+| b6q | Galaxy Z Flip6 | 34 | Medium |
+| b6qsqw | Galaxy Z Flip6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Medium |
