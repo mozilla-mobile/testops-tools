@@ -22,7 +22,7 @@
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Low |
 | a13 | Galaxy A13 | 34 | Low |
-| a14m | SM-A145R | 34 | None |
+| a14m | SM-A145R | 34 | Low |
 | a14xm | Galaxy A14 | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | None |
@@ -134,7 +134,7 @@
 | pa1q | Samsung S25 | 36 | Low |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
-| pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 35 | Medium |
 | pa3q | Galaxy S25 Ultra | 36 | Low |
 | pa3qxxx | Samsung S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
@@ -168,6 +168,6 @@
 | tokay | Pixel 9 | 35 | Medium |
 | tokay | Pixel 9 | 36 | Low |
 | xcover7 | SM-G556B | 34 | Low |
-| xcoverpro | Galaxy XCover Pro | 33 | Low |
+| xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | S20 Plus 5G | 33 | Low |
 
