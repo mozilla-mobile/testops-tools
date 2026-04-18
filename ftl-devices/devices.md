@@ -134,7 +134,7 @@
 | pa1q | Samsung S25 | 36 | Low |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
-| pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 35 | Medium |
 | pa3q | Galaxy S25 Ultra | 36 | Low |
 | pa3qxxx | Samsung S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
