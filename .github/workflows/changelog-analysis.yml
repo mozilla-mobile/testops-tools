@@ -1,0 +1,36 @@
+name: Changelog Analysis
+
+on:
+  push:
+    branches:
+      - irios-new-jenkins-file-verify-release-tags
+    paths:
+      - 'changelog-analysis/**'
+  workflow_dispatch:
+    inputs:
+      base_tag:
+        description: 'Previous release tag (e.g. firefox-v149.3) — leave blank to auto-detect'
+        required: false
+      head_tag:
+        description: 'Current release tag (e.g. firefox-v150.1) — leave blank to auto-detect'
+        required: false
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: pip install requests pyyaml
+
+      - name: Run changelog analysis
+        run: |
+          if [ -n "${{ inputs.base_tag }}" ] && [ -n "${{ inputs.head_tag }}" ]; then
+            python3 changelog-analysis/run_release_selection.py ${{ inputs.base_tag }} ${{ inputs.head_tag }}
+          else
+            python3 changelog-analysis/run_release_selection.py
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -137,6 +137,9 @@ def main():
             testrail_project_id, milestone_name, milestone_description
         )
 
+        with open("milestone_id.txt", "w") as f:
+            f.write(str(milestone["id"]))
+
         for device in devices:
             # Create Smoke Tests Suite test runs     
             testrail.create_paginated_test_runs(

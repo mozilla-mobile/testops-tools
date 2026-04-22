@@ -1,0 +1,113 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'MILESTONE_ID', description: 'TestRail milestone ID')
+    }
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        PATH          = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${env.PATH}"
+        GITHUB_TOKEN  = credentials('github-token')
+        SLACK_WEBHOOK = credentials('slack-mobile-alerts-tooling-webhook')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Setup Python') {
+            steps {
+                sh '''
+                    set -e
+                    python3 --version
+                    python3 -m pip --version
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('changelog-analysis') {
+                    sh 'pip3 install --no-cache-dir -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Get Changelog') {
+            steps {
+                dir('changelog-analysis') {
+                    script {
+                        def output = sh(
+                            script: 'python3 run_release_selection.py',
+                            returnStdout: true
+                        ).trim()
+
+                        echo output
+
+                        def headMatch = output =~ /Head tag from latest_tags\.json:\s+(\S+)/
+                        def baseMatch = output =~ /Base tag \(previous version\):\s+(\S+)/
+
+                        env.HEAD_TAG = headMatch ? headMatch[0][1] : 'unknown'
+                        env.BASE_TAG = baseMatch ? baseMatch[0][1] : 'unknown'
+
+                        echo "Changelog: ${env.BASE_TAG} → ${env.HEAD_TAG}"
+                    }
+                }
+            }
+        }
+
+        stage('Notify') {
+            steps {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":mag: *Smart Test Run — Changelog Analysis*",
+                        "attachments": [{
+                            "color": "good",
+                            "fields": [
+                                {"title": "From",         "value": "${env.BASE_TAG}", "short": true},
+                                {"title": "To",           "value": "${env.HEAD_TAG}", "short": true},
+                                {"title": "Milestone ID", "value": "${params.MILESTONE_ID}", "short": true},
+                                {"title": "Status", "value": "Changelog captured — test run creation coming soon", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+        }
+    }
+
+    post {
+        regression {
+            script {
+                sh """
+                    curl -X POST ${SLACK_WEBHOOK} \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        "text": ":x: *REGRESSION*: ${env.JOB_NAME}",
+                        "attachments": [{
+                            "color": "danger",
+                            "fields": [
+                                {"title": "Job",     "value": "${env.JOB_NAME}", "short": true},
+                                {"title": "Build",   "value": "#${env.BUILD_NUMBER}", "short": true},
+                                {"title": "Console", "value": "<${env.BUILD_URL}console|View Logs>", "short": false}
+                            ]
+                        }]
+                    }'
+                """
+            }
+        }
+
+        cleanup {
+            cleanWs()
+        }
+    }
+}
