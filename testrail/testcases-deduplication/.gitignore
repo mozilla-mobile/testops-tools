@@ -1,0 +1,34 @@
+# Virtual environment
+venv/
+.venv/
+
+# Generated output files (contain sensitive TestRail data — do not commit)
+output/
+duplicates_exact.csv
+similar_pairs.csv
+WORK_LIST_EXACT.csv
+WORK_LIST_PERFECT_MATCHES.csv
+WORK_LIST_SIMILAR_HIGH_PRIORITY.csv
+PRIORITIZED_DUPLICATES.csv
+ACTION_ITEMS.csv
+analysis_stats.json
+
+# Input files (TestRail exports contain product test coverage data)
+*.xlsx
+*.xls
+
+# Reports generated locally
+DEDUPLICATION_REPORT.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# sentence-transformers model cache (if stored locally)
+.cache/
+models/
+
+# OS
+.DS_Store
