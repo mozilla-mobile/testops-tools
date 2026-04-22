@@ -32,6 +32,7 @@ env:
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
   IMG_URI: gs://testops-llm-artifacts/images/examples/iOS/1.png
+  SENTRY_IOS_URI: gs://testops-llm-artifacts/sentry/firefox-ios/latest.json
   LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
@@ -169,6 +170,7 @@ jobs:
           gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           gcloud storage cp "${ANR_URI}" "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
           gcloud storage cp "${IMG_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
+          gcloud storage cp "${SENTRY_IOS_URI}" "${LOCAL_ARTIFACT_DIR}/sentry_release_health.json"
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
 
