@@ -21,7 +21,7 @@ from requests.auth import HTTPBasicAuth
 
 
 def testrail_client() -> tuple[str, HTTPBasicAuth]:
-    host = os.environ.get("TESTRAIL_HOST", "").rstrip("/")
+    host = os.environ.get("TESTRAIL_HOST", "").rstrip("/").removeprefix("https://").removeprefix("http://")
     username = os.environ.get("TESTRAIL_USERNAME", "")
     password = os.environ.get("TESTRAIL_PASSWORD", "")
 
