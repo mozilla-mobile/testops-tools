@@ -90,6 +90,28 @@ EOF
             }
         }
 
+        stage('Trigger Smart Test Runs') {
+            when {
+                expression { env.MILESTONE_CREATED == 'true' }
+            }
+            steps {
+                script {
+                    try {
+                        def milestoneId = readFile('testrail/milestone_id.txt').trim()
+                        build job: 'create-smart-test-runs',
+                              parameters: [
+                                  string(name: 'RELEASE_TAG',  value: params.RELEASE_TAG),
+                                  string(name: 'MILESTONE_ID', value: milestoneId)
+                              ],
+                              wait: false
+                        echo "✅ Smart test runs job triggered for ${params.RELEASE_TAG} / milestone ${milestoneId}"
+                    } catch (e) {
+                        echo "⚠️ Could not trigger smart test runs job: ${e.message}"
+                    }
+                }
+            }
+        }
+
         stage('Trigger Test Jobs') {
             when {
                 expression { env.MILESTONE_CREATED == 'true' }
@@ -169,7 +191,7 @@ EOF
     post {
         always {
             dir('testrail') {
-                sh 'rm -f .testrail_credentials.json'
+                sh 'rm -f .testrail_credentials.json milestone_id.txt'
             }
         }
 
