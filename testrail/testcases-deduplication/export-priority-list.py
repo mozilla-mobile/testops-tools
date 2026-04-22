@@ -39,16 +39,17 @@ def export_priority_lists():
         exact = exact.sort_values(['group_size', 'duplicate_group_id', '_case_id'], ascending=[False, True, True])
 
         # Add decision columns (sort numerically by case ID to pick the lowest-numbered case to keep)
-        def get_keep_archive(group):
-            case_ids = sorted(group['_case_id'].tolist(), key=case_id_sort_key)
-            keep = case_ids[0]
-            archive = ', '.join(case_ids[1:])
-            result = group.copy()
-            result['KEEP'] = keep
-            result['ARCHIVE'] = archive
-            return result
-
-        exact = exact.groupby('duplicate_group_id', group_keys=False).apply(get_keep_archive)
+        # Use Series.groupby to avoid pandas 2.2+ include_groups deprecation
+        group_keep = (
+            exact.groupby('duplicate_group_id')['_case_id']
+            .apply(lambda ids: sorted(ids.tolist(), key=case_id_sort_key)[0])
+        )
+        group_archive = (
+            exact.groupby('duplicate_group_id')['_case_id']
+            .apply(lambda ids: ', '.join(sorted(ids.tolist(), key=case_id_sort_key)[1:]))
+        )
+        exact['KEEP'] = exact['duplicate_group_id'].map(group_keep)
+        exact['ARCHIVE'] = exact['duplicate_group_id'].map(group_archive)
 
         # Reorder columns
         section_col = '_section' if '_section' in exact.columns else None
