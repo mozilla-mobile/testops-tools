@@ -179,35 +179,42 @@ jobs:
         run: |
           set -euo pipefail
 
-          CRASH_FILE="${LOCAL_ARTIFACT_DIR}/crash_example.txt"
-          ANR_FILE="${LOCAL_ARTIFACT_DIR}/anr_example.txt"
-          IMG_FILE="${LOCAL_ARTIFACT_DIR}/1.png"
-
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
           PROMPT_FILE=".github/prompts/${{ inputs.prompt_file }}"
           PROMPT=$(<"$PROMPT_FILE")
 
-          # Write combined crash + ANR content to a temp file
-          CONTENT_FILE="$(mktemp)"
-          {
-            printf 'Crash:\n'
-            cat "$CRASH_FILE"
-            printf '\n\nANR:\n'
-            cat "$ANR_FILE"
-          } > "$CONTENT_FILE"
-
-          # Post multipart form data: prompt, content (from file), and image
           RESPONSE_FILE="$(mktemp)"
-          curl --fail-with-body -sS -X POST \
-            -H "Authorization: Bearer ${TOKEN}" \
-            -F "prompt=$(printf "%s" "$PROMPT")" \
-            -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
-            -F "image=@${IMG_FILE};type=image/png" \
-            -o "$RESPONSE_FILE" \
-            "${SERVICE_URL}/analyze"
 
-          # Extract output from JSON response and write to GitHub summary
+          if [ "${{ inputs.prompt_file }}" = "sentry-release-health.txt" ]; then
+            # Sentry release health: send JSON as log file, no image
+            curl --fail-with-body -sS -X POST \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -F "prompt=$(printf "%s" "$PROMPT")" \
+              -F "log_file=@${LOCAL_ARTIFACT_DIR}/sentry_release_health.json;type=text/plain" \
+              -o "$RESPONSE_FILE" \
+              "${SERVICE_URL}/analyze"
+          else
+            # Default: crash + ANR + image
+            CONTENT_FILE="$(mktemp)"
+            {
+              printf 'Crash:\n'
+              cat "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
+              printf '\n\nANR:\n'
+              cat "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
+            } > "$CONTENT_FILE"
+
+            curl --fail-with-body -sS -X POST \
+              -H "Authorization: Bearer ${TOKEN}" \
+              -F "prompt=$(printf "%s" "$PROMPT")" \
+              -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
+              -F "image=@${LOCAL_ARTIFACT_DIR}/1.png;type=image/png" \
+              -o "$RESPONSE_FILE" \
+              "${SERVICE_URL}/analyze"
+
+            rm -f "$CONTENT_FILE"
+          fi
+
           OUTPUT=$(jq -r '.output' "$RESPONSE_FILE")
 
           {
@@ -216,5 +223,4 @@ jobs:
             echo "$OUTPUT"
           } >> "$GITHUB_STEP_SUMMARY"
 
-
-          rm -f "$CONTENT_FILE" "$RESPONSE_FILE"
+          rm -f "$RESPONSE_FILE"
