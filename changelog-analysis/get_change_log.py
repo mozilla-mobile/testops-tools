@@ -2,17 +2,11 @@ import os
 from pathlib import Path
 import requests
 import yaml
-from typing import List, Set
+from typing import List, Set, Tuple
 
-
-USE_GITHUB_COMPARE = True  # Toggle this
 RULES_FILE = "rules.yml"
 OWNER = "mozilla-mobile"
 REPO = "firefox-ios"
-
-# Hardcoded for local testing
-BASE_TAG = "firefox-v147.3"
-HEAD_TAG = "firefox-v147.4"
 
 IGNORED_DIRECTORIES = [
     ".github/workflows/",
@@ -37,6 +31,46 @@ IGNORED_EXTENSIONS = [
     ".strings",
     ".stringsdict",
 ]
+
+def _github_headers() -> dict:
+    headers = {"Accept": "application/vnd.github+json"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
+def get_latest_release_tags(owner: str, repo: str, count: int = 2,
+                             prefix: str = "firefox-v") -> List[str]:
+    """Return the `count` most-recent release tag names by version, newest first."""
+    url = f"https://api.github.com/repos/{owner}/{repo}/git/matching-refs/tags/{prefix}"
+    all_tags = []
+
+    while url:
+        response = requests.get(url, headers=_github_headers())
+        response.raise_for_status()
+        all_tags.extend(ref["ref"].removeprefix("refs/tags/") for ref in response.json())
+
+        url = None
+        for part in response.headers.get("Link", "").split(","):
+            if 'rel="next"' in part:
+                url = part[part.index("<") + 1: part.index(">")]
+                break
+
+    def version_key(tag: str) -> tuple:
+        try:
+            return tuple(int(p) for p in tag.removeprefix(prefix).split("."))
+        except ValueError:
+            return (0,)
+
+    all_tags.sort(key=version_key, reverse=True)
+
+    if len(all_tags) < count:
+        raise ValueError(
+            f"Only {len(all_tags)} tag(s) matching '{prefix}' found in {owner}/{repo}; need at least {count}."
+        )
+    return all_tags[:count]
+
 
 def is_ignored_path(path: str) -> bool:
     p = path.lower()
@@ -85,7 +119,7 @@ def load_rules(filename: str):
 # Map files to components
 # -------------------------------
 
-def map_files_to_components(files: List[str], rules) -> (Set[str], List[str]):
+def map_files_to_components(files: List[str], rules) -> Tuple[Set[str], List[str]]:
     impacted_components = set()
     unmatched_files = []
 
@@ -112,9 +146,7 @@ def map_files_to_components(files: List[str], rules) -> (Set[str], List[str]):
 
 def get_changed_files(owner, repo, base, head):
     url = f"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}"
-    headers = {"Accept": "application/vnd.github+json"}
-
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=_github_headers())
     response.raise_for_status()
 
     data = response.json()
@@ -131,17 +163,19 @@ def get_changed_files(owner, repo, base, head):
 
     return filtered_files
 
-def get_impacted_components(base_tag: str, head_tag: str) -> list[str]:
+def get_impacted_components(base_tag: str, head_tag: str,
+                             owner: str = OWNER, repo: str = REPO) -> List[str]:
     rules = load_rules(RULES_FILE)
-    changed_files = get_changed_files(OWNER, REPO, base_tag, head_tag) 
-    #filtered_files = [f for f in changed_files if not is_ignored_path(f)]
+    changed_files = get_changed_files(owner, repo, base_tag, head_tag)
     components, unmatched = map_files_to_components(changed_files, rules)
     print(f"Unmatched files: {len(unmatched)}")
     return sorted(components)
 
-# Debug
+
 if __name__ == "__main__":
-    components = get_impacted_components(BASE_TAG, HEAD_TAG)
+    head_tag, base_tag = get_latest_release_tags(OWNER, REPO)
+    print(f"Comparing {base_tag} → {head_tag}")
+    components = get_impacted_components(base_tag, head_tag)
     print("\nImpacted Components:")
     for c in components:
         print("-", c)
