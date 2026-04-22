@@ -21,7 +21,7 @@ from requests.auth import HTTPBasicAuth
 
 
 def testrail_client() -> tuple[str, HTTPBasicAuth]:
-    host = os.environ.get("TESTRAIL_HOST", "").rstrip("/").removeprefix("https://").removeprefix("http://")
+    host = os.environ.get("TESTRAIL_HOST", "").strip().rstrip("/")
     username = os.environ.get("TESTRAIL_USERNAME", "")
     password = os.environ.get("TESTRAIL_PASSWORD", "")
 
@@ -29,7 +29,7 @@ def testrail_client() -> tuple[str, HTTPBasicAuth]:
         print("Error: TESTRAIL_HOST, TESTRAIL_USERNAME and TESTRAIL_PASSWORD must be set.")
         sys.exit(1)
 
-    base_url = f"https://{host}/index.php?/api/v2"
+    base_url = f"{host}/index.php?/api/v2"
     return base_url, HTTPBasicAuth(username, password)
 
 
