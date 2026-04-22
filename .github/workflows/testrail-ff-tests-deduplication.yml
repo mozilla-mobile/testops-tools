@@ -121,6 +121,7 @@ jobs:
           path: ${{ env.DEFAULT_DIR }}/output
           destination: ${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ env.project_name }}/${{ env.today }}
           glob: '*.csv'
+          parent: false
 
       - name: Query previous stats from BigQuery
         run: |
