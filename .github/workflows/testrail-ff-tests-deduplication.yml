@@ -30,7 +30,7 @@ env:
   BUCKET: mobile-reports
   BUCKET_PREFIX: public/testrail-ff-test-deduplication
   DEFAULT_DIR: ./testrail/testcases-deduplication
-  STORAGE_URL_PREFIX: https://storage.googleapis.com
+  STORAGE_URL_PREFIX: https://console.cloud.google.com/storage/browser
   BQ_DATASET: testops_stats
   BQ_TABLE: testrail_deduplication_runs
 
@@ -129,7 +129,7 @@ jobs:
             --project_id=moz-mobile-tools \
             --use_legacy_sql=false \
             --format=json \
-            "SELECT exact_duplicate_cases, similar_pairs, total_cases
+            "SELECT exact_duplicate_cases, similar_pairs, high_priority_similar_pairs, total_cases
              FROM \`moz-mobile-tools.${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}\`
              WHERE project_id = '${{ env.project_id }}'
              ORDER BY run_date DESC
@@ -148,10 +148,11 @@ jobs:
                   row = rows[0]
                   f.write(f"prev_exact={row.get('exact_duplicate_cases', 0)}\n")
                   f.write(f"prev_similar={row.get('similar_pairs', 0)}\n")
+                  f.write(f"prev_high_priority_similar={row.get('high_priority_similar_pairs', 0)}\n")
                   f.write(f"prev_total={row.get('total_cases', 0)}\n")
                   f.write("has_prev_data=true\n")
               else:
-                  f.write("prev_exact=0\nprev_similar=0\nprev_total=0\nhas_prev_data=false\n")
+                  f.write("prev_exact=0\nprev_similar=0\nprev_high_priority_similar=0\nprev_total=0\nhas_prev_data=false\n")
           PYEOF
 
       - name: Insert current stats into BigQuery
@@ -159,6 +160,7 @@ jobs:
           total=0
           exact=0
           similar=0
+          high_priority_similar=0
 
           if [ -f output/analysis_stats.json ]; then
             total=$(python3 -c "import json; print(json.load(open('output/analysis_stats.json'))['total_cases'])")
@@ -168,6 +170,7 @@ jobs:
           fi
           if [ -f output/similar_pairs.csv ]; then
             similar=$(tail -n +2 output/similar_pairs.csv | wc -l | tr -d ' ')
+            high_priority_similar=$(tail -n +2 output/similar_pairs.csv | awk -F',' '$7 >= 0.95' | wc -l | tr -d ' ')
           fi
 
           duplicate_rate=$(python3 -c "print(round($exact / $total, 4) if $total > 0 else 0.0)")
@@ -175,9 +178,10 @@ jobs:
           echo "current_total=$total" >> $GITHUB_ENV
           echo "current_exact=$exact" >> $GITHUB_ENV
           echo "current_similar=$similar" >> $GITHUB_ENV
+          echo "current_high_priority_similar=$high_priority_similar" >> $GITHUB_ENV
           echo "current_rate=$duplicate_rate" >> $GITHUB_ENV
 
-          echo "{\"run_date\": \"${{ env.today }}\", \"project_id\": \"${{ env.project_id }}\", \"project_name\": \"${{ env.project_name }}\", \"total_cases\": $total, \"exact_duplicate_cases\": $exact, \"similar_pairs\": $similar, \"duplicate_rate\": $duplicate_rate, \"github_run_id\": \"${{ github.run_id }}\"}" \
+          echo "{\"run_date\": \"${{ env.today }}\", \"project_id\": \"${{ env.project_id }}\", \"project_name\": \"${{ env.project_name }}\", \"total_cases\": $total, \"exact_duplicate_cases\": $exact, \"similar_pairs\": $similar, \"high_priority_similar_pairs\": $high_priority_similar, \"duplicate_rate\": $duplicate_rate, \"github_run_id\": \"${{ github.run_id }}\"}" \
             | bq insert --project_id=moz-mobile-tools ${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}
 
       - name: Build Slack payloads
@@ -188,16 +192,17 @@ jobs:
           today         = os.environ["today"]
           project_id    = os.environ["project_id"]
           project_name  = os.environ["project_name"]
-          current_total   = int(os.environ.get("current_total", 0))
-          current_exact   = int(os.environ.get("current_exact", 0))
-          current_similar = int(os.environ.get("current_similar", 0))
-          current_rate    = float(os.environ.get("current_rate", 0))
-          prev_exact      = int(os.environ.get("prev_exact", 0))
-          prev_similar    = int(os.environ.get("prev_similar", 0))
-          prev_total      = int(os.environ.get("prev_total", 0))
-          has_prev_data   = os.environ.get("has_prev_data", "false") == "true"
-          gcs_url         = os.environ.get("GCS_URL", "")
-          run_url         = os.environ.get("RUN_URL", "")
+          current_total                  = int(os.environ.get("current_total", 0))
+          current_exact                  = int(os.environ.get("current_exact", 0))
+          current_similar                = int(os.environ.get("current_similar", 0))
+          current_high_priority_similar  = int(os.environ.get("current_high_priority_similar", 0))
+          current_rate                   = float(os.environ.get("current_rate", 0))
+          prev_exact                     = int(os.environ.get("prev_exact", 0))
+          prev_high_priority_similar     = int(os.environ.get("prev_high_priority_similar", 0))
+          prev_total                     = int(os.environ.get("prev_total", 0))
+          has_prev_data                  = os.environ.get("has_prev_data", "false") == "true"
+          gcs_url                        = os.environ.get("GCS_URL", "")
+          run_url                        = os.environ.get("RUN_URL", "")
 
           def delta_str(current, previous):
               if not has_prev_data:
@@ -213,7 +218,7 @@ jobs:
               f"*Project:* {project_name} (ID: {project_id})\n"
               f"*Total cases:* {current_total}{delta_str(current_total, prev_total)}\n"
               f"*Exact duplicates:* {current_exact}{delta_str(current_exact, prev_exact)}\n"
-              f"*Similar pairs:* {current_similar}{delta_str(current_similar, prev_similar)}\n"
+              f"*High-priority similar pairs:* {current_high_priority_similar}{delta_str(current_high_priority_similar, prev_high_priority_similar)} _(≥95% similarity)_\n"
               f"*Duplicate rate:* {current_rate:.1%}\n"
               f"<{gcs_url}|Download results from GCS>"
           )
