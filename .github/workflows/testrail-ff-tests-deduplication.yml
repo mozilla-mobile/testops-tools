@@ -170,7 +170,7 @@ jobs:
           fi
           if [ -f output/similar_pairs.csv ]; then
             similar=$(tail -n +2 output/similar_pairs.csv | wc -l | tr -d ' ')
-            high_priority_similar=$(tail -n +2 output/similar_pairs.csv | awk -F',' '$7 >= 0.95' | wc -l | tr -d ' ')
+            high_priority_similar=$(python3 -c "import csv; print(sum(1 for r in csv.DictReader(open('output/similar_pairs.csv')) if float(r['similarity']) >= 0.95))")
           fi
 
           duplicate_rate=$(python3 -c "print(round($exact / $total, 4) if $total > 0 else 0.0)")
@@ -218,7 +218,7 @@ jobs:
               f"*Project:* {project_name} (ID: {project_id})\n"
               f"*Total cases:* {current_total}{delta_str(current_total, prev_total)}\n"
               f"*Exact duplicates:* {current_exact}{delta_str(current_exact, prev_exact)}\n"
-              f"*High-priority similar pairs:* {current_high_priority_similar}{delta_str(current_high_priority_similar, prev_high_priority_similar)} _(≥95% similarity)_\n"
+              f"*High-priority similar pairs:* {current_high_priority_similar}{delta_str(current_high_priority_similar, prev_high_priority_similar)}\n"
               f"*Duplicate rate:* {current_rate:.1%}\n"
               f"<{gcs_url}|Download results from GCS>"
           )
