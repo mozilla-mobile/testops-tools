@@ -73,9 +73,22 @@ jobs:
 
       - name: Fetch test cases from TestRail
         run: |
+          PROJECT_ID="${{ github.event.inputs.project_id || '14' }}"
+          SUITE_ID="${{ github.event.inputs.suite_id }}"
+
+          # Default suite IDs per project (required for multi-suite projects)
+          if [ -z "$SUITE_ID" ]; then
+            case "$PROJECT_ID" in
+              14) SUITE_ID="45443" ;;  # Firefox for iOS
+              59) SUITE_ID="3192"  ;;  # Fenix Browser
+              27) SUITE_ID="5291"  ;;  # Focus for iOS
+              48) SUITE_ID="1028"  ;;  # Focus for Android
+            esac
+          fi
+
           python3 fetch_testrail_export.py \
-            --project-id ${{ github.event.inputs.project_id || '14' }} \
-            ${{ github.event.inputs.suite_id && format('--suite-id {0}', github.event.inputs.suite_id) || '' }} \
+            --project-id "$PROJECT_ID" \
+            ${SUITE_ID:+--suite-id "$SUITE_ID"} \
             --output testrail_export.xlsx
 
       - name: Run deduplication pipeline
