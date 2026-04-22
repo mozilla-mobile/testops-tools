@@ -8,7 +8,9 @@
 | OP535DL1 | CPH2409 | 34 | Low |
 | OP5552L1 | CPH2415 | 34 | Low |
 | OP573DL1 | CPH2557 | 34 | High |
+| OP5759L1 | CPH2579 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
+| RE58C2 | Realme C53 | 35 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
@@ -37,7 +39,7 @@
 | a16xeea | Samsung A16 5G | 35 | Low |
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | SM-A256U1 | 34 | Low |
-| a26x | Samsung SM-A266B | 36 | None |
+| a26x | Samsung SM-A266B | 36 | Low |
 | a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Low |
 | a35x | Samsung A35 | 35 | Low |
