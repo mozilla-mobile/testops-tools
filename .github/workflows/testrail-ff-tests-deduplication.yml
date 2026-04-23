@@ -2,6 +2,9 @@ name: TestRail Test Case Deduplication
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - mb/MTE-4838-deduplication-ios
   schedule:
     - cron: "0 9 * * 1"  # Every Monday at 9am UTC
 
