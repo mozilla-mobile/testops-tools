@@ -47,7 +47,7 @@
 | a36xq | Samsung SM-A366E | 35 | Low |
 | a36xq | Samsung SM-A366E | 36 | Low |
 | a52sxq | Galaxy A52s | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | Low |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | a56x | SM-A566E | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
