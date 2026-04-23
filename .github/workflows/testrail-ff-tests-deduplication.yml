@@ -1,12 +1,6 @@
 name: TestRail Test Case Deduplication
 
 on:
-  push:
-    branches:
-      - mb/MTE-4838-deduplication-ios
-    paths:
-      - 'testrail/testcases-deduplication/**'
-      - '.github/workflows/testrail-ff-tests-deduplication.yml'
   workflow_dispatch:
   schedule:
     - cron: "0 9 * * 1"  # Every Monday at 9am UTC
