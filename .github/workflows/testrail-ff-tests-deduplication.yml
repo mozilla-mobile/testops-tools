@@ -8,21 +8,6 @@ on:
       - 'testrail/testcases-deduplication/**'
       - '.github/workflows/testrail-ff-tests-deduplication.yml'
   workflow_dispatch:
-    inputs:
-      project_id:
-        description: 'TestRail Project ID'
-        required: true
-        default: '14'
-        type: choice
-        options:
-          - '14'   # Firefox for iOS
-          - '59'   # Fenix Browser
-          - '27'   # Focus for iOS
-          - '48'   # Focus for Android
-      suite_id:
-        description: 'TestRail Suite ID (leave empty to fetch all suites)'
-        required: false
-        default: ''
   schedule:
     - cron: "0 9 * * 1"  # Every Monday at 9am UTC
 
@@ -36,11 +21,28 @@ env:
 
 jobs:
   deduplication:
-    name: Run test case deduplication
+    name: Deduplication — ${{ matrix.project_name }}
     runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ${{ env.DEFAULT_DIR }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project_id: '14'
+            project_name: firefox-ios
+            suite_id: '45443'
+          - project_id: '59'
+            project_name: fenix
+            suite_id: '3192'
+          - project_id: '27'
+            project_name: focus-ios
+            suite_id: '5291'
+          - project_id: '48'
+            project_name: focus-android
+            suite_id: '1028'
 
     env:
       TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
@@ -73,22 +75,9 @@ jobs:
 
       - name: Fetch test cases from TestRail
         run: |
-          PROJECT_ID="${{ github.event.inputs.project_id || '14' }}"
-          SUITE_ID="${{ github.event.inputs.suite_id }}"
-
-          # Default suite IDs per project (required for multi-suite projects)
-          if [ -z "$SUITE_ID" ]; then
-            case "$PROJECT_ID" in
-              14) SUITE_ID="45443" ;;  # Firefox for iOS
-              59) SUITE_ID="3192"  ;;  # Fenix Browser
-              27) SUITE_ID="5291"  ;;  # Focus for iOS
-              48) SUITE_ID="1028"  ;;  # Focus for Android
-            esac
-          fi
-
           python3 fetch_testrail_export.py \
-            --project-id "$PROJECT_ID" \
-            ${SUITE_ID:+--suite-id "$SUITE_ID"} \
+            --project-id "${{ matrix.project_id }}" \
+            --suite-id "${{ matrix.suite_id }}" \
             --output testrail_export.xlsx
 
       - name: Run deduplication pipeline
@@ -98,16 +87,8 @@ jobs:
       - name: Set run metadata
         run: |
           echo "today=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
-          echo "project_id=${{ github.event.inputs.project_id || '14' }}" >> $GITHUB_ENV
-
-          case "${{ github.event.inputs.project_id || '14' }}" in
-            14) project_name="firefox-ios" ;;
-            59) project_name="fenix" ;;
-            27) project_name="focus-ios" ;;
-            48) project_name="focus-android" ;;
-            *)  project_name="project-${{ github.event.inputs.project_id || '14' }}" ;;
-          esac
-          echo "project_name=$project_name" >> $GITHUB_ENV
+          echo "project_id=${{ matrix.project_id }}" >> $GITHUB_ENV
+          echo "project_name=${{ matrix.project_name }}" >> $GITHUB_ENV
 
       - name: Establish Google Cloud connection
         uses: google-github-actions/auth@v3
@@ -119,7 +100,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v3
         with:
           path: ${{ env.DEFAULT_DIR }}/output
-          destination: ${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ env.project_name }}/${{ env.today }}
+          destination: ${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}
           glob: '*.csv'
           parent: false
 
@@ -131,7 +112,7 @@ jobs:
             --format=json \
             "SELECT exact_duplicate_cases, similar_pairs, high_priority_similar_pairs, total_cases
              FROM \`moz-mobile-tools.${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}\`
-             WHERE project_id = '${{ env.project_id }}'
+             WHERE project_id = '${{ matrix.project_id }}'
              ORDER BY run_date DESC
              LIMIT 1" 2>/dev/null || echo "[]")
 
@@ -181,7 +162,7 @@ jobs:
           echo "current_high_priority_similar=$high_priority_similar" >> $GITHUB_ENV
           echo "current_rate=$duplicate_rate" >> $GITHUB_ENV
 
-          echo "{\"run_date\": \"${{ env.today }}\", \"project_id\": \"${{ env.project_id }}\", \"project_name\": \"${{ env.project_name }}\", \"total_cases\": $total, \"exact_duplicate_cases\": $exact, \"similar_pairs\": $similar, \"high_priority_similar_pairs\": $high_priority_similar, \"duplicate_rate\": $duplicate_rate, \"github_run_id\": \"${{ github.run_id }}\"}" \
+          echo "{\"run_date\": \"${{ env.today }}\", \"project_id\": \"${{ matrix.project_id }}\", \"project_name\": \"${{ matrix.project_name }}\", \"total_cases\": $total, \"exact_duplicate_cases\": $exact, \"similar_pairs\": $similar, \"high_priority_similar_pairs\": $high_priority_similar, \"duplicate_rate\": $duplicate_rate, \"github_run_id\": \"${{ github.run_id }}\"}" \
             | bq insert --project_id=moz-mobile-tools ${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}
 
       - name: Build Slack payloads
@@ -253,7 +234,7 @@ jobs:
                   json.dump(spike_payload, f)
           PYEOF
         env:
-          GCS_URL: ${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ env.project_name }}/${{ env.today }}/
+          GCS_URL: ${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}/
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Write job summary
@@ -262,14 +243,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Project | ${{ env.project_name }} (ID: ${{ env.project_id }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Project | ${{ matrix.project_name }} (ID: ${{ matrix.project_id }}) |" >> $GITHUB_STEP_SUMMARY
           echo "| Date | ${{ env.today }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Total cases | ${{ env.current_total }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Exact duplicates | ${{ env.current_exact }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Similar pairs | ${{ env.current_similar }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Duplicate rate | ${{ env.current_rate }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[Download results from GCS](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ env.project_name }}/${{ env.today }}/)" >> $GITHUB_STEP_SUMMARY
+          echo "[Download results from GCS](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}/)" >> $GITHUB_STEP_SUMMARY
 
       - name: Notify Slack — weekly digest
         if: success()
@@ -300,7 +281,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":x: *TestRail Deduplication failed* (project ${{ env.project_id }})\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
+                    "text": ":x: *TestRail Deduplication failed* (${{ matrix.project_name }})\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
                   }
                 }
               ]
