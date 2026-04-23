@@ -38,11 +38,6 @@ jobs:
             project_name: focus-android
             suite_id: '1028'
 
-    env:
-      TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
-      TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
-      TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -68,6 +63,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Fetch test cases from TestRail
+        env:
+          TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
         run: |
           python3 fetch_testrail_export.py \
             --project-id "${{ matrix.project_id }}" \
@@ -132,32 +131,15 @@ jobs:
 
       - name: Insert current stats into BigQuery
         run: |
-          total=0
-          exact=0
-          similar=0
-          high_priority_similar=0
-
-          if [ -f output/analysis_stats.json ]; then
-            total=$(python3 -c "import json; print(json.load(open('output/analysis_stats.json'))['total_cases'])")
-          fi
-          if [ -f output/duplicates_exact.csv ]; then
-            exact=$(tail -n +2 output/duplicates_exact.csv | wc -l | tr -d ' ')
-          fi
-          if [ -f output/similar_pairs.csv ]; then
-            similar=$(tail -n +2 output/similar_pairs.csv | wc -l | tr -d ' ')
-            high_priority_similar=$(python3 -c "import csv; print(sum(1 for r in csv.DictReader(open('output/similar_pairs.csv')) if float(r['similarity']) >= 0.95))")
-          fi
-
-          duplicate_rate=$(python3 -c "print(round($exact / $total, 4) if $total > 0 else 0.0)")
-
-          echo "current_total=$total" >> $GITHUB_ENV
-          echo "current_exact=$exact" >> $GITHUB_ENV
-          echo "current_similar=$similar" >> $GITHUB_ENV
-          echo "current_high_priority_similar=$high_priority_similar" >> $GITHUB_ENV
-          echo "current_rate=$duplicate_rate" >> $GITHUB_ENV
-
-          echo "{\"run_date\": \"${{ env.today }}\", \"project_id\": \"${{ matrix.project_id }}\", \"project_name\": \"${{ matrix.project_name }}\", \"total_cases\": $total, \"exact_duplicate_cases\": $exact, \"similar_pairs\": $similar, \"high_priority_similar_pairs\": $high_priority_similar, \"duplicate_rate\": $duplicate_rate, \"github_run_id\": \"${{ github.run_id }}\"}" \
-            | bq insert --project_id=moz-mobile-tools ${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}
+          python3 insert_bq_stats.py \
+            --output-dir ./output \
+            --project-id "${{ matrix.project_id }}" \
+            --project-name "${{ matrix.project_name }}" \
+            --run-date "${{ env.today }}" \
+            --github-run-id "${{ github.run_id }}" \
+            --bq-project moz-mobile-tools \
+            --bq-dataset ${{ env.BQ_DATASET }} \
+            --bq-table ${{ env.BQ_TABLE }}
 
       - name: Build Slack payloads
         run: |
