@@ -2,6 +2,7 @@
 """
 Export filtered priority lists to CSV for easy review in Excel
 """
+import argparse
 import os
 import re
 import sys
@@ -149,7 +150,6 @@ def export_priority_lists():
     print("="*60)
 
 if __name__ == "__main__":
-    import argparse
     parser = argparse.ArgumentParser(description="Export priority work lists from deduplication results.")
     parser.add_argument(
         "--output-dir", default=".",
