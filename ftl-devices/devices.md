@@ -11,6 +11,7 @@
 | OP5759L1 | CPH2579 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
 | RE58C2 | Realme C53 | 35 | Low |
+| RMX3231 | Realme C11 | 30 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
@@ -28,7 +29,7 @@
 | a14xm | Galaxy A14 | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | None |
-| a15 | Samsung A15 | 34 | Low |
+| a15 | Samsung A15 | 34 | Medium |
 | a15x | Samsung A15 5G | 34 | Low |
 | a15x | Samsung A15 5G | 36 | Low |
 | a15xtfn | Galaxy A15 5G | 36 | Low |
@@ -113,6 +114,8 @@
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
 | gts9fe | Samsung Galaxy Tab S9 FE 5G | 34 | Medium |
 | gts9wifi | SM-X710 | 34 | Medium |
+| guamna | Moto XT2093-3 | 30 | Low |
+| guamp | Moto XT2083-1 | 30 | Low |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | High |
