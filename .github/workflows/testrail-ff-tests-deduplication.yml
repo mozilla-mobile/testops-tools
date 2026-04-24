@@ -143,72 +143,13 @@ jobs:
 
       - name: Build Slack payloads
         run: |
-          python3 << 'PYEOF'
-          import json, os
-
-          today         = os.environ["today"]
-          project_id    = os.environ["project_id"]
-          project_name  = os.environ["project_name"]
-          current_total                  = int(os.environ.get("current_total", 0))
-          current_exact                  = int(os.environ.get("current_exact", 0))
-          current_similar                = int(os.environ.get("current_similar", 0))
-          current_high_priority_similar  = int(os.environ.get("current_high_priority_similar", 0))
-          current_rate                   = float(os.environ.get("current_rate", 0))
-          prev_exact                     = int(os.environ.get("prev_exact", 0))
-          prev_high_priority_similar     = int(os.environ.get("prev_high_priority_similar", 0))
-          prev_total                     = int(os.environ.get("prev_total", 0))
-          has_prev_data                  = os.environ.get("has_prev_data", "false") == "true"
-          gcs_url                        = os.environ.get("GCS_URL", "")
-          run_url                        = os.environ.get("RUN_URL", "")
-
-          def delta_str(current, previous):
-              if not has_prev_data:
-                  return ""
-              diff = current - previous
-              if diff > 0:
-                  return f" _(+{diff} vs last week)_"
-              if diff < 0:
-                  return f" _({diff} vs last week)_"
-              return " _(no change)_"
-
-          digest_text = (
-              f"*Project:* {project_name} (ID: {project_id})\n"
-              f"*Total cases:* {current_total}{delta_str(current_total, prev_total)}\n"
-              f"*Exact duplicates:* {current_exact}{delta_str(current_exact, prev_exact)}\n"
-              f"*High-priority similar pairs:* {current_high_priority_similar}{delta_str(current_high_priority_similar, prev_high_priority_similar)}\n"
-              f"*Duplicate rate:* {current_rate:.1%}\n"
-              f"<{gcs_url}|Download results from GCS>"
-          )
-
-          digest_payload = {
-              "blocks": [
-                  {"type": "header", "text": {"type": "plain_text", "text": f":mag: TestRail Deduplication — {today}"}},
-                  {"type": "section", "text": {"type": "mrkdwn", "text": digest_text}},
-              ]
-          }
-          with open("slack-digest.json", "w") as f:
-              json.dump(digest_payload, f)
-
-          delta_exact = current_exact - prev_exact
-          send_spike = has_prev_data and delta_exact > 10
-          with open(os.environ["GITHUB_ENV"], "a") as env_file:
-              env_file.write(f"send_spike={'true' if send_spike else 'false'}\n")
-
-          if send_spike:
-              spike_payload = {
-                  "blocks": [
-                      {"type": "header", "text": {"type": "plain_text", "text": f":warning: Duplicate spike detected — {project_name}"}},
-                      {"type": "section", "text": {"type": "mrkdwn", "text": (
-                          f"*Exact duplicates jumped by {delta_exact}* this week "
-                          f"({prev_exact} → {current_exact})\n"
-                          f"*Project:* {project_name} (ID: {project_id}) | *Date:* {today}\n"
-                          f"<{gcs_url}|Download results> · <{run_url}|View run>"
-                      )}},
-                  ]
-              }
-              with open("slack-spike.json", "w") as f:
-                  json.dump(spike_payload, f)
-          PYEOF
+          python3 build_slack_payloads.py \
+            --output-dir . \
+            --today "${{ env.today }}" \
+            --project-id "${{ matrix.project_id }}" \
+            --project-name "${{ matrix.project_name }}" \
+            --gcs-url "${{ env.GCS_URL }}" \
+            --run-url "${{ env.RUN_URL }}"
         env:
           GCS_URL: ${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}/
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
