@@ -8,7 +8,6 @@ import re
 import sys
 import pandas as pd
 
-
 def load_csv(path: str) -> pd.DataFrame:
     """Load a CSV file, returning an empty DataFrame if the file doesn't exist."""
     if not os.path.exists(path):

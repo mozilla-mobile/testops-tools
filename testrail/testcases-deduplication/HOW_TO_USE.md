@@ -316,7 +316,7 @@ duplicates = similar[similar['relation'] == 'semantic_duplicate']
 ## FAQs
 
 ### Q: Which test should I keep if they're all identical?
-**A:** Keep the one with the **lowest Case ID** (e.g., C2575167 instead of C3193560). The lowest ID is usually the original test, and higher IDs are copies.
+**A:** Keep the test that is linked in githug to avoid creating a PR just to modify the link.
 
 ### Q: What if one duplicate has automation coverage and the other doesn't?
 **A:** Keep the one with automation coverage, or migrate the automation to the version you want to keep before archiving.
