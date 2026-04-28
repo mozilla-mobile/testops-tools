@@ -131,16 +131,33 @@ def map_files_to_components(files: List[str], rules) -> Tuple[Set[str], List[str
 
 
 def get_changed_files(owner: str, repo: str, base: str, head: str) -> List[str]:
-    url = f"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}"
-    response = requests.get(url, headers=_github_headers())
-    response.raise_for_status()
+    commit_shas = []
+    page = 1
+    while True:
+        response = requests.get(
+            f"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}",
+            headers=_github_headers(),
+            params={"per_page": 100, "page": page},
+        )
+        response.raise_for_status()
+        commits = response.json().get("commits", [])
+        commit_shas.extend(c["sha"] for c in commits)
+        if len(commits) < 100:
+            break
+        page += 1
 
-    all_files = [f["filename"] for f in response.json().get("files", [])]
-    filtered = [f for f in all_files if not is_ignored_path(f)]
+    all_files: Set[str] = set()
+    for sha in commit_shas:
+        response = requests.get(
+            f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}",
+            headers=_github_headers(),
+        )
+        response.raise_for_status()
+        all_files.update(f["filename"] for f in response.json().get("files", []))
 
+    filtered = [f for f in sorted(all_files) if not is_ignored_path(f)]
     print(f"Total changed files (raw): {len(all_files)}")
     print(f"After filtering ignored paths: {len(filtered)}")
-
     return filtered
 
 

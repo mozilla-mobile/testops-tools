@@ -22,20 +22,24 @@ def main():
         description="Smart release test selection based on changelog diff.",
         epilog="Tags are read from testrail/latest_tags.json when not provided explicitly.",
     )
-    parser.add_argument("base_tag", nargs="?", help="Previous release tag")
-    parser.add_argument("head_tag", nargs="?", help="Current release tag")
+    parser.add_argument("--base_tag", help="Previous release tag")
+    parser.add_argument("--head_tag", help="Current release tag")
     parser.add_argument("--milestone_id", type=int, help="TestRail milestone ID")
     args = parser.parse_args()
 
-    if args.base_tag and args.head_tag:
+    if args.head_tag and not args.base_tag:
+        head_tag = args.head_tag
+        base_tag = get_base_tag(head_tag, IOS_OWNER, IOS_REPO)
+    elif args.base_tag and args.head_tag:
         base_tag, head_tag = args.base_tag, args.head_tag
     elif args.base_tag or args.head_tag:
-        parser.error("Provide both base_tag and head_tag, or neither.")
+        parser.error("Provide both --base_tag and --head_tag, or only --head_tag.")
     else:
         head_tag = read_head_tag()
-        print(f"Head tag from latest_tags.json: {head_tag}")
         base_tag = get_base_tag(head_tag, IOS_OWNER, IOS_REPO)
-        print(f"Base tag (previous version):    {base_tag}")
+
+    print(f"Head tag: {head_tag}")
+    print(f"Base tag: {base_tag}")
 
     print(f"\nComparing {base_tag} → {head_tag}")
 
