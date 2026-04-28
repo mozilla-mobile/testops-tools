@@ -59,7 +59,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | High |
-| b5q | Galaxy Z Flip5 | 34 | High |
+| b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
@@ -145,7 +145,7 @@
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
-| q5q | Galaxy Z Fold5 | 34 | High |
+| q5q | Galaxy Z Fold5 | 34 | Medium |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
