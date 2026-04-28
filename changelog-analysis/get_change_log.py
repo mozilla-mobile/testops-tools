@@ -69,18 +69,22 @@ def get_all_release_tags(owner: str, repo: str, prefix: str = TAG_PREFIX) -> Lis
 
 def get_base_tag(head_tag: str, owner: str = OWNER, repo: str = REPO,
                  prefix: str = TAG_PREFIX) -> str:
-    """Return the release tag immediately before head_tag by version."""
+    """Return the latest released tag with a lower version than head_tag."""
     tags = get_all_release_tags(owner, repo, prefix)
 
-    try:
-        idx = tags.index(head_tag)
-    except ValueError:
-        raise ValueError(f"Tag '{head_tag}' not found in {owner}/{repo}")
+    def version_tuple(tag: str) -> tuple:
+        try:
+            return tuple(int(p) for p in tag.removeprefix(prefix).split("."))
+        except ValueError:
+            return (0,)
 
-    if idx + 1 >= len(tags):
-        raise ValueError(f"No tag before '{head_tag}' found in {owner}/{repo}")
+    head_version = version_tuple(head_tag)
 
-    return tags[idx + 1]
+    for tag in tags:  # already sorted descending
+        if version_tuple(tag) < head_version:
+            return tag
+
+    raise ValueError(f"No released tag before '{head_tag}' found in {owner}/{repo}")
 
 
 def is_ignored_path(path: str) -> bool:
