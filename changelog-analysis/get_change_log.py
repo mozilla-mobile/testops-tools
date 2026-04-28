@@ -158,6 +158,7 @@ def get_changed_files(owner: str, repo: str, base: str, head: str) -> List[str]:
             break
         page += 1
 
+    print(f"Total commits ({base_ref} → {head_ref}): {len(commit_shas)}")
     all_files: Set[str] = set()
     for sha in commit_shas:
         response = requests.get(
