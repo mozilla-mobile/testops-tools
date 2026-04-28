@@ -134,12 +134,20 @@ def map_files_to_components(files: List[str], rules) -> Tuple[Set[str], List[str
     return impacted, unmatched
 
 
+def _release_branch(tag: str) -> str:
+    # firefox-v150.2 -> release/v150.2
+    version = tag.rsplit("-v", 1)[-1]
+    return f"release/v{version}"
+
+
 def get_changed_files(owner: str, repo: str, base: str, head: str) -> List[str]:
+    base_ref = _release_branch(base)
+    head_ref = _release_branch(head)
     commit_shas = []
     page = 1
     while True:
         response = requests.get(
-            f"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}",
+            f"https://api.github.com/repos/{owner}/{repo}/compare/{base_ref}...{head_ref}",
             headers=_github_headers(),
             params={"per_page": 100, "page": page},
         )
