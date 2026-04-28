@@ -605,7 +605,7 @@ def query_vitals(
     package_name: str,
     metric_set_config: dict[str, Any],
     body: dict[str, Any],
-    max_retries: int = 5,
+    max_retries: int = 10,
 ) -> dict[str, Any]:
     """Query the vitals API with automatic retry for freshness errors.
 
