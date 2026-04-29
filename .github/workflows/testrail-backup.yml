@@ -99,7 +99,7 @@ jobs:
           echo "Full Functional Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
           [ -f test-counts.json ] || echo '{}' > test-counts.json
           cd $filename
-          table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Count"},{"type":"raw_text","text":"Change"}]]'
+          table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Delta"}]]'
           counts_json='{}'
           for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite"; do
             csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
@@ -110,19 +110,28 @@ jobs:
               project=$(echo "$suite" | sed 's/_Full Functional Tests Suite//')
               prev=$(jq -r --arg key "$display" '.[$key] // empty' ../test-counts.json)
               if [ -n "$prev" ]; then
+                starting="$prev"
                 delta=$((count - prev))
-                if [ $delta -gt 0 ]; then change="↑ +${delta}"
-                elif [ $delta -lt 0 ]; then change="↓ ${delta}"
-                else change="no change"
+                if [ $delta -gt 0 ]; then
+                  pct=$(awk "BEGIN {printf \"%.1f\", ($delta / $prev) * 100}")
+                  change="+${delta} / +${pct}%"
+                elif [ $delta -lt 0 ]; then
+                  abs_delta=$(( -delta ))
+                  pct=$(awk "BEGIN {printf \"%.1f\", ($abs_delta / $prev) * 100}")
+                  change="${delta} / -${pct}%"
+                else
+                  change="no change"
                 fi
               else
+                starting="-"
                 change="-"
               fi
               row=$(jq -n \
                 --arg suite "$project" \
+                --arg starting "$starting" \
                 --arg count "$count" \
                 --arg change "$change" \
-                '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$count},{"type":"raw_text","text":$change}]')
+                '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$starting},{"type":"raw_text","text":$count},{"type":"raw_text","text":$change}]')
               table_rows=$(echo "$table_rows" | jq --argjson row "$row" '. + [$row]')
               counts_json=$(echo "$counts_json" | jq --arg key "$display" --argjson val "$count" '. + {($key): $val}')
             fi
