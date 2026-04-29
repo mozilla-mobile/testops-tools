@@ -32,7 +32,9 @@ env:
   CRASH_URI: gs://testops-llm-artifacts/crashes/minidumps/examples/crash_example.txt
   ANR_URI: gs://testops-llm-artifacts/anr/examples/anr_example.txt
   IMG_URI: gs://testops-llm-artifacts/images/examples/iOS/1.png
-  SENTRY_IOS_URI: gs://testops-llm-artifacts/sentry/firefox-ios/latest.json
+  SENTRY_CRASH_FREE_RATES_FENIX: gs://testops-llm-artifacts/sentry/fenix/sentry_rates.csv
+  SENTRY_CRASH_FREE_RATES_FENIX_BETA: gs://testops-llm-artifacts/sentry/fenix-beta/sentry_rates.csv
+  SENTRY_CRASH_FREE_RATES_FIREFOX_IOS: gs://testops-llm-artifacts/sentry/firefox-ios/sentry_rates.csv
   LOCAL_ARTIFACT_DIR: artifacts
 
 jobs:
@@ -170,9 +172,26 @@ jobs:
           gcloud storage cp "${CRASH_URI}" "${LOCAL_ARTIFACT_DIR}/crash_example.txt"
           gcloud storage cp "${ANR_URI}" "${LOCAL_ARTIFACT_DIR}/anr_example.txt"
           gcloud storage cp "${IMG_URI}" "${LOCAL_ARTIFACT_DIR}/1.png"
-          gcloud storage cp "${SENTRY_IOS_URI}" "${LOCAL_ARTIFACT_DIR}/sentry_release_health.json"
+          gcloud storage cp "${SENTRY_CRASH_FREE_RATES_FENIX}" "${LOCAL_ARTIFACT_DIR}/sentry_rates_fenix.csv"
+          gcloud storage cp "${SENTRY_CRASH_FREE_RATES_FENIX_BETA}" "${LOCAL_ARTIFACT_DIR}/sentry_rates_fenix_beta.csv"
+          gcloud storage cp "${SENTRY_CRASH_FREE_RATES_FIREFOX_IOS}" "${LOCAL_ARTIFACT_DIR}/sentry_rates_firefox_ios.csv"
           echo "Downloaded files:"
           ls -la "${LOCAL_ARTIFACT_DIR}"
+
+      - name: Validate downloaded artifacts
+        run: |
+          set -euo pipefail
+
+          if [ "${{ inputs.prompt_file }}" = "sentry-release-health.txt" ]; then
+            for f in sentry_rates_fenix.csv sentry_rates_fenix_beta.csv sentry_rates_firefox_ios.csv; do
+              filepath="${LOCAL_ARTIFACT_DIR}/${f}"
+              if [ ! -s "${filepath}" ]; then
+                echo "::error::${f} is missing or empty. Run the upstream Sentry workflow first."
+                exit 1
+              fi
+              echo "${f}: $(wc -l < "${filepath}") lines"
+            done
+          fi
 
       - name: (Optional) POST artifacts as JSON to Cloud Run
         if: ${{ inputs.use_prod_service_url == true }}
@@ -187,13 +206,24 @@ jobs:
           RESPONSE_FILE="$(mktemp)"
 
           if [ "${{ inputs.prompt_file }}" = "sentry-release-health.txt" ]; then
-            # Sentry release health: send JSON as log file, no image
+            CONTENT_FILE="$(mktemp)"
+            {
+              printf 'Fenix (Android):\n'
+              cat "${LOCAL_ARTIFACT_DIR}/sentry_rates_fenix.csv"
+              printf '\n\nFenix Beta (Android):\n'
+              cat "${LOCAL_ARTIFACT_DIR}/sentry_rates_fenix_beta.csv"
+              printf '\n\nFirefox iOS:\n'
+              cat "${LOCAL_ARTIFACT_DIR}/sentry_rates_firefox_ios.csv"
+            } > "$CONTENT_FILE"
+
             curl --fail-with-body -sS -X POST \
               -H "Authorization: Bearer ${TOKEN}" \
               -F "prompt=$(printf "%s" "$PROMPT")" \
-              -F "log_file=@${LOCAL_ARTIFACT_DIR}/sentry_release_health.json;type=text/plain" \
+              -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
               -o "$RESPONSE_FILE" \
               "${SERVICE_URL}/analyze"
+
+            rm -f "$CONTENT_FILE"
           else
             # Default: crash + ANR + image
             CONTENT_FILE="$(mktemp)"
