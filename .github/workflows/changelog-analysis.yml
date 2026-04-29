@@ -28,7 +28,7 @@ jobs:
       - name: Run changelog analysis
         run: |
           if [ -n "${{ inputs.base_tag }}" ] && [ -n "${{ inputs.head_tag }}" ]; then
-            python3 changelog-analysis/run_release_selection.py ${{ inputs.base_tag }} ${{ inputs.head_tag }}
+            python3 changelog-analysis/run_release_selection.py --base_tag ${{ inputs.base_tag }} --head_tag ${{ inputs.head_tag }}
           else
             python3 changelog-analysis/run_release_selection.py
           fi
