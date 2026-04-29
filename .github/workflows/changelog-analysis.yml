@@ -6,6 +6,7 @@ on:
       - irios-new-jenkins-file-verify-release-tags
     paths:
       - 'changelog-analysis/**'
+      - '.github/workflows/**'
   workflow_dispatch:
     inputs:
       base_tag:
