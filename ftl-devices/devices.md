@@ -10,7 +10,7 @@
 | OP573DL1 | CPH2557 | 34 | High |
 | OP5759L1 | CPH2579 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE3 Lite | 34 | High |
-| RE58C2 | Realme C53 | 35 | Low |
+| RE58C2 | Realme C53 | 35 | Medium |
 | RMX3231 | Realme C11 | 30 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
@@ -163,7 +163,7 @@
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | Medium |
 | shiba | Pixel 8 | 36 | Medium |
-| stallion | Pixel 10a | 36 | Medium |
+| stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21 Plus | 34 | Medium |
 | t2q | Galaxy S21 Plus | 35 | Low |
