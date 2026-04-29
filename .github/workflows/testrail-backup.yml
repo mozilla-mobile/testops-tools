@@ -95,50 +95,7 @@ jobs:
           awk -F '_' '{print "* " $2 }' < files.txt | uniq >> $GITHUB_STEP_SUMMARY
 
       - name: Output test case counts to Github Actions summary
-        run: |
-          echo "Full Functional Test Case Counts (Full Functional Tests Suite)" >> $GITHUB_STEP_SUMMARY
-          [ -f test-counts.json ] || echo '{}' > test-counts.json
-          cd $filename
-          table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Delta"}]]'
-          counts_json='{}'
-          for suite in "Fenix Browser_Full Functional Tests Suite" "Firefox for iOS_Full Functional Tests Suite"; do
-            csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
-            if [ -n "$csvfile" ]; then
-              count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
-              echo "* ${suite}: ${count} test cases" >> $GITHUB_STEP_SUMMARY
-              display=$(echo "$suite" | sed 's/_/ - /')
-              project=$(echo "$suite" | sed 's/_Full Functional Tests Suite//')
-              prev=$(jq -r --arg key "$display" '.[$key] // empty' ../test-counts.json)
-              if [ -n "$prev" ]; then
-                starting="$prev"
-                delta=$((count - prev))
-                if [ $delta -gt 0 ]; then
-                  pct=$(awk "BEGIN {printf \"%.1f\", ($delta / $prev) * 100}")
-                  change="+${delta} / +${pct}%"
-                elif [ $delta -lt 0 ]; then
-                  abs_delta=$(( -delta ))
-                  pct=$(awk "BEGIN {printf \"%.1f\", ($abs_delta / $prev) * 100}")
-                  change="${delta} / -${pct}%"
-                else
-                  change="no change"
-                fi
-              else
-                starting="-"
-                change="-"
-              fi
-              row=$(jq -n \
-                --arg suite "$project" \
-                --arg starting "$starting" \
-                --arg count "$count" \
-                --arg change "$change" \
-                '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$starting},{"type":"raw_text","text":$count},{"type":"raw_text","text":$change}]')
-              table_rows=$(echo "$table_rows" | jq --argjson row "$row" '. + [$row]')
-              counts_json=$(echo "$counts_json" | jq --arg key "$display" --argjson val "$count" '. + {($key): $val}')
-            fi
-          done
-          echo "$counts_json" > ../test-counts.json
-          today=$(date "+%Y-%m-%d")
-          jq -n --argjson rows "$table_rows" --arg date "$today" '{"blocks":[{"type":"header","text":{"type":"plain_text","text":(":testops-testrail:Full Functional Test Case Counts — " + $date)}},{"type":"table","rows":$rows}]}' > ../slack-counts.json
+        run: bash output-test-counts.sh test-counts.json slack-counts.json
 
       - name: Commit updated test counts
         run: |
