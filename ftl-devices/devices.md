@@ -67,6 +67,8 @@
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Medium |
 | c1q | Galaxy Note 20 5G | 33 | Low |
+| c1qksw | Galaxy Note 20 5G | 33 | Medium |
+| c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Low |
 | caiman | Pixel 9 Pro | 34 | Low |
 | caiman | Pixel 9 Pro | 35 | Medium |
@@ -85,6 +87,7 @@
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | Medium |
 | e1q | Galaxy S24 | 36 | Low |
+| e1s | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24 + | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Low |
@@ -107,7 +110,6 @@
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | SM-X210 | 34 | Medium |
-| gts3lltevzw | Galaxy Tab S3 | 28 | Low |
 | gts7lwifi | SM-T870 | 33 | Low |
 | gts7xllite | SM-T738U | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
@@ -128,7 +130,7 @@
 | lyriq | motorola edge 40 | 34 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
-| mustang | Pixel 10 Pro XL | 36 | Medium |
+| mustang | Pixel 10 Pro XL | 36 | Low |
 | o1q | Galaxy S21 | 34 | Medium |
 | o1q | Galaxy S21 | 35 | Low |
 | oriole | Pixel 6 | 32 | High |
@@ -136,6 +138,7 @@
 | oriole | Pixel 6 | 31 | High |
 | p3q | Galaxy S21 Ultra | 34 | Medium |
 | p3q | Galaxy S21 Ultra | 35 | Low |
+| p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Samsung S25 | 36 | Low |
 | pa2q | Samsung S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
@@ -175,4 +178,5 @@
 | xcover7 | SM-G556B | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | S20 Plus 5G | 33 | Low |
+| z3q | Galaxy S20 Ultra 5G | 33 | Low |
 
