@@ -17,7 +17,7 @@ table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Star
 updated_counts='{}'
 
 for suite in "${suites[@]}"; do
-  csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1)
+  csvfile=$(ls "backup_${suite}_"*.csv 2>/dev/null | head -1) || true
   [ -z "$csvfile" ] && continue
 
   count=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$csvfile")
@@ -26,7 +26,7 @@ for suite in "${suites[@]}"; do
 
   echo "* ${suite}: ${count} test cases" >> "$GITHUB_STEP_SUMMARY"
 
-  graveyard_csv=$(ls "backup_${project}_Duplicated Tests Graveyard_"*.csv 2>/dev/null | head -1)
+  graveyard_csv=$(ls "backup_${project}_Duplicated Tests Graveyard_"*.csv 2>/dev/null | head -1) || true
   if [ -n "$graveyard_csv" ]; then
     deleted=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$graveyard_csv")
   else
