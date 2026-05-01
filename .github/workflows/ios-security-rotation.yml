@@ -38,7 +38,7 @@ jobs:
         env:
           security_monitor_name: ${{ steps.pick.outputs.security_monitor_name }}
           date: ${{ steps.pick.outputs.date }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v3.0.2
         with:
           payload-file-path: slack-reminders/ios-security-rotation.json
           payload-templated: true
