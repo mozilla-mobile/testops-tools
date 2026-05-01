@@ -5,6 +5,8 @@
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
+| MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
+| MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
 | OP535DL1 | CPH2409 | 34 | Low |
 | OP5552L1 | CPH2415 | 34 | Low |
 | OP573DL1 | CPH2557 | 34 | High |
@@ -39,7 +41,7 @@
 | a16x | Samsung A16 5G | 36 | Low |
 | a16xeea | Samsung A16 5G | 35 | Low |
 | a21 | Galaxy A21 | 31 | Low |
-| a25x | SM-A256U1 | 34 | Low |
+| a25x | SM-A256U1 | 34 | Medium |
 | a26x | Samsung SM-A266B | 36 | Low |
 | a34x | Samsung SM-A346N | 36 | Low |
 | a35x | Samsung A35 | 34 | Low |
