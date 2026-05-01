@@ -219,7 +219,7 @@ jobs:
             curl --fail-with-body -sS -X POST \
               -H "Authorization: Bearer ${TOKEN}" \
               -F "prompt=$(printf "%s" "$PROMPT")" \
-              -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
+              -F "log_file=@${CONTENT_FILE};type=text/plain" \
               -o "$RESPONSE_FILE" \
               "${SERVICE_URL}/analyze"
 
@@ -237,7 +237,7 @@ jobs:
             curl --fail-with-body -sS -X POST \
               -H "Authorization: Bearer ${TOKEN}" \
               -F "prompt=$(printf "%s" "$PROMPT")" \
-              -F "content=<${CONTENT_FILE};type=text/plain; charset=utf-8" \
+              -F "log_file=@${CONTENT_FILE};type=text/plain" \
               -F "image=@${LOCAL_ARTIFACT_DIR}/1.png;type=image/png" \
               -o "$RESPONSE_FILE" \
               "${SERVICE_URL}/analyze"
