@@ -13,7 +13,7 @@ echo "Full Functional Test Case Counts (Full Functional Tests Suite)" >> "$GITHU
 [ -f "$counts_file" ] || echo '{}' > "$counts_file"
 cd "$filename"
 
-table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Tests Deleted :tombstone:"},{"type":"raw_text","text":"Delta"}]]'
+table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Delta"},{"type":"raw_text","text":"Tests Deleted ❌"}]]'
 updated_counts='{}'
 
 for suite in "${suites[@]}"; do
@@ -30,7 +30,7 @@ for suite in "${suites[@]}"; do
   if [ -n "$graveyard_csv" ]; then
     deleted=$(awk -F',' 'NR>1 && $1+0>0 {c++} END {print c+0}' "$graveyard_csv")
   else
-    deleted="-"
+    deleted="0"
   fi
 
   prev=$(jq -r --arg key "$display" '.[$key] // empty' "../$counts_file")
@@ -54,7 +54,7 @@ for suite in "${suites[@]}"; do
     --arg count    "$count" \
     --arg deleted  "$deleted" \
     --arg change   "$change" \
-    '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$starting},{"type":"raw_text","text":$count},{"type":"raw_text","text":$deleted},{"type":"raw_text","text":$change}]')
+    '[{"type":"raw_text","text":$suite},{"type":"raw_text","text":$starting},{"type":"raw_text","text":$count},{"type":"raw_text","text":$change},{"type":"raw_text","text":$deleted}]')
   table_rows=$(echo "$table_rows" | jq --argjson row "$row" '. + [$row]')
   updated_counts=$(echo "$updated_counts" | jq --arg key "$display" --argjson val "$count" '. + {($key): $val}')
 done
