@@ -16,7 +16,7 @@
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
-| SO-41A | Xperia 10 II | 31 | Low |
+| SO-41A | Xperia 10 II | 31 | Medium |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
