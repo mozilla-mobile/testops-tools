@@ -137,6 +137,10 @@ def main():
             testrail_project_id, milestone_name, milestone_description
         )
 
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(script_dir, "milestone_id.txt"), "w") as f:
+            f.write(str(milestone["id"]))
+
         for device in devices:
             # Create Smoke Tests Suite test runs     
             testrail.create_paginated_test_runs(
