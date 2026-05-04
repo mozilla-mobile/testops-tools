@@ -72,7 +72,7 @@
 | c1qksw | Galaxy Note20 5G | 33 | Medium |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Low |
-| caiman | Pixel 9 Pro | 34 | Low |
+| caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
@@ -166,7 +166,7 @@
 | rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
-| shiba | Pixel 8 | 34 | Medium |
+| shiba | Pixel 8 | 34 | High |
 | shiba | Pixel 8 | 36 | Medium |
 | stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Low |
