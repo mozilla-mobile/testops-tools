@@ -1,4 +1,8 @@
 {
   "Fenix Browser - Full Functional Tests Suite": 1313,
+<<<<<<< HEAD
   "Firefox for iOS - Full Functional Tests Suite": 1755
+=======
+  "Firefox for iOS - Full Functional Tests Suite": 1754
+>>>>>>> f08cb59 (Get the version from main ;-))
 }
