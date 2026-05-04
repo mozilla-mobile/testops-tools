@@ -41,7 +41,7 @@ for suite in "${suites[@]}"; do
     pct=$(awk "BEGIN {printf \"%.1f\", ($abs_delta / $prev) * 100}")
     if   [ $delta -gt 0 ]; then change="+${delta} / +${pct}%"
     elif [ $delta -lt 0 ]; then change="${delta} / -${pct}%"
-    else                        change="no change"
+    else                        change="—"
     fi
   else
     starting="-"
