@@ -13,7 +13,7 @@ echo "Full Functional Test Case Counts (Full Functional Tests Suite)" >> "$GITHU
 [ -f "$counts_file" ] || echo '{}' > "$counts_file"
 cd "$filename"
 
-table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Delta"},{"type":"raw_text","text":"Tests Deleted ❌"}]]'
+table_rows='[[{"type":"raw_text","text":"Suite"},{"type":"raw_text","text":"Starting Count"},{"type":"raw_text","text":"Current Count"},{"type":"raw_text","text":"Delta"},{"type":"raw_text","text":"Tests Deleted"}]]'
 updated_counts='{}'
 
 for suite in "${suites[@]}"; do
