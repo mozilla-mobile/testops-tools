@@ -20,6 +20,8 @@ The purpose of this repo is to house automation / notification tools for the Moz
 
 [![testrail-api-tests](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml/badge.svg)](https://github.com/mozilla-mobile/mobile-ci-tools/actions/workflows/testrail-api-tests.yml)
 
+[![Play Developer Reporting](https://github.com/mozilla-mobile/testops-tools/actions/workflows/play-developer-reporting.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/play-developer-reporting.yml)
+
 ### iOS
 
 [![Digest ios test results and import to BigQuery](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ios-insights-slack-notification.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/ios-insights-slack-notification.yml)

@@ -1,0 +1,205 @@
+name: TestRail Test Case Deduplication
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"  # Every Monday at 9am UTC
+
+env:
+  BUCKET: mobile-reports
+  BUCKET_PREFIX: public/testrail-ff-test-deduplication
+  DEFAULT_DIR: ./testrail/testcases-deduplication
+  STORAGE_URL_PREFIX: https://console.cloud.google.com/storage/browser
+  BQ_DATASET: testops_stats
+  BQ_TABLE: testrail_deduplication_runs
+
+jobs:
+  deduplication:
+    name: Deduplication — ${{ matrix.project_name }}
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.DEFAULT_DIR }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project_id: '14'
+            project_name: firefox-ios
+            suite_id: '45443'
+          - project_id: '59'
+            project_name: fenix
+            suite_id: '3192'
+          - project_id: '27'
+            project_name: focus-ios
+            suite_id: '5291'
+          - project_id: '48'
+            project_name: focus-android
+            suite_id: '1028'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Get sentence-transformers version
+        id: st-version
+        run: |
+          version=$(grep '^sentence-transformers' requirements.txt | sed 's/[^0-9.]//g')
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Cache sentence-transformers model
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/huggingface
+          key: sentence-transformers-all-MiniLM-L6-v2-${{ steps.st-version.outputs.version }}-${{ runner.os }}
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch test cases from TestRail
+        env:
+          TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+        run: |
+          python3 fetch_testrail_export.py \
+            --project-id "${{ matrix.project_id }}" \
+            --suite-id "${{ matrix.suite_id }}" \
+            --output testrail_export.xlsx
+
+      - name: Run deduplication pipeline
+        run: |
+          python3 run_all.py testrail_export.xlsx --output-dir ./output
+
+      - name: Set run metadata
+        run: |
+          echo "today=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
+          echo "project_id=${{ matrix.project_id }}" >> $GITHUB_ENV
+          echo "project_name=${{ matrix.project_name }}" >> $GITHUB_ENV
+
+      - name: Establish Google Cloud connection
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
+
+      - name: Upload results to GCS
+        id: upload-results
+        uses: google-github-actions/upload-cloud-storage@v3
+        with:
+          path: ${{ env.DEFAULT_DIR }}/output
+          destination: ${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}
+          glob: '*.csv'
+          parent: false
+
+      - name: Query previous stats from BigQuery
+        run: |
+          bq_result=$(bq query \
+            --project_id=moz-mobile-tools \
+            --use_legacy_sql=false \
+            --format=json \
+            "SELECT exact_duplicate_cases, similar_pairs, high_priority_similar_pairs, total_cases
+             FROM \`moz-mobile-tools.${{ env.BQ_DATASET }}.${{ env.BQ_TABLE }}\`
+             WHERE project_id = '${{ matrix.project_id }}'
+             ORDER BY run_date DESC
+             LIMIT 1" 2>/dev/null || echo "[]")
+
+          python3 - << PYEOF
+          import json, os, sys
+          raw = """${bq_result}"""
+          rows = []
+          try:
+              rows = json.loads(raw.strip())
+          except (json.JSONDecodeError, ValueError):
+              pass
+          with open(os.environ["GITHUB_ENV"], "a") as f:
+              if rows:
+                  row = rows[0]
+                  f.write(f"prev_exact={row.get('exact_duplicate_cases', 0)}\n")
+                  f.write(f"prev_similar={row.get('similar_pairs', 0)}\n")
+                  f.write(f"prev_high_priority_similar={row.get('high_priority_similar_pairs', 0)}\n")
+                  f.write(f"prev_total={row.get('total_cases', 0)}\n")
+                  f.write("has_prev_data=true\n")
+              else:
+                  f.write("prev_exact=0\nprev_similar=0\nprev_high_priority_similar=0\nprev_total=0\nhas_prev_data=false\n")
+          PYEOF
+
+      - name: Insert current stats into BigQuery
+        run: |
+          python3 insert_bq_stats.py \
+            --output-dir ./output \
+            --project-id "${{ matrix.project_id }}" \
+            --project-name "${{ matrix.project_name }}" \
+            --run-date "${{ env.today }}" \
+            --github-run-id "${{ github.run_id }}" \
+            --bq-project moz-mobile-tools \
+            --bq-dataset ${{ env.BQ_DATASET }} \
+            --bq-table ${{ env.BQ_TABLE }}
+
+      - name: Build Slack payloads
+        run: |
+          python3 build_slack_payloads.py \
+            --output-dir . \
+            --today "${{ env.today }}" \
+            --project-id "${{ matrix.project_id }}" \
+            --project-name "${{ matrix.project_name }}" \
+            --gcs-url "${{ env.GCS_URL }}" \
+            --run-url "${{ env.RUN_URL }}"
+        env:
+          GCS_URL: ${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}/
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Write job summary
+        run: |
+          echo "## TestRail Deduplication Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Project | ${{ matrix.project_name }} (ID: ${{ matrix.project_id }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Date | ${{ env.today }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Total cases | ${{ env.current_total }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Exact duplicates | ${{ env.current_exact }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Similar pairs | ${{ env.current_similar }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Duplicate rate | ${{ env.current_rate }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[Download results from GCS](${{ env.STORAGE_URL_PREFIX }}/${{ env.BUCKET }}/${{ env.BUCKET_PREFIX }}/${{ matrix.project_name }}/${{ env.today }}/)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify Slack — weekly digest
+        if: success()
+        uses: slackapi/slack-github-action@v3.0.2
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-digest.json
+
+      - name: Notify Slack — spike alert
+        if: success() && env.send_spike == 'true'
+        uses: slackapi/slack-github-action@v3.0.2
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: ${{ env.DEFAULT_DIR }}/slack-spike.json
+
+      - name: Notify Slack (failure)
+        if: failure()
+        uses: slackapi/slack-github-action@v3.0.2
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":x: *TestRail Deduplication failed* (${{ matrix.project_name }})\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
+                  }
+                }
+              ]
+            }
