@@ -20,7 +20,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
-| XQ-DQ72 | Xperia 1 V | 34 | Medium |
+| XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -105,6 +105,7 @@
 | fogona | moto g play - 2024 | 34 | Low |
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
+| fogos | moto g34 5G | 35 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Medium |
 | g0q | Galaxy S22+ | 36 | Low |
@@ -141,7 +142,7 @@
 | p3q | Galaxy S21 Ultra 5G | 34 | Medium |
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
-| pa1q | Galaxy S25 | 36 | Low |
+| pa1q | Galaxy S25 | 36 | Medium |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
@@ -151,6 +152,7 @@
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
+| q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
