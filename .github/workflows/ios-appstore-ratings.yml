@@ -108,7 +108,7 @@ jobs:
         VERSION: ${{ steps.fetch-rating.outputs.today_version }}
         RATING_COUNT: ${{ steps.fetch-rating.outputs.today_rating_count }}
         APP_NAME: ${{ matrix.package.name }}
-      uses: slackapi/slack-github-action@v3.0.2
+      uses: slackapi/slack-github-action@v3.0.3
       with:
         webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
         webhook-type: incoming-webhook
@@ -131,7 +131,7 @@ jobs:
       if: failure()
       env:
         JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      uses: slackapi/slack-github-action@v3.0.2
+      uses: slackapi/slack-github-action@v3.0.3
       with:
         webhook:  ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
         webhook-type: incoming-webhook

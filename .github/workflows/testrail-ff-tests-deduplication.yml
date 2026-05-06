@@ -171,7 +171,7 @@ jobs:
 
       - name: Notify Slack — weekly digest
         if: success()
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
@@ -179,7 +179,7 @@ jobs:
 
       - name: Notify Slack — spike alert
         if: success() && env.send_spike == 'true'
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
@@ -187,7 +187,7 @@ jobs:
 
       - name: Notify Slack (failure)
         if: failure()
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
