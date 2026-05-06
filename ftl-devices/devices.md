@@ -131,6 +131,7 @@
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
+| m2q | Galaxy S26+ | 36 | High |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Low |
