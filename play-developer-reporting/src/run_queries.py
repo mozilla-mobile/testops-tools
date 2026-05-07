@@ -337,8 +337,7 @@ def generate_slack_payload(results: dict) -> dict:
                             "\u2191 >10% above 28-day avg  \u00b7  "
                             "\u2193 >10% below  \u00b7  "
                             "\u2192 stable  \u00b7  "
-                            f"Data date: {date_str}  \u00b7  "
-                            "<https://play.google.com/console|Open Play Console>"
+                            f"Data date: {date_str}"
                         ),
                     }
                 ],
