@@ -44,14 +44,14 @@
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
-| a35x | Galaxy A35 5G | 34 | Low |
+| a35x | Galaxy A35 5G | 34 | Medium |
 | a35x | Galaxy A35 5G | 35 | Low |
 | a35x | Galaxy A35 5G | 36 | Low |
 | a36xq | Galaxy A36 5G | 35 | Low |
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | Medium |
-| a56x | Galaxy A56 5G | 35 | Low |
+| a56x | Galaxy A56 5G | 35 | None |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
@@ -132,7 +132,6 @@
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
 | m2q | Galaxy S26+ | 36 | High |
-| m3q | Galaxy S26 Ultra | 36 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
 | mustang | Pixel 10 Pro XL | 36 | Low |
