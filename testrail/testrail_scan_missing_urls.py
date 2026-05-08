@@ -214,20 +214,24 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         return False
 
     if platform == "android":
-        # For Android/Kotlin, skip back over annotations (@Test, @SmokeTest, etc.)
+        # Scan upward past annotations and comments to find the TestRail URL
         idx = func_idx - 1
         while idx >= 0:
             line = lines[idx].strip()
             if not line:
                 idx -= 1
                 continue
-            # If we hit an annotation, keep going up
             if line.startswith("@"):
                 idx -= 1
                 continue
-            # Found a non-annotation, non-empty line
-            # This should be the TestRail comment
-            return is_testrail_url_line(lines[idx], testrail_domain)
+            if is_testrail_url_line(lines[idx], testrail_domain):
+                return True
+            # Keep scanning upward through non-testrail comment lines
+            if line.startswith("//"):
+                idx -= 1
+                continue
+            # Hit a non-comment, non-annotation line — stop
+            return False
 
         return False
 
