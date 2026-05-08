@@ -214,8 +214,9 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         return False
 
     if platform == "android":
-        # Scan upward past annotations and comments to find the TestRail URL
+        # Scan upward past annotations, single-line comments, and block comments
         idx = func_idx - 1
+        in_block_comment = False
         while idx >= 0:
             line = lines[idx].strip()
             if not line:
@@ -226,11 +227,21 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
                 continue
             if is_testrail_url_line(lines[idx], testrail_domain):
                 return True
-            # Keep scanning upward through non-testrail comment lines
+            # Closing marker of a block comment — enter traversal mode
+            if line.endswith("*/"):
+                in_block_comment = True
+                idx -= 1
+                continue
+            if in_block_comment:
+                # Opening marker — exit block comment
+                if line.startswith("/**") or line.startswith("/*"):
+                    in_block_comment = False
+                idx -= 1
+                continue
             if line.startswith("//"):
                 idx -= 1
                 continue
-            # Hit a non-comment, non-annotation line — stop
+            # Non-comment, non-annotation line — stop
             return False
 
         return False
