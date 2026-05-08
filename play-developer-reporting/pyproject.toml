@@ -12,7 +12,7 @@ license = "MPL-2.0"
 authors = [{ name = "Mozilla Mobile Test Engineering" }]
 
 dependencies = [
-    "google-auth>=2.49.2",
+    "google-auth>=2.50.0",
     "google-api-python-client>=2.194.0",
     "tabulate>=0.10.0",
 ]
