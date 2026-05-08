@@ -106,14 +106,14 @@ jobs:
           git push
 
       - name: Notify Slack - Test case counts
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
           payload-file-path: ${{ env.DEFAULT_DIR }}/slack-counts.json
 
       - name: Notify Slack (Fail)
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         if: ${{ failure() }}
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_MOBILE_ALERTS_TOOLING }}
