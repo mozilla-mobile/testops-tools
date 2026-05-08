@@ -412,6 +412,7 @@ def main() -> int:
         default=None,
         help="TestRail domain to check for (default: mozilla.testrail.io for Android, any for iOS)",
     )
+    ap.add_argument("--no-recurse", action="store_true", help="Scan only the root directory, not subdirectories")
     ap.add_argument("--fail", action="store_true", help="Exit with error code if missing URLs found")
     ap.add_argument("--debug", action="store_true", help="Print debug information")
     args = ap.parse_args()
@@ -464,7 +465,7 @@ def main() -> int:
             print(f"ERROR: root does not exist: {root}", file=sys.stderr)
             return 2
 
-        test_files = sorted(root.rglob(file_pattern))
+        test_files = sorted(root.glob(file_pattern) if args.no_recurse else root.rglob(file_pattern))
         file_count = len(test_files)
 
         for f in test_files:
