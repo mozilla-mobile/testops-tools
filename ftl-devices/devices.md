@@ -1,7 +1,7 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
 | 1610 | Y55s | 23 | Medium |
-| A402SO | Xperia 10 VI | 34 | Low |
+| A402SO | Xperia 10 VI | 34 | None |
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
@@ -50,7 +50,7 @@
 | a36xq | Galaxy A36 5G | 35 | Low |
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | Medium |
+| a54x | Galaxy A54 5G | 34 | High |
 | a56x | Galaxy A56 5G | 35 | None |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
@@ -155,6 +155,7 @@
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
+| q7mq | Galaxy Z TriFold | 36 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
