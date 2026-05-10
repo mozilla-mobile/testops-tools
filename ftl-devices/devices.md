@@ -1,7 +1,7 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
 | 1610 | Y55s | 23 | Medium |
-| A402SO | Xperia 10 VI | 34 | None |
+| A402SO | Xperia 10 VI | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Medium |
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
@@ -60,7 +60,7 @@
 | austin | moto g 5G (2022) | 33 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
-| b4q | Galaxy Z Flip4 | 33 | High |
+| b4q | Galaxy Z Flip4 | 33 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
@@ -125,7 +125,7 @@
 | husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | High |
 | kansas | moto g - 2025 | 35 | Low |
-| komodo | Pixel 9 Pro XL | 34 | Low |
+| komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
 | lamul | moto g05 | 35 | Medium |
 | lion | moto g04 | 34 | Low |
