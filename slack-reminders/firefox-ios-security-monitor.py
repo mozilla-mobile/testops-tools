@@ -13,10 +13,7 @@ def load_data():
 def get_assignee_for_today():
     data = load_data()
     today = date.today().isoformat()
-    name = data["duty-start-dates"].get(today)
-    if name is None:
-        return None
-    return data["triagers"][name]["slack"]
+    return data["duty-start-dates"].get(today)
 
 
 def get_current_assignee():
@@ -25,8 +22,7 @@ def get_current_assignee():
     past_dates = [d for d in data["duty-start-dates"] if d <= today]
     if not past_dates:
         return None
-    name = data["duty-start-dates"][max(past_dates)]
-    return data["triagers"][name]["slack"]
+    return data["duty-start-dates"][max(past_dates)]
 
 
 if __name__ == "__main__":
