@@ -67,7 +67,7 @@
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Low |
-| blueline | Pixel 3 | 28 | Medium |
+| blueline | Pixel 3 | 28 | Low |
 | c1q | Galaxy Note20 5G | 33 | Low |
 | c1qksw | Galaxy Note20 5G | 33 | Medium |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
@@ -122,7 +122,7 @@
 | guamna | moto g play (2021) | 30 | Low |
 | guamp | moto g(9) play | 30 | Low |
 | husky | Pixel 8 Pro | 34 | High |
-| husky | Pixel 8 Pro | 35 | Medium |
+| husky | Pixel 8 Pro | 35 | Low |
 | java | Motorola G20 | 30 | High |
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
@@ -131,6 +131,7 @@
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
+| m1q | Galaxy S26 | 36 | Medium |
 | m2q | Galaxy S26+ | 36 | High |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Medium |
@@ -155,7 +156,7 @@
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
-| q7mq | Galaxy Z TriFold | 36 | Medium |
+| q7mq | Galaxy Z TriFold | 36 | High |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
