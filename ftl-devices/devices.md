@@ -51,7 +51,7 @@
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a54x | Galaxy A54 5G | 34 | High |
-| a56x | Galaxy A56 5G | 35 | None |
+| a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
 | akita | Pixel 8a | 35 | Low |
@@ -77,7 +77,7 @@
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
 | cheetah | Pixel 7 Pro | 33 | Medium |
-| comet | Pixel 9 Pro Fold | 34 | Low |
+| comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Low |
 | cuscoi | moto g96 5G | 35 | Low |
 | dm1q | Galaxy S23 | 35 | Low |
