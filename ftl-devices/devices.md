@@ -27,6 +27,7 @@
 | a10 | Galaxy A10 | 29 | Medium |
 | a12 | Galaxy A12 | 31 | Low |
 | a13 | Galaxy A13 | 34 | Low |
+| a13x | Galaxy A13 5G | 33 | Low |
 | a14m | Galaxy A14 | 34 | Low |
 | a14xm | Galaxy A14 5G | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
@@ -98,7 +99,7 @@
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | Galaxy S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
-| felix | Pixel Fold | 33 | Medium |
+| felix | Pixel Fold | 33 | Low |
 | felix | Pixel Fold | 34 | High |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogo | moto g 5G - 2024 | 35 | Low |
