@@ -44,6 +44,7 @@
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
+| a32 | Galaxy A32 | 33 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
 | a35x | Galaxy A35 5G | 34 | Medium |
 | a35x | Galaxy A35 5G | 35 | Low |
