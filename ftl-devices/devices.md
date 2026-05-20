@@ -12,7 +12,7 @@
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Medium |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
-| RE58C2 | realme C53 | 35 | Medium |
+| RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
