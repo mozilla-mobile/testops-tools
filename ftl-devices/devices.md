@@ -7,6 +7,7 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
+| OP4F39L1 | CPH2195 | 33 | Low |
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
@@ -81,6 +82,7 @@
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Low |
+| comet | Pixel 9 Pro Fold | 36 | Medium |
 | cuscoi | moto g96 5G | 35 | Low |
 | dm1q | Galaxy S23 | 35 | Low |
 | dm1q-SM-S911U | Galaxy S23 | 36 | Low |
