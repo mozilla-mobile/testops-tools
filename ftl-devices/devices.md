@@ -14,10 +14,10 @@
 | OP5759L1 | A38 | 34 | Medium |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
-| RMX3231 | RMX3231 | 30 | Low |
+| RMX3231 | RMX3231 | 30 | Medium |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
-| SO-41A | Xperia 10 II | 31 | Medium |
+| SO-41A | Xperia 10 II | 31 | Low |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
@@ -169,7 +169,7 @@
 | r11s | Galaxy S23 FE | 36 | Low |
 | r12s | Galaxy S24 FE | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
-| r8qksx | Galaxy S20 FE 5G | 33 | Medium |
+| r8qksx | Galaxy S20 FE 5G | 33 | Low |
 | r9q | Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
 | rango | Pixel 10 Pro Fold | 36 | Medium |
