@@ -117,7 +117,7 @@
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
-| gts7lwifi | Galaxy Tab S7 | 33 | Low |
+| gts7lwifi | Galaxy Tab S7 | 33 | Medium |
 | gts7xllite | Galaxy Tab S7 FE 5G | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
@@ -177,7 +177,7 @@
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba | Pixel 8 | 36 | Medium |
-| stallion | Pixel 10a | 36 | Low |
+| stallion | Pixel 10a | 36 | Medium |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21+ 5G | 34 | Medium |
 | t2q | Galaxy S21+ 5G | 35 | Low |
