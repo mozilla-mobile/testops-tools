@@ -183,7 +183,7 @@
 | t2q | Galaxy S21+ 5G | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
 | tegu | Pixel 9a | 35 | Low |
-| tokay | Pixel 9 | 34 | Medium |
+| tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | Medium |
 | tokay | Pixel 9 | 36 | Low |
 | xcover7 | Galaxy XCover7 | 34 | Low |
