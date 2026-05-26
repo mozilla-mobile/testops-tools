@@ -7,7 +7,7 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
-| OP4F39L1 | CPH2195 | 33 | Low |
+| OP4F39L1 | CPH2195 | 33 | Medium |
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
@@ -53,7 +53,7 @@
 | a36xq | Galaxy A36 5G | 35 | Low |
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | High |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
@@ -91,7 +91,7 @@
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
-| e1q | Galaxy S24 | 34 | Medium |
+| e1q | Galaxy S24 | 34 | High |
 | e1q | Galaxy S24 | 36 | Low |
 | e1s | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24+ | 36 | Low |
@@ -157,6 +157,7 @@
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
+| q4qksx | Galaxy Z Fold4 | 36 | Low |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
