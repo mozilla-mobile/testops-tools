@@ -104,8 +104,9 @@
 | eos | Eos | 33 | Medium |
 | felix | Pixel Fold | 33 | Low |
 | felix | Pixel Fold | 34 | High |
+| felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
-| fogo | moto g 5G - 2024 | 35 | Low |
+| fogo | moto g 5G - 2024 | 35 | None |
 | fogona | moto g play - 2024 | 34 | Low |
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
