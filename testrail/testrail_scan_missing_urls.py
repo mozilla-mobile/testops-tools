@@ -214,12 +214,21 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
         return False
 
     if platform == "android":
-        # Scan upward past annotations, single-line comments, and block comments
+        # Scan upward past annotations (incl. multi-line ones like
+        # @Converted(replacedBy = [...], bug = N, since = "...")),
+        # single-line comments, and block comments.
         idx = func_idx - 1
         in_block_comment = False
+        paren_depth = 0
         while idx >= 0:
             line = lines[idx].strip()
             if not line:
+                idx -= 1
+                continue
+            # Inside a multi-line annotation argument list — track parens
+            # until we find the opening `@Name(`.
+            if paren_depth > 0:
+                paren_depth += line.count(")") - line.count("(")
                 idx -= 1
                 continue
             if line.startswith("@"):
@@ -241,6 +250,14 @@ def is_linked(lines: list[str], func_idx: int, testrail_domain: str | None, plat
             if line.startswith("//"):
                 idx -= 1
                 continue
+            # Closing paren of a multi-line annotation on its own line.
+            # Enter paren-traversal mode until we balance with the `@Name(`.
+            if line.endswith(")"):
+                depth = line.count(")") - line.count("(")
+                if depth > 0:
+                    paren_depth = depth
+                    idx -= 1
+                    continue
             # Non-comment, non-annotation line — stop
             return False
 
