@@ -72,7 +72,7 @@
 | bluejay | Pixel 6a | 32 | Low |
 | blueline | Pixel 3 | 28 | Low |
 | c1q | Galaxy Note20 5G | 33 | Low |
-| c1qksw | Galaxy Note20 5G | 33 | Medium |
+| c1qksw | Galaxy Note20 5G | 33 | Low |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
@@ -102,7 +102,7 @@
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | Galaxy S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
-| felix | Pixel Fold | 33 | Low |
+| felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
@@ -184,6 +184,7 @@
 | t2q | Galaxy S21+ 5G | 34 | Medium |
 | t2q | Galaxy S21+ 5G | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
+| tangorpro | Pixel Tablet | 36 | Low |
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | Medium |
