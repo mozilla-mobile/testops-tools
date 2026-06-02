@@ -87,7 +87,7 @@
 | dm1q | Galaxy S23 | 35 | Low |
 | dm1q-SM-S911U | Galaxy S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
-| dm2q | Galaxy S23+ | 34 | Medium |
+| dm2q | Galaxy S23+ | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
@@ -162,7 +162,7 @@
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
-| q7mq | Galaxy Z TriFold | 36 | High |
+| q7mq | Galaxy Z TriFold | 36 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
@@ -179,7 +179,7 @@
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba | Pixel 8 | 36 | Medium |
-| stallion | Pixel 10a | 36 | Medium |
+| stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21+ 5G | 34 | Medium |
 | t2q | Galaxy S21+ 5G | 35 | Low |
