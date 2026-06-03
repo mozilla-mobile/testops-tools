@@ -111,7 +111,7 @@
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | fogos | moto g34 5G | 35 | Low |
-| frankel | Pixel 10 | 36 | High |
+| frankel | Pixel 10 | 36 | Medium |
 | g0q | Galaxy S22+ | 34 | Medium |
 | g0q | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
@@ -184,11 +184,11 @@
 | t2q | Galaxy S21+ 5G | 34 | Medium |
 | t2q | Galaxy S21+ 5G | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
-| tangorpro | Pixel Tablet | 36 | Low |
+| tangorpro | Pixel Tablet | 36 | Medium |
 | tegu | Pixel 9a | 35 | Low |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | Medium |
-| tokay | Pixel 9 | 36 | Low |
+| tokay | Pixel 9 | 36 | Medium |
 | xcover7 | Galaxy XCover7 | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | Galaxy S20+ 5G | 33 | Low |
