@@ -11,7 +11,7 @@
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
-| OP5759L1 | A38 | 34 | Medium |
+| OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Medium |
@@ -110,9 +110,9 @@
 | fogona | moto g play - 2024 | 34 | Low |
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
-| fogos | moto g34 5G | 35 | Low |
+| fogos | moto g34 5G | 35 | None |
 | frankel | Pixel 10 | 36 | Medium |
-| g0q | Galaxy S22+ | 34 | Medium |
+| g0q | Galaxy S22+ | 34 | Low |
 | g0q | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
