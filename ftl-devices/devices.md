@@ -25,7 +25,7 @@
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
-| a10 | Galaxy A10 | 29 | Medium |
+| a10 | Galaxy A10 | 29 | Low |
 | a12 | Galaxy A12 | 31 | Low |
 | a13 | Galaxy A13 | 34 | Low |
 | a13x | Galaxy A13 5G | 33 | Low |
