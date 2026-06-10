@@ -1,6 +1,9 @@
 name: Gemini-LLM GCS Artifact Test
 
 on:
+  schedule:
+    # Daily at 9:00 AM EDT (1:00 PM UTC)
+    - cron: "0 13 * * *"
   workflow_dispatch:
     inputs:
       seed_notes:
@@ -39,7 +42,7 @@ env:
 
 jobs:
   seed-notes:
-    if: ${{ inputs.seed_notes == true }}
+    if: ${{ github.event_name == 'schedule' || inputs.seed_notes == true }}
     runs-on: ubuntu-latest
 
     steps:
@@ -149,6 +152,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Resolve inputs for scheduled runs
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "PROMPT_FILE=sentry-release-health.txt" >> "$GITHUB_ENV"
+            echo "USE_PROD_SERVICE=true" >> "$GITHUB_ENV"
+          else
+            echo "PROMPT_FILE=${{ inputs.prompt_file }}" >> "$GITHUB_ENV"
+            echo "USE_PROD_SERVICE=${{ inputs.use_prod_service_url }}" >> "$GITHUB_ENV"
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -182,7 +195,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ "${{ inputs.prompt_file }}" = "sentry-release-health.txt" ]; then
+          if [ "${PROMPT_FILE}" = "sentry-release-health.txt" ]; then
             for f in sentry_rates_fenix.csv sentry_rates_fenix_beta.csv sentry_rates_firefox_ios.csv; do
               filepath="${LOCAL_ARTIFACT_DIR}/${f}"
               if [ ! -s "${filepath}" ]; then
@@ -193,19 +206,19 @@ jobs:
             done
           fi
 
-      - name: (Optional) POST artifacts as JSON to Cloud Run
-        if: ${{ inputs.use_prod_service_url == true }}
+      - name: (Optional) POST artifacts to Cloud Run
+        if: ${{ env.USE_PROD_SERVICE == 'true' }}
         run: |
           set -euo pipefail
 
           TOKEN="$(gcloud auth print-identity-token --audiences="${SERVICE_URL}")"
 
-          PROMPT_FILE=".github/prompts/${{ inputs.prompt_file }}"
+          PROMPT_FILE=".github/prompts/${PROMPT_FILE}"
           PROMPT=$(<"$PROMPT_FILE")
 
           RESPONSE_FILE="$(mktemp)"
 
-          if [ "${{ inputs.prompt_file }}" = "sentry-release-health.txt" ]; then
+          if [ "${PROMPT_FILE}" = ".github/prompts/sentry-release-health.txt" ]; then
             CONTENT_FILE="$(mktemp)"
             {
               printf 'Fenix (Android):\n'
@@ -225,7 +238,6 @@ jobs:
 
             rm -f "$CONTENT_FILE"
           else
-            # Default: crash + ANR + image
             CONTENT_FILE="$(mktemp)"
             {
               printf 'Crash:\n'
@@ -253,4 +265,21 @@ jobs:
             echo "$OUTPUT"
           } >> "$GITHUB_STEP_SUMMARY"
 
-          rm -f "$RESPONSE_FILE"
+          # Build Slack payload
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          echo "$OUTPUT" > /tmp/llm_output.txt
+          python llm-cloud-run/slack.py \
+            --output-file /tmp/llm_output.txt \
+            --run-url "$RUN_URL" \
+            --dest /tmp/slack-payload.json
+
+          rm -f "$RESPONSE_FILE" /tmp/llm_output.txt
+
+      - name: Send analysis to Slack
+        if: ${{ env.USE_PROD_SERVICE == 'true' }}
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+          webhook-type: incoming-webhook
+          payload-file-path: /tmp/slack-payload.json
