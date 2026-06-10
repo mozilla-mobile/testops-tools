@@ -1,0 +1,30 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": ":brain: Product health pulse"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "${LLM_OUTPUT}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": ":chart_with_upwards_trend: Source: Sentry crash-free rates | <${RUN_URL}|View run> | React :+1: useful :-1: not useful :speech_balloon: what's missing"
+        }
+      ]
+    }
+  ]
+}
