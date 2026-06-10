@@ -20,7 +20,7 @@
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
-| XQ-DC54 | Xperia 10 V | 34 | High |
+| XQ-DC54 | Xperia 10 V | 34 | Medium |
 | XQ-DQ72 | Xperia 1 V | 34 | Medium |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
@@ -89,7 +89,7 @@
 | dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | Galaxy S23+ | 34 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
-| dm3q | Galaxy S23 Ultra | 34 | High |
+| dm3q | Galaxy S23 Ultra | 34 | Medium |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
 | e1q | Galaxy S24 | 36 | Low |
@@ -137,7 +137,7 @@
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
 | m1q | Galaxy S26 | 36 | Medium |
-| m2q | Galaxy S26+ | 36 | High |
+| m2q | Galaxy S26+ | 36 | Medium |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Low |
 | mustang | Pixel 10 Pro XL | 36 | Low |
@@ -149,7 +149,7 @@
 | p3q | Galaxy S21 Ultra 5G | 34 | Low |
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
-| pa1q | Galaxy S25 | 36 | Medium |
+| pa1q | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
