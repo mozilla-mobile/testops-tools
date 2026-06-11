@@ -2,7 +2,7 @@
 | --- | --- | --- | --- |
 | 1610 | Y55s | 23 | Medium |
 | A402SO | Xperia 10 VI | 34 | Low |
-| CPH2449 | OnePlus 11 5G | 34 | Medium |
+| CPH2449 | OnePlus 11 5G | 34 | Low |
 | F01L | F-01L | 27 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
@@ -118,6 +118,7 @@
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Low |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
+| gts10pwifi | Galaxy Tab S10+ | 36 | Low |
 | gts7lwifi | Galaxy Tab S7 | 33 | Medium |
 | gts7xllite | Galaxy Tab S7 FE 5G | 34 | Medium |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
@@ -174,7 +175,7 @@
 | r8qksx | Galaxy S20 FE 5G | 33 | Low |
 | r9q | Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
-| rango | Pixel 10 Pro Fold | 36 | Medium |
+| rango | Pixel 10 Pro Fold | 36 | Low |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
