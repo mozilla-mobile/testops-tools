@@ -18,7 +18,7 @@
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
-| TB330FU | Lenovo Tab M11 | 35 | Low |
+| TB330FU | Lenovo Tab M11 | 35 | None |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | Medium |
 | XQ-DQ72 | Xperia 1 V | 34 | Medium |
@@ -153,7 +153,7 @@
 | pa1q | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
-| pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 35 | Medium |
 | pa3q | Galaxy S25 Ultra | 36 | Low |
 | pa3qxxx | Galaxy S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
