@@ -14,7 +14,7 @@
 | OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
-| RMX3231 | RMX3231 | 30 | Medium |
+| RMX3231 | RMX3231 | 30 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
@@ -116,7 +116,7 @@
 | g0q | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
-| gta8wifi | Galaxy Tab A8 | 34 | Low |
+| gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
 | gts10pwifi | Galaxy Tab S10+ | 36 | Low |
 | gts7lwifi | Galaxy Tab S7 | 33 | Medium |
@@ -133,7 +133,7 @@
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
-| lamul | moto g05 | 35 | Medium |
+| lamul | moto g05 | 35 | Low |
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
