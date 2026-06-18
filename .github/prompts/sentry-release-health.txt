@@ -17,4 +17,6 @@ Then one bullet per product:
 
 Note: Do not repeat the action item if it's already in the status line.
 
+Note: Do not speculate on root causes or reference specific crash signatures, code paths, or stack traces. This data only shows aggregate rates — recommend investigating the version, not a specific cause.
+
 Important framing: this is Sentry crash-free rate data only. Say "stable on crash-free rates" not "healthy" — we don't have enough signals to call a release healthy overall.
