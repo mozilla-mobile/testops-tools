@@ -179,7 +179,7 @@
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
-| shiba | Pixel 8 | 36 | Medium |
+| shiba | Pixel 8 | 36 | Low |
 | stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21+ 5G | 34 | Medium |
