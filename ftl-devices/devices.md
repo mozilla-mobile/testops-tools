@@ -75,7 +75,7 @@
 | c1qksw | Galaxy Note20 5G | 33 | Low |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | cactus | Redmi 6A | 27 | Low |
-| caiman | Pixel 9 Pro | 34 | Low |
+| caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Medium |
@@ -155,7 +155,7 @@
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | pa3q | Galaxy S25 Ultra | 36 | Low |
-| pa3qxxx | Galaxy S25 Ultra | 36 | Low |
+| pa3qxxx | Galaxy S25 Ultra | 36 | None |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
