@@ -53,7 +53,7 @@
 | a36xq | Galaxy A36 5G | 35 | Low |
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
-| a54x | Galaxy A54 5G | 34 | Medium |
+| a54x | Galaxy A54 5G | 34 | High |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
