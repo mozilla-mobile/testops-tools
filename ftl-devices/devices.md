@@ -20,7 +20,7 @@
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
-| XQ-DC54 | Xperia 10 V | 34 | Medium |
+| XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | Medium |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
