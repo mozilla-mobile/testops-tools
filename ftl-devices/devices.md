@@ -21,7 +21,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
-| XQ-DQ72 | Xperia 1 V | 34 | Medium |
+| XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -31,7 +31,7 @@
 | a13x | Galaxy A13 5G | 33 | Low |
 | a14m | Galaxy A14 | 34 | Low |
 | a14xm | Galaxy A14 5G | 34 | High |
-| a14xmsq | Galaxy A14 5G | 35 | Low |
+| a14xmsq | Galaxy A14 5G | 35 | None |
 | a14xmtfn | Galaxy A14 5G | 35 | None |
 | a15 | Galaxy A15 | 34 | Medium |
 | a15x | Galaxy A15 5G | 34 | Low |
