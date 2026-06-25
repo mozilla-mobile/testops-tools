@@ -15,6 +15,7 @@
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
+| SC-51C | Galaxy S22 | 36 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
@@ -36,7 +37,7 @@
 | a15 | Galaxy A15 | 34 | Medium |
 | a15x | Galaxy A15 5G | 34 | Low |
 | a15x | Galaxy A15 5G | 36 | Low |
-| a15xtfn | Galaxy A15 5G | 36 | Low |
+| a15xtfn | Galaxy A15 5G | 36 | None |
 | a16 | Galaxy A16 | 35 | Low |
 | a16x | Galaxy A16 5G | 35 | Low |
 | a16x | Galaxy A16 5G | 34 | Low |
@@ -53,6 +54,7 @@
 | a36xq | Galaxy A36 5G | 35 | Low |
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
+| a52xq | Galaxy A52 5G | 34 | Low |
 | a54x | Galaxy A54 5G | 34 | High |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
@@ -121,6 +123,7 @@
 | gts10pwifi | Galaxy Tab S10+ | 36 | Low |
 | gts7lwifi | Galaxy Tab S7 | 33 | Medium |
 | gts7xllite | Galaxy Tab S7 FE 5G | 34 | Medium |
+| gts7xlwifi | Galaxy Tab S7+ | 33 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
 | gts8wifi | Galaxy Tab S8 | 34 | Medium |
 | gts9fe | Galaxy Tab S9 FE 5G | 34 | Medium |
