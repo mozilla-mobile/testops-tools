@@ -32,10 +32,10 @@ jobs:
 
     steps:
       - name: Checkout testops-tools
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Checkout ${{ matrix.platform }} repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ matrix.repo }}
           path: ${{ matrix.repo_path }}
