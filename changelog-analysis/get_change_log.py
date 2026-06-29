@@ -135,8 +135,13 @@ def map_files_to_components(files: List[str], rules) -> Tuple[Set[str], List[str
 
 
 def _release_branch(tag: str) -> str:
-    # firefox-v150.2 -> release/v150.2
+    # Patches live on the parent minor's branch,drop the third component:
+    #   firefox-v150.2   -> release/v150.2
+    #   firefox-v152.1.1 -> release/v152.1
     version = tag.rsplit("-v", 1)[-1]
+    parts = version.split(".")
+    if len(parts) > 2:
+        version = ".".join(parts[:2])
     return f"release/v{version}"
 
 
