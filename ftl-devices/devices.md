@@ -17,10 +17,13 @@
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-51C | Galaxy S22 | 36 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
+| SCG13 | Galaxy S22 | 36 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
+| TECNO-BG6 | SPARK Go 2024 | 33 | Low |
+| TECNO-KI5k | TECNO SPARK 10C | 31 | Medium |
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
@@ -56,6 +59,7 @@
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a52xq | Galaxy A52 5G | 34 | Low |
 | a54x | Galaxy A54 5G | 34 | High |
+| a55xzh | Galaxy A55 5G | 36 | Low |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
@@ -90,6 +94,7 @@
 | dm1q-SM-S911U | Galaxy S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | Galaxy S23+ | 34 | Low |
+| dm2qksx | Galaxy S23+ | 36 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | Medium |
 | dubai | motorola edge 30 | 34 | High |
@@ -166,6 +171,8 @@
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
+| q6qksx | Galaxy Z Fold6 | 36 | Low |
+| q6qsqw | Galaxy Z Fold6 | 36 | Low |
 | q7mq | Galaxy Z TriFold | 36 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
