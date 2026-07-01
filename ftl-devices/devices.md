@@ -20,7 +20,7 @@
 | SCG13 | Galaxy S22 | 36 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
-| TB330FU | Lenovo Tab M11 | 35 | Low |
+| TB330FU | Lenovo Tab M11 | 35 | None |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | TECNO-BG6 | SPARK Go 2024 | 33 | Low |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Medium |
@@ -80,7 +80,6 @@
 | c1q | Galaxy Note20 5G | 33 | Low |
 | c1qksw | Galaxy Note20 5G | 33 | Low |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
-| cactus | Redmi 6A | 27 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
@@ -189,7 +188,7 @@
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
-| shiba | Pixel 8 | 36 | Low |
+| shiba | Pixel 8 | 36 | Medium |
 | stallion | Pixel 10a | 36 | Low |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21+ 5G | 34 | Medium |
