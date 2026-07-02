@@ -11,7 +11,6 @@
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
-| OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
@@ -20,7 +19,6 @@
 | SCG13 | Galaxy S22 | 36 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
-| TB330FU | Lenovo Tab M11 | 35 | None |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | TECNO-BG6 | SPARK Go 2024 | 33 | Low |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Medium |
@@ -112,11 +110,9 @@
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
-| fogo | moto g 5G - 2024 | 35 | None |
 | fogona | moto g play - 2024 | 34 | Low |
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
-| fogos | moto g34 5G | 35 | None |
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Low |
 | g0q | Galaxy S22+ | 36 | Low |
@@ -161,8 +157,6 @@
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
-| pa3q | Galaxy S25 Ultra | 36 | Low |
-| pa3qxxx | Galaxy S25 Ultra | 36 | None |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
