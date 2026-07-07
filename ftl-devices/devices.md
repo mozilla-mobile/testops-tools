@@ -25,6 +25,7 @@
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
+| a03sutfn | Galaxy A03s | 33 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Low |
@@ -68,6 +69,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | Medium |
+| b4qsqw | Galaxy Z Flip4 | 36 | Low |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
@@ -170,6 +172,7 @@
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
+| r0qksx | Galaxy S22 | 36 | Low |
 | r11 | Pixel Watch | 30 | Medium |
 | r11q | Galaxy S23 FE | 34 | Low |
 | r11s | Galaxy S23 FE | 36 | Low |
