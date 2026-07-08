@@ -186,7 +186,7 @@
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
 | shiba | Pixel 8 | 36 | Medium |
-| stallion | Pixel 10a | 36 | Low |
+| stallion | Pixel 10a | 36 | Medium |
 | starlte | Galaxy S9 | 29 | Low |
 | t2q | Galaxy S21+ 5G | 34 | Medium |
 | t2q | Galaxy S21+ 5G | 35 | Low |
