@@ -171,7 +171,7 @@
 | q7mq | Galaxy Z TriFold | 36 | Medium |
 | r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
-| r0qcsx | Galaxy S22 | 36 | Low |
+| r0qcsx | Galaxy S22 | 36 | None |
 | r0qksx | Galaxy S22 | 36 | Low |
 | r11 | Pixel Watch | 30 | Medium |
 | r11q | Galaxy S23 FE | 34 | Low |
