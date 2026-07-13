@@ -13,7 +13,7 @@ authors = [{ name = "Mozilla Mobile Test Engineering" }]
 
 dependencies = [
     "google-auth>=2.55.2",
-    "google-api-python-client>=2.197.0",
+    "google-api-python-client>=2.198.0",
     "tabulate>=0.10.0",
 ]
 
