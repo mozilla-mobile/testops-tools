@@ -39,7 +39,7 @@
 | a15 | Galaxy A15 | 34 | Medium |
 | a15x | Galaxy A15 5G | 34 | Low |
 | a15x | Galaxy A15 5G | 36 | Low |
-| a15xtfn | Galaxy A15 5G | 36 | None |
+| a15xtfn | Galaxy A15 5G | 36 | Low |
 | a16 | Galaxy A16 | 35 | Low |
 | a16x | Galaxy A16 5G | 35 | Low |
 | a16x | Galaxy A16 5G | 34 | Low |
@@ -68,6 +68,7 @@
 | austin | moto g 5G (2022) | 33 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
+| b0qksx | Galaxy S22 Ultra | 36 | Medium |
 | b4q | Galaxy Z Flip4 | 33 | Medium |
 | b4qsqw | Galaxy Z Flip4 | 36 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
@@ -80,6 +81,7 @@
 | c1q | Galaxy Note20 5G | 33 | Low |
 | c1qksw | Galaxy Note20 5G | 33 | Low |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
+| c2qksw | Galaxy Note20 Ultra 5G | 33 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
@@ -93,7 +95,7 @@
 | dm1q-SM-S911U | Galaxy S23 | 36 | Low |
 | dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | Galaxy S23+ | 34 | Low |
-| dm2qksx | Galaxy S23+ | 36 | Low |
+| dm2qksx | Galaxy S23+ | 36 | Medium |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | Medium |
 | dubai | motorola edge 30 | 34 | High |
@@ -119,6 +121,7 @@
 | g0q | Galaxy S22+ | 34 | Low |
 | g0q | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
+| gta4lwifi | Galaxy Tab A7 | 31 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | None |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
@@ -157,7 +160,7 @@
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
-| pa2qxxx | Galaxy S25+ | 36 | Low |
+| pa2qxxx | Galaxy S25+ | 36 | None |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
 | psq | Galaxy S25 Edge | 35 | Low |
