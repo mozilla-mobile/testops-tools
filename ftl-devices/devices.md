@@ -15,17 +15,20 @@
 | RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-51C | Galaxy S22 | 36 | Low |
+| SC-51E | Galaxy S24 | 36 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
 | SCG13 | Galaxy S22 | 36 | Medium |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
+| TECNO-BF6 | TECNO POP 7 | 31 | Low |
 | TECNO-BG6 | SPARK Go 2024 | 33 | Low |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Medium |
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
 | a03sutfn | Galaxy A03s | 33 | Low |
+| a04s | Galaxy A04s | 34 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Low |
@@ -48,6 +51,7 @@
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
+| a31 | Galaxy A31 | 31 | Low |
 | a32 | Galaxy A32 | 33 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
 | a35x | Galaxy A35 5G | 34 | Medium |
@@ -85,10 +89,10 @@
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancunf | moto g54 5G | 34 | Medium |
-| caprip | moto g(30) | 31 | Medium |
+| caprip | moto g(30) | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
-| comet | Pixel 9 Pro Fold | 35 | Low |
+| comet | Pixel 9 Pro Fold | 35 | Medium |
 | comet | Pixel 9 Pro Fold | 36 | Medium |
 | cuscoi | moto g96 5G | 35 | Low |
 | dm1q | Galaxy S23 | 35 | Low |
@@ -159,11 +163,14 @@
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Galaxy S25 | 36 | Low |
+| pa1qksx | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | None |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
+| penang | moto g53 5G | 34 | Low |
 | psq | Galaxy S25 Edge | 35 | Low |
+| q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q4qksx | Galaxy Z Fold4 | 36 | Low |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
@@ -181,9 +188,11 @@
 | r11s | Galaxy S23 FE | 36 | Low |
 | r12s | Galaxy S24 FE | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
+| r8qcsx | Galaxy S20 FE 5G | 33 | Low |
 | r8qksx | Galaxy S20 FE 5G | 33 | Low |
 | r9q | Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
+| r9q2csx | Galaxy S21 FE 5G | 36 | Low |
 | rango | Pixel 10 Pro Fold | 36 | Low |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
