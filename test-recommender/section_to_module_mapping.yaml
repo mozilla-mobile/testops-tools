@@ -1,0 +1,670 @@
+# Mapping: TestRail "Section Hierarchy" top-level  →  firefox-ios code modules
+#
+# Generated 2026-06-12 from:
+#   - TestRail export: firefox_for_ios_regression.xlsx (1652 cases, 52 top-level sections)
+#   - Repo inspection: mozilla-mobile/firefox-ios (firefox-ios/Client/Frontend, BrowserKit/Sources)
+#
+# Confidence levels:
+#   high   = name match or unambiguous mapping
+#   medium = reasonable inference, please verify with the team
+#   low    = guess based on context, needs confirmation
+#
+# Format:
+#   test_count    = how many TestRail cases live under this section (informational)
+#   automated     = how many of those are already marked Completed in automation (deprioritize signal)
+#   modules       = code paths that, when changed, suggest running tests from
+#                   this section. Usually a directory (e.g.
+#                   `firefox-ios/Client/Frontend/Library`), but a specific
+#                   `.swift` file is allowed when a broader directory entry
+#                   would over-match. Both use longest-prefix matching in the
+#                   pipeline; a file entry only fires on changes to that exact
+#                   file. See "Adresses autofill" (AccessoryViewProvider.swift)
+#                   and "Ad Blocker V1" (FirefoxTabContentBlocker.swift) for
+#                   examples of the file-level convention.
+#   notes         = clarifications, gotchas, things to verify
+
+sections:
+
+  - name: "Share Sheet"
+    test_count: 228
+    automated: 27
+    modules:
+      - { path: firefox-ios/Client/Frontend/Share, confidence: high }
+      - { path: firefox-ios/Extensions, confidence: medium }   # ShareTo extension target
+    notes: |
+      Largest section. Verify whether "Extensions/ShareTo" or similar exists as a separate target.
+
+  - name: "Toolbar Specs & Flows"
+    test_count: 147
+    automated: 15
+    modules:
+      - { path: BrowserKit/Sources/ToolbarKit, confidence: high }
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
+    notes: |
+      Note: separate from the smaller "Toolbar" section below. This is the redesigned/spec'd toolbar.
+
+  - name: "Library"
+    test_count: 139
+    automated: 65
+    modules:
+      - { path: firefox-ios/Client/Frontend/Library, confidence: high }
+    notes: |
+      Covers Bookmarks, History, Reading List, Downloads. Already 47% automated — deprioritize unless heavy diff here.
+
+  - name: "Platform search suggestions"
+    test_count: 95
+    automated: 17
+    modules:
+      - { path: BrowserKit/Sources/UnifiedSearchKit, confidence: high }
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium }
+    notes: |
+      Includes third-party search engine settings. Verify if there's a SearchEngines/ module.
+
+  - name: "Translations"
+    test_count: 87
+    automated: 4
+    modules:
+      - { path: firefox-ios/Client/Frontend/Translations, confidence: high }
+    notes: |
+      Very low automation coverage (4/87) — high priority for manual when touched.
+
+  - name: "Settings - General"
+    test_count: 70
+    automated: 21
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+    notes: |
+      All "Settings - *" sections likely share the same root path; needs sub-section granularity to dispatch tests precisely.
+
+  - name: "Settings - Privacy"
+    test_count: 69
+    automated: 16
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - { path: firefox-ios/Client/Frontend/TrackingProtection, confidence: medium }
+      - { path: firefox-ios/Client/ContentBlocker, confidence: medium }
+
+  - name: "Adresses autofill"   # sic — typo in TestRail
+    test_count: 64
+    automated: 33
+    modules:
+      - { path: firefox-ios/Client/Frontend/Autofill, confidence: high }
+      - { path: firefox-ios/Client/AccessoryViewProvider.swift, confidence: medium }   # shared accessory bar used by autofill
+    notes: |
+      Heavy automation coverage. The section title has a typo ("Adresses").
+      AccessoryViewProvider.swift added 2026-07-14 — feeds the accessory bar
+      used from AutofillAccessoryViewButtonItem.
+
+  - name: "Brand refresh onboarding"
+    test_count: 62
+    automated: 4
+    modules:
+      - { path: BrowserKit/Sources/OnboardingKit, confidence: high }
+      - { path: firefox-ios/Client/Frontend/Onboarding, confidence: high }
+      - { path: firefox-ios/Client/Frontend/DefaultBrowserOnboarding, confidence: medium }
+
+  - name: "Menu redesign"
+    test_count: 59
+    automated: 4
+    modules:
+      - { path: BrowserKit/Sources/MenuKit, confidence: high }
+
+  - name: "Shake to summarize"
+    test_count: 51
+    automated: 3
+    modules:
+      - { path: BrowserKit/Sources/SummarizeKit, confidence: high }
+      - { path: BrowserKit/Sources/LLMKit, confidence: medium }
+      - { path: firefox-ios/Client/Frontend/Summarizer, confidence: high }
+
+  # "Homepage" removed 2026-07-14 — renamed to "Current Homepage Structure" in TestRail.
+  # See the new section further down.
+
+  - name: "Tab Tray"
+    test_count: 49
+    automated: 27
+    modules:
+      - { path: firefox-ios/Client/TabManagement, confidence: high }
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }   # TabTrayViewController may live here
+    notes: |
+      Includes "Top Tabs" iPad variant — verify path for iPad-specific code.
+
+  - name: "Logins"
+    test_count: 47
+    automated: 19
+    modules:
+      - { path: firefox-ios/Client/Frontend/PasswordManagement, confidence: high }
+      - { path: firefox-ios/Client/Frontend/PasswordGenerator, confidence: high }
+      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
+
+  - name: "Private Browsing"
+    test_count: 42
+    automated: 12
+    modules:
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - { path: firefox-ios/Client/TabManagement, confidence: medium }
+    notes: |
+      Cross-cutting. Private mode toggle is wired across many places. Verify if there's a dedicated PrivateBrowsing/ folder.
+
+  - name: "Search box in the Middle"
+    test_count: 41
+    automated: 0
+    modules:
+      - { path: BrowserKit/Sources/ToolbarKit, confidence: high }
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
+    notes: |
+      0% automated, fully manual. UX variant of toolbar — overlaps with "Toolbar Specs & Flows".
+
+  - name: "Homescreen Redesign - Discover content feed"
+    test_count: 25
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
+      - { path: firefox-ios/Client/Frontend/StoriesFeed, confidence: high }
+
+  - name: "Settings"
+    test_count: 23
+    automated: 20
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+    notes: |
+      Generic settings — may overlap with "Settings - General".
+
+  - name: "Felt Privacy - Unified Panel"
+    test_count: 22
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Frontend/FeltPrivacy, confidence: high }
+
+  - name: "ToU update for existing users"
+    test_count: 21
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/Onboarding, confidence: medium }
+      - { path: firefox-ios/Client/Frontend/SurveySurface, confidence: low }
+    notes: |
+      Terms of Use update flow. Verify which target hosts the ToU modal.
+
+  - name: "Keyboard shortcuts"
+    test_count: 20
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Application, confidence: medium }
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+    notes: |
+      iOS key commands. Likely registered at BrowserViewController or AppDelegate level. Verify.
+
+  - name: "External links opening options"
+    test_count: 19
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Coordinators, confidence: high }
+      - { path: firefox-ios/Client/Application, confidence: medium }
+    notes: |
+      Deep link handling, openURL, "while dedicated app is installed" branching.
+
+  - name: "PDF management"
+    test_count: 17
+    automated: 5
+    modules:
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+    notes: |
+      In-app PDF view + save/share. Verify where PDF preview is implemented.
+
+  - name: "Widget"
+    test_count: 16
+    automated: 6
+    modules:
+      - { path: firefox-ios/WidgetKit, confidence: high }
+      - { path: firefox-ios/Client/Frontend/Widgets, confidence: medium }
+
+  - name: "Long Tap Interaction - Context menu"
+    test_count: 15
+    automated: 11
+    modules:
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - { path: BrowserKit/Sources/ComponentLibrary, confidence: low }
+
+  # "Homescreen redesign V2" removed 2026-07-14 — renamed to
+  # "Homescreen redesign V2 - not applicable anymore" in TestRail.
+  # See the new section further down.
+
+  - name: "Toolbar"
+    test_count: 13
+    automated: 8
+    modules:
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
+      - { path: BrowserKit/Sources/ToolbarKit, confidence: medium }
+    notes: |
+      Older/smaller section — likely legacy. "Toolbar Specs & Flows" is the redesigned variant.
+
+  - name: "Auto Push Notification"
+    test_count: 12
+    automated: 0
+    modules:
+      - { path: firefox-ios/Push, confidence: high }
+      - { path: firefox-ios/Client/Frontend/NotificationSurface, confidence: medium }
+
+  - name: "US1 - Internet Connection Error"
+    test_count: 12
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high }
+      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+
+  - name: "Pull to refresh"
+    test_count: 11
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+    notes: |
+      Verify the actual gesture-recognizer host. May live in WebEngine or BrowserViewController.
+
+  - name: "Sync Integration Tests"
+    test_count: 10
+    automated: 10
+    modules:
+      - { path: firefox-ios/Sync, confidence: high }
+      - { path: firefox-ios/Account, confidence: high }
+      - { path: firefox-ios/RustFxA, confidence: high }
+    notes: |
+      100% automated — system can typically skip suggesting manual tests here, just verify CI passed.
+
+  - name: "Launch in Attentive Mode"
+    test_count: 9
+    automated: 4
+    modules:
+      - { path: firefox-ios/Client/Application, confidence: medium }
+    notes: |
+      Likely lifecycle / scene-delegate behavior. Verify.
+
+  - name: "Settings - Account"
+    test_count: 9
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - { path: firefox-ios/Account, confidence: medium }
+      - { path: firefox-ios/RustFxA, confidence: medium }
+
+  - name: "Find In Page"
+    test_count: 9
+    automated: 9
+    modules:
+      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+    notes: |
+      100% automated. Verify FindInPageBar path.
+
+  - name: "Default Zoom Settings"
+    test_count: 9
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+
+  - name: "Domain Autocomplete"
+    test_count: 8
+    automated: 8
+    modules:
+      - { path: BrowserKit/Sources/UnifiedSearchKit, confidence: medium }
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium }
+
+  - name: "Security"
+    test_count: 8
+    automated: 8
+    modules:
+      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
+      - { path: firefox-ios/CredentialProvider, confidence: medium }
+    notes: |
+      Vague section. May need to look at individual cases to refine. 100% automated.
+
+  - name: "Desktop mode"
+    test_count: 7
+    automated: 6
+    modules:
+      - { path: BrowserKit/Sources/WebEngine, confidence: high }
+    notes: |
+      User-Agent switching.
+
+  - name: "Firefox Accounts"
+    test_count: 6
+    automated: 3
+    modules:
+      - { path: firefox-ios/Account, confidence: high }
+      - { path: firefox-ios/RustFxA, confidence: high }
+      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
+
+  - name: "Zooming & panning"
+    test_count: 6
+    automated: 5
+    modules:
+      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+
+  - name: "Toast notifications"
+    test_count: 4
+    automated: 3
+    modules:
+      - { path: BrowserKit/Sources/ComponentLibrary, confidence: medium }
+
+  - name: "Navigation"
+    test_count: 4
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Coordinators, confidence: medium }
+      - { path: BrowserKit/Sources/WebEngine, confidence: low }
+    notes: |
+      Ambiguous — could be in-app navigation (coordinators) or web navigation (WebEngine). Verify.
+
+  - name: "Mobile Microsurvey"
+    test_count: 4
+    automated: 4
+    modules:
+      - { path: firefox-ios/Client/Frontend/Microsurvey, confidence: high }
+      - { path: firefox-ios/Client/Frontend/SurveySurface, confidence: medium }
+
+  - name: "Integration between deeplinks and mobile Apps"
+    test_count: 4
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Coordinators, confidence: high }
+      - { path: firefox-ios/Client/Application, confidence: medium }
+
+  - name: "Clipboard"
+    test_count: 3
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Helpers, confidence: low }
+      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: low }
+    notes: |
+      Verify ClipboardBarDisplayHandler or similar.
+
+  - name: "iPad MultiWindows"
+    test_count: 3
+    automated: 3
+    modules:
+      - { path: firefox-ios/Client/Coordinators, confidence: high }
+      - { path: firefox-ios/Client/Application, confidence: medium }
+
+  - name: "Settings - About"
+    test_count: 2
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+
+  - name: "Session Restore"
+    test_count: 2
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/TabManagement, confidence: high }
+      - { path: BrowserKit/Sources/TabDataStore, confidence: high }
+
+  - name: "Database Fixtures"
+    test_count: 2
+    automated: 2
+    modules:
+      - { path: BrowserKit/Sources/TestKit, confidence: medium }
+      - { path: firefox-ios/firefox-ios-tests, confidence: medium }
+    notes: |
+      Likely test infrastructure, not a product feature.
+
+  - name: "Update"
+    test_count: 1
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Application, confidence: medium }
+    notes: |
+      App-update / migration flow. Hard to trigger from a code diff alone — almost always exploratory.
+
+  - name: "SSL Certificate Error"
+    test_count: 1
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high }
+      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+
+  - name: "Authentication"
+    test_count: 1
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: high }
+
+  # -----------------------------------------------------------------------------
+  # Sections added 2026-07-14 from drift findings on release/v153.0.
+  # See commit message for the run that produced the drift report.
+  # -----------------------------------------------------------------------------
+
+  - name: "Current Homepage Structure"
+    test_count: 54
+    automated: 0     # to be re-checked from next export
+    modules:
+      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
+    notes: |
+      Added 2026-07-14. Rename of the old "Homepage" section. Same code
+      module. Automated Test Name(s) still reference XCUITests/ActivityStream*.
+
+  - name: "Homescreen redesign V2 - not applicable anymore"
+    test_count: 10
+    automated: 1
+    modules:
+      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
+    notes: |
+      Added 2026-07-14. Rename of the old "Homescreen redesign V2". Section
+      name now signals the feature is deprecated in product but tests are
+      still catalogued. Consider low priority unless Home module changes.
+
+  - name: "Google Lens 🔍"
+    test_count: 25
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/GoogleLens, confidence: high }
+    notes: |
+      Added 2026-07-14. New feature landing in v153.0 (PR #34604 telemetry,
+      #34561 hide in private, #34567 setting).
+
+  - name: "Quick Answers"
+    test_count: 32
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/QuickAnswers, confidence: high }
+      - { path: BrowserKit/Sources/QuickAnswersKit, confidence: high }
+    notes: |
+      Added 2026-07-14. Voice AI feature landing in v153.0 (PR #34483,
+      largest PR in the release). Both the Frontend/QuickAnswers UI and
+      BrowserKit/QuickAnswersKit service layer trigger this section.
+
+  - name: "Webcompat Reporting Tool"
+    test_count: 19
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Frontend/WebCompatReporter, confidence: high }
+      - { path: BrowserKit/Sources/WebCompatReporterKit, confidence: high }
+    notes: |
+      Added 2026-07-14. New feature landing in v153.0 (PR #34499 UI shell,
+      #34309 Glean ping).
+
+  - name: "Ad Blocker V1"
+    test_count: 21
+    automated: 0
+    modules:
+      - { path: firefox-ios/Client/Application/RemoteSettings/Application Services/, confidence: medium }
+      - { path: firefox-ios/Client/Frontend/Browser/FirefoxTabContentBlocker.swift, confidence: medium }
+    notes: |
+      Added 2026-07-14. The AS-prefixed remote-settings ad-blocker service
+      files live under Client/Application/RemoteSettings/Application Services/.
+      The tab content blocker file handles the actual blocking. The Settings
+      toggle UI is BrowsingSettingsViewController.swift but that file is
+      shared with other browsing prefs — not mapped here to avoid false
+      positives on unrelated Settings changes.
+
+  - name: "HTTPS First Mode"
+    test_count: 21
+    automated: 0
+    modules: []
+    notes: |
+      Added 2026-07-14 as a placeholder — no HTTPS-First code found in the
+      repo under this name yet. TestRail cases likely written ahead of the
+      feature landing.
+
+      ⚠️  With `modules: []`, these 21 tests are INVISIBLE to the recommender
+      until at least one module path is added — they will not appear as
+      candidates for any release regardless of what code changes. Drift
+      detection does NOT flag this either (the section IS in the YAML,
+      just with no code links), so the gap is silent.
+
+      Revisit once the code ships and identify the correct module(s).
+
+# -----------------------------------------------------------------------------
+# Modules that exist in code but have NO clear TestRail section mapping
+# (worth knowing — these are blind spots in the catalog)
+# -----------------------------------------------------------------------------
+modules_without_clear_section:
+  - BrowserKit/Sources/Redux                  # State management — affects everything indirectly
+  - BrowserKit/Sources/Common                 # Shared utilities — affects everything indirectly
+  - BrowserKit/Sources/Shared                 # AUTO-ADDED 2026-06-12 (drift): general shared utilities, cross-cutting
+  - BrowserKit/Sources/SiteImageView          # Favicon/screenshot rendering
+  - BrowserKit/Sources/JWTKit                 # Auth tokens (Sync/Account adjacent)
+  - BrowserKit/Sources/MLPAKit                # Machine learning / personalization?
+  # BrowserKit/Sources/QuickAnswersKit — REMOVED 2026-07-14, now mapped to "Quick Answers" section
+  - BrowserKit/Sources/ActionExtensionKit
+  - firefox-ios/Client/Configuration          # AUTO-ADDED 2026-06-12 (drift): app config files, cross-cutting
+  - firefox-ios/Client/Extensions             # AUTO-ADDED 2026-06-12 (drift): Swift extensions (String, UIView, …), cross-cutting
+  - firefox-ios/Client/Glean                  # Telemetry
+  - firefox-ios/Client/Telemetry
+  - firefox-ios/Client/Nimbus                 # Feature flags wiring
+  - firefox-ios/Client/FeatureFlags
+  - firefox-ios/Client/Experiments
+  - firefox-ios/Client/Frontend/InternalSchemeHandler  # AUTO-ADDED 2026-06-12 (drift): about:home, reader://, error pages — product-facing, NO TestRail section covers it directly (cobertura gap)
+  - firefox-ios/Client/Frontend/UserContent   # AUTO-ADDED 2026-06-12 (drift): user-scripts injected into web views (reader-mode JS, content scripts)
+  - firefox-ios/Client/Frontend/Reader        # Reader mode — no section found
+  # firefox-ios/Client/Frontend/QuickAnswers — REMOVED 2026-07-14, now mapped to "Quick Answers" section
+  - firefox-ios/Client/Frontend/Wayback       # AUTO-ADDED 2026-07-14 (drift): no dedicated TestRail section yet
+  - firefox-ios/Client/Frontend/ContextualHint
+  - firefox-ios/Client/Frontend/ShortcutsLibrary
+  # firefox-ios/Client/Frontend/PasswordGenerator — REMOVED 2026-07-17: already
+  # mapped under "Logins", so the "no clear section" label was contradictory.
+  - firefox-ios/Providers                     # AUTO-ADDED 2026-06-12 (drift): Profile, FxA Account providers — foundational for Account/Sync/Logins
+  - firefox-ios/Storage                       # Persistence layer — affects Library, Logins, Autofill indirectly
+  - firefox-ios/MozillaRustComponents         # Rust bindings — affect Sync, Logins, Autofill
+
+# -----------------------------------------------------------------------------
+# Special handling rules — DESCRIPTIVE DOCUMENTATION ONLY.
+#
+# These entries document behaviour hardcoded inside recommend.py (see
+# LOW_IMPACT_TITLE_KEYWORDS, DEPENDENCY_PATHS, NIMBUS_PATHS, and the
+# Mergify backport handling in fetch_prs_for_commits). This YAML block
+# is NOT parsed at runtime — a reader can consult it to understand what
+# the pipeline does with special cases without grepping the source.
+#
+# If you change a rule here, update recommend.py to match. Nothing keeps
+# them in sync automatically.
+# -----------------------------------------------------------------------------
+special_rules:
+  - paths: [firefox-ios/nimbus-features/, firefox-ios/initial_experiments.json]
+    handling: "Always flag in risk section: behavior may flip server-side without code diff in product."
+  - paths: [Package.swift, Package.resolved, Podfile.lock, firefox-ios/MozillaRustComponents/**]
+    handling: "Flag as dependency change. List bumped versions. Suggest smoke test on affected areas (Sync/Logins/Autofill for Rust components)."
+  - paths: ["**/*.lproj/**", "**/Localizable.strings"]
+    handling: "Auto-classify as low-impact (string import). No test suggestion unless paired with code change in same PR."
+  - pr_titles_starting_with: ["String Import", "Strings Import"]
+    handling: "Auto-skip from analysis."
+  - branch_patterns: ["mergify/bp/**"]
+    handling: "Dedup against the main-branch PR these backport. Don't re-suggest tests for already-shipped backports."
+
+# -----------------------------------------------------------------------------
+# Drift detection — DESCRIPTIVE DOCUMENTATION OF INTENT.
+#
+# recommend.py currently implements two of the checks below (see detect_drift):
+#   - `new_section_in_testrail` (TestRail sections not present in this YAML)
+#   - `new_module_in_repo` (touched paths without a YAML mapping)
+#
+# The rest of this block — rename detection strategies (fuzzy/id-set/section-id),
+# the pending_mapping_review workflow, LLM-proposed mappings — is planned but
+# not yet wired. This YAML block is NOT parsed at runtime; it documents the
+# design goals for align.py (TBD) and the direction of drift detection.
+# -----------------------------------------------------------------------------
+drift_detection:
+
+  testrail_side:
+    # Compare the TestRail export against the `sections:` block above.
+    checks:
+      - id: new_section_in_testrail
+        description: "Top-level Section Hierarchy value present in export but not in this YAML."
+        action: |
+          - Emit warning: "N new TestRail sections without mapping: [...]".
+          - For each, LLM proposes initial mapping using:
+              * section name
+              * sample of 5 random test titles + steps from that section
+              * current repo module list (BrowserKit/Sources/*, firefox-ios/Client/**)
+          - Write proposal to pending_mapping_review.yaml with confidence: auto-generated.
+          - Tests from unmapped sections appear in the report flagged "AUTO-MAPPED — verify".
+
+      - id: yaml_section_no_longer_in_testrail
+        description: "Section listed in this YAML but not found in the latest export."
+        action: |
+          - Emit warning: "N YAML sections no longer in TestRail: [...]".
+          - Attempt rename detection (see rename_detection below) before assuming deletion.
+          - If no rename match, mark entry as stale in the report; await human removal.
+
+      - id: rename_detection
+        description: "Detect TestRail section renames so the mapping survives them."
+        strategies_in_order:
+          - fuzzy_name_match:
+              method: "Levenshtein distance on section name, threshold ≤ 3 chars or ≥ 0.85 similarity"
+              confidence: low
+              notes: "Cheap, catches typos and minor edits. Many false positives possible."
+          - id_set_match:
+              method: |
+                Compare the set of TestRail case IDs (C-numbers) under each section between
+                the previous export and the new export. If section X (old) and section Y (new)
+                share ≥ 80% of their case IDs, treat as rename X → Y.
+              confidence: high
+              notes: "Requires storing the previous export's section→case-ID map alongside the YAML."
+          - testrail_section_id:
+              method: "Use stable TestRail Section ID (NOT name) as the mapping key."
+              confidence: highest
+              notes: |
+                NOT AVAILABLE YET in the current export — needs TestRail admin to add
+                Section ID column to the export. Once added, this becomes the primary
+                key and renames stop being a problem entirely.
+                ACTION: ask TestRail admin to enable Section ID export.
+
+  repo_side:
+    # Compare the diff's touched file paths against the modules referenced anywhere in this YAML.
+    checks:
+      - id: new_module_in_repo
+        description: |
+          A file path in the release diff doesn't fall under any module listed in any section's
+          `modules:` block, nor in `modules_without_clear_section`.
+        action: |
+          - Emit warning: "N new/unclassified modules touched in diff: [...]".
+          - LLM proposes which TestRail section(s) these probably belong to, using:
+              * module path + sample of file names inside it
+              * any README/PR description for the module
+              * existing section list
+          - Proposal goes to pending_mapping_review.yaml.
+          - Changes to unclassified modules still appear in the report under "Unclassified changes
+            — needs mapping" so they aren't silently dropped from QA consideration.
+
+      - id: dead_module_path
+        description: "Module path referenced in this YAML no longer exists in the repo."
+        action: |
+          - Emit warning at runtime (cheap check via `gh api repos/.../contents/<path>`).
+          - Mark entry as stale; await human update.
+
+  output:
+    drift_report_location: pending_mapping_review.yaml
+    fail_behavior: |
+      The pipeline does NOT block on drift — it produces the report anyway, but with a
+      prominent "⚠️ Mapping drift detected" header listing what's unmapped and what was
+      auto-proposed. Rationale: a release shouldn't be held up by a mapping gap, but the
+      gap must be loudly visible so it gets fixed before the next run.
+    review_workflow: |
+      1. Open pending_mapping_review.yaml after each run.
+      2. For each proposal: accept, edit, or reject.
+      3. Move accepted entries into this YAML's `sections:` block (or
+         `modules_without_clear_section` if the module legitimately has no TestRail home).
+      4. Delete the entry from pending_mapping_review.yaml.
+
+  open_action_items:
+    - "Ask TestRail admin to add stable Section ID to the export — eliminates rename ambiguity."
+    - "First time the pipeline runs, snapshot the current section→case-ID map for future id_set_match comparisons."
