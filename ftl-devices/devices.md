@@ -119,7 +119,7 @@
 | felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogona | moto g play - 2024 | 34 | Low |
-| fogorow | moto g24 | 34 | Low |
+| fogorow | moto g24 | 34 | None |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Low |
@@ -170,7 +170,7 @@
 | panther | Pixel 7 | 33 | High |
 | penang | moto g53 5G | 34 | Low |
 | psq | Galaxy S25 Edge | 35 | Low |
-| q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
+| q2qsqw | Galaxy Z Fold3 5G | 35 | Medium |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q4qksx | Galaxy Z Fold4 | 36 | Low |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
