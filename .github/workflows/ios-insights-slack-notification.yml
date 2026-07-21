@@ -32,7 +32,7 @@ jobs:
         id: list-html
         run: |
           echo "List HTML file on gs://mobile-reports/public/test_ios_insights/build/reports/"
-          files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || true)
+          files=$(gcloud storage ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || true)
           if [ -z "$files" ]; then
             echo "No HTML files found."
             echo "found=false" >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
           mkdir -p processed
           while IFS= read -r file_html; do
             echo "Processing $file_html"
-            gsutil cp "$file_html" .
+            gcloud storage cp "$file_html" .
             name_base=$(basename "$file_html" .html)
 
             echo "Checking if $name_base.html exists..."
@@ -98,7 +98,7 @@ jobs:
         run: |
           for ndjson_file in processed/*.ndjson; do
             echo "Uplod $ndjson_file to bucket..."
-            gsutil cp "$ndjson_file" gs://mobile-reports/public/test_ios_insights/build/reports/
+            gcloud storage cp "$ndjson_file" gs://mobile-reports/public/test_ios_insights/build/reports/
           done
 
       - name: Import NDJSON to BigQuery
@@ -119,19 +119,19 @@ jobs:
         if: ${{ success() }}
         run: |
             echo "Checking for HTML files to delete..."
-            html_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || echo "")
+            html_files=$(gcloud storage ls gs://mobile-reports/public/test_ios_insights/build/reports/*.html 2>/dev/null || echo "")
             if [ -n "$html_files" ]; then
                 echo "Deleting HTML files..."
-                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html || true
+                gcloud storage rm gs://mobile-reports/public/test_ios_insights/build/reports/*.html || true
             else
                 echo "No HTML files found to delete."
             fi
 
             echo "Checking for NDJSON files to delete..."
-            ndjson_files=$(gsutil ls gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson 2>/dev/null || echo "")
+            ndjson_files=$(gcloud storage ls gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson 2>/dev/null || echo "")
             if [ -n "$ndjson_files" ]; then
                 echo "Deleting NDJSON files..."
-                gsutil rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson || true
+                gcloud storage rm gs://mobile-reports/public/test_ios_insights/build/reports/*.ndjson || true
             else
                 echo "No NDJSON files found to delete."
             fi
@@ -157,7 +157,7 @@ jobs:
       - name: Upload CSV Report to Cloud Storage
         run: |
             echo "Uploading file: ${csv_report_filename}"
-            gsutil cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}
+            gcloud storage cp "${csv_report_filename}" gs://mobile-reports/public/test_ios_insights/flaky_test_reports/${csv_report_filename}
       
       - name: Import CSV Report into BigQuery Flaky Test Table
         run: |
