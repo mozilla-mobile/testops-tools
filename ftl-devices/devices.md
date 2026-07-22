@@ -51,7 +51,7 @@
 | a21 | Galaxy A21 | 31 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
-| a31 | Galaxy A31 | 31 | Low |
+| a31 | Galaxy A31 | 31 | Medium |
 | a32 | Galaxy A32 | 33 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
 | a35x | Galaxy A35 5G | 34 | Medium |
@@ -170,7 +170,7 @@
 | panther | Pixel 7 | 33 | High |
 | penang | moto g53 5G | 34 | Low |
 | psq | Galaxy S25 Edge | 35 | Low |
-| q2qsqw | Galaxy Z Fold3 5G | 35 | Medium |
+| q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q4qksx | Galaxy Z Fold4 | 36 | Low |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
