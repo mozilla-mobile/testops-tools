@@ -1,0 +1,17 @@
+# Minimum versions pinned to the ones this project has been tested against.
+# Update carefully — the Anthropic SDK evolves the messages API frequently
+# (see the model-specific parameter handling in recommend.py).
+#
+# The upper cap on `anthropic` is a safety net: Anthropic's pre-1.0 SDK has
+# introduced breaking changes at minor bumps in the past (budget_tokens
+# deprecation, output_config.format reshape, model-specific parameter
+# handling). The cap gives ~1 year of headroom for new models without
+# requiring code changes. When it needs raising, verify:
+#   - messages.create() signature (kwargs still accepted)
+#   - output_config.format schema (json_schema still supported)
+#   - streaming API (client.messages.stream still returns the same shape)
+#   - error class hierarchy (anthropic.APIStatusError still exposes .status_code)
+
+openpyxl>=3.1.5
+pyyaml>=6.0.3
+anthropic>=0.109.1,<0.200

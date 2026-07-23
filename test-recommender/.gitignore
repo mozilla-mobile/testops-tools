@@ -1,0 +1,33 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Generated outputs (regenerate per release)
+release_report_*.md
+pending_mapping_review.yaml
+
+# TestRail exports — ad-hoc xlsx files are ignored, but the canonical
+# test catalogue export is versioned so recommend.py can consume it directly.
+*.xlsx
+!testrail_export_ios.xlsx
+
+# Backups produced by align.py
+section_to_module_mapping.yaml.bak
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS / editor noise
+.DS_Store
+.vscode/
+.idea/
+*.swp
