@@ -78,7 +78,7 @@ highest-value subset of the catalogue, not to declare anything "safe to skip".
         ▼                                   ▼
 ┌───────────────────┐               ┌────────────────────┐
 │  align.py         │               │  recommend.py      │
-│  (planned)        │               │  (batch)           │
+│  (interactive)    │               │  (batch)           │
 │                   │               │                    │
 │  Run on demand    │               │  Run per release   │
 │  when TestRail or │               │  by QA lead        │
@@ -101,8 +101,8 @@ highest-value subset of the catalogue, not to declare anything "safe to skip".
 | `section_to_module_mapping.yaml` | Config (human-curated) | QA lead | `recommend.py`, `align.py` |
 | `testrail_export_ios.xlsx` | TestRail export | TestRail admin | `recommend.py`, `align.py` |
 | `recommend.py` | Script (working) | Engineering | Run per release |
-| `align.py` | Interactive CLI (planned) | Engineering | Run when drift is detected |
-| `pending_mapping_review.yaml` | Output (planned) | `align.py` will write it, humans will review | `align.py` (planned) |
+| `align.py` | Interactive CLI (working) | Engineering | Run when drift is detected |
+| `pending_mapping_review.yaml` | Output | `align.py` writes it on `[r]eject`, humans review | Next `align.py` session |
 | `release_report_<tag>.md` | Output | Generated each run | QA team (the deliverable) |
 
 ### Why two scripts, not one
@@ -113,14 +113,16 @@ highest-value subset of the catalogue, not to declare anything "safe to skip".
   release report on a mapping gap — it surfaces drift as a visible warning
   at the top of the report and produces the recommendations with whatever
   mapping is available.
-- **`align.py`** (planned) will run on demand when TestRail or the repo
-  changes structurally. It will be interactive (CLI prompts) and update
-  the mapping YAML directly. Curating a mapping needs a human in the loop;
-  recommendation generation does not.
+- **`align.py`** runs on demand when TestRail or the repo changes
+  structurally. It is interactive (CLI prompts: `[a]ccept / [e]dit /
+  [r]eject / [s]kip`) and updates the mapping YAML in place with a `.bak`
+  backup. Rejected proposals are routed to `pending_mapping_review.yaml`
+  for the next curator session. Curating a mapping needs a human in the
+  loop; recommendation generation does not.
 
-Both will share the same drift-detection logic. Until `align.py` ships,
-`recommend.py`'s inline drift detection is the only mechanism surfacing
-gaps.
+Both share drift-detection logic. `recommend.py`'s inline drift check keeps
+a release from failing when the mapping is out of date; `align.py` is the
+tool the operator runs afterwards to close the gap.
 
 ---
 
@@ -233,7 +235,7 @@ across each phase of pipeline evolution.
 pip3 install --user -r requirements.txt
 ```
 
-Pinned minimums: `openpyxl>=3.1.5`, `pyyaml>=6.0.3`, `anthropic>=0.109.1`. See
+Pinned minimums: `openpyxl>=3.1.5`, `pyyaml>=6.0.3`, `ruamel.yaml>=0.18.0`, `anthropic>=0.109.1`. See
 `requirements.txt` for the source of truth. Newer versions usually work but
 the Anthropic SDK's messages API evolves — the code has model-specific
 handling for `effort`, `temperature`, and `thinking` and may need adjustment
@@ -354,8 +356,8 @@ The report has seven sections in this order:
 
 If the system detects mapping drift (new sections in TestRail or new
 modules in the repo without YAML mapping), a `⚠️ Mapping drift detected`
-warning appears at the very top of the report. Until `align.py` ships,
-curate the mapping YAML by hand to resolve.
+warning appears at the very top of the report. Run `align.py` to curate
+the mapping YAML interactively (see the `align.py` section below).
 
 ### Verbose output
 
@@ -399,15 +401,103 @@ project. It has four top-level blocks:
   block is NOT parsed at runtime, it exists as a reference for readers.
 - `drift_detection:` — **descriptive documentation** of the drift-detection
   design. `recommend.py` implements the basic checks (TestRail sections
-  and repo modules not in the YAML); the rest of the block describes
-  goals for `align.py` (not yet implemented).
+  and repo modules not in the YAML). `align.py` implements the interactive
+  curation flow (see the `align.py` usage section below).
 
 When TestRail adds a new section, or the repo adds a new module, the
 mapping needs to be updated. The drift-detection logic in `recommend.py`
-will surface this as a warning; you should then either edit the YAML
-directly or run `align.py` once it exists.
+will surface this as a warning at the top of the report; run `align.py`
+to curate the YAML interactively.
 
 ---
+
+## Curate the mapping with `align.py`
+
+Run this when `recommend.py` reports mapping drift or when TestRail /
+the repo has changed structurally between releases.
+
+```bash
+cd test-recommender
+
+python3 align.py \
+  --testrail ./testrail_export_ios.xlsx \
+  --mapping ./section_to_module_mapping.yaml \
+  --repo /path/to/your/firefox-ios/clone \
+  --verbose
+```
+
+Arguments:
+
+| Flag | Required | Notes |
+|---|---|---|
+| `--testrail` | yes | Path to the current TestRail `.xlsx` export |
+| `--mapping` | yes | Path to `section_to_module_mapping.yaml` (updated in place) |
+| `--repo` | yes | Path to a local `firefox-ios` clone (used to enumerate code modules) |
+| `--pending` | no | Where to write rejected/report-only findings. Default: `./pending_mapping_review.yaml` |
+| `--dry-run` | no | Compute drift and prompt as usual, but do not touch the YAML |
+| `--report-only` | no | Non-interactive: dump every drift finding + LLM proposal to `--pending` and exit `1` if drift was found. Meant for CI. Never mutates the mapping YAML. |
+| `--no-llm` | no | Skip LLM proposal calls entirely (fast/offline). |
+| `--verbose` / `-v` | no | Progress logging |
+
+For each drift finding, `align.py`:
+
+1. Asks Claude (Sonnet 4.6 by default; override with `ALIGN_MODEL`) for a
+   mapping proposal — for new TestRail sections it proposes code modules;
+   for new repo modules it proposes an existing TestRail section (or
+   routes to `modules_without_clear_section` for cross-cutting code).
+2. Prints the finding + LLM proposal to the terminal.
+3. Prompts `[a]ccept / [e]dit / [r]eject / [s]kip`:
+   - `a` writes the proposal into `section_to_module_mapping.yaml`.
+   - `e` lets you override the proposed modules or section by typing them.
+   - `r` routes the finding to `pending_mapping_review.yaml` — an inbox
+     for the next curator session, unchanged from LLM output.
+   - `s` skips (do nothing this run).
+4. On write, a `.bak` copy of the YAML is created next to it. Comments,
+   ordering, and quote style are preserved via `ruamel.yaml`. New entries
+   are stamped with `# added YYYY-MM-DD by align.py`.
+
+If `ANTHROPIC_API_KEY` is unset (or `--no-llm` is passed) the LLM proposal
+step is skipped and each finding becomes a manual entry via the `[e]dit`
+path — the tool still functions offline.
+
+### CI vs. interactive flow
+
+`align.py` has two operating modes with the same drift-detection logic
+underneath:
+
+- **Interactive (default)**: for the QA lead / operator. Prompts per
+  finding; the human decides accept/edit/reject/skip; the mapping YAML
+  is mutated in place with a `.bak` backup.
+- **`--report-only`** (for CI): no prompts. Every finding lands in
+  `--pending` with its LLM proposal attached, and the process exits `1`
+  if drift was found (exit `0` if the mapping is in sync). The mapping
+  YAML is never touched.
+
+Recommended pipeline:
+
+```bash
+# In CI, after each release run — never blocks the release, just flags drift.
+python3 align.py \
+  --testrail ./testrail_export_ios.xlsx \
+  --mapping ./section_to_module_mapping.yaml \
+  --repo ${WORKSPACE}/firefox-ios \
+  --pending ./pending_mapping_review.yaml \
+  --report-only
+
+if [ $? -eq 1 ]; then
+  # Post pending_mapping_review.yaml to Slack / open a Jira ticket / etc.
+fi
+```
+
+Then the QA lead, once they see the notification, runs `align.py`
+interactively locally to curate the findings in the pending file.
+
+Notes:
+- The LLM proposals stage in `--report-only` still hits the Anthropic API
+  (~$0.01 per finding). Pass `--no-llm` in CI if you want a zero-cost
+  drift check and don't need the proposals attached.
+- Every LLM call logs progress (`section i/N`, `module i/N`) to stderr,
+  so a slow proposal doesn't look like the script has hung.
 
 ## Cost estimate
 
@@ -451,10 +541,11 @@ collapses, and the narrative sections become boilerplate.
   A change in `nimbus-features/` is flagged as a risk, but the recommender
   doesn't know whether the affected flag is on or off in production. The
   QA team should cross-check Nimbus rollout status manually.
-- **`align.py` is not yet implemented.** Drift findings are surfaced in
-  the report and to `pending_mapping_review.yaml` (in the recommender's
-  inline drift check), but the interactive curation tool is still to be
-  built.
+- **`align.py` rename detection is not yet implemented.** The MVP handles
+  new/stale sections and new repo modules with LLM proposals, but doesn't
+  yet attempt to detect a TestRail section rename via fuzzy name match or
+  case-ID set overlap. Stale sections are surfaced with a manual
+  `[k]eep / [r]emove / [p]end / [s]kip` prompt.
 - **The deterministic fallback ranker is intentionally crude.** It exists
   to keep the pipeline from failing closed, not to replace the LLM. When
   the LLM is unavailable, the fallback sorts candidates by sub-suite and
@@ -472,10 +563,10 @@ test-recommender/
 ├── requirements.txt                       ← pinned deps
 ├── section_to_module_mapping.yaml         ← human-curated config
 ├── recommend.py                           ← release pipeline (working)
+├── align.py                               ← interactive mapping curation
 ├── budget_calculator.py                   ← per-release test budget (Phase 2)
 ├── candidate_scorer.py                    ← deterministic pre-filter (Phase 3)
 ├── git_pr_extractor.py                    ← git-first PR resolver (ready for CI)
-├── (align.py — planned, not yet in repo)  ← interactive curation
 ├── metrics_baseline.md                    ← measured cost/latency/overlap
 ├── tests/                                 ← unit tests (78 tests across 3 modules)
 │   ├── test_budget_calculator.py
@@ -509,33 +600,11 @@ External inputs:
    Compare the system's `Suggested manual tests` list against what QA
    actually executed and the bugs found after the release. Feed findings
    back into the rerank prompt.
-3. **Then**: implement `align.py` — the interactive mapping-curation
-   tool. Target design:
-
-   ```
-   INPUT: testrail_export.xlsx, mapping.yaml
-     │
-     ├─ 1. Diff TestRail sections vs YAML sections.
-     │     · For each new section: LLM proposes mapping using the section
-     │       name, a sample of 5 random test titles + steps from that
-     │       section, and the current repo module list.
-     │     · For each stale YAML section: attempt rename detection in
-     │       this order — fuzzy name match, then case-ID set overlap,
-     │       then Section ID once TestRail exports it.
-     │
-     ├─ 2. Diff repo modules vs YAML references.
-     │     · For each new module not referenced: LLM proposes a section.
-     │     · For each YAML path that no longer exists: mark stale.
-     │
-     ├─ 3. Interactive review (CLI prompts):
-     │       For each proposal:
-     │         [a] accept   [e] edit   [r] reject   [s] skip
-     │       Accepted changes are written into mapping.yaml directly
-     │       (with a .bak backup); rejected go to
-     │       pending_mapping_review.yaml.
-     │
-     └─ OUTPUT: updated mapping.yaml + pending_mapping_review.yaml
-   ```
+3. **Then**: extend `align.py` with rename detection (fuzzy name match
+   + case-ID set overlap) so a TestRail section rename doesn't require
+   removing the old entry and re-mapping the new one from scratch.
+   The MVP already handles new sections, stale sections, and new repo
+   modules — see the `align.py` usage section above.
 4. **Then**: ask the TestRail admin to add Section ID to the export.
    Use it as the stable mapping key once available.
 5. **Later**: integrate Jira (`FXIOS-NNNNN` enrichment from PR titles)

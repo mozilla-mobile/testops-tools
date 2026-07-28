@@ -29,8 +29,8 @@ sections:
     test_count: 228
     automated: 27
     modules:
-      - { path: firefox-ios/Client/Frontend/Share, confidence: high }
-      - { path: firefox-ios/Extensions, confidence: medium }   # ShareTo extension target
+      - {path: firefox-ios/Client/Frontend/Share, confidence: high}
+      - {path: firefox-ios/Extensions, confidence: medium}     # ShareTo extension target
     notes: |
       Largest section. Verify whether "Extensions/ShareTo" or similar exists as a separate target.
 
@@ -38,8 +38,8 @@ sections:
     test_count: 147
     automated: 15
     modules:
-      - { path: BrowserKit/Sources/ToolbarKit, confidence: high }
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
+      - {path: BrowserKit/Sources/ToolbarKit, confidence: high}
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: high}
     notes: |
       Note: separate from the smaller "Toolbar" section below. This is the redesigned/spec'd toolbar.
 
@@ -47,7 +47,7 @@ sections:
     test_count: 139
     automated: 65
     modules:
-      - { path: firefox-ios/Client/Frontend/Library, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Library, confidence: high}
     notes: |
       Covers Bookmarks, History, Reading List, Downloads. Already 47% automated — deprioritize unless heavy diff here.
 
@@ -55,8 +55,8 @@ sections:
     test_count: 95
     automated: 17
     modules:
-      - { path: BrowserKit/Sources/UnifiedSearchKit, confidence: high }
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium }
+      - {path: BrowserKit/Sources/UnifiedSearchKit, confidence: high}
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium}
     notes: |
       Includes third-party search engine settings. Verify if there's a SearchEngines/ module.
 
@@ -64,7 +64,7 @@ sections:
     test_count: 87
     automated: 4
     modules:
-      - { path: firefox-ios/Client/Frontend/Translations, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Translations, confidence: high}
     notes: |
       Very low automation coverage (4/87) — high priority for manual when touched.
 
@@ -72,7 +72,7 @@ sections:
     test_count: 70
     automated: 21
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
     notes: |
       All "Settings - *" sections likely share the same root path; needs sub-section granularity to dispatch tests precisely.
 
@@ -80,16 +80,16 @@ sections:
     test_count: 69
     automated: 16
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
-      - { path: firefox-ios/Client/Frontend/TrackingProtection, confidence: medium }
-      - { path: firefox-ios/Client/ContentBlocker, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
+      - {path: firefox-ios/Client/Frontend/TrackingProtection, confidence: medium}
+      - {path: firefox-ios/Client/ContentBlocker, confidence: medium}
 
   - name: "Adresses autofill"   # sic — typo in TestRail
     test_count: 64
     automated: 33
     modules:
-      - { path: firefox-ios/Client/Frontend/Autofill, confidence: high }
-      - { path: firefox-ios/Client/AccessoryViewProvider.swift, confidence: medium }   # shared accessory bar used by autofill
+      - {path: firefox-ios/Client/Frontend/Autofill, confidence: high}
+      - {path: firefox-ios/Client/AccessoryViewProvider.swift, confidence: medium}     # shared accessory bar used by autofill
     notes: |
       Heavy automation coverage. The section title has a typo ("Adresses").
       AccessoryViewProvider.swift added 2026-07-14 — feeds the accessory bar
@@ -99,23 +99,23 @@ sections:
     test_count: 62
     automated: 4
     modules:
-      - { path: BrowserKit/Sources/OnboardingKit, confidence: high }
-      - { path: firefox-ios/Client/Frontend/Onboarding, confidence: high }
-      - { path: firefox-ios/Client/Frontend/DefaultBrowserOnboarding, confidence: medium }
+      - {path: BrowserKit/Sources/OnboardingKit, confidence: high}
+      - {path: firefox-ios/Client/Frontend/Onboarding, confidence: high}
+      - {path: firefox-ios/Client/Frontend/DefaultBrowserOnboarding, confidence: medium}
 
   - name: "Menu redesign"
     test_count: 59
     automated: 4
     modules:
-      - { path: BrowserKit/Sources/MenuKit, confidence: high }
+      - {path: BrowserKit/Sources/MenuKit, confidence: high}
 
   - name: "Shake to summarize"
     test_count: 51
     automated: 3
     modules:
-      - { path: BrowserKit/Sources/SummarizeKit, confidence: high }
-      - { path: BrowserKit/Sources/LLMKit, confidence: medium }
-      - { path: firefox-ios/Client/Frontend/Summarizer, confidence: high }
+      - {path: BrowserKit/Sources/SummarizeKit, confidence: high}
+      - {path: BrowserKit/Sources/LLMKit, confidence: medium}
+      - {path: firefox-ios/Client/Frontend/Summarizer, confidence: high}
 
   # "Homepage" removed 2026-07-14 — renamed to "Current Homepage Structure" in TestRail.
   # See the new section further down.
@@ -124,8 +124,8 @@ sections:
     test_count: 49
     automated: 27
     modules:
-      - { path: firefox-ios/Client/TabManagement, confidence: high }
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }   # TabTrayViewController may live here
+      - {path: firefox-ios/Client/TabManagement, confidence: high}
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}     # TabTrayViewController may live here
     notes: |
       Includes "Top Tabs" iPad variant — verify path for iPad-specific code.
 
@@ -133,16 +133,16 @@ sections:
     test_count: 47
     automated: 19
     modules:
-      - { path: firefox-ios/Client/Frontend/PasswordManagement, confidence: high }
-      - { path: firefox-ios/Client/Frontend/PasswordGenerator, confidence: high }
-      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/PasswordManagement, confidence: high}
+      - {path: firefox-ios/Client/Frontend/PasswordGenerator, confidence: high}
+      - {path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium}
 
   - name: "Private Browsing"
     test_count: 42
     automated: 12
     modules:
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
-      - { path: firefox-ios/Client/TabManagement, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
+      - {path: firefox-ios/Client/TabManagement, confidence: medium}
     notes: |
       Cross-cutting. Private mode toggle is wired across many places. Verify if there's a dedicated PrivateBrowsing/ folder.
 
@@ -150,8 +150,8 @@ sections:
     test_count: 41
     automated: 0
     modules:
-      - { path: BrowserKit/Sources/ToolbarKit, confidence: high }
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
+      - {path: BrowserKit/Sources/ToolbarKit, confidence: high}
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: high}
     notes: |
       0% automated, fully manual. UX variant of toolbar — overlaps with "Toolbar Specs & Flows".
 
@@ -159,14 +159,14 @@ sections:
     test_count: 25
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
-      - { path: firefox-ios/Client/Frontend/StoriesFeed, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Home, confidence: high}
+      - {path: firefox-ios/Client/Frontend/StoriesFeed, confidence: high}
 
   - name: "Settings"
     test_count: 23
     automated: 20
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
     notes: |
       Generic settings — may overlap with "Settings - General".
 
@@ -174,14 +174,14 @@ sections:
     test_count: 22
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Frontend/FeltPrivacy, confidence: high }
+      - {path: firefox-ios/Client/Frontend/FeltPrivacy, confidence: high}
 
   - name: "ToU update for existing users"
     test_count: 21
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/Onboarding, confidence: medium }
-      - { path: firefox-ios/Client/Frontend/SurveySurface, confidence: low }
+      - {path: firefox-ios/Client/Frontend/Onboarding, confidence: medium}
+      - {path: firefox-ios/Client/Frontend/SurveySurface, confidence: low}
     notes: |
       Terms of Use update flow. Verify which target hosts the ToU modal.
 
@@ -189,8 +189,8 @@ sections:
     test_count: 20
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Application, confidence: medium }
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - {path: firefox-ios/Client/Application, confidence: medium}
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
     notes: |
       iOS key commands. Likely registered at BrowserViewController or AppDelegate level. Verify.
 
@@ -198,8 +198,8 @@ sections:
     test_count: 19
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Coordinators, confidence: high }
-      - { path: firefox-ios/Client/Application, confidence: medium }
+      - {path: firefox-ios/Client/Coordinators, confidence: high}
+      - {path: firefox-ios/Client/Application, confidence: medium}
     notes: |
       Deep link handling, openURL, "while dedicated app is installed" branching.
 
@@ -207,8 +207,8 @@ sections:
     test_count: 17
     automated: 5
     modules:
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
-      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
+      - {path: BrowserKit/Sources/WebEngine, confidence: medium}
     notes: |
       In-app PDF view + save/share. Verify where PDF preview is implemented.
 
@@ -216,15 +216,15 @@ sections:
     test_count: 16
     automated: 6
     modules:
-      - { path: firefox-ios/WidgetKit, confidence: high }
-      - { path: firefox-ios/Client/Frontend/Widgets, confidence: medium }
+      - {path: firefox-ios/WidgetKit, confidence: high}
+      - {path: firefox-ios/Client/Frontend/Widgets, confidence: medium}
 
   - name: "Long Tap Interaction - Context menu"
     test_count: 15
     automated: 11
     modules:
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
-      - { path: BrowserKit/Sources/ComponentLibrary, confidence: low }
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
+      - {path: BrowserKit/Sources/ComponentLibrary, confidence: low}
 
   # "Homescreen redesign V2" removed 2026-07-14 — renamed to
   # "Homescreen redesign V2 - not applicable anymore" in TestRail.
@@ -234,8 +234,8 @@ sections:
     test_count: 13
     automated: 8
     modules:
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: high }
-      - { path: BrowserKit/Sources/ToolbarKit, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: high}
+      - {path: BrowserKit/Sources/ToolbarKit, confidence: medium}
     notes: |
       Older/smaller section — likely legacy. "Toolbar Specs & Flows" is the redesigned variant.
 
@@ -243,21 +243,21 @@ sections:
     test_count: 12
     automated: 0
     modules:
-      - { path: firefox-ios/Push, confidence: high }
-      - { path: firefox-ios/Client/Frontend/NotificationSurface, confidence: medium }
+      - {path: firefox-ios/Push, confidence: high}
+      - {path: firefox-ios/Client/Frontend/NotificationSurface, confidence: medium}
 
   - name: "US1 - Internet Connection Error"
     test_count: 12
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high }
-      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high}
+      - {path: BrowserKit/Sources/WebEngine, confidence: medium}
 
   - name: "Pull to refresh"
     test_count: 11
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
     notes: |
       Verify the actual gesture-recognizer host. May live in WebEngine or BrowserViewController.
 
@@ -265,9 +265,9 @@ sections:
     test_count: 10
     automated: 10
     modules:
-      - { path: firefox-ios/Sync, confidence: high }
-      - { path: firefox-ios/Account, confidence: high }
-      - { path: firefox-ios/RustFxA, confidence: high }
+      - {path: firefox-ios/Sync, confidence: high}
+      - {path: firefox-ios/Account, confidence: high}
+      - {path: firefox-ios/RustFxA, confidence: high}
     notes: |
       100% automated — system can typically skip suggesting manual tests here, just verify CI passed.
 
@@ -275,7 +275,7 @@ sections:
     test_count: 9
     automated: 4
     modules:
-      - { path: firefox-ios/Client/Application, confidence: medium }
+      - {path: firefox-ios/Client/Application, confidence: medium}
     notes: |
       Likely lifecycle / scene-delegate behavior. Verify.
 
@@ -283,15 +283,15 @@ sections:
     test_count: 9
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
-      - { path: firefox-ios/Account, confidence: medium }
-      - { path: firefox-ios/RustFxA, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
+      - {path: firefox-ios/Account, confidence: medium}
+      - {path: firefox-ios/RustFxA, confidence: medium}
 
   - name: "Find In Page"
     test_count: 9
     automated: 9
     modules:
-      - { path: firefox-ios/Client/Frontend/Browser, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: medium}
     notes: |
       100% automated. Verify FindInPageBar path.
 
@@ -299,22 +299,22 @@ sections:
     test_count: 9
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
-      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
+      - {path: BrowserKit/Sources/WebEngine, confidence: medium}
 
   - name: "Domain Autocomplete"
     test_count: 8
     automated: 8
     modules:
-      - { path: BrowserKit/Sources/UnifiedSearchKit, confidence: medium }
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium }
+      - {path: BrowserKit/Sources/UnifiedSearchKit, confidence: medium}
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: medium}
 
   - name: "Security"
     test_count: 8
     automated: 8
     modules:
-      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
-      - { path: firefox-ios/CredentialProvider, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium}
+      - {path: firefox-ios/CredentialProvider, confidence: medium}
     notes: |
       Vague section. May need to look at individual cases to refine. 100% automated.
 
@@ -322,7 +322,7 @@ sections:
     test_count: 7
     automated: 6
     modules:
-      - { path: BrowserKit/Sources/WebEngine, confidence: high }
+      - {path: BrowserKit/Sources/WebEngine, confidence: high}
     notes: |
       User-Agent switching.
 
@@ -330,28 +330,28 @@ sections:
     test_count: 6
     automated: 3
     modules:
-      - { path: firefox-ios/Account, confidence: high }
-      - { path: firefox-ios/RustFxA, confidence: high }
-      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium }
+      - {path: firefox-ios/Account, confidence: high}
+      - {path: firefox-ios/RustFxA, confidence: high}
+      - {path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium}
 
   - name: "Zooming & panning"
     test_count: 6
     automated: 5
     modules:
-      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+      - {path: BrowserKit/Sources/WebEngine, confidence: medium}
 
   - name: "Toast notifications"
     test_count: 4
     automated: 3
     modules:
-      - { path: BrowserKit/Sources/ComponentLibrary, confidence: medium }
+      - {path: BrowserKit/Sources/ComponentLibrary, confidence: medium}
 
   - name: "Navigation"
     test_count: 4
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Coordinators, confidence: medium }
-      - { path: BrowserKit/Sources/WebEngine, confidence: low }
+      - {path: firefox-ios/Client/Coordinators, confidence: medium}
+      - {path: BrowserKit/Sources/WebEngine, confidence: low}
     notes: |
       Ambiguous — could be in-app navigation (coordinators) or web navigation (WebEngine). Verify.
 
@@ -359,22 +359,22 @@ sections:
     test_count: 4
     automated: 4
     modules:
-      - { path: firefox-ios/Client/Frontend/Microsurvey, confidence: high }
-      - { path: firefox-ios/Client/Frontend/SurveySurface, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/Microsurvey, confidence: high}
+      - {path: firefox-ios/Client/Frontend/SurveySurface, confidence: medium}
 
   - name: "Integration between deeplinks and mobile Apps"
     test_count: 4
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Coordinators, confidence: high }
-      - { path: firefox-ios/Client/Application, confidence: medium }
+      - {path: firefox-ios/Client/Coordinators, confidence: high}
+      - {path: firefox-ios/Client/Application, confidence: medium}
 
   - name: "Clipboard"
     test_count: 3
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Helpers, confidence: low }
-      - { path: firefox-ios/Client/Frontend/TabToolbar, confidence: low }
+      - {path: firefox-ios/Client/Helpers, confidence: low}
+      - {path: firefox-ios/Client/Frontend/TabToolbar, confidence: low}
     notes: |
       Verify ClipboardBarDisplayHandler or similar.
 
@@ -382,28 +382,28 @@ sections:
     test_count: 3
     automated: 3
     modules:
-      - { path: firefox-ios/Client/Coordinators, confidence: high }
-      - { path: firefox-ios/Client/Application, confidence: medium }
+      - {path: firefox-ios/Client/Coordinators, confidence: high}
+      - {path: firefox-ios/Client/Application, confidence: medium}
 
   - name: "Settings - About"
     test_count: 2
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/Settings, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
 
   - name: "Session Restore"
     test_count: 2
     automated: 0
     modules:
-      - { path: firefox-ios/Client/TabManagement, confidence: high }
-      - { path: BrowserKit/Sources/TabDataStore, confidence: high }
+      - {path: firefox-ios/Client/TabManagement, confidence: high}
+      - {path: BrowserKit/Sources/TabDataStore, confidence: high}
 
   - name: "Database Fixtures"
     test_count: 2
     automated: 2
     modules:
-      - { path: BrowserKit/Sources/TestKit, confidence: medium }
-      - { path: firefox-ios/firefox-ios-tests, confidence: medium }
+      - {path: BrowserKit/Sources/TestKit, confidence: medium}
+      - {path: firefox-ios/firefox-ios-tests, confidence: medium}
     notes: |
       Likely test infrastructure, not a product feature.
 
@@ -411,7 +411,7 @@ sections:
     test_count: 1
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Application, confidence: medium }
+      - {path: firefox-ios/Client/Application, confidence: medium}
     notes: |
       App-update / migration flow. Hard to trigger from a code diff alone — almost always exploratory.
 
@@ -419,14 +419,14 @@ sections:
     test_count: 1
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high }
-      - { path: BrowserKit/Sources/WebEngine, confidence: medium }
+      - {path: firefox-ios/Client/Frontend/NativeErrorPage, confidence: high}
+      - {path: BrowserKit/Sources/WebEngine, confidence: medium}
 
   - name: "Authentication"
     test_count: 1
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: high }
+      - {path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: high}
 
   # -----------------------------------------------------------------------------
   # Sections added 2026-07-14 from drift findings on release/v153.0.
@@ -437,7 +437,7 @@ sections:
     test_count: 54
     automated: 0     # to be re-checked from next export
     modules:
-      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Home, confidence: high}
     notes: |
       Added 2026-07-14. Rename of the old "Homepage" section. Same code
       module. Automated Test Name(s) still reference XCUITests/ActivityStream*.
@@ -446,7 +446,7 @@ sections:
     test_count: 10
     automated: 1
     modules:
-      - { path: firefox-ios/Client/Frontend/Home, confidence: high }
+      - {path: firefox-ios/Client/Frontend/Home, confidence: high}
     notes: |
       Added 2026-07-14. Rename of the old "Homescreen redesign V2". Section
       name now signals the feature is deprecated in product but tests are
@@ -456,7 +456,7 @@ sections:
     test_count: 25
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/GoogleLens, confidence: high }
+      - {path: firefox-ios/Client/Frontend/GoogleLens, confidence: high}
     notes: |
       Added 2026-07-14. New feature landing in v153.0 (PR #34604 telemetry,
       #34561 hide in private, #34567 setting).
@@ -465,8 +465,8 @@ sections:
     test_count: 32
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/QuickAnswers, confidence: high }
-      - { path: BrowserKit/Sources/QuickAnswersKit, confidence: high }
+      - {path: firefox-ios/Client/Frontend/QuickAnswers, confidence: high}
+      - {path: BrowserKit/Sources/QuickAnswersKit, confidence: high}
     notes: |
       Added 2026-07-14. Voice AI feature landing in v153.0 (PR #34483,
       largest PR in the release). Both the Frontend/QuickAnswers UI and
@@ -476,8 +476,8 @@ sections:
     test_count: 19
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Frontend/WebCompatReporter, confidence: high }
-      - { path: BrowserKit/Sources/WebCompatReporterKit, confidence: high }
+      - {path: firefox-ios/Client/Frontend/WebCompatReporter, confidence: high}
+      - {path: BrowserKit/Sources/WebCompatReporterKit, confidence: high}
     notes: |
       Added 2026-07-14. New feature landing in v153.0 (PR #34499 UI shell,
       #34309 Glean ping).
@@ -486,8 +486,8 @@ sections:
     test_count: 21
     automated: 0
     modules:
-      - { path: firefox-ios/Client/Application/RemoteSettings/Application Services/, confidence: medium }
-      - { path: firefox-ios/Client/Frontend/Browser/FirefoxTabContentBlocker.swift, confidence: medium }
+      - {path: firefox-ios/Client/Application/RemoteSettings/Application Services/, confidence: medium}
+      - {path: firefox-ios/Client/Frontend/Browser/FirefoxTabContentBlocker.swift, confidence: medium}
     notes: |
       Added 2026-07-14. The AS-prefixed remote-settings ad-blocker service
       files live under Client/Application/RemoteSettings/Application Services/.
@@ -517,6 +517,23 @@ sections:
 # Modules that exist in code but have NO clear TestRail section mapping
 # (worth knowing — these are blind spots in the catalog)
 # -----------------------------------------------------------------------------
+  - name: App Icon  # added 2026-07-28 by align.py
+    test_count: 11
+    automated: 0
+    modules:
+      - {path: firefox-ios/Client/Frontend/Settings, confidence: high}
+  - name: Search bar for Bookmarks 🗃  # added 2026-07-28 by align.py
+    test_count: 23
+    automated: 6
+    modules:
+      - {path: firefox-ios/Client/Frontend/Library, confidence: high}
+      - {path: firefox-ios/Storage, confidence: medium}
+  - name: Swipe for Tab Tray 🤳  # added 2026-07-28 by align.py
+    test_count: 9
+    automated: 0
+    modules:
+      - {path: firefox-ios/Client/Frontend/Browser, confidence: high}
+      - {path: firefox-ios/Client/TabManagement, confidence: medium}
 modules_without_clear_section:
   - BrowserKit/Sources/Redux                  # State management — affects everything indirectly
   - BrowserKit/Sources/Common                 # Shared utilities — affects everything indirectly
