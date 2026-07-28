@@ -17,7 +17,7 @@
 | SC-51C | Galaxy S22 | 36 | Low |
 | SC-51E | Galaxy S24 | 36 | Low |
 | SC-53C | Galaxy A53 5G | 36 | Low |
-| SCG13 | Galaxy S22 | 36 | Medium |
+| SCG13 | Galaxy S22 | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
@@ -62,6 +62,7 @@
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a52xq | Galaxy A52 5G | 34 | Low |
 | a54x | Galaxy A54 5G | 34 | High |
+| a54xue | Galaxy A54 5G | 36 | Medium |
 | a55xzh | Galaxy A55 5G | 36 | Low |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
@@ -77,6 +78,7 @@
 | b4qsqw | Galaxy Z Flip4 | 36 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
+| b5qxeea | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qsqw | Galaxy Z Flip6 | 36 | None |
 | blazer | Pixel 10 Pro | 36 | Low |
@@ -88,6 +90,7 @@
 | c2qksw | Galaxy Note20 Ultra 5G | 33 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
+| cancun | moto g14 | 34 | Low |
 | cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
@@ -108,6 +111,7 @@
 | e1s | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24+ | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
+| e2sksx | Galaxy S24+ | 36 | Medium |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | e3q | Galaxy S24 Ultra | 36 | Low |
 | e3qcsx | Galaxy S24 Ultra | 36 | Low |
@@ -151,11 +155,13 @@
 | lyriq | motorola edge 40 | 34 | Low |
 | m1q | Galaxy S26 | 36 | Medium |
 | m2q | Galaxy S26+ | 36 | Medium |
+| malmo | moto g85 5G | 36 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Low |
 | mustang | Pixel 10 Pro XL | 36 | Low |
 | o1q | Galaxy S21 5G | 34 | Medium |
 | o1q | Galaxy S21 5G | 35 | Low |
+| o1s | Galaxy S21 5G | 35 | Low |
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
@@ -185,6 +191,7 @@
 | r0qksx | Galaxy S22 | 36 | Medium |
 | r11 | Pixel Watch | 30 | Medium |
 | r11q | Galaxy S23 FE | 34 | Low |
+| r11qcs | Galaxy S23 FE | 36 | Low |
 | r11s | Galaxy S23 FE | 36 | Low |
 | r12s | Galaxy S24 FE | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
