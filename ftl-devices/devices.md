@@ -1,9 +1,9 @@
 | Model | Name | Version | Capacity |
 | --- | --- | --- | --- |
-| 1610 | Y55s | 23 | Medium |
 | A402SO | Xperia 10 VI | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Low |
 | F01L | F-01L | 27 | High |
+| Infinix-X6525 | Infinix SMART 8 | 33 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
@@ -22,8 +22,9 @@
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Low |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
+| TECNO-BF7 | TECNO | 31 | Low |
 | TECNO-BG6 | SPARK Go 2024 | 33 | Low |
-| TECNO-KI5k | TECNO SPARK 10C | 31 | Medium |
+| TECNO-KI5k | TECNO SPARK 10C | 31 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
@@ -74,6 +75,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b0qksx | Galaxy S22 Ultra | 36 | Medium |
+| b0qxxx | Galaxy S22 Ultra | 36 | Medium |
 | b4q | Galaxy Z Flip4 | 33 | Medium |
 | b4qsqw | Galaxy Z Flip4 | 36 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
