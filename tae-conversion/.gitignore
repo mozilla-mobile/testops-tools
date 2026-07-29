@@ -1,0 +1,8 @@
+# Secrets — never commit. effbug.py reads this; see tools/.eff.env.example.
+tools/.eff.env
+
+# Disposable run artifacts produced by effloop/effwatch.
+conversion-runs/*/
+conversion-runs/_queue/
+conversion-runs/_git/
+conversion-runs/_bug/
