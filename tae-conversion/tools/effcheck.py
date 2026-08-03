@@ -49,6 +49,12 @@ def basepage_verbs(eff_root):
     except Exception:
         return set()
 
+def _strip_comments(txt):
+    """Drop // line comments and /* */ blocks, so a placeholder comment cannot masquerade as code."""
+    txt = re.sub(r"/\*.*?\*/", "", txt, flags=re.S)
+    return re.sub(r"//[^\n]*", "", txt)
+
+
 def check_file(path, strings, app_root, eff_root, verbs, tag_cache):
     txt = open(path, encoding="utf-8").read()
     p = path.replace("\\", "/")
@@ -103,12 +109,57 @@ def check_file(path, strings, app_root, eff_root, verbs, tag_cache):
         # CAT (B2): no inline selectors in a page object
         if "SelectorStrategy." in txt:
             add("WARN", "CAT  inline Selector(...) in a page object — move it into the *Selectors catalog (gotcha B2)")
-        # NAV (B1): registered edges must have steps OR a launch config
-        for reg in re.findall(r"NavigationRegistry\.register\((.*?)\)\s*(?:\}|$)", txt, re.S):
-            has_steps = re.search(r"steps\s*=\s*listOf\(\s*[^)\s]", reg)
-            has_launch = "launch" in reg and "LaunchConfig" in reg
-            if not has_steps and not has_launch:
-                add("FAIL", "NAV  page registers an edge with empty steps and no launch=LaunchConfig(...) (gotcha B1)")
+        # NAV (B1): registered edges must have steps OR a launch config.
+        #
+        # Comments are stripped first. The previous check tested `listOf(\s*[^)\s]`, and a `//`
+        # placeholder comment inside an otherwise-empty listOf() satisfied `[^)\s]` — so an edge whose
+        # steps were nothing but a "TODO: add a nav path" comment was reported as having steps. That is
+        # exactly how ShareOverlayPage shipped a no-op edge that made navigateToPage() silently succeed
+        # while never leaving the previous screen (bug 2060297).
+        nav_txt = _strip_comments(txt)
+        is_component = re.search(r"class\s+\w*Component\b", txt) is not None
+        # Match every register block, keyed on the `from`/`to` pair rather than on what follows the
+        # closing paren. The previous pattern required the block to be followed by `}` or end-of-file, so
+        # in a page with several edges only the LAST was ever examined — which is why the legitimate
+        # empty-step edges in HomePage, OnboardingPage and MainMenuPage went unreported while unfinished
+        # forward edges elsewhere did not.
+        for reg in re.finditer(
+            r"NavigationRegistry\.register\(\s*from\s*=\s*([^,]+),\s*to\s*=\s*([^,]+),(.*?)\n\s*\)",
+            nav_txt, re.S,
+        ):
+            src, dst, body = reg.group(1).strip(), reg.group(2).strip(), reg.group(3)
+            has_steps = re.search(r"steps\s*=\s*listOf\(\s*[^)\s]", body)
+            has_launch = "launch" in body and "LaunchConfig" in body
+            if has_steps or has_launch:
+                continue
+            # Empty steps are correct in three cases, so only a forward edge into a distinct screen is a
+            # bug — you cannot arrive somewhere new by performing no actions:
+            #   from = "AppEntry"  the app launches straight into this screen (HomePage, OnboardingPage)
+            #   from = pageName    a return/dismiss edge; leaving the overlay needs no action (MainMenuPage)
+            #   *Component         the component is already on its parent screen (ToolbarComponent)
+            if src == '"AppEntry"' or src == "pageName" or is_component:
+                continue
+            add("FAIL", f"NAV  edge {src} -> {dst} has empty steps and no launch=LaunchConfig(...): "
+                        "a forward edge into a screen cannot be reached by doing nothing (gotcha B1)")
+
+        # ANCHOR (B1b): the page's selector catalog must carry a "requiredForPage" entry, otherwise the
+        # arrival check has nothing to assert and navigateToPage() reports success for any screen. Paired
+        # with the NAV check above: either gap alone silently turns navigation into a no-op, and both
+        # shipped undetected (bugs 2060297 and 2060305) because neither was checked here.
+        # Only demanded of pages that actually register an edge. A page with no edge cannot be navigated
+        # to at all — navigateToPage() fails with "no navigation path found" — so there is no arrival
+        # check to anchor and no bug to prevent. Without this condition the rule pushes you to invent an
+        # unverifiable requiredForPage on unfinished scaffolding, which is worse than leaving it absent.
+        registers_edge = "NavigationRegistry.register(" in nav_txt
+        cat = re.search(r"return\s+([A-Za-z0-9_]+)\.all", txt) if registers_edge else None
+        if cat:
+            cat_path = os.path.join(eff_root, "selectors", cat.group(1) + ".kt")
+            if os.path.isfile(cat_path):
+                if "requiredForPage" not in open(cat_path, encoding="utf-8").read():
+                    add("FAIL", f"ANCHOR {cat.group(1)} has no \"requiredForPage\" selector — "
+                                "the page has no arrival check, so navigateToPage() cannot fail (gotcha B1)")
+            else:
+                add("WARN", f"ANCHOR could not locate {cat.group(1)}.kt to check for requiredForPage")
     # VERB: moz* verbs used exist on BasePage
     if verbs:
         for v in sorted(set(re.findall(r"\.(moz[A-Za-z0-9_]+)\(", txt))):
