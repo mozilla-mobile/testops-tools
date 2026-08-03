@@ -34,25 +34,51 @@ def main():
         sys.exit(1)
     full = open(rr, encoding="utf-8", errors="ignore").read()
 
-    # --- Scope to the LAST run only. A report can hold several `run started:`..`run finished:`
-    # blocks (retries, or stale buffer bleed if a `logcat -c` didn't fully clear). Summing failures
-    # across all of them caused false negatives (a prior failed attempt inflated the current verdict).
-    # We evaluate the most recent run; earlier blocks only feed the flakiness signal below.
+    # --- Evaluate EVERY run block, not just the last one.
+    #
+    # A single class request legitimately produces many blocks: one for the class run, then one per
+    # test that the retry rule re-ran individually. Scoping to the last block (the previous behaviour)
+    # read the verdict off whichever 1-test re-run happened to land last, which produced three distinct
+    # wrong answers:
+    #   - every test not in that final block was reported "not-run", even though it ran and passed;
+    #   - `failed_total` came from that block alone, so a real failure recorded in an earlier block was
+    #     reported as 0 failures — a green verdict for a red test;
+    #   - `retried` only looked at the last block, so a report with 8 runs of a 7-test class still said
+    #     retried=false.
+    #
+    # Per-test truth comes from the report's own `failed:` / `ignored:` / `started:` markers, aggregated
+    # across all blocks. A test that failed in ANY block is not clean, even if a later re-run passed —
+    # that is precisely the retry-pass the done-gate exists to catch.
     starts = [m.start() for m in re.finditer(r"^run started:", full, re.M)]
-    txt = full[starts[-1]:] if starts else full
+    bounds = starts + [len(full)]
+    blocks = [full[bounds[i]:bounds[i + 1]] for i in range(len(starts))] or [full]
 
-    started = set(re.findall(r"started:\s*([A-Za-z0-9_]+)\s*\(", txt))
-    ignored = set(re.findall(r"ignored:\s*([A-Za-z0-9_]+)\s*\(", txt))
-    # failures reported by the LAST run block (not summed across the whole buffer)
-    fails = [int(f) for f in re.findall(r"run finished:\s*\d+\s*tests?,\s*(\d+)\s*failed", txt)]
-    failed_total = sum(fails)  # normally one finished-line in the last block
+    def names(pattern, text):
+        return set(re.findall(pattern + r":\s*([A-Za-z0-9_]+)\s*\(", text))
 
-    # Flakiness signal — surface a retry WITHIN the current run instead of masking it.
-    # Scope to the last block (txt), NOT the whole file: earlier blocks may be stale buffer bleed
-    # (pre-`logcat -c`-fix artifacts) and their retries are not this run's. A `Started try #2+` inside
-    # the current run means "passed on retry" = green-but-flaky. n_runs is informational only (whole-file).
+    started, ignored, failed_names = set(), set(), set()
+    passed_in_some_block = set()
+    for b in blocks:
+        b_started, b_ignored, b_failed = names("started", b), names("ignored", b), names("failed", b)
+        started |= b_started
+        ignored |= b_ignored
+        failed_names |= b_failed
+        # Ran in this block and this block did not record it failing → it passed here.
+        passed_in_some_block |= (b_started - b_failed - b_ignored)
+
+    # Count actual per-test failures observed anywhere in the report, not one block's summary line.
+    failed_total = len(failed_names)
+
     n_runs = len(starts)
-    retried = bool(re.search(r"Started try #(?:[2-9]|\d\d)", txt))
+    # Retried if the harness logged a second attempt anywhere, or a test both failed and later passed.
+    #
+    # Deliberately NOT keyed on n_runs > 1: effloop emits one block per test after the class run as
+    # normal behaviour, so a clean 6-test class legitimately reports 7 blocks. Treating that as a retry
+    # marked every multi-test run flaky.
+    retried = (
+        bool(re.search(r"Started try #(?:[2-9]|\d\d)", full)) or
+        bool(failed_names & passed_in_some_block)
+    )
 
     # gradle raw cross-check (authoritative per-test SKIPPED/FAILED)
     raw_txt = open(raw, encoding="utf-8", errors="ignore").read() if os.path.isfile(raw) else ""
@@ -79,17 +105,27 @@ def main():
     tests = []
     for name in expected:
         rs = raw_status(name)
+        # Order matters. The report's own `failed:` marker is checked BEFORE falling through to
+        # "started and not otherwise flagged → passed": previously a test whose gradle line did not
+        # match raw_status() but which appeared in `started` was reported passed outright, so a genuine
+        # failure came back green whenever that regex missed.
         if name in ignored or rs == "SKIPPED":
             status, passed = "skipped", False
-        elif rs == "FAILED":
-            status, passed = "failed", False
+        elif name in failed_names or rs == "FAILED":
+            # Failed at least once. If a later block ran it green, it is a retry-pass: usable but flaky,
+            # never "clean". Kept out of `passed` so `ok` stays false and the caller cannot mistake it
+            # for done.
+            if name in passed_in_some_block:
+                status, passed = "retry-pass", False
+            else:
+                status, passed = "failed", False
         elif name not in started:
             status, passed = "not-run", False
         else:
             status, passed = "passed", True
         ok = ok and passed
         entry = {"name": name, "status": status, "passed": passed, "gradle": rs}
-        if not passed and status in ("failed", "not-run"):
+        if not passed and status in ("failed", "not-run", "retry-pass"):
             exc = failure_excerpt(name)
             if exc:
                 entry["failure_excerpt"] = exc
@@ -107,7 +143,8 @@ def main():
             if t["passed"]:
                 print(f"  ✔ {t['name']}: executed" + (f" (gradle:{t['gradle']})" if t["gradle"] else ""))
             else:
-                lbl = {"skipped": "SKIPPED/ignored — NOT a pass", "failed": "FAILED in gradle log",
+                lbl = {"skipped": "SKIPPED/ignored — NOT a pass", "failed": "FAILED",
+                       "retry-pass": "FAILED then passed on a re-run — flaky, NOT done",
                        "not-run": "never executed (no 'started:' line)"}[t["status"]]
                 print(f"  ✖ {t['name']}: {lbl}")
         if failed_total > 0:
