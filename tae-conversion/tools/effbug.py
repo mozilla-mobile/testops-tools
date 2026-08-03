@@ -198,6 +198,13 @@ def run(req):
         for k in ("summary", "status", "resolution", "keywords", "whiteboard", "priority", "severity"):
             if req.get(k):
                 fields[k] = req[k]
+        # Relations take an add/remove object on update (unlike create, which takes a plain list) —
+        # a bare list would REPLACE the existing set, which on a meta bug would silently drop every
+        # other bug it tracks. Accept a list for convenience and wrap it as {"add": [...]}.
+        for k in ("depends_on", "blocks", "see_also"):
+            v = req.get(k)
+            if v:
+                fields[k] = {"add": v} if isinstance(v, list) else v
         if not fields:
             raise RuntimeError("update: nothing to change (pass assigned_to/self_assign or a field)")
         updated, failed = [], []
