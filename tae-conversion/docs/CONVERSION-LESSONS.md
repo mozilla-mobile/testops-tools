@@ -129,6 +129,14 @@ selector (e.g. the trust-panel website tag), re-verify the WHOLE class, not just
 - Reality: the Sheet is systems-of-record for status, but round-tripping it to *pick* is slow and burns tokens.
   The working queue is local: `testrail_smoke_pool.txt` (prioritized) minus `converted_rows.csv` (done).
 - Rule: `effnext --json` for the next candidate; reconcile the Sheet in a batch after landing, not per-pick.
+- Correction (2026-08-03): `converted_rows.csv` lags the tree badly — it proposed a test that was already
+  converted and committed, and 11 of its top 30 candidates were already in-tree. `effnext` now greps the
+  efficiency tests package itself and drops those (`--no-tree-check` opts out). Note `effscaffold`'s
+  `already_converted` does NOT cover this: it lists matching *files*, not methods.
+- Rule (2026-08-03): a candidate you decide not to take — too complex for whoever is picking it up, blocked
+  on a harness gap, deliberately deferred — gets recorded with `effnext --skip Class.method --reason "…"`
+  rather than mentally stepped over, so the next caller gets a different pick and the reason survives.
+  Skips are advisory and reversible (`--unskip`, `--skips`); they never mark a test converted.
 
 ## D3. Settings sub-pages need a back-edge to Home to load a URL after a settings change.
 - Assumed: navigateToPage(BrowserPage) works from any page.
@@ -211,6 +219,53 @@ the bottom navigation bar, only a content-description. A Compose exact/merged co
 also fails where the device-level one succeeds. Three of four test failures debugged on 2026-07-28 were
 this single pattern. See gotcha A12.
 
+
+## H. Acting on a control vs. finding it (2026-08-03, translations sheet + credit cards)
+
+**H1. "Clicked" in the report does not mean the app acted.**
+- Assumed: if `mozClick` reports success, the click did something.
+- Reality: a Compose button rendered `enabled = false` still accepts the gesture and silently skips
+  `onClick`. The failure then surfaces wherever the effect was expected — 25s and several steps away from
+  the cause.
+- Rule: when a control's enabled state depends on async work, wait for enabled before clicking, and make
+  sure the gate really blocks (a gate returning in tens of ms is not gating). See gotchas A16/A17.
+- Tooling: 🛠️ `mozWaitUntilEnabled` was written for this and is not landed yet; a check that flags
+  `mozClick` on a `COMPOSE_BY_TEXT` selector would catch the no-op-gate variant statically.
+
+**H2. Selector strategy decides whether you can even observe actionability.**
+- Assumed: text selectors are interchangeable for reading and for clicking.
+- Reality: `COMPOSE_BY_TEXT` resolves the text node inside the button (unmerged tree), which reports
+  enabled while the button is disabled. `COMPOSE_BY_TEXT_MERGED` resolves the button.
+- Rule: read with `COMPOSE_BY_TEXT`, act with `COMPOSE_BY_TEXT_MERGED`.
+
+**H3. A default 5s locate is not a synchronisation primitive.**
+- Reality: three separate defects found in one 2026-08-03 sweep (bugs 2060405, 2060414, 2060415) were all a
+  default `mozVerify` timeout standing in for a readiness signal that never came.
+- Rule: gate on the thing that means "ready" (the detected language rendered, the sheet gone, the toolbar
+  usable again), and prefer a positive assertion over waiting for something to disappear — absence cannot
+  distinguish "it worked" from "the click was dropped".
+
+## I. Paperwork that is part of the conversion, not after it (2026-08-03)
+
+**I1. The `@Converted` annotation belongs in the conversion commit.**
+- Reality: the burndown keys off that marker, so a conversion that lands without it reads as unconverted.
+  Two conversions in one stack were caught missing it during a pre-submit audit, requiring a mid-stack
+  rewrite that would have been free if written at the time.
+- Rule: annotate the legacy method in the same commit; use `notes` for any deliberate deviation (e.g. local
+  mockWebServer asset instead of an external URL).
+- Tooling: 🛠️ a pre-submit check ("every conversion commit touches a legacy test and adds `@Converted`")
+  would make this mechanical.
+
+**I2. Conversion bugs must block the tracking meta; harness bugs must not.**
+- Reality: the meta (bug 2030727) tracks the campaign through `depends_on`. A conversion bug that is never
+  linked is invisible in the burndown; a tooling/harness bug that *is* linked pollutes it.
+- Rule: set `blocks` at filing time, and only for test-conversion bugs.
+
+**I3. Bugzilla descriptions cannot be edited via the API.**
+- Reality: `PUT /rest/bug/comment/<id>` returns 404 (code 32614); only comment *tags* are writable. A wrong
+  comment 0 can only be corrected by a human in the web UI.
+- Rule: get the mechanism right before filing, or expect to hand a human the corrected text. Prefer filing
+  after the diagnosis is confirmed, not while it is still a theory.
 
 ## Open gaps (unresolved — pick up on next attempt)
 

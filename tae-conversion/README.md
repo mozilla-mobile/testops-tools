@@ -47,7 +47,7 @@ Optional environment, all with sane fallbacks:
 
 | Tool | Who runs it | Does |
 |---|---|---|
-| `effnext.py` | agent | Next unconverted candidate from the local pool minus the done-ledger. Local only, no network. `--json`. |
+| `effnext.py` | agent | Next unconverted candidate from the local pool minus the done-ledger, minus skips, minus anything already in the efficiency tests package. Local only, no network. `--skip`/`--unskip`/`--skips`, `--json`. |
 | `effscaffold.py` | agent | Front-loads a conversion: legacy body, TestRail id, already-converted check, robots + selector lines, existing coverage. |
 | `effcheck.py` | agent | Static pre-flight, no device. Resolution, empty nav paths, inline selectors, missing verbs, test-class boilerplate. Exit ≠ 0 = fix something. |
 | `effbuild.py` | agent | Gradle log → one-line verdict plus only the compile errors. `--json`. |
@@ -78,8 +78,22 @@ If both work, the host side is wired. Then attach a device and start `effwatch.s
 - `conversion-runs/testrail_smoke_pool.txt` — prioritized candidates, one `Class.method` per line.
 - `tools/converted_rows.csv` — the done-ledger.
 
-`effnext` returns the first pool entry absent from the ledger. Replace both files to point
-the toolchain at a different project.
+- `conversion-runs/skiplist.tsv` — candidates deliberately passed over, with reasons. Created on first
+  `--skip`; advisory only, and a skip never marks a test converted.
+
+`effnext` returns the first pool entry that is absent from the ledger, not skipped, and whose method does not
+already exist in the efficiency tests package (the ledger lags the tree — that last check is what stops it
+proposing work that is already done; `--no-tree-check` disables it, `--repo`/`$REPO` points it at a checkout).
+Replace the pool and ledger to point the toolchain at a different project.
+
+Skipping a candidate:
+
+```bash
+python3 tools/effnext.py --skip CustomTabsTest.verifyLoginSaveInCustomTabTest \
+        --reason "needs save-login capability first"
+python3 tools/effnext.py --skips      # what's parked, and why
+python3 tools/effnext.py --unskip CustomTabsTest.verifyLoginSaveInCustomTabTest
+```
 
 ## Docs
 

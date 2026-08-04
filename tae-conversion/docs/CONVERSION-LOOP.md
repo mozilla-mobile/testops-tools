@@ -23,13 +23,25 @@ The end-to-end loop for landing a legacy→efficiency conversion. Who runs what:
 ## The 5 steps
 
 ### 1. Do the conversion work (Claude, sandbox)
-Pick the next test with **`effnext --json`** (local pool minus done — never the Google Sheet). Convert it onto
+Pick the next test with **`effnext --json`** (local pool minus done minus skipped, and minus anything whose
+method already exists in the efficiency tests package — never the Google Sheet). If the pick is not one you
+should take — too complex for who is picking it up, blocked on a harness gap, deliberately deferred — record
+that instead of stepping over it: `effnext --skip Class.method --reason "…"` writes it to
+`conversion-runs/skiplist.tsv` and prints the new next pick. Skips are advisory and reversible
+(`--unskip`, `--skips`, `--include-skipped`); they never mark a test converted. Convert it onto
 ui/efficiency; `effcheck.py` (static pre-flight) then the build-run via `effwatch`, reading **only** the JSON
 verdicts (`effbuild --json`, `effverify --json`) — never the raw run report. Iterate until `clean`=true (or
 "good enough + notes"). Log lessons to CONVERSION-LESSONS.md.
 
+### 1b. Close out the conversion before you leave it (Claude, sandbox)
+Annotate the legacy method `@Converted(replacedBy = [...], bug = NNNNN, since = "YYYY-MM")` **in the same
+commit as the conversion** — the burndown keys off that marker, so a conversion landing without it reads as
+unconverted. Record deliberate deviations in `notes`.
+
 ### 2. Create the Bugzilla bug → get the number (Claude → bridge → `effbug`)
-Claude drops `conversion-runs/_queue/<id>.request.json`:
+Claude drops `conversion-runs/_queue/<id>.request.json`. Test-conversion bugs must `blocks` the tracking
+meta (2030727); tooling/harness/docs bugs must not. Get the mechanism right *before* filing — BMO has no API
+for editing a description, so a wrong comment 0 needs a human in the web UI.
 ```json
 { "bug": "create",
   "summary": "[efficiency] Convert <Test>.<method> to ui/efficiency",
@@ -88,6 +100,7 @@ trailers. Note: base landed on **autoland** (callsign `FIREFOXAUTOLAND`), which 
 web UI after submit. Submitting/landing stays with you: the bridge refuses submit and Claude never runs it.
 
 ## After landing
-Run the repo-side reconcile (see the tae-conversion README) so the tracker's physical/in-review counts and the
-`@Converted` annotations catch up, and annotate the converted legacy methods with
-`@Converted(replacedBy = [...], bug = NNNNN, since = "YYYY-MM")` once green + landed.
+Run the repo-side reconcile (see the tae-conversion README) so the tracker's physical/in-review counts catch
+up with what landed. The `@Converted` annotations are **not** part of this step — they ship in the conversion
+commit itself (step 1b). Annotating after the fact leaves a window where the burndown reads the conversion as
+missing, and in practice it is simply forgotten.
