@@ -5,22 +5,36 @@ effnext — pick the next legacy test(s) to convert, from LOCAL files only. No G
 Source of truth for "what to do next":
   - candidate pool : conversion-runs/testrail_smoke_pool.txt  (prioritized `Class.method<TAB>method` lines)
   - already done   : tools/converted_rows.csv                 (Class,Method,...,Converted,... rows)
-The next candidate = first pool entry not marked Converted in converted_rows.csv.
+  - skipped        : conversion-runs/skiplist.tsv             (`Class.method<TAB>reason<TAB>date` lines)
+The next candidate = first pool entry that is neither marked Converted nor skipped.
 
 converted_rows.csv is a fast snapshot and can lag reality (the campaign notes warn the "Converted" column is
-not authoritative). This tool is only for cheaply *proposing* candidates; gate 1 (`effscaffold`) does the
-authoritative "already exists in the efficiency package?" grep before you actually convert.
+not authoritative), so by default effnext also greps the efficiency tests package for `fun <method>(` and
+drops anything already present in-tree. Point it at a checkout with --repo or $REPO; pass --no-tree-check to
+turn the grep off (it is skipped automatically when the checkout cannot be found).
+
+Skipping: a candidate you do not want — too complex for who is picking it up, blocked on a harness gap,
+deliberately deferred — should be recorded rather than mentally stepped over, so the next caller (and the
+next person) gets a different pick. Skips are advisory and reversible; they never mark a test converted.
 
 Usage:
-  effnext.py [-n N] [--json]      # print the next N (default 1) unconverted candidates
-Exit 0 always (unless files are missing).
+  effnext.py [-n N] [--json]                     # print the next N (default 1) candidates
+  effnext.py --skip Class.method [--reason "…"]  # record a skip, then show the new next pick
+  effnext.py --unskip Class.method               # remove a skip
+  effnext.py --skips                             # list what is currently skipped
+  effnext.py --include-skipped                   # ignore the skiplist for this call
+Exit 0 always (unless files are missing, or --skip/--unskip names something not in the pool).
 """
-import csv, json, os, sys
+import csv, datetime, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 POOL = os.path.join(ROOT, "conversion-runs", "testrail_smoke_pool.txt")
 DONE = os.path.join(HERE, "converted_rows.csv")
+SKIPS = os.path.join(ROOT, "conversion-runs", "skiplist.tsv")
+
+DEFAULT_REPO = os.path.expanduser(os.environ.get("REPO", "~/Workspace/firefox"))
+EFF_TESTS = "mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/tests"
 
 
 def load_done():
@@ -49,41 +63,159 @@ def load_pool():
     return out
 
 
+def load_skips():
+    """fq -> reason. Missing file is normal (nothing skipped yet)."""
+    skips = {}
+    if not os.path.isfile(SKIPS):
+        return skips
+    with open(SKIPS, encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.startswith("#"):
+                continue
+            parts = line.split("\t")
+            skips[parts[0].strip()] = parts[1].strip() if len(parts) > 1 else ""
+    return skips
+
+
+def write_skips(skips):
+    os.makedirs(os.path.dirname(SKIPS), exist_ok=True)
+    existing_dates = {}
+    if os.path.isfile(SKIPS):
+        with open(SKIPS, encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                parts = line.rstrip("\n").split("\t")
+                if len(parts) > 2:
+                    existing_dates[parts[0].strip()] = parts[2].strip()
+    today = datetime.date.today().isoformat()
+    with open(SKIPS, "w", encoding="utf-8") as f:
+        f.write("# Candidates deliberately passed over by effnext. Advisory only — a skip never marks a\n")
+        f.write("# test converted. Remove a line (or run `effnext.py --unskip <Class.method>`) to requeue it.\n")
+        f.write("# Class.method\treason\tdate\n")
+        for fq in sorted(skips):
+            f.write(f"{fq}\t{skips[fq]}\t{existing_dates.get(fq, today)}\n")
+
+
+def converted_in_tree(repo):
+    """Method names with a `fun <name>(` in the efficiency tests package. Empty set if the repo isn't there."""
+    tests_dir = os.path.join(repo, EFF_TESTS)
+    if not os.path.isdir(tests_dir):
+        return None
+    names = set()
+    pattern = re.compile(r"\bfun\s+([A-Za-z0-9_]+)\s*\(")
+    for entry in os.listdir(tests_dir):
+        if not entry.endswith(".kt"):
+            continue
+        with open(os.path.join(tests_dir, entry), encoding="utf-8", errors="ignore") as f:
+            names.update(pattern.findall(f.read()))
+    return names
+
+
+def emit(payload, as_json, lines):
+    print(json.dumps(payload) if as_json else "\n".join(lines))
+
+
 def main():
     args = sys.argv[1:]
     as_json = "--json" in args
     args = [a for a in args if a != "--json"]
+
+    def opt(flag):
+        if flag in args:
+            i = args.index(flag)
+            if i + 1 >= len(args):
+                print(f"✖ {flag} needs a value")
+                sys.exit(2)
+            return args[i + 1]
+        return None
+
     n = 1
     if "-n" in args:
-        i = args.index("-n")
         try:
-            n = int(args[i + 1])
+            n = int(args[args.index("-n") + 1])
         except (IndexError, ValueError):
-            print("usage: effnext.py [-n N] [--json]"); sys.exit(2)
+            print(__doc__.strip())
+            sys.exit(2)
+
+    repo = opt("--repo") or DEFAULT_REPO
+    tree_check = "--no-tree-check" not in args
+    include_skipped = "--include-skipped" in args
+    to_skip = opt("--skip")
+    to_unskip = opt("--unskip")
 
     for p in (POOL, DONE):
         if not os.path.isfile(p):
             msg = f"missing required file: {p}"
-            print(json.dumps({"tool": "effnext", "ok": False, "error": msg}) if as_json else f"✖ {msg}")
+            emit({"tool": "effnext", "ok": False, "error": msg}, as_json, [f"✖ {msg}"])
             sys.exit(1)
 
-    done = load_done()
     pool = load_pool()
-    pending = [(c, m, fq) for (c, m, fq) in pool if (c, m) not in done]
+    pool_fqs = {fq for (_, _, fq) in pool}
+    skips = load_skips()
+
+    if "--skips" in args:
+        payload = {"tool": "effnext", "ok": True, "skipped": [{"fqmethod": k, "reason": v} for k, v in sorted(skips.items())]}
+        lines = [f"effnext — {len(skips)} skipped"] + [f"  ⤳ {k}{('  — ' + v) if v else ''}" for k, v in sorted(skips.items())]
+        emit(payload, as_json, lines or ["effnext — nothing skipped"])
+        sys.exit(0)
+
+    for flag, fq in (("--skip", to_skip), ("--unskip", to_unskip)):
+        if fq and fq not in pool_fqs:
+            msg = f"{fq} is not in the pool ({POOL}); expected Class.method"
+            emit({"tool": "effnext", "ok": False, "error": msg}, as_json, [f"✖ {msg}"])
+            sys.exit(2)
+
+    if to_unskip:
+        skips.pop(to_unskip, None)
+        write_skips(skips)
+    if to_skip:
+        skips[to_skip] = (opt("--reason") or "").strip()
+        write_skips(skips)
+
+    done = load_done()
+    in_tree = converted_in_tree(repo) if tree_check else None
+
+    pending, already_in_tree = [], 0
+    for (c, m, fq) in pool:
+        if (c, m) in done:
+            continue
+        if in_tree is not None and m in in_tree:
+            already_in_tree += 1
+            continue
+        if not include_skipped and fq in skips:
+            continue
+        pending.append((c, m, fq))
     picks = pending[:n]
 
-    if as_json:
-        print(json.dumps({
-            "tool": "effnext", "ok": True,
-            "pool_total": len(pool), "done": len(done), "pending": len(pending),
-            "next": [{"class": c, "method": m, "fqmethod": fq} for (c, m, fq) in picks],
-        }))
-    else:
-        print(f"effnext — {len(pending)} pending / {len(pool)} pool ({len(done)} converted)")
-        for c, m, fq in picks:
-            print(f"  → {fq}")
-        if not picks:
-            print("  (nothing pending — pool exhausted or all marked converted)")
+    payload = {
+        "tool": "effnext", "ok": True,
+        "pool_total": len(pool), "done": len(done), "pending": len(pending),
+        "skipped": len(skips), "already_in_tree": already_in_tree,
+        "tree_checked": in_tree is not None,
+        "next": [{"class": c, "method": m, "fqmethod": fq} for (c, m, fq) in picks],
+    }
+    if to_skip:
+        payload["just_skipped"] = to_skip
+    if to_unskip:
+        payload["just_unskipped"] = to_unskip
+
+    lines = []
+    if to_skip:
+        lines.append(f"⤳ skipped {to_skip}{('  — ' + skips[to_skip]) if skips[to_skip] else ''}")
+    if to_unskip:
+        lines.append(f"↩ unskipped {to_unskip}")
+    summary = f"effnext — {len(pending)} pending / {len(pool)} pool ({len(done)} converted"
+    if already_in_tree:
+        summary += f", {already_in_tree} already in-tree"
+    if skips and not include_skipped:
+        summary += f", {len(skips)} skipped"
+    lines.append(summary + ")")
+    if in_tree is None and tree_check:
+        lines.append(f"  (no checkout at {repo} — tree check skipped; pass --repo or set $REPO)")
+    lines += [f"  → {fq}" for (_, _, fq) in picks]
+    if not picks:
+        lines.append("  (nothing pending — pool exhausted, or everything left is converted or skipped)")
+    emit(payload, as_json, lines)
     sys.exit(0)
 
 

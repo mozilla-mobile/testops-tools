@@ -6,12 +6,12 @@ catch them. Use it two ways: (1) a **review checklist** against new page objects
 
 Each entry: **symptom → cause → check**. Add new ones as we find them; link the Jira/bug where relevant.
 
-Last updated: 2026-07-28.
+Last updated: 2026-08-03.
 
 > The distilled, landed subset of this catalog lives in-tree at
 > `<fenix>/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/docs/gotchas.md`.
 > This file runs ahead of it: entries land here first and are folded in-tree once confirmed.
-> At the time of writing, in-tree carries A1–A8 and B1–B8; A9–A15 and B9–B11 are here only.
+> At the time of writing, in-tree carries A1–A8 and B1–B8; A9–A19 and B9–B13 are here only.
 
 ---
 
@@ -279,3 +279,55 @@ Last updated: 2026-07-28.
   — a detail easy to miss when porting, because it lives in the robot, not the test.
 - **Check:** use `BrowserPage.verifyPageContentWithReload(url, text)`. When porting, read the legacy *robot*
   helper, not just the test body — retry/refresh semantics hide there.
+
+### A16. A disabled Compose button accepts the click and drops it (2026-08-03, translations sheet)
+- **Symptom:** `mozClick`/`mozClickIfPresent` reports success, nothing happens, and the test fails much
+  later at whatever was supposed to follow — e.g. `'Translation bottom sheet translate button' was expected
+  to disappear after 25000ms`.
+- **Cause:** a Compose button rendered with `enabled = false` still receives the click gesture; only
+  `onClick` is skipped. `mozClick` resolves and clicks — it never asserts actionability — so "clicked" in
+  the report means "the gesture was delivered", not "the app acted on it".
+- **Check:** for any control whose enabled state is driven by async work (a fetch, a detection), gate on
+  enabled before clicking. Confirm the gate actually blocks: a real gate takes measurable time. See A17 for
+  why the obvious gate silently does not.
+
+### A17. An enabled-check on a COMPOSE_BY_TEXT selector is a no-op (2026-08-03)
+- **Symptom:** a wait-until-enabled gate returns in ~30 ms and the click is still dropped (A16).
+- **Cause:** `COMPOSE_BY_TEXT` resolves on the unmerged tree, which yields the *text node inside* the
+  button. Disabled semantics live on the button, so the text node reports enabled while the button is not.
+- **Check:** use `COMPOSE_BY_TEXT_MERGED` for anything you interact with rather than merely read —
+  it resolves the button itself. A gate that returns in tens of milliseconds is the tell.
+
+### A18. A failed attempt's HomeActivity blocks the retry's launch (2026-08-03, bug 2060347)
+- **Symptom:** the retry never runs its steps; it dies after 45 s with
+  `Could not launch intent … HomeActivity within 45000 milliseconds`, naming HomeActivity instead of
+  whatever actually failed.
+- **Cause:** the previous attempt's `HomeActivity` is still RESUMED when the retry rule relaunches (the
+  activity rule's teardown has not finished it). `HomeActivity` is `launchMode="singleTask"`, so the intent
+  goes to the existing instance and `MonitoringInstrumentation` never sees a new activity reach RESUMED.
+- **Check:** `BaseTest` now finishes every non-destroyed activity between attempts. When a retry dies at
+  activity launch, log `ActivityLifecycleMonitorRegistry.getActivitiesInStage()` for every `Stage` in the
+  catch block before theorising — it names the resident activity in one run. Note a leftover *custom tab*
+  is harmless; the next test launches over one fine.
+
+### A19. ESPRESSO_BY_ID cannot address framework ids (2026-08-03)
+- **Symptom:** `IllegalArgumentException` (not "element not found") the moment a selector resolves, e.g. on
+  the "Later" button of the secure-your-cards system dialog.
+- **Cause:** `ESPRESSO_BY_ID` looks the name up in the *app's* `R.id`, so `android:id/button2` cannot
+  resolve at all.
+- **Check:** for platform/system-UI ids use `UIAUTOMATOR_WITH_RAW_RES_ID` with the fully-qualified id
+  (`android:id/button2`, `com.android.systemui:id/notification_stack_scroller`).
+
+### B12. Compose's waitUntil raises a Throwable, so `catch (e: Exception)` misses it (2026-08-03)
+- **Symptom:** a helper with a retry loop does not retry; the first timeout escapes.
+- **Cause:** `ComposeTimeoutException` extends `Throwable` directly, not `Exception`.
+- **Check:** retry loops around `composeRule.waitUntil` must catch `Throwable`.
+
+### B13. A helper that opens a system window must close it on the failure path (2026-08-03, bug 2060345)
+- **Symptom:** one failure inside the notification shade turns every later step — and the retry — into an
+  unrelated error; Espresso cannot even dump (`has-window-focus=false`).
+- **Cause:** the shade holds window focus, and `openNotificationTray()` left it open when its verify threw.
+- **Check:** wrap the post-open verification, close on the failure path, then rethrow the original error.
+  Confirm the close rather than assuming it: `pressBack()` does dismiss the shade, but a close helper should
+  re-probe and escalate (`pressHome()`) rather than trust it.
+
