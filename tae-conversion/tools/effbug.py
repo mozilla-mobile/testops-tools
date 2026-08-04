@@ -19,6 +19,8 @@ Request JSON (dropped by Claude into conversion-runs/_queue/<id>.request.json):
 
   { "bug": "update", "ids": [2057407, …], "self_assign": true }   # or "assigned_to","summary","status",…
       → assigns/edits existing bugs. self_assign (default on) sets the assignee to the API key's owner.
+      `dupe_of` marks the bug(s) a duplicate: it fills in RESOLVED/DUPLICATE for you, and DUPLICATE
+      without it is rejected rather than sent for Bugzilla to refuse.
 
   Assignee on create/update resolves as: explicit `assigned_to` → env BUGZILLA_ASSIGNEE → self (BMO whoami,
   the key owner) unless `self_assign` is false.
@@ -198,6 +200,17 @@ def run(req):
         for k in ("summary", "status", "resolution", "keywords", "whiteboard", "priority", "severity"):
             if req.get(k):
                 fields[k] = req[k]
+        # Marking a duplicate: Bugzilla rejects resolution=DUPLICATE without dupe_of, and setting dupe_of
+        # implies RESOLVED/DUPLICATE, so fill in whichever half the caller left out.
+        if req.get("dupe_of"):
+            dupe = str(req["dupe_of"]).strip()
+            if not dupe.isdigit():
+                raise RuntimeError(f"update: dupe_of must be a bug number, got {req['dupe_of']!r}")
+            fields["dupe_of"] = int(dupe)
+            fields.setdefault("status", "RESOLVED")
+            fields.setdefault("resolution", "DUPLICATE")
+        elif str(req.get("resolution", "")).upper() == "DUPLICATE":
+            raise RuntimeError("update: resolution=DUPLICATE also needs dupe_of=<bug number>")
         # Relations take an add/remove object on update (unlike create, which takes a plain list) —
         # a bare list would REPLACE the existing set, which on a meta bug would silently drop every
         # other bug it tracks. Accept a list for convenience and wrap it as {"add": [...]}.
