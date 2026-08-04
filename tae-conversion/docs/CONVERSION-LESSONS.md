@@ -20,6 +20,15 @@ Legend for **Tooling status**: ✅ enforced by a tool · 🛠️ candidate for a
   check which screens are already modeled before committing to a candidate.
 - Tooling: 🛠️ `effscaffold` surfaces the body/coverage; a coverage-aware scorer could rank the P0 pool.
 
+**A2. "Not converted" means not converted *on main*, not absent from your tree (2026-08-04).**
+- Assumed: if the efficiency package in your checkout has no such test, it needs converting.
+- Reality: a branch that predates someone else's landing cannot see their work. Bug 2060292 converted
+  `AddressAutofillTest.deleteSavedAddressTest` while bug 2060174 had already landed the same test from
+  someone else — the duplicate only surfaced as a rebase conflict, after review and submission.
+- Rule: fetch and check main before picking, not just the working tree. `effnext`'s tree check and
+  `effscaffold`'s already-converted check both read your checkout, so both are blind to this.
+- Tooling: 🛠️ the tree check could compare against `origin/main` rather than the working tree.
+
 ## B. Authoring (compile-time — cheap to catch statically)
 
 **B1. `mockWebServer` isn't on BaseTest.**
@@ -266,6 +275,16 @@ this single pattern. See gotcha A12.
   comment 0 can only be corrected by a human in the web UI.
 - Rule: get the mechanism right before filing, or expect to hand a human the corrected text. Prefer filing
   after the diagnosis is confirmed, not while it is still a theory.
+
+**I4. Rebasing a submitted stack: dropping a commit leaves its revision in the graph (2026-08-04).**
+- Reality: abandoning a revision does not remove it from the stack's dependency graph. After dropping a
+  duplicate commit mid-stack, the next revision still recorded the abandoned one as its parent, and its
+  diff still pointed at the dropped commit's hash as its base.
+- Rule: resubmit the **whole** range, not just the commits whose content changed — the re-parenting is
+  what clears the stale edge. Expect every revision to get a new diff (the rebase changed every hash),
+  and expect already-accepted revisions to reset to needs-review; tell the reviewers why before they see
+  it. If avoiding a resubmit matters more, leave commit messages alone — editing one forces the upload
+  you were trying to avoid.
 
 ## Open gaps (unresolved — pick up on next attempt)
 

@@ -23,7 +23,9 @@ The end-to-end loop for landing a legacy→efficiency conversion. Who runs what:
 ## The 5 steps
 
 ### 1. Do the conversion work (Claude, sandbox)
-Pick the next test with **`effnext --json`** (local pool minus done minus skipped, and minus anything whose
+Fetch main first — a branch that predates someone else's landing cannot see their conversion, and the
+duplicate then surfaces as a rebase conflict after review (bug 2060292 vs 2060174). Then pick the next
+test with **`effnext --json`** (local pool minus done minus skipped, and minus anything whose
 method already exists in the efficiency tests package — never the Google Sheet). If the pick is not one you
 should take — too complex for who is picking it up, blocked on a harness gap, deliberately deferred — record
 that instead of stepping over it: `effnext --skip Class.method --reason "…"` writes it to
@@ -98,6 +100,13 @@ trailers. Note: base landed on **autoland** (callsign `FIREFOXAUTOLAND`), which 
 `main`/central — that's fine; moz-phab keys off the commit trailers, not what's in central. Tag
 **testing-exception-unchanged**: no moz-phab CLI flag exists (checked at runtime), so add it in the Phabricator
 web UI after submit. Submitting/landing stays with you: the bridge refuses submit and Claude never runs it.
+
+## If you rebase a stack that is already submitted
+Dropping a commit does not remove its revision from the stack graph: abandoning D-nnn leaves the next
+revision still recording it as a parent, with a diff based on the commit you dropped. Resubmit the whole
+range so moz-phab re-parents everything — submitting only the changed commits leaves the abandoned
+revision wedged in the chain. Every revision gets a fresh diff either way, and accepted ones reset to
+needs-review, so warn the reviewers first.
 
 ## After landing
 Run the repo-side reconcile (see the tae-conversion README) so the tracker's physical/in-review counts catch
