@@ -94,19 +94,18 @@ def get_release_version_ios(release_tag):
     return version
 
 def build_milestone_description_ios(milestone_name):
-    current_date = datetime.now()
-    formatted_date = current_date = current_date.strftime("%B %d, %Y")
-    return textwrap.dedent(
-        f"""
-        RELEASE: {milestone_name}\n\n\
-        RELEASE_TAG_URL: https://github.com/mozilla-mobile/firefox-ios/releases/\n\n\
-        RELEASE_DATE: {formatted_date}\n\n\
-        TESTING_STATUS: [ TBD ]\n\n\
-        QA_RECOMMENDATION: [ TBD ]\n\n\
-        QA_RECOMENTATION_VERBOSE: \n\n\
-        TESTING_SUMMARY\n\n\
-        Known issues: n/a\n\
-        New issue: n/a\n\
-        Verified issue:
-    """
-    )
+    formatted_date = datetime.now().strftime("%B %d, %Y")
+    release_url = "https://github.com/mozilla-mobile/firefox-ios/releases/"
+    # TestRail 10.6+ renders milestone descriptions as HTML, so raw newlines
+    # collapse to spaces. Use <br> for line breaks (see build_milestone_description).
+    fields = [
+        f"RELEASE: {milestone_name}",
+        f'RELEASE_TAG_URL: <a href="{release_url}">{release_url}</a>',
+        f"RELEASE_DATE: {formatted_date}",
+        "TESTING_STATUS: [ TBD ]",
+        "QA_RECOMMENDATION: [ TBD ]",
+        "QA_RECOMENTATION_VERBOSE: ",
+        "TESTING_SUMMARY",
+    ]
+    footer = ["Known issues: n/a", "New issue: n/a", "Verified issue:"]
+    return "<br><br>".join(fields) + "<br><br>" + "<br>".join(footer)
