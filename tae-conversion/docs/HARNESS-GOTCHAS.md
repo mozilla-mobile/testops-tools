@@ -6,7 +6,7 @@ catch them. Use it two ways: (1) a **review checklist** against new page objects
 
 Each entry: **symptom → cause → check**. Add new ones as we find them; link the Jira/bug where relevant.
 
-Last updated: 2026-08-03.
+Last updated: 2026-08-04.
 
 > The distilled, landed subset of this catalog lives in-tree at
 > `<fenix>/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/docs/gotchas.md`.
@@ -331,3 +331,75 @@ Last updated: 2026-08-03.
   Confirm the close rather than assuming it: `pressBack()` does dismiss the shade, but a close helper should
   re-probe and escalate (`pressHome()`) rather than trust it.
 
+---
+
+## A. Known harness bugs (continued — 2026-08-04, DownloadFileTypesTest conversion)
+
+### A20. A click can resolve, report success, and do nothing (inert text twin) (2026-08-04)
+- **Symptom:** `mozClick` logs `[OK] ✔ Clicked '<x>'` in ~100 ms and the UI does not change. No exception —
+  the failure surfaces later as a timeout on whatever should have appeared. Same shape as A16, different
+  cause.
+- **Cause:** the text you matched sits on a different node than the click action, and the node you hit is
+  not merely disabled — it is not interactive at all. Each link on the downloads test page is a clickable
+  node with `desc="Download <file>"` PLUS a sibling text node carrying the same string and no click action;
+  a `textContains` match lands on the twin. A17 is the Compose-side instance of this (unmerged text node
+  inside a button); this entry is the device-side one, in web content.
+- **Check:** for a CLICK target prefer a handle owned by the interactive node — testTag, then
+  content-description. The on-failure ScreenDump marks interactive nodes `[clickable]`: if your target
+  prints without it, you are aiming at the twin. Watch the dump's `(N nodes with a handle, of M total)`
+  line too — the interactive parent is often among the hidden ones, having no text of its own.
+
+### A21. A Compose click can resolve the right node and still not actuate it (2026-08-04)
+- **Symptom:** an on-screen Compose button does not respond to `mozClick`, whichever text strategy is used.
+  Seen on the download dialog's confirm button (a `FilledButton` with no testTag in
+  `RenameAndChangeLocationDialogContent.DialogActionButtons`).
+- **Cause:** NOT root-caused. What is established: `COMPOSE_BY_TEXT`, a purpose-built
+  `hasText and hasClickAction`, and `COMPOSE_BY_TEXT_MERGED` all resolved a node and reported a successful
+  click while the dialog stayed open; a device-level `UiObject2` tap worked immediately. Given A16/A17 the
+  leading explanation is timing rather than injection path — the button is briefly disabled while the
+  dialog settles, Compose resolves and clicks within ~150 ms and the gesture is dropped, whereas the
+  device-level query is slower and lands after it is enabled. That was not verified: no enabled-state
+  gate was tried on this dialog.
+- **Check:** before reaching for a different injection path, gate on enabled per A16 — a real gate takes
+  measurable time. If gating fixes it, fold this entry into A16 and delete it.
+
+### A22. `UiObject.click()` returns false for SLOW controls, not just missed ones (2026-08-04)
+- **Symptom:** `AssertionError: Failed to click UiObject` on an element that is present and was tapped.
+- **Cause:** `UiObject.click()` is `clickAndSync`, which reports failure when no window update arrives
+  within ~5.5 s. Anything triggering a network round-trip (starting a download) can exceed that. A dump at
+  one such failure showed the target holding input focus — the tap had landed, and the surrounding retry
+  then reloaded the page and discarded a dialog that was on its way.
+- **Check:** use a `UIAUTOMATOR2_*` strategy for slow-reacting controls; `UiObject2.click()` injects the
+  gesture and lets the caller wait. Read `Failed to click UiObject` as "no window update in time", not as
+  proof the click missed.
+
+### A23. `mozSwipeTo` cannot scroll to a `UiObject` (2026-08-04)
+- **Symptom:** `mozSwipeTo` returns immediately without swiping, and the following click fails anyway.
+- **Cause:** its visibility test for a `UiObject` is `element.exists()`, already true for a node that is in
+  the hierarchy but scrolled off-screen — so it "succeeds" on attempt 0. The Compose and Espresso branches
+  check actual display; the UiObject branch does not.
+- **Check:** don't rely on `mozSwipeTo` for UiObject-based selectors. Worth fixing to check visible bounds.
+
+### A24. effloop can finish without a `run-report.txt`, silently disabling effverify (2026-08-04)
+- **Symptom:** `effverify` returns `{"ok": false, "error": "no run-report.txt (did it compile/run?)"}` for a
+  run that plainly executed, and `status.json` says `"ran": false` while listing per-test results.
+- **Cause:** the `effpretty capture` step produced no report. The consequence beyond effverify is worse: the
+  on-failure ScreenDumps never reach `raw-run.log` either, so diagnostics look absent when they are merely
+  unrouted. This is what led me to conclude "mozClick does not dump on click failure" — it does,
+  `BasePage.kt:478`.
+- **Check:** if `run-report.txt` is missing, take the verdict from `status.json` (the folded JUnit XML) and
+  read dumps straight off the device with `adb logcat -d -s EffScreenDump:I`. logcat rotates — grep the
+  whole buffer rather than tailing it.
+
+## B. Authoring / review checklist (continued — 2026-08-04)
+
+### B14. Serving a page from mockWebServer can change which dialog the app shows (2026-08-04)
+- **Why:** replacing the remote downloads page with the local `downloadPageAsset` made localhost return a
+  `content-length`, so Fenix rendered the KNOWN-SIZE download dialog —
+  `RenameAndChangeLocationDialogContent`, with a rename field and a differently-composed confirm button —
+  instead of the unknown-size variant. The test went from 5/9 to 0/9 on that change alone, and four device
+  runs went into debugging a failure the change had introduced.
+- **Check:** switching a test from a remote page to a local asset changes the system under test, not just
+  its reliability. Re-run immediately and compare against the previous baseline; if results get worse,
+  suspect the switch before suspecting the code under test. Both dialog variants ship in the product, so a
+  selector verified against one is not verified against the other.

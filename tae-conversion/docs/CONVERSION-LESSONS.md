@@ -286,6 +286,52 @@ this single pattern. See gotcha A12.
   it. If avoiding a resubmit matters more, leave commit messages alone — editing one forces the upload
   you were trying to avoid.
 
+## J. Interaction diagnosis and re-baselining (DownloadFileTypesTest, 2026-08-04, 8 device runs)
+
+Section H covers the same family from the translations sheet; these are the additions from a conversion
+where the click problem appeared twice in one test, on two different layers.
+
+**J1. A text selector can resolve a non-interactive TWIN of the target.**
+- Assumed: if a selector resolves an element and the click reports success, the click landed.
+- Reality: hit twice in one conversion. Each download link renders as a PAIR — a clickable node carrying
+  `desc="Download <file>"` and a sibling text node with the same string and no click action. Same shape for
+  the dialog's confirm button (`Button { Text("Download") }`). H1 is the disabled-button version of this;
+  here the node was not disabled, it was never interactive.
+- Rule: for anything you CLICK rather than merely read, the handle must belong to the node owning the click
+  action. A text match is the likeliest to pick the twin, because the text lives on the child and the action
+  on the parent. Gotchas A17 (Compose side) and A20 (device side).
+- Tooling: 🛠️ a check could flag text strategies used as click targets.
+
+**J2. `UiObject.click()` returning false does NOT mean the click failed.**
+- Assumed: `Failed to click UiObject` means the tap missed.
+- Reality: it is `clickAndSync`, which returns false when no window update arrives inside ~5.5 s — routinely
+  exceeded by a click that starts a network download. A dump at one such "failure" showed the link holding
+  input focus; the tap had worked, and the retry then reloaded the page and threw away a dialog that was
+  on its way.
+- Rule: for a control whose reaction is slow, use a UiObject2 strategy — it injects the gesture and leaves
+  the waiting to the caller. Gotcha A22.
+- Tooling: ✅ `UIAUTOMATOR2_BY_DESCRIPTION_CONTAINS` added for this.
+
+**J3. Two identical failures mean the variable you are changing is the wrong one.**
+- Assumed: a click that resolves but does nothing is a selector problem, so try another strategy.
+- Reality: `COMPOSE_BY_TEXT`, a purpose-built `hasText and hasClickAction`, and `COMPOSE_BY_TEXT_MERGED`
+  all resolved a node, reported success, and left the dialog open. Three runs, one hypothesis, no new
+  information. The first run designed to DISCRIMINATE between hypotheses (Compose injection vs. the app not
+  acting) settled it immediately.
+- Rule: after the second identical failure, stop varying the same dimension and design a run whose possible
+  outcomes point at different causes. Write down what each outcome would mean before starting it.
+- Tooling: 📖 judgment.
+
+**J4. Swapping a remote page for a local asset is a change to the system under test.**
+- Assumed: serving the same page from mockWebServer only removes network flakiness.
+- Reality: localhost returns a `content-length`, so Fenix rendered the known-size download dialog (with a
+  rename field) instead of the unknown-size one — a dialog carrying the J1 confirm-button problem, which
+  the remote page never surfaced. A run that was 5/9 green went to 0/9, and four runs went into debugging a
+  failure the change itself had introduced.
+- Rule: re-baseline immediately after a determinism change. If results get worse, suspect the change before
+  suspecting the code under test. Gotcha B14.
+- Tooling: 📖 judgment.
+
 ## Open gaps (unresolved — pick up on next attempt)
 
 - **Address-autofill suggestion not offered on-device.** With the stylus overlay removed AND stylus disabled,
