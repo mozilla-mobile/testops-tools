@@ -158,3 +158,34 @@ else:
 PY
 
 echo "▶ reports in $OUT"
+
+# ── propagate a real exit code ───────────────────────────────────────────────────────────────────────
+# Previously the script's last command was the echo above, so effloop ALWAYS exited 0 — even when gradle
+# failed or tests failed. effwatch records that as `effloop_exit: 0`, so a red run was reported green to
+# every consumer, and the only way to notice was to open status.json by hand.
+#
+# status.json is the source of truth here: it is parsed from gradle's JUnit XML and already carries the
+# per-test verdict. Gradle's own exit code is deliberately not used as the primary signal — it is
+# non-zero for a failed test AND for unrelated infrastructure problems, and it cannot distinguish
+# "compiled but a test failed" from "did not compile", which callers need to tell apart.
+#
+# Exit codes:
+#   0  compiled, ran, all tests passed
+#   1  compiled and ran, but at least one test failed
+#   2  compile failure (no test verdict possible)
+#   3  compiled but produced no usable test verdict (no JUnit XML) — inconclusive, treat as failure
+#   4  the test filter matched nothing — almost always a mistyped class/method, i.e. a caller error
+#      rather than a red run, so it is worth distinguishing from 1 and 3
+OUTCOME=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("outcome","unknown"))' \
+    "$OUT/status.json" 2>/dev/null || echo unknown)
+case "$OUTCOME" in
+    pass) exit 0 ;;
+    fail) echo "✗ effloop: tests failed (see $OUT/status.json)"; exit 1 ;;
+    no-tests) echo "✗ effloop: no tests matched '$TEST_CLASS' — check the class/method name"; exit 4 ;;
+    *)
+        if [ "${COMPILE_OK:-1}" != "0" ]; then
+            echo "✗ effloop: compile failure (see $OUT/build-report.txt)"; exit 2
+        fi
+        echo "✗ effloop: no usable test verdict (see $OUT/build-report.txt)"; exit 3
+        ;;
+esac
