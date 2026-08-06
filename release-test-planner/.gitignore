@@ -1,0 +1,19 @@
+# Generated reports - regenerate per range
+out/
+*.html
+!examples/*.html
+
+# Local agent answers (examples/answers.example.json is the versioned one)
+answers.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor noise
+.DS_Store
+.vscode/
+.idea/
+*.swp

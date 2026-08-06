@@ -1,0 +1,38 @@
+{
+  "_note": "Agent answers for range HEAD~300..HEAD. Each one was produced by reading the actual diff, not by inspecting the summary numbers. Re-run with --answers answers.json to apply.",
+  "answers": {
+    "semantics-home": {
+      "kind": "behaviour-change",
+      "occurrence_delta": 1,
+      "rationale": "Bug 2056670 adds HomeSwipeIntegration (237 lines, new file) and reworks HomeFragment gesture handling to allow swiping from home when HNT is enabled. New interaction surface, not a rename."
+    },
+    "semantics-localization": {
+      "kind": "config",
+      "occurrence_delta": -2,
+      "rationale": "The 705 churned lines are two bulk 'Import translations from android-l10n' commits. Machine-generated string updates carry truncation risk at worst, not logic risk."
+    },
+    "semantics-browser-core": {
+      "kind": "behaviour-change",
+      "occurrence_delta": 0,
+      "rationale": "Mixed: BrowserFragment gesture wiring plus ACCESS_LOCAL_NETWORK permission handling on load errors. Real behaviour change, but the churn-derived Occurrence of 8 already reflects it."
+    },
+    "semantics-settings-general": {
+      "kind": "behaviour-change",
+      "occurrence_delta": 0,
+      "rationale": "IPProtectionFragment and assorted settings surfaces. Churn-derived Occurrence is proportionate."
+    },
+    "semantics-app-infrastructure": {
+      "kind": "new-feature",
+      "occurrence_delta": -1,
+      "rationale": "342 of the 690 churned lines were the new Google Lens integration under components/lens/, which has since been split out into its own 'lens' catalog entry. What remains in this bucket is StartupMiddleware and preference plumbing, so the original Occurrence of 7 overstated it."
+    },
+    "severity-ip-protection": {
+      "severity": 9,
+      "rationale": "Confirmed. A silent IP Protection failure tells the user they are protected when they are not, which is a trust violation rather than a broken feature."
+    },
+    "severity-app-infrastructure": {
+      "severity": 8,
+      "rationale": "Confirmed at 8. StartupMiddleware sits on the cold-start path and a fault there affects every session."
+    }
+  }
+}
