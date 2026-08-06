@@ -185,6 +185,16 @@ h3 { font-size: 13.5px; margin: 0 0 6px; }
   border-radius: 4px; border: 1px solid var(--border); color: var(--text-secondary); }
 .src.parsed { border-color: var(--good); color: var(--success-text); }
 
+.warn { border: 1px solid var(--critical); border-left-width: 4px;
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+  background: var(--surface-1); }
+.warn .hd { font-weight: 700; font-size: 13.5px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 7px; }
+.warn .hd .dot { width: 9px; height: 9px; border-radius: 50%;
+  background: var(--critical); flex: none; }
+.warn p { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 6px; }
+.warn pre { margin-top: 8px; }
+
 .mtx { font-size: 12px; }
 .mtx td { padding: 6px 9px; }
 .mtx td.cfg { font-variant-numeric: tabular-nums; color: var(--muted); }
@@ -216,6 +226,8 @@ pre { background: var(--plane); border: 1px solid var(--border);
   </div>
   <button class="theme" id="themeBtn">Toggle theme</button>
 </header>
+
+<div id="warnings"></div>
 
 <div class="kpis" id="kpis"></div>
 
@@ -380,6 +392,23 @@ document.getElementById('meta').innerHTML =
   (SOURCE === 'live'
     ? ` &middot; <span class="src parsed">live</span> reading report.json`
     : ` &middot; <span class="src">snapshot</span> embedded copy`);
+
+/* warnings - these travel with the file, so a report generated against the
+   wrong tree says so wherever it ends up */
+document.getElementById('warnings').innerHTML = D.meta.tree_mismatch_tip
+  ? `<div class="warn">
+      <div class="hd"><i class="dot"></i>These numbers are not trustworthy</div>
+      <p>The checkout used to generate this report does not contain the code
+      being analysed &mdash; range tip <code>${esc(D.meta.tree_mismatch_tip)}</code>
+      is not an ancestor of its <code>HEAD</code>. Churn was scored against a
+      different revision's tests, so coverage and confidence are wrong, and
+      usually overstated.</p>
+      <p>Regenerate from a worktree of the branch being analysed:</p>
+      <pre>git worktree add --no-checkout ../firefox-beta origin/beta
+cd ../firefox-beta &amp;&amp; git sparse-checkout set mobile/android/fenix &amp;&amp; git checkout
+./plan.py analyze --repo ../firefox-beta --range "${esc(D.meta.range)}"</pre>
+    </div>`
+  : '';
 
 /* KPIs */
 const P = D.plan.totals, R = D.risk.totals;

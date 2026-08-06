@@ -56,6 +56,24 @@ def run_analysis(args, quiet: bool = False):
         log("\nNo changed files in that range. Try a wider --range.")
         return None
 
+    # The churn comes from the range; the test corpus comes from the checked-out
+    # tree. If they are different revisions the confidence number is wrong, and
+    # nothing else in the pipeline would notice.
+    stray_tip = changes.tip_in_working_tree(repo, change_data["commits"])
+    if stray_tip:
+        log(
+            "\n  !! WARNING - the checkout does not contain the code being analysed.\n"
+            "     Range tip {} is not an ancestor of HEAD in {}.\n"
+            "     Churn is being scored against a DIFFERENT revision's tests, so\n"
+            "     coverage and confidence will be wrong (usually overstated).\n"
+            "\n     Fix - analyse a branch from a worktree of that branch:\n"
+            "       git worktree add --no-checkout ../firefox-beta origin/beta\n"
+            "       cd ../firefox-beta && git sparse-checkout set mobile/android/fenix\n"
+            "       git checkout\n"
+            "       ./plan.py analyze --repo ../firefox-beta --range \"{}\"\n"
+            .format(stray_tip, repo, args.range)
+        )
+
     log("[2/8] mapping paths to features")
     attribution = featuremap.attribute(catalog, change_data["files"])
     log("      {} features touched, {} paths unmapped, {} ignored".format(
@@ -129,6 +147,7 @@ def run_analysis(args, quiet: bool = False):
             "budget_minutes": args.budget,
             "catalog": os.path.abspath(args.catalog),
             "agent_overrides_applied": audit,
+            "tree_mismatch_tip": stray_tip,
         },
         "changes": change_data,
         "attribution": attribution,

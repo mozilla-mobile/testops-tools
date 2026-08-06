@@ -116,6 +116,41 @@ python -m unittest discover -s tests -p '*tests.py'
 
 `export FENIX_REPO=/path/to/firefox` to skip `--repo`.
 
+### Analysing a release branch
+
+`--range` is handed straight to `git log`, so any revision expression works.
+`origin/release..origin/beta` *is* the release candidate — everything in beta
+that has not shipped yet.
+
+**Analyse a branch from a worktree of that branch.** Churn comes from the range,
+but the test corpus comes from the checked-out tree. Point `--repo` at a `main`
+checkout while analysing beta and you score beta's changes against main's tests,
+which silently overstates coverage — on a real beta cycle the two corpora
+differed by 44 tests. The tool detects this and warns, in the terminal and in a
+banner on the report itself, but the fix is to check out the right tree:
+
+```bash
+# one-time: sparse worktree, ~65MB, a couple of seconds
+cd /path/to/firefox
+git worktree add --no-checkout ../firefox-beta origin/beta
+cd ../firefox-beta && git sparse-checkout set mobile/android/fenix && git checkout
+
+# each run
+cd /path/to/firefox && git fetch origin beta release
+cd ../firefox-beta && git checkout origin/beta
+
+cd /path/to/testops-tools/release-test-planner
+./plan.py analyze --repo ../../firefox-beta \
+  --range "origin/release..origin/beta" --budget 480 --out beta-report
+```
+
+Sparse-checkout keeps it to `mobile/android/fenix`, which is all the tool reads.
+A full beta cycle — 477 commits, 924 files, ~107k lines churned — analyses in
+about 30 seconds. `git worktree remove ../firefox-beta` when finished.
+
+Other useful ranges: `origin/beta..origin/main` for what is queued for the next
+merge, and `HEAD~300..HEAD` for a rough nightly cycle.
+
 Outputs land in `out/` (gitignored):
 
 | file | what it is |
@@ -203,6 +238,9 @@ defines, not runnable tests today.
 - Test cost is a flat per-suite estimate, not measured runtime.
 - Flaky tests count as full detection, which is generous.
 - Binding is name and surface matching, not execution tracing.
+- The corpus is read from the checked-out tree, not from the range. Analysing
+  a branch you have not checked out is detected and warned about, but not
+  corrected automatically — see *Analysing a release branch*.
 - The matrix assumes every test runs in every configuration; real constraints
   need forbidden-tuple support in the generator.
 

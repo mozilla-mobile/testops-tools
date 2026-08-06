@@ -496,6 +496,57 @@ class GitChangeTests(unittest.TestCase):
         self.assertEqual(changes.collect(self.repo, "HEAD..HEAD")["files"], [])
 
 
+@unittest.skipIf(shutil.which("git") is None, "git not available")
+class WorkingTreeMismatchTests(unittest.TestCase):
+    """Guards the silent-wrong-answer case.
+
+    Churn comes from the range; the test corpus comes from the checked-out
+    tree. Analysing `origin/release..origin/beta` from a `main` checkout scores
+    one branch's changes against another branch's tests and reports an inflated
+    confidence number, with nothing else in the pipeline noticing.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.repo = tempfile.mkdtemp(prefix="planner-mismatch-")
+
+        def run(*a):
+            subprocess.run(a, cwd=cls.repo, check=True, capture_output=True)
+
+        def commit(name, body, message):
+            with open(os.path.join(cls.repo, name), "w") as fh:
+                fh.write(body)
+            run("git", "add", name)
+            run("git", "commit", "-q", "-m", message)
+
+        run("git", "init", "-q")
+        run("git", "config", "user.email", "t@example.com")
+        run("git", "config", "user.name", "Tester")
+        commit("base.txt", "base\n", "No bug - base")
+
+        # A side branch whose commits never reach the checked-out main line.
+        run("git", "checkout", "-q", "-b", "sidebranch")
+        commit("side.txt", "side\n", "Bug 999999 - only on the side branch")
+        run("git", "checkout", "-q", "-")
+        commit("main.txt", "main\n", "Bug 888888 - only on the main line")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.repo, ignore_errors=True)
+
+    def test_flags_a_range_the_checkout_does_not_contain(self):
+        data = changes.collect(self.repo, "HEAD..sidebranch")
+        tip = changes.tip_in_working_tree(self.repo, data["commits"])
+        self.assertIsNotNone(tip, "side-branch range should have been flagged")
+
+    def test_does_not_flag_a_range_the_checkout_does_contain(self):
+        data = changes.collect(self.repo, "HEAD~1..HEAD")
+        self.assertIsNone(changes.tip_in_working_tree(self.repo, data["commits"]))
+
+    def test_no_commits_is_not_a_mismatch(self):
+        self.assertIsNone(changes.tip_in_working_tree(self.repo, []))
+
+
 # ---------------------------------------------------------------------------
 # planning
 # ---------------------------------------------------------------------------

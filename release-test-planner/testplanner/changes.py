@@ -191,6 +191,31 @@ def collect(
     }
 
 
+def tip_in_working_tree(repo: str, commits: List[Dict]) -> Optional[str]:
+    """Is the newest commit of the analysed range present in the checked-out tree?
+
+    If it is not, the corpus and the churn describe different revisions: we
+    would be scoring one branch's changes against another branch's tests, and
+    reporting a confidence number that is quietly wrong. Analysing
+    `origin/release..origin/beta` from a `main` checkout is the easy way to do
+    this by accident.
+
+    Returns the offending tip SHA, or None when the tree is consistent.
+    """
+    if not commits:
+        return None
+
+    tip = commits[0]["sha"]
+    proc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", tip, "HEAD"],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return None if proc.returncode == 0 else tip
+
+
 def _resolve_rename(path: str) -> str:
     """Turn git's 'a/{b => c}/d' or 'old => new' notation into the new path."""
     brace = re.search(r"\{(.*?) => (.*?)\}", path)
