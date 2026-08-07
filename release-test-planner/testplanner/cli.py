@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-"""Command line entry point for the Fenix release test planner PoC."""
+"""Command line entry point for the release test planner PoC."""
 
 from __future__ import annotations
 
@@ -14,17 +14,26 @@ import webbrowser
 
 from . import (
     agentio, changes, corpus, coverage, factories, featuremap, matrix, plan,
-    report, risk,
+    platforms, report, risk, testrail,
 )
 
 DEFAULT_REPO = os.environ.get("FENIX_REPO", "")
-FENIX_APP = "mobile/android/fenix/app"
-FENIX_SRC = FENIX_APP + "/src/main"
-FENIX_UI_TESTS = FENIX_APP + "/src/androidTest/java/org/mozilla/fenix/ui"
-FENIX_EFFICIENCY = FENIX_UI_TESTS + "/efficiency"
 HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_CATALOG = os.path.join(HERE, "..", "config", "features.json")
 DEFAULT_ENV = os.path.join(HERE, "..", "config", "environment.json")
+
+# Only the paths git is asked to look at. Fenix lives in mozilla-central beside
+# everything else, so the Android default scopes the range to it; firefox-ios is
+# its own repo and needs no scoping.
+DEFAULT_PATHSPEC = {
+    "android": ["mobile/android/fenix/"],
+    "ios": [],
+}
+
+
+def _catalog_for(args, platform) -> str:
+    if args.catalog:
+        return os.path.abspath(args.catalog)
+    return os.path.abspath(os.path.join(HERE, "..", platform.default_catalog))
 
 
 def run_analysis(args, quiet: bool = False):
@@ -36,14 +45,15 @@ def run_analysis(args, quiet: bool = False):
     log = (lambda *a: None) if quiet else (lambda *a: print(*a))
 
     repo = os.path.abspath(os.path.expanduser(args.repo))
+    platform = platforms.get(args.platform)
 
-    catalog = featuremap.FeatureCatalog.load(os.path.abspath(args.catalog))
+    catalog = featuremap.FeatureCatalog.load(_catalog_for(args, platform))
 
-    log("[1/8] reading git range {}".format(args.range))
+    log("[1/8] reading git range {} ({})".format(args.range, platform.label))
     change_data = changes.collect(
         repo,
         args.range,
-        pathspec=args.pathspec or ["mobile/android/fenix/"],
+        pathspec=args.pathspec or DEFAULT_PATHSPEC.get(platform.id, []),
         max_commits=args.max_commits,
     )
     log("      {} commits, {} files, {} lines churned".format(
@@ -88,17 +98,44 @@ def run_analysis(args, quiet: bool = False):
         log("      applied {} agent override(s)".format(len(audit)))
 
     log("[3/8] indexing test corpus")
-    inventory = corpus.build(repo, FENIX_UI_TESTS)
+    inventory = corpus.build(repo, platform, tests_root=args.tests_root)
     log("      {} tests ({}), {} smoke, {} disabled".format(
         inventory["total_tests"],
         ", ".join("{} {}".format(v, k) for k, v in inventory["by_suite"].items()),
         inventory["smoke_tests"],
         inventory["disabled_tests"],
     ))
+    if inventory["test_plans"]:
+        log("      test plans: {}".format(", ".join(
+            "{} ({})".format(k, v) for k, v in inventory["test_plans"].items())))
+    # An empty corpus is the failure that looks most like a result: every feature
+    # reads 0% covered, risk maxes out, and the plan says everything is critical
+    # and untested. Say so loudly instead.
+    if not inventory["total_tests"]:
+        log("\n  !! WARNING - no tests found. Coverage will read 0% for every\n"
+            "     feature and the risk scores will all max out, which is a\n"
+            "     wrong path rather than a finding.")
+        for missing in inventory["missing_roots"]:
+            log("     missing: {}".format(missing))
+        log("     Check --platform (currently {}) and --tests-root.".format(
+            platform.id))
 
     log("[4/8] binding tests to features")
     cov = coverage.bind(catalog, inventory)
     log("      {} tests bound to no feature".format(cov["unbound_count"]))
+
+    # Optional denominator from TestRail. Independent of the factory space and
+    # measuring a different thing - see testplanner/testrail.py.
+    rail = None
+    if args.testrail_export:
+        log("      joining TestRail export")
+        rail = testrail.build(args.testrail_export, catalog, inventory, cov)
+        log("      {} cases, {} automated ({:.1%}), {} manual-only".format(
+            rail["totals"]["cases"], rail["totals"]["automated"],
+            rail["totals"]["automated_ratio"], rail["totals"]["manual_only"]))
+        if rail["totals"]["unmatched_ids"]:
+            log("      {} case ids referenced by tests but absent from the "
+                "export".format(rail["totals"]["unmatched_ids"]))
 
     log("[5/8] scoring FMEA risk")
     risk_result = risk.score(attribution, cov)
@@ -117,14 +154,24 @@ def run_analysis(args, quiet: bool = False):
         pt["features_with_gaps"],
     ))
 
-    log("[7/8] scanning generated-test factories")
-    factory_scan = factories.scan(repo, FENIX_EFFICIENCY)
-    factory_by_feature = factories.attribute_to_features(
-        factory_scan, catalog, risk_result["rows"]
-    )
-    log("      {} candidate cases across {} factories".format(
-        factory_scan["total_candidates"], len(factory_scan["factories"])
-    ))
+    if platform.has_factories:
+        log("[7/8] scanning generated-test factories")
+        factory_scan = factories.scan(repo, platform.factory_root)
+        factory_by_feature = factories.attribute_to_features(
+            factory_scan, catalog, risk_result["rows"]
+        )
+        log("      {} candidate cases across {} factories".format(
+            factory_scan["total_candidates"], len(factory_scan["factories"])
+        ))
+    else:
+        # Not a gap to be filled with an estimate. The factory space is what
+        # gives coverage a derived denominator; asserting one here would be
+        # inventing the number the whole model rests on.
+        log("[7/8] no generated-test factories on this platform")
+        log("      coverage is reported without a derived denominator" +
+            (" (TestRail supplies an assumed one)" if rail else ""))
+        factory_scan = factories.empty(platform.id)
+        factory_by_feature = {}
 
     log("[8/8] building the combinatorial matrix")
     with open(os.path.abspath(args.environment)) as fh:
@@ -145,10 +192,15 @@ def run_analysis(args, quiet: bool = False):
             "repo": repo,
             "range": args.range,
             "budget_minutes": args.budget,
-            "catalog": os.path.abspath(args.catalog),
+            "catalog": _catalog_for(args, platform),
+            "platform": platform.id,
+            "platform_label": platform.label,
+            "has_factories": platform.has_factories,
+            "platform_notes": platform.notes,
             "agent_overrides_applied": audit,
             "tree_mismatch_tip": stray_tip,
         },
+        "testrail": rail,
         "changes": change_data,
         "attribution": attribution,
         "inventory": {k: v for k, v in inventory.items() if k != "tests"},
@@ -268,7 +320,8 @@ def _serve(args) -> int:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         prog="testplanner",
-        description="Risk-based release test planner for Fenix (proof of concept).",
+        description="Risk-based release test planner for Fenix and Firefox iOS "
+                    "(proof of concept).",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -276,9 +329,20 @@ def main(argv=None) -> int:
         p.add_argument("--range", default="HEAD~200..HEAD",
                        help="git revision range (default: HEAD~200..HEAD)")
         p.add_argument("--repo", default=DEFAULT_REPO,
-                       help="path to a mozilla-central / firefox checkout "
-                            "(or set FENIX_REPO)")
-        p.add_argument("--catalog", default=DEFAULT_CATALOG)
+                       help="path to a firefox (Android) or firefox-ios "
+                            "checkout (or set FENIX_REPO)")
+        p.add_argument("--platform", default=platforms.DEFAULT,
+                       choices=sorted(platforms.PLATFORMS),
+                       help="which app is being analysed (default: %s)"
+                            % platforms.DEFAULT)
+        p.add_argument("--tests-root", default="",
+                       help="override the platform's UI test directory, for a "
+                            "checkout whose layout differs from the current one")
+        p.add_argument("--testrail-export", default=None,
+                       help="TestRail case export (JSON or CSV) to use as an "
+                            "assumed coverage denominator")
+        p.add_argument("--catalog", default=None,
+                       help="feature catalog (default: the platform's)")
         p.add_argument("--environment", default=DEFAULT_ENV,
                        help="JSON file of environment factors and allocation policy")
         p.add_argument("--budget", type=float, default=None,
@@ -306,13 +370,18 @@ def main(argv=None) -> int:
 
     if not args.repo:
         parser.error(
-            "no Firefox checkout given. Pass --repo /path/to/firefox, or set "
-            "FENIX_REPO in your environment."
+            "no checkout given. Pass --repo /path/to/firefox (or "
+            "/path/to/firefox-ios with --platform ios), or set FENIX_REPO."
         )
-    if not os.path.isdir(os.path.join(os.path.expanduser(args.repo), FENIX_APP)):
+    # Sanity-check against the platform's own source root, so pointing an iOS
+    # run at an Android checkout fails here rather than producing an empty
+    # report that looks like a finding.
+    expected = platforms.get(args.platform).source_root
+    if not os.path.isdir(os.path.join(os.path.expanduser(args.repo), expected)):
         parser.error(
-            "{} does not look like a Firefox checkout - expected to find {} "
-            "under it.".format(args.repo, FENIX_APP)
+            "{} does not look like a {} checkout - expected to find {} under "
+            "it. Wrong --platform?".format(
+                args.repo, platforms.get(args.platform).label, expected)
         )
 
     return args.func(args)

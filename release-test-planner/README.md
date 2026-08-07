@@ -7,20 +7,97 @@ automation exists for them, scores the release risk with FMEA, and produces a
 recommended test run, the manual-testing gap, and a configuration matrix sized
 by risk.
 
-> **Status: early prototype (v0.0.1).** Wired to Fenix/Android only, on UI tests
-> only. It is here to be reviewed and argued with, not to gate a release. iOS
-> and other platforms follow once the model is proven — the risk scoring and
-> array generation carry no platform knowledge and are designed to move
-> unchanged.
+> **Status: early prototype (v0.0.2).** Fenix/Android and Firefox iOS, on UI
+> tests only. It is here to be reviewed and argued with, not to gate a release.
+> The risk scoring and array generation carry no platform knowledge and moved to
+> iOS unchanged, as intended — but **iOS has no factory candidate space, so it
+> has no derived coverage denominator.** See
+> [Two platforms, two denominators](#two-platforms-two-denominators) before
+> reading any percentage.
 
 Stdlib Python 3.9+. No install, no dependencies, no API key, no network.
 
 ```bash
 cd release-test-planner
+
+# Android (default)
 ./plan.py analyze --repo /path/to/firefox --range "HEAD~300..HEAD" --budget 240 --open
+
+# Firefox iOS
+./plan.py analyze --platform ios --repo /path/to/firefox-ios \
+  --range "release/v153.0..release/v153.3" --budget 240 --open
+
+# either platform, with TestRail as an assumed denominator
+./plan.py analyze --platform ios --repo /path/to/firefox-ios \
+  --range "HEAD~120..HEAD" --testrail-export cases.json --budget 240 --open
 ```
 
 ---
+
+## Two platforms, two denominators
+
+Everything below the attribution stage is platform-agnostic and always was:
+churn measures, FMEA scoring, the plan builder, the covering arrays. Porting to
+iOS needed a Swift reader, a feature catalog, and one honest admission.
+
+| | Android | iOS |
+|---|---|---|
+| test language | Kotlin, `@Test` | Swift, `func test…()` by convention |
+| suites | `ui/`, `ui/efficiency/tests/` | `XCUITests/` |
+| surface evidence | `on.<pageObject>`, `robots.*` | `navigator.goto/nowAt/performAction` |
+| "does not run" | `@Ignore`, `@Suppress`, `@Manual` | skipped by every `.xctestplan`, `XCTSkip`, `guard #available … else { return }` |
+| candidate space | **3,158**, derived by the generation factories | **none** |
+
+The last row is the load-bearing one. The argument for this tool
+([docs/why-factories.md](docs/why-factories.md)) is that the factories
+*enumerate* a space, which gives coverage a denominator that was computed rather
+than asserted. firefox-ios has no factory framework, so on iOS the tool reports
+counts and gaps, and refuses to print a coverage percentage it cannot justify.
+`factories.empty()` exists to make that refusal explicit rather than a zero that
+looks like a measurement.
+
+### TestRail: an assumed denominator that works on both
+
+`--testrail-export cases.json` supplies the other kind of denominator. Both
+codebases already write the case id above each test, in the same URL form:
+
+```kotlin
+// TestRail link: https://mozilla.testrail.io/index.php?/cases/view/2283299
+@Test fun verifyExpandedCollectionItemsTest() { … }
+```
+```swift
+// https://mozilla.testrail.io/index.php?/cases/view/2306905
+func testBookmarkCanBeAdded() { … }
+```
+
+So the join is an **id match, not a name heuristic** — which matters, because a
+heuristic would be another assumption stacked on an already-assumed denominator.
+
+What it is: the TestRail case set is a deliberate artefact. Someone decided each
+case was worth writing for a release, and unlike the automated suite it was not
+constrained by what was cheap to automate. Taking it as the intended release-test
+plan is defensible.
+
+What it is not: complete. TestRail is also a pile that accumulated — dense where
+bugs were once found, thin where nobody wrote cases. So the number is reported as
+`automated_ratio`, never as `coverage`, and it answers exactly one question:
+**how much of the plan we wrote down will a machine run?** The remainder is the
+manual-testing gap, which is the number a release manager actually needs.
+
+Two rules keep it honest:
+
+- **A case automated only by a test that never runs is manual.** Same rule the
+  corpus applies to `@Ignore` and xctestplan skips. On firefox-ios this is not a
+  rounding error: of 440 case ids referenced by XCUITests, 125 are claimed by a
+  test that no test plan runs.
+- **A referenced id absent from the export is reported, not counted.** A test
+  pointing at another project's case would otherwise inflate the ratio.
+
+Accepted formats are JSON (the raw `get_cases` API response, or a bare list) and
+CSV (what the TestRail UI exports). Not xlsx — that needs a dependency this tool
+deliberately does not have, and
+`testrail/testcases-deduplication/fetch_testrail_export.py` can be pointed at the
+API response instead.
 
 ## Read this first: why this is possible now and wasn't before
 
@@ -101,6 +178,7 @@ action-required with zero UI coverage — which it genuinely has.
 | | |
 |---|---|
 | **[why-factories.md](docs/why-factories.md)** | why generated candidates are the precondition for coverage tooling at scale |
+| **[denominators.md](docs/denominators.md)** | derived vs assumed denominators, why iOS gets no candidate space, and what TestRail does and does not prove |
 | [risk-model.md](docs/risk-model.md) | FMEA, how each factor is derived, the two decisions with regression tests |
 | [matrix.md](docs/matrix.md) | orthogonal vs covering arrays, verification, risk-tiered allocation |
 | [architecture.md](docs/architecture.md) | pipeline stages, config, the agent seam, how to extend |
@@ -150,6 +228,34 @@ about 30 seconds. `git worktree remove ../firefox-beta` when finished.
 
 Other useful ranges: `origin/beta..origin/main` for what is queued for the next
 merge, and `HEAD~300..HEAD` for a rough nightly cycle.
+
+#### On iOS
+
+firefox-ios is its own repository, so there is no sparse-checkout to do and no
+pathspec to scope — but two things differ:
+
+```bash
+# release branches are release/vNNN.N. The bare vNNN.N branches stop at v105
+# and predate the layout move, so their paths will not match the catalog.
+git clone --single-branch --branch release/v153.3 --depth 400 \
+  https://github.com/mozilla-mobile/firefox-ios ~/Workspace/firefox-ios
+
+./plan.py analyze --platform ios --repo ~/Workspace/firefox-ios \
+  --range "HEAD~120..HEAD" --budget 240 --testrail-export cases.json --open
+```
+
+Depth matters: churn is computed by diffing the range, so a `--depth 1` clone
+gives an empty analysis. For the uplift delta between two release branches,
+fetch both and use `release/v153.2..release/v153.3`.
+
+The checkout also contains **focus-ios**, a separate product, and
+`SampleComponentLibraryApp`. Both are in the iOS catalog's `_ignored_globs`; a
+release report for Firefox iOS should not be scored on Focus churn.
+
+Layout note: the catalog's globs follow the current layout (app under
+`firefox-ios/`, shared packages under `BrowserKit/`). `--tests-root` overrides
+the test directory for an older checkout, but the source globs would also need
+adjusting.
 
 Outputs land in `out/` (gitignored):
 
@@ -228,9 +334,19 @@ defines, not runnable tests today.
 - **UI tests only.** Unit, component and service coverage are not modelled, so
   confidence is *understated* for well-unit-tested code. Closing this is worth
   more than any refinement of the existing scoring.
-- **TestRail is read, not integrated.** IDs are parsed from test comments and
-  displayed. The API is not queried and manual effort is not sized against the
-  case catalogue.
+- **TestRail is joined from an export, not queried.** Pass `--testrail-export`;
+  the tool does not talk to the API, and the export can be stale. Manual effort
+  is counted in cases, not sized in minutes.
+- **The iOS feature catalog is hand-written and unreviewed by the iOS team.**
+  Severities were carried over from the Android catalog where the feature exists,
+  which assumes user impact is the same on both platforms. The globs are fitted
+  to `release/v153.3` — 0 of 973 changed files unmapped on that branch, but that
+  is a fit to one branch, not a guarantee.
+- **iOS surface binding relies on the MappaMundi screen graph.** A test that
+  drives the app without `navigator` calls binds by class name alone, which is
+  the weaker of the two signals.
+- **No iOS candidate space.** Coverage on iOS is counts and gaps only, unless a
+  TestRail export supplies an assumed denominator.
 - **Factory candidates are counted, not selected.** They are attributed to
   features but do not yet feed the run plan.
 - Occurrence is churn-only — no cyclomatic complexity, no historical defect
@@ -247,11 +363,14 @@ defines, not runnable tests today.
 ## Layout
 
 ```
-plan.py                  entry point
-config/features.json     feature catalog: severity, source globs, page objects
-config/environment.json  matrix factors and the risk -> strength policy
-docs/                    the reasoning
-examples/                a worked agent-answers file
-testplanner/             one module per pipeline stage
-tests/                   69 unit tests, no checkout required
+plan.py                     entry point
+config/features.json        Android feature catalog: severity, globs, page objects
+config/features-ios.json    iOS feature catalog, plus its own _ignored_globs
+config/environment.json     matrix factors and the risk -> strength policy
+docs/                       the reasoning
+examples/                   a worked agent-answers file
+testplanner/                one module per pipeline stage
+  platforms.py              where the tests live, what language, factories or not
+  testrail.py               the assumed denominator and its join rules
+tests/                      108 unit tests, no checkout required
 ```

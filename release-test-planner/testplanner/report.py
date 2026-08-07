@@ -273,6 +273,20 @@ pre { background: var(--plane); border: 1px solid var(--border);
   <div id="factoryNote"></div>
 </section>
 
+<section id="testrailSection" style="display:none">
+  <h2>TestRail case set &mdash; an assumed denominator</h2>
+  <p class="note">The factory space above is <em>derived</em>: it is computed by
+  enumerating what the page-object model can reach. The TestRail case set is
+  <em>assumed</em> &mdash; someone decided each case was worth writing, which
+  makes it a statement of intent about what a release needs, but not a complete
+  map of the app. It answers "how much of the plan we wrote down is automated",
+  never "how much of the app is covered". The join is exact rather than
+  heuristic: both codebases already carry the case id above each test.</p>
+  <table id="testrailTotals"></table>
+  <div id="testrailNote"></div>
+  <table id="testrailPerFeature"></table>
+</section>
+
 <section>
   <h2>Combinatorial matrix</h2>
   <p class="note">A test is not one thing - it is a test run in a configuration.
@@ -510,6 +524,19 @@ document.getElementById('plan').innerHTML =
 
 /* factories */
 const F = D.factories;
+if (!F.factories.length) {
+  /* A platform with no factory framework. Not a gap to fill with an estimate:
+     the candidate space is what gives coverage a derived denominator, so
+     inventing one here would fabricate the number the model rests on. */
+  document.getElementById('factories').innerHTML =
+    `<thead><tr><th>Generated-test candidate space</th></tr></thead><tbody><tr>
+      <td class="dim">Not available on ${esc(D.meta.platform_label || D.meta.platform || 'this platform')}.
+      ${esc(F.reason || '')}</td></tr></tbody>`;
+  document.getElementById('factoryNote').innerHTML =
+    `<p class="note">Coverage below is reported as counts, and as a ratio only
+     against the TestRail case set when one was supplied - an assumed
+     denominator, not a derived one.</p>`;
+} else {
 document.getElementById('factories').innerHTML =
   `<thead><tr><th>Factory</th><th>Unit of generation</th>
    <th class="num">Candidates</th><th>Basis</th></tr></thead><tbody>` +
@@ -539,6 +566,43 @@ document.getElementById('factoryNote').innerHTML = `
       catalogued feature, <em>stubbed</em>): <strong>${beh.projection.candidates.toLocaleString()}</strong>
       candidates - which would make it the largest factory of the four.</p>
     </div></details>`;
+}
+
+/* TestRail: an assumed denominator, shown only when an export was supplied */
+const TR = D.testrail;
+if (TR) {
+  const t = TR.totals;
+  document.getElementById('testrailSection').style.display = '';
+  document.getElementById('testrailTotals').innerHTML =
+    `<thead><tr><th>Cases in export</th><th class="num">Automated</th>
+     <th class="num">Manual only</th><th class="num">Automated by a skipped test</th>
+     <th class="num">Automated share</th></tr></thead><tbody><tr>
+      <td class="feat">${t.cases.toLocaleString()}</td>
+      <td class="num">${t.automated.toLocaleString()}</td>
+      <td class="num">${t.manual_only.toLocaleString()}</td>
+      <td class="num">${t.skipped_automation.toLocaleString()}</td>
+      <td class="num"><strong>${pct(t.automated_ratio)}</strong></td>
+     </tr></tbody>`;
+  document.getElementById('testrailPerFeature').innerHTML =
+    `<thead><tr><th>Feature</th><th class="num">Cases</th><th class="num">Automated</th>
+     <th class="num">Skipped</th><th class="num">Manual</th><th class="num">Automated</th>
+     </tr></thead><tbody>` +
+    TR.per_feature.filter(e => e.cases).map(e => `<tr>
+      <td class="feat">${esc(e.feature)}</td>
+      <td class="num">${e.cases}</td>
+      <td class="num">${e.automated}</td>
+      <td class="num">${e.skipped_automation || ''}</td>
+      <td class="num">${e.manual_only}</td>
+      <td class="num">${e.automated_ratio == null ? '-' : pct(e.automated_ratio)}</td>
+    </tr>`).join('') + '</tbody>';
+  document.getElementById('testrailNote').innerHTML =
+    `<p class="note">${esc(TR.denominator_note)}</p>
+     <p class="note">${t.skipped_automation.toLocaleString()} case(s) are claimed by
+     an automated test that no test plan runs, so they fall back to manual.
+     ${t.tests_without_case_id.toLocaleString()} automated test(s) carry no case id and
+     cannot be counted either way. ${t.unmatched_ids.toLocaleString()} id(s) referenced by
+     tests are absent from this export.</p>`;
+}
 
 /* matrix */
 const M = D.matrix;

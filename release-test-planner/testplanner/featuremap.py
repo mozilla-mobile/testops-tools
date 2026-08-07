@@ -16,7 +16,12 @@ import json
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-# Paths that legitimately carry no release risk for the app under test.
+# Paths that legitimately carry no release risk for the app under test. A
+# catalog can replace this with `_ignored_globs`, because what counts as
+# "not app code" is platform-specific: on iOS the test targets, asset catalogs
+# and Xcode plumbing would otherwise show up as unmapped feature churn, which
+# reads as "we did not recognise this code" - a risk signal - when it is really
+# just a test file.
 IGNORED_GLOBS = [
     "**/test/**",
     "**/androidTest/**",
@@ -44,15 +49,24 @@ class Feature:
 
 
 class FeatureCatalog:
-    def __init__(self, features: List[Feature]):
+    def __init__(self, features: List[Feature],
+                 ignored_globs: Optional[List[str]] = None,
+                 platform: str = ""):
         self.features = features
+        self.platform = platform
+        self.ignored_globs = (list(ignored_globs) if ignored_globs
+                              else list(IGNORED_GLOBS))
         self._by_id = {f.id: f for f in features}
 
     @classmethod
     def load(cls, path: str) -> "FeatureCatalog":
         with open(path) as fh:
             data = json.load(fh)
-        return cls([Feature(**f) for f in data["features"]])
+        return cls(
+            [Feature(**f) for f in data["features"]],
+            ignored_globs=data.get("_ignored_globs"),
+            platform=data.get("_platform", ""),
+        )
 
     def get(self, feature_id: str) -> Optional[Feature]:
         return self._by_id.get(feature_id)
@@ -89,8 +103,8 @@ def _specificity(glob: str) -> int:
     return len(glob.replace("*", ""))
 
 
-def is_ignored(path: str) -> bool:
-    return any(_glob_match(path, g) for g in IGNORED_GLOBS)
+def is_ignored(path: str, globs: Optional[List[str]] = None) -> bool:
+    return any(_glob_match(path, g) for g in (globs or IGNORED_GLOBS))
 
 
 def attribute(catalog: FeatureCatalog, files: List[Dict]) -> Dict:
@@ -107,7 +121,7 @@ def attribute(catalog: FeatureCatalog, files: List[Dict]) -> Dict:
     for fc in files:
         path = fc["path"]
 
-        if is_ignored(path):
+        if is_ignored(path, catalog.ignored_globs):
             ignored.append(path)
             continue
 

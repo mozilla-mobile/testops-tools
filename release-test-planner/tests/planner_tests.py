@@ -26,7 +26,8 @@ FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
 sys.path.insert(0, TOOL_ROOT)
 
 from testplanner import (  # noqa: E402
-    changes, corpus, coverage, factories, featuremap, matrix, plan, risk,
+    changes, corpus, coverage, factories, featuremap, matrix, plan,
+    platforms, risk, testrail,
 )
 
 
@@ -687,6 +688,318 @@ class ConfigTests(unittest.TestCase):
             self.assertTrue(factor.get("origin"), factor["name"])
             self.assertGreaterEqual(len(factor["levels"]), 2, factor["name"])
 
+
+
+
+# ---------------------------------------------------------------------------
+# iOS: Swift corpus, test plans, platform descriptors
+# ---------------------------------------------------------------------------
+
+IOS_FIXTURE = os.path.join(FIXTURES, "ios")
+
+
+class SwiftCorpusTests(unittest.TestCase):
+    """XCUITest parsing. A test is a naming convention here, not an annotation."""
+
+    def setUp(self):
+        self.cases = corpus.parse_swift_file(
+            os.path.join(IOS_FIXTURE, "XCUITests", "SampleFeatureTests.swift"),
+            "xcuitest", IOS_FIXTURE)
+        self.by_name = {c.name: c for c in self.cases}
+
+    def test_finds_every_test_method(self):
+        self.assertEqual(
+            sorted(self.by_name),
+            ["testBookmarkCanBeAdded", "testExplicitlySkipped",
+             "testHistoryListShows", "testNewToolbarOnly",
+             "testWithoutATestRailCase"])
+
+    def test_a_helper_named_like_a_test_is_not_a_test(self):
+        self.assertNotIn("helperThatLooksLikeATest", self.by_name)
+
+    def test_class_name_is_read_from_the_declaration(self):
+        self.assertEqual(self.by_name["testBookmarkCanBeAdded"].class_name,
+                         "SampleFeatureTests")
+
+    def test_testrail_id_uses_the_same_url_form_as_fenix(self):
+        self.assertEqual(self.by_name["testBookmarkCanBeAdded"].testrail_id,
+                         "1000001")
+
+    def test_a_test_without_a_case_link_has_no_id_rather_than_the_previous_one(self):
+        self.assertEqual(self.by_name["testWithoutATestRailCase"].testrail_id, "")
+
+    def test_surfaces_come_from_the_navigator_screen_graph(self):
+        surfaces = self.by_name["testBookmarkCanBeAdded"].surfaces
+        self.assertIn("LibraryPanel_Bookmarks", surfaces)
+        self.assertIn("NewTabScreen", surfaces)
+        self.assertIn("Action.AddNewBookmark", surfaces)
+
+    def test_xctskip_is_recognised_as_a_skip(self):
+        self.assertTrue(self.by_name["testExplicitlySkipped"].skipped_in_code)
+
+    def test_an_availability_guard_that_returns_is_a_skip(self):
+        # `guard #available ... else { return }` passes having asserted nothing.
+        self.assertTrue(self.by_name["testNewToolbarOnly"].skipped_in_code)
+
+    def test_an_ordinary_test_is_not_marked_skipped(self):
+        self.assertFalse(self.by_name["testBookmarkCanBeAdded"].skipped_in_code)
+
+
+class TestPlanResolutionTests(unittest.TestCase):
+    def setUp(self):
+        self.plans = corpus.load_test_plans(IOS_FIXTURE, "plans", "XCUITests")
+
+    def test_only_plans_including_the_ui_target_are_read(self):
+        # UnitTest.xctestplan lists ClientTests and no XCUITests, so reading it
+        # would make every UI test look as though it ran there.
+        self.assertEqual(sorted(self.plans), ["Smoketest"])
+
+    def test_method_and_class_skips_are_kept_apart(self):
+        plan_data = self.plans["Smoketest"]
+        self.assertIn("testHistoryListShows", plan_data["skipped_tests"])
+        self.assertIn("SomeOtherClass", plan_data["skipped_classes"])
+
+    def test_a_skipped_method_does_not_run_in_that_plan(self):
+        cases = corpus.parse_swift_file(
+            os.path.join(IOS_FIXTURE, "XCUITests", "SampleFeatureTests.swift"),
+            "xcuitest", IOS_FIXTURE)
+        corpus.apply_test_plans(cases, self.plans)
+        by_name = {c.name: c for c in cases}
+        self.assertEqual(by_name["testHistoryListShows"].plans, [])
+        self.assertEqual(by_name["testBookmarkCanBeAdded"].plans, ["Smoketest"])
+
+    def test_a_test_no_plan_runs_is_disabled(self):
+        cases = corpus.parse_swift_file(
+            os.path.join(IOS_FIXTURE, "XCUITests", "SampleFeatureTests.swift"),
+            "xcuitest", IOS_FIXTURE)
+        corpus.apply_test_plans(cases, self.plans)
+        by_name = {c.name: c for c in cases}
+        self.assertTrue(by_name["testHistoryListShows"].is_disabled)
+        self.assertFalse(by_name["testBookmarkCanBeAdded"].is_disabled)
+
+    def test_android_tests_are_not_disabled_by_absent_plans(self):
+        # `plans is None` means the platform has no test plans; `[]` means every
+        # plan skips the test. Conflating them would disable the Android suite.
+        case = corpus.TestCase(name="t", class_name="C", suite="ui", file="C.kt")
+        self.assertIsNone(case.plans)
+        self.assertFalse(case.is_disabled)
+
+
+class PlatformTests(unittest.TestCase):
+    def test_android_declares_a_candidate_space_and_ios_does_not(self):
+        self.assertTrue(platforms.ANDROID.has_factories)
+        self.assertFalse(platforms.IOS.has_factories)
+
+    def test_unknown_platform_fails_loudly(self):
+        with self.assertRaises(SystemExit):
+            platforms.get("windows-phone")
+
+    def test_empty_factory_scan_matches_the_real_scan_shape(self):
+        # matrix.allocate and the report both read these keys.
+        real_keys = {"total_candidates", "page_count", "capabilities",
+                     "capability_features", "templates", "factories",
+                     "selectors_per_page", "context_factors", "context_profiles"}
+        self.assertTrue(real_keys.issubset(set(factories.empty("ios"))))
+        self.assertEqual(factories.empty("ios")["total_candidates"], 0)
+        self.assertFalse(factories.empty("ios")["has_candidate_space"])
+
+
+class CatalogIgnoreTests(unittest.TestCase):
+    def test_a_catalog_can_replace_the_ignore_list(self):
+        cat = featuremap.FeatureCatalog([], ignored_globs=["**/*.swift"])
+        self.assertTrue(featuremap.is_ignored("a/b/C.swift", cat.ignored_globs))
+        self.assertFalse(featuremap.is_ignored("a/b/C.kt", cat.ignored_globs))
+
+    def test_the_default_ignore_list_still_applies_without_one(self):
+        cat = featuremap.FeatureCatalog([])
+        self.assertTrue(featuremap.is_ignored("x/androidTest/Y.kt",
+                                              cat.ignored_globs))
+
+    def test_the_shipped_ios_catalog_loads_and_ignores_its_test_target(self):
+        cat = featuremap.FeatureCatalog.load(
+            os.path.join(TOOL_ROOT, "config", "features-ios.json"))
+        self.assertEqual(cat.platform, "ios")
+        self.assertTrue(cat.features)
+        self.assertTrue(featuremap.is_ignored(
+            "firefox-ios/firefox-ios-tests/Tests/XCUITests/A.swift",
+            cat.ignored_globs))
+        # focus-ios is a different product living in the same repository.
+        self.assertTrue(featuremap.is_ignored(
+            "focus-ios/Blockzilla/AppDelegate.swift", cat.ignored_globs))
+
+    def test_ios_feature_ids_overlap_android_so_reports_compare(self):
+        ios = featuremap.FeatureCatalog.load(
+            os.path.join(TOOL_ROOT, "config", "features-ios.json"))
+        android = featuremap.FeatureCatalog.load(
+            os.path.join(TOOL_ROOT, "config", "features.json"))
+        shared = {f.id for f in ios} & {f.id for f in android}
+        self.assertGreater(len(shared), 20)
+        # A feature that exists on both platforms describes the same user impact,
+        # so its severity must not drift between the two catalogs.
+        for fid in shared:
+            self.assertEqual(ios.get(fid).severity, android.get(fid).severity,
+                             "severity differs for %s" % fid)
+
+
+# ---------------------------------------------------------------------------
+# TestRail as an assumed denominator
+# ---------------------------------------------------------------------------
+
+class TestRailLoaderTests(unittest.TestCase):
+    CASES = [
+        {"id": 2306905, "title": "Bookmark a page", "section": "Bookmarks"},
+        {"id": 2306906, "title": "Delete a bookmark", "section": "Bookmarks"},
+        {"id": 2307300, "title": "Clear history", "section": "History"},
+    ]
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.json_path = os.path.join(self.tmp, "export.json")
+        with open(self.json_path, "w") as fh:
+            json.dump({"cases": self.CASES}, fh)
+        self.csv_path = os.path.join(self.tmp, "export.csv")
+        with open(self.csv_path, "w") as fh:
+            fh.write("Case ID,Title,Section\n")
+            for c in self.CASES:
+                fh.write("C%d,%s,%s\n" % (c["id"], c["title"], c["section"]))
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_id_forms_all_normalise_to_the_bare_integer(self):
+        for raw in (2306905, "2306905", "C2306905",
+                    "https://mozilla.testrail.io/index.php?/cases/view/2306905"):
+            self.assertEqual(testrail.normalise_id(raw), "2306905")
+
+    def test_missing_id_is_empty_not_an_exception(self):
+        self.assertEqual(testrail.normalise_id(None), "")
+        self.assertEqual(testrail.normalise_id("no digits here"), "")
+
+    def test_json_and_csv_produce_the_same_cases(self):
+        from_json = testrail.load_export(self.json_path)
+        from_csv = testrail.load_export(self.csv_path)
+        self.assertEqual([c["id"] for c in from_json], [c["id"] for c in from_csv])
+        self.assertEqual(len(from_json), 3)
+
+    def test_a_bare_json_list_is_accepted_too(self):
+        path = os.path.join(self.tmp, "bare.json")
+        with open(path, "w") as fh:
+            json.dump(self.CASES, fh)
+        self.assertEqual(len(testrail.load_export(path)), 3)
+
+    def test_an_unsupported_format_fails_with_a_readable_error(self):
+        path = os.path.join(self.tmp, "export.xlsx")
+        open(path, "w").close()
+        with self.assertRaises(SystemExit):
+            testrail.load_export(path)
+
+    def test_a_csv_without_an_id_column_fails_loudly(self):
+        path = os.path.join(self.tmp, "bad.csv")
+        with open(path, "w") as fh:
+            fh.write("Name,Section\nfoo,Bookmarks\n")
+        with self.assertRaises(SystemExit):
+            testrail.load_export(path)
+
+    def test_a_missing_file_fails_loudly(self):
+        with self.assertRaises(SystemExit):
+            testrail.load_export(os.path.join(self.tmp, "nope.json"))
+
+
+class TestRailJoinTests(unittest.TestCase):
+    """The join rules that decide what counts as automated coverage."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7,
+                               test_patterns=["BookmarksTests"]),
+            featuremap.Feature(id="history", name="History", severity=7,
+                               test_patterns=["HistoryTests"]),
+        ])
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _export(self, cases):
+        path = os.path.join(self.tmp, "export.json")
+        with open(path, "w") as fh:
+            json.dump({"cases": cases}, fh)
+        return path
+
+    def _inventory(self, tests):
+        return {"tests": tests}
+
+    def test_a_live_test_makes_its_case_automated(self):
+        path = self._export([{"id": 1, "title": "t", "section": "Bookmarks"}])
+        inv = self._inventory([
+            {"class_name": "BookmarksTests", "name": "testA", "testrail_id": "1",
+             "is_disabled": False}])
+        out = testrail.build(path, self.catalog, inv, {})
+        self.assertEqual(out["totals"]["automated"], 1)
+        self.assertEqual(out["totals"]["manual_only"], 0)
+
+    def test_a_case_automated_only_by_a_skipped_test_is_manual(self):
+        # Automation that never runs is not coverage - the same rule the corpus
+        # applies to @Ignore and to xctestplan skips.
+        path = self._export([{"id": 1, "title": "t", "section": "Bookmarks"}])
+        inv = self._inventory([
+            {"class_name": "BookmarksTests", "name": "testA", "testrail_id": "1",
+             "is_disabled": True}])
+        out = testrail.build(path, self.catalog, inv, {})
+        self.assertEqual(out["totals"]["automated"], 0)
+        self.assertEqual(out["totals"]["manual_only"], 1)
+        self.assertEqual(out["totals"]["skipped_automation"], 1)
+
+    def test_a_case_no_test_references_is_manual(self):
+        path = self._export([{"id": 9, "title": "t", "section": "History"}])
+        out = testrail.build(path, self.catalog, self._inventory([]), {})
+        self.assertEqual(out["totals"]["manual_only"], 1)
+        self.assertEqual(out["totals"]["automated_ratio"], 0.0)
+
+    def test_ids_referenced_but_absent_from_the_export_are_reported_not_counted(self):
+        # Otherwise a test pointing at another project's case would inflate the
+        # ratio against this export.
+        path = self._export([{"id": 1, "title": "t", "section": "Bookmarks"}])
+        inv = self._inventory([
+            {"class_name": "BookmarksTests", "name": "testA", "testrail_id": "1",
+             "is_disabled": False},
+            {"class_name": "BookmarksTests", "name": "testB",
+             "testrail_id": "424242", "is_disabled": False}])
+        out = testrail.build(path, self.catalog, inv, {})
+        self.assertEqual(out["totals"]["cases"], 1)
+        self.assertEqual(out["totals"]["automated"], 1)
+        self.assertEqual(out["totals"]["unmatched_ids"], 1)
+
+    def test_cases_are_attributed_to_features_by_section(self):
+        path = self._export([
+            {"id": 1, "title": "x", "section": "Bookmarks"},
+            {"id": 2, "title": "y", "section": "History"}])
+        out = testrail.build(path, self.catalog, self._inventory([]), {})
+        per = {e["feature_id"]: e["cases"] for e in out["per_feature"]}
+        self.assertEqual(per["bookmarks"], 1)
+        self.assertEqual(per["history"], 1)
+
+    def test_a_case_matching_no_feature_is_reported_rather_than_spread_around(self):
+        path = self._export([{"id": 1, "title": "z", "section": "Telemetry"}])
+        out = testrail.build(path, self.catalog, self._inventory([]), {})
+        self.assertEqual(out["totals"]["unattributed_cases"], 1)
+        self.assertEqual(sum(e["cases"] for e in out["per_feature"]), 0)
+
+    def test_tests_without_a_case_id_are_counted_separately(self):
+        path = self._export([{"id": 1, "title": "t", "section": "Bookmarks"}])
+        inv = self._inventory([
+            {"class_name": "BookmarksTests", "name": "testA", "testrail_id": "",
+             "is_disabled": False}])
+        out = testrail.build(path, self.catalog, inv, {})
+        self.assertEqual(out["totals"]["tests_without_case_id"], 1)
+
+    def test_the_denominator_is_labelled_assumed(self):
+        # The report must never present this as a derived coverage percentage.
+        path = self._export([{"id": 1, "title": "t", "section": "Bookmarks"}])
+        out = testrail.build(path, self.catalog, self._inventory([]), {})
+        self.assertEqual(out["denominator"], "assumed")
+        self.assertIn("not how much of the app is covered",
+                      out["denominator_note"])
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

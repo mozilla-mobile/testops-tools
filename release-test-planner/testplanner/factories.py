@@ -295,3 +295,28 @@ def attribute_to_features(scan_result: Dict, catalog, risk_rows: List[Dict]) -> 
         )
 
     return sorted(per_feature.values(), key=lambda e: e["rpn"], reverse=True)
+
+
+def empty(platform_id: str) -> Dict:
+    """A scan result for a platform that has no generated-test factories.
+
+    Every count is zero and `has_candidate_space` is False, so downstream code
+    reports "no derived denominator" rather than dividing by a number that was
+    never computed. Estimating a candidate space here would fabricate exactly
+    the quantity the model's coverage claims rest on.
+    """
+    return {
+        "platform": platform_id,
+        "has_candidate_space": False,
+        "total_candidates": 0,
+        "page_count": 0,
+        "capabilities": [],
+        "capability_features": [],
+        "templates": [],
+        "factories": [],
+        "selectors_per_page": {},
+        "context_factors": [],
+        "context_profiles": {},
+        "reason": "no factory framework on this platform; coverage has no "
+                  "derived denominator",
+    }

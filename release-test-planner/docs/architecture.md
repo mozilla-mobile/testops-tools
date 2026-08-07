@@ -27,11 +27,11 @@ Three constraints shaped the whole thing:
       |
   [1] changes     git log --numstat -> per-file churn          deterministic
   [2] featuremap  path globs -> features                       + agent for misses
-  [3] corpus      parse androidTest Kotlin -> test inventory   deterministic
+  [3] corpus      parse Kotlin / Swift tests -> test inventory  deterministic
   [4] coverage    bind tests to features, score depth          + agent for weak bindings
   [5] risk        FMEA: RPN = S x O x D                        + agent for S and O
   [6] plan        greedy budgeted selection -> gaps            + agent for manual cases
-  [7] factories   generated-case candidate space               deterministic
+  [7] factories   generated-case candidate space               deterministic (Android only)
   [8] matrix      risk-tiered covering arrays                  deterministic
       report      static HTML
 ```
@@ -43,7 +43,9 @@ can be run, inspected or replaced in isolation.
 |---|---|---|
 | `changes.py` | git range -> per-file churn, bug ids, backout detection | the record separator must **prefix** each record; `--numstat` output follows the format string, so a trailing separator pairs each commit with the *previous* commit's files |
 | `featuremap.py` | path globs -> features, longest-glob-wins | a file gets exactly one primary feature so churn is never double counted |
-| `corpus.py` | Kotlin parsing: `@Test`, annotations, TestRail ids, surfaces | handles both the legacy robot DSL and the efficiency `on.<page>` form |
+| `corpus.py` | Kotlin **and Swift** parsing: tests, TestRail ids, surfaces, what actually runs | one reader per language behind one interface; on iOS a test's `.xctestplan` membership decides whether it runs at all |
+| `platforms.py` | where tests live, which language, whether a candidate space exists | `has_factories` gates whether a coverage percentage may be printed |
+| `testrail.py` | the assumed denominator: joins a case export to the corpus on case id | never merged with the derived denominator — see denominators.md |
 | `coverage.py` | test-to-feature binding, Detection curve | binding strength is the whole ballgame — see risk-model.md |
 | `risk.py` | FMEA scoring, bands, CRAP | no Fenix knowledge; reusable as-is |
 | `plan.py` | greedy budgeted selection, gap detection | gain is re-derived per candidate, not assumed |
@@ -52,8 +54,11 @@ can be run, inspected or replaced in isolation.
 | `agentio.py` | the deterministic/AI boundary | typed questions out, audited overrides in |
 | `report.py` | the self-contained HTML dashboard | data embedded *and* fetched — see below |
 
-`risk.py` and `matrix.py` carry no platform knowledge at all. When this grows
-beyond Android, those two should move unchanged.
+`risk.py` and `matrix.py` carry no platform knowledge at all. That claim was
+tested by the iOS port: both moved unchanged, as did `changes.py` and `plan.py`.
+What the port actually needed was a Swift reader in `corpus.py`, a second
+catalog, and `platforms.py` to hold the paths that used to be constants in
+`cli.py`.
 
 ## Configuration is data
 
@@ -133,8 +138,10 @@ source globs, page objects, test patterns, and a severity rationale. No code.
 **A new matrix factor** — add it to `infrastructure_factors` and reference it in
 the allocation policy. Declare its `source` honestly.
 
-**A new platform** — `risk.py` and `matrix.py` move unchanged. `featuremap.py`
-and `corpus.py` need a per-platform catalog and parser. `factories.py` is
+**A new platform** — add a `Platform` to `platforms.py`, a catalog under
+`config/`, and a reader to `corpus.readers` if the language is new. `risk.py`,
+`matrix.py`, `changes.py` and `plan.py` need no changes; iOS proved that.
+`factories.py` is
 Android-specific by nature. The pipeline shape holds.
 
 **A new test layer (unit/component/service)** — this is the highest-value
