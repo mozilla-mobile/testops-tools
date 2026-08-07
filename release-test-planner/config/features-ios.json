@@ -1,0 +1,1235 @@
+{
+  "_comment": "Feature catalog for Firefox iOS. Each entry binds a user-facing feature to (a) the production source it lives in, (b) the MappaMundi navigator screens that drive it, and (c) XCUITest class name patterns. Feature ids match config/features.json wherever the same feature exists on Android, so the two platforms' reports are comparable; iOS-only features are marked in their rationale. Severity is the FMEA S factor, 1-10, judged on blast radius if the feature breaks in a release build - it describes user impact, not platform, so it carries over from the Android catalog unchanged where the feature does.",
+  "_platform": "ios",
+  "_severity_scale": {
+    "10": "Silent data loss, privacy/security leak, or app unusable. Ships = chemspill.",
+    "9": "Core journey broken or trust boundary weakened. Ships = dot release.",
+    "8": "Major feature broken for all users.",
+    "7": "Feature broken, workaround exists.",
+    "6": "Degraded but usable.",
+    "5": "Visible defect, no functional loss.",
+    "4": "Cosmetic or narrow-audience defect.",
+    "3": "Trivial.",
+    "2": "Barely observable.",
+    "1": "Invisible to users."
+  },
+  "_source_root": "firefox-ios/Client",
+  "_ignored_globs": [
+    "**/firefox-ios-tests/**",
+    "**/BrowserKit/Tests/**",
+    "**/*Tests/**",
+    "**/*Test.swift",
+    "**/*Tests.swift",
+    "**/XCUITests/**",
+    "**/Assets/**",
+    "**/*.xcassets/**",
+    "**/docs/**",
+    "**/*.md",
+    ".github/**",
+    "**/Dangerfile.swift",
+    "bitrise.yml",
+    "**/*.yml",
+    "package-lock.json",
+    "**/latest_acorn_release.json",
+    "**/sync_acorn_icons.py",
+    "focus-ios/**",
+    "SampleComponentLibraryApp/**",
+    "**/Package.resolved",
+    "version.txt",
+    "**/*.xcodeproj/**"
+  ],
+  "_layout_note": "Paths follow the current firefox-ios layout (release/v106 onwards), where the app lives under firefox-ios/ and the shared Swift packages under BrowserKit/. Release branches named vNNN.N without the release/ prefix predate that move and are flat; these globs will not match them.",
+  "features": [
+    {
+      "id": "browser-core",
+      "name": "Core Browsing & Navigation",
+      "severity": 10,
+      "severity_rationale": "Every session passes through it; a break makes the app unusable.",
+      "iso25010": [
+        "functional_suitability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Browser/**",
+        "firefox-ios/Client/Coordinators/**",
+        "firefox-ios/Client/Frontend/InternalSchemeHandler/**",
+        "firefox-ios/Client/Frontend/NativeErrorPage/**",
+        "BrowserKit/Sources/WebEngine/**"
+      ],
+      "page_objects": [
+        "BrowserTab",
+        "URLBarOpen",
+        "NewTabScreen"
+      ],
+      "test_patterns": [
+        "NavigationTest",
+        "SiteLoadTest",
+        "URLValidationTests",
+        "UrlBarTests",
+        "OpeningScreenTests",
+        "BrowsingPDFTests",
+        "DomainAutocompleteTests",
+        "CopiedLinksTests",
+        "ClipBoardTests"
+      ],
+      "testrail_keywords": [
+        "load bar",
+        "website view",
+        "pdf",
+        "web page",
+        "page load",
+        "reload",
+        "external link",
+        "open link",
+        "deeplink",
+        "deep link",
+        "url bar",
+        "address bar",
+        "navigation",
+        "progress bar",
+        "context menu",
+        "long press link",
+        "zoom",
+        "print"
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home Screen",
+      "severity": 9,
+      "severity_rationale": "First screen of every launch; a break is immediately visible to everyone.",
+      "iso25010": [
+        "functional_suitability",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Home/**",
+        "firefox-ios/Client/Frontend/StoriesFeed/**"
+      ],
+      "page_objects": [
+        "HomePanelsScreen",
+        "NewTabScreen",
+        "HomeSettings",
+        "NewTabSettings"
+      ],
+      "test_patterns": [
+        "ActivityStreamTest",
+        "JumpBackInTests",
+        "HomeButtonTests",
+        "HomePageSettingsUITests",
+        "NewTabSettingsTest",
+        "StoryTests",
+        "A11yHomePageTests"
+      ],
+      "testrail_keywords": [
+        "homepage",
+        "home page",
+        "stories",
+        "jump back in",
+        "recently visited",
+        "top site",
+        "shortcut on homepage",
+        "customize homepage",
+        "pocket",
+        "wallpaper"
+      ]
+    },
+    {
+      "id": "search",
+      "name": "Search & Suggestions",
+      "severity": 9,
+      "severity_rationale": "Primary entry point for navigation; breakage blocks the core journey.",
+      "iso25010": [
+        "functional_suitability",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Browser/SearchViewController/**",
+        "firefox-ios/Client/Frontend/Browser/Search/**",
+        "BrowserKit/Sources/UnifiedSearchKit/**"
+      ],
+      "page_objects": [
+        "SearchSettings",
+        "URLBarOpen"
+      ],
+      "test_patterns": [
+        "SearchTests",
+        "SearchSettingsUITests",
+        "ThirdPartySearchTest",
+        "FirefoxSuggestTest",
+        "A11ySearchTest"
+      ],
+      "testrail_keywords": [
+        "search engine",
+        "suggestion",
+        "sponsored suggestion",
+        "firefox suggest",
+        "awesomebar",
+        "quick search",
+        "search bar",
+        "search widget",
+        "autocomplete"
+      ]
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs & Tab Tray",
+      "severity": 9,
+      "severity_rationale": "Tab loss is data loss from the user's point of view.",
+      "iso25010": [
+        "functional_suitability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Browser/TabManagement/**",
+        "firefox-ios/Client/Frontend/Browser/Tabs/**",
+        "BrowserKit/Sources/TabDataStore/**",
+        "firefox-ios/Client/TabManagement/**"
+      ],
+      "page_objects": [
+        "TabTray",
+        "CloseTabMenu"
+      ],
+      "test_patterns": [
+        "TabsTests",
+        "TabCounterTests",
+        "SwipingTabsTests",
+        "MultiWindowTests",
+        "DragAndDropTest",
+        "A11yTabTrayTests",
+        "TabsTestsIpad",
+        "TabsTestsIphone"
+      ],
+      "testrail_keywords": [
+        "tab tray",
+        "top tabs",
+        "tab counter",
+        "new tab",
+        "private tab",
+        "inactive tab",
+        "tab group",
+        "close tab",
+        "undo close",
+        "tab bar"
+      ]
+    },
+    {
+      "id": "private-browsing",
+      "name": "Private Browsing",
+      "severity": 10,
+      "severity_rationale": "A leak between private and normal sessions is a privacy incident.",
+      "iso25010": [
+        "security",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/FeltPrivacy/**",
+        "firefox-ios/Client/PrivacyWindowHelper.swift",
+        "firefox-ios/Client/PrivacyNoticeHelper.swift"
+      ],
+      "page_objects": [
+        "NewTabScreen",
+        "TabTray"
+      ],
+      "test_patterns": [
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad",
+        "PrivateBrowsingTestIphone"
+      ],
+      "testrail_keywords": [
+        "private browsing",
+        "private mode",
+        "private tab",
+        "incognito"
+      ]
+    },
+    {
+      "id": "tracking-protection",
+      "name": "Enhanced Tracking Protection",
+      "severity": 10,
+      "severity_rationale": "The product's central privacy promise; silent failure is a trust breach.",
+      "iso25010": [
+        "security",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/TrackingProtection/**",
+        "firefox-ios/Client/ContentBlocker/**",
+        "BrowserKit/Sources/ContentBlockingGenerator/**"
+      ],
+      "page_objects": [
+        "TrackingProtectionSettings"
+      ],
+      "test_patterns": [
+        "TrackingProtectionTests",
+        "SecurityTests"
+      ],
+      "testrail_keywords": [
+        "etp",
+        "tracking protection",
+        "content blocking",
+        "shield",
+        "cookie protection",
+        "total cookie protection",
+        "trackers"
+      ]
+    },
+    {
+      "id": "downloads",
+      "name": "Downloads",
+      "severity": 8,
+      "severity_rationale": "A failed download loses user data with no recovery path.",
+      "iso25010": [
+        "functional_suitability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Library/Downloads/**",
+        "firefox-ios/Client/Frontend/Browser/DownloadQueue.swift"
+      ],
+      "page_objects": [
+        "LibraryPanel_Downloads"
+      ],
+      "test_patterns": [
+        "DownloadsTests"
+      ],
+      "testrail_keywords": [
+        "download",
+        "downloaded file",
+        "download manager"
+      ]
+    },
+    {
+      "id": "bookmarks",
+      "name": "Bookmarks",
+      "severity": 7,
+      "severity_rationale": "User-created data; corruption is unrecoverable but the journey survives.",
+      "iso25010": [
+        "functional_suitability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Library/Bookmarks/**"
+      ],
+      "page_objects": [
+        "LibraryPanel_Bookmarks",
+        "HomePanel_Library"
+      ],
+      "test_patterns": [
+        "BookmarksTests",
+        "LibraryTests"
+      ],
+      "testrail_keywords": [
+        "bookmark",
+        "bookmark folder",
+        "reading list bookmark"
+      ]
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "severity": 7,
+      "severity_rationale": "User data, and the surface most affected by deletion bugs.",
+      "iso25010": [
+        "functional_suitability",
+        "security"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Library/History/**"
+      ],
+      "page_objects": [
+        "LibraryPanel_History",
+        "HistoryRecentlyClosed"
+      ],
+      "test_patterns": [
+        "HistoryTests"
+      ],
+      "testrail_keywords": [
+        "history",
+        "recently closed",
+        "clear history",
+        "browsing history"
+      ]
+    },
+    {
+      "id": "logins-passwords",
+      "name": "Logins & Passwords",
+      "severity": 9,
+      "severity_rationale": "Credential loss or exposure is the highest-consequence data class in the app.",
+      "iso25010": [
+        "security",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/PasswordManagement/**",
+        "firefox-ios/Client/Frontend/PasswordGenerator/**",
+        "firefox-ios/CredentialProvider/**"
+      ],
+      "page_objects": [
+        "LoginsSettings",
+        "AutofillPasswordSettings"
+      ],
+      "test_patterns": [
+        "LoginTest",
+        "AuthenticationTest"
+      ],
+      "testrail_keywords": [
+        "password",
+        "login",
+        "credential",
+        "password generator",
+        "autofill password",
+        "face id",
+        "touch id",
+        "passcode"
+      ]
+    },
+    {
+      "id": "autofill",
+      "name": "Address & Credit Card Autofill",
+      "severity": 8,
+      "severity_rationale": "Handles payment and identity data; wrong values are worse than none.",
+      "iso25010": [
+        "security",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Autofill/**"
+      ],
+      "page_objects": [
+        "CreditCardsSettings",
+        "AddressesSettings"
+      ],
+      "test_patterns": [
+        "CreditCardsTests",
+        "AddressesTests",
+        "O_AddressesTests"
+      ],
+      "testrail_keywords": [
+        "credit card",
+        "address autofill",
+        "autofill address",
+        "saved card",
+        "payment method"
+      ]
+    },
+    {
+      "id": "delete-browsing-data",
+      "name": "Delete Browsing Data",
+      "severity": 8,
+      "severity_rationale": "If deletion silently fails the user believes data is gone when it is not.",
+      "iso25010": [
+        "security",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Settings/Clearables.swift",
+        "firefox-ios/Client/Frontend/Settings/ClearPrivateData*/**",
+        "firefox-ios/Client/Frontend/Settings/DataManagement/**"
+      ],
+      "page_objects": [
+        "ClearPrivateDataSettings",
+        "WebsiteDataSettings"
+      ],
+      "test_patterns": [
+        "DataManagementTests"
+      ],
+      "testrail_keywords": [
+        "clear private data",
+        "data management",
+        "website data",
+        "delete browsing data",
+        "clear cookies"
+      ]
+    },
+    {
+      "id": "main-menu",
+      "name": "Main Menu & Action Sheets",
+      "severity": 7,
+      "severity_rationale": "Gateway to most features; a break hides them all without breaking them.",
+      "iso25010": [
+        "usability",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "BrowserKit/Sources/MenuKit/**",
+        "firefox-ios/Client/Frontend/Browser/MainMenu/**"
+      ],
+      "page_objects": [
+        "BrowserTabMenu",
+        "BrowserTabMenuMore",
+        "SaveBrowserTabMenu",
+        "ReloadLongPressMenu"
+      ],
+      "test_patterns": [
+        "PhotonActionSheetTests",
+        "ToolbarMenuTests",
+        "ShareMenuTests"
+      ],
+      "testrail_keywords": [
+        "main menu",
+        "hamburger",
+        "menu option",
+        "photon",
+        "action sheet",
+        "homepage menu",
+        "browser menu",
+        "more menu"
+      ]
+    },
+    {
+      "id": "toolbar",
+      "name": "Toolbar",
+      "severity": 8,
+      "severity_rationale": "Always on screen and the control surface for navigation. iOS-specific feature: the toolbar is its own package here.",
+      "iso25010": [
+        "usability",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "BrowserKit/Sources/ToolbarKit/**",
+        "firefox-ios/Client/Frontend/TabToolbar/**"
+      ],
+      "page_objects": [
+        "ToolbarSettings"
+      ],
+      "test_patterns": [
+        "ToolbarTests",
+        "ShareToolbarTests"
+      ],
+      "testrail_keywords": [
+        "toolbar",
+        "url toolbar",
+        "top placement",
+        "bottom placement",
+        "tab toolbar",
+        "navigation toolbar"
+      ]
+    },
+    {
+      "id": "onboarding",
+      "name": "Onboarding",
+      "severity": 8,
+      "severity_rationale": "First impression for every new install and the hardest thing to hotfix.",
+      "iso25010": [
+        "usability",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Onboarding/**",
+        "firefox-ios/Client/Frontend/DefaultBrowserOnboarding/**",
+        "BrowserKit/Sources/OnboardingKit/**",
+        "firefox-ios/Client/IntroScreenManager.swift"
+      ],
+      "page_objects": [
+        "Intro_FxASignin"
+      ],
+      "test_patterns": [
+        "LegacyOnboardingTests",
+        "ModernKitOnboardingTests",
+        "ModernOrangeAndBlueOnboardingTests",
+        "A11yOnboardingTests"
+      ],
+      "testrail_keywords": [
+        "onboarding",
+        "first run",
+        "intro",
+        "default browser card",
+        "set as default browser",
+        "welcome",
+        "upgrade card",
+        "tour"
+      ]
+    },
+    {
+      "id": "startup-perf",
+      "name": "Startup & Performance",
+      "severity": 9,
+      "severity_rationale": "Regressions here affect every user on every launch and rarely trip functional tests.",
+      "iso25010": [
+        "performance_efficiency",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Application/**",
+        "firefox-ios/Client/AppDelegate*.swift"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "PerformanceTests"
+      ],
+      "testrail_keywords": [
+        "startup",
+        "launch time",
+        "performance",
+        "cold start"
+      ]
+    },
+    {
+      "id": "crash-reporting",
+      "name": "Crash Reporting",
+      "severity": 9,
+      "severity_rationale": "If this breaks, every other failure becomes invisible.",
+      "iso25010": [
+        "reliability",
+        "maintainability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/CrashTracker.swift",
+        "firefox-ios/Client/Frontend/Settings/**/CrashReport*/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "crash",
+        "crash report",
+        "sentry"
+      ]
+    },
+    {
+      "id": "sync",
+      "name": "Firefox Account & Sync",
+      "severity": 7,
+      "severity_rationale": "Cross-device data movement; failures can duplicate or drop records.",
+      "iso25010": [
+        "functional_suitability",
+        "compatibility"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Settings/SearchBarSettings/**",
+        "firefox-ios/RustFxA/**",
+        "firefox-ios/FxA/**",
+        "firefox-ios/Storage/**",
+        "firefox-ios/Sync/**",
+        "firefox-ios/Account/**",
+        "firefox-ios/Storage/**",
+        "firefox-ios/RustFxA/**",
+        "firefox-ios/FxA/**"
+      ],
+      "page_objects": [
+        "FxASigninScreen",
+        "Intro_FxASignin"
+      ],
+      "test_patterns": [
+        "SyncUITests",
+        "IntegrationTests",
+        "PairingTests",
+        "DatabaseFixtureTest"
+      ],
+      "testrail_keywords": [
+        "sync",
+        "firefox account",
+        "fxa",
+        "account management",
+        "desktop app",
+        "pairing",
+        "signed in",
+        "sign in",
+        "send tab",
+        "synced tab"
+      ]
+    },
+    {
+      "id": "share",
+      "name": "Share",
+      "severity": 6,
+      "severity_rationale": "Frequently used but failures are visible and recoverable.",
+      "iso25010": [
+        "functional_suitability",
+        "compatibility"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Share/**",
+        "firefox-ios/Extensions/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "ShareMenuTests",
+        "ShareLongPressTests",
+        "ShareToolbarTests",
+        "PrintTests"
+      ],
+      "testrail_keywords": [
+        "share",
+        "share sheet",
+        "share extension",
+        "send to device"
+      ]
+    },
+    {
+      "id": "pwa-shortcuts",
+      "name": "Shortcuts & Widgets",
+      "severity": 6,
+      "severity_rationale": "Entry points outside the app; breakage is confusing but non-blocking.",
+      "iso25010": [
+        "compatibility",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/ShortcutsLibrary/**",
+        "firefox-ios/Client/Frontend/Widgets/**",
+        "firefox-ios/WidgetKit/**"
+      ],
+      "page_objects": [
+        "Shortcuts"
+      ],
+      "test_patterns": [
+        "TodayWidgetTests"
+      ],
+      "testrail_keywords": [
+        "widget",
+        "today widget",
+        "home screen shortcut",
+        "add to home screen",
+        "siri",
+        "shortcut"
+      ]
+    },
+    {
+      "id": "lens",
+      "name": "Google Lens Integration",
+      "severity": 7,
+      "severity_rationale": "Third-party integration with camera and network permissions attached.",
+      "iso25010": [
+        "functional_suitability",
+        "security"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/GoogleLens/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "lens",
+        "google lens",
+        "visual search"
+      ]
+    },
+    {
+      "id": "reader-view",
+      "name": "Reader View & Reading List",
+      "severity": 5,
+      "severity_rationale": "Optional reading surface; failure degrades rather than blocks.",
+      "iso25010": [
+        "functional_suitability",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Reader/**"
+      ],
+      "page_objects": [
+        "LibraryPanel_ReadingList"
+      ],
+      "test_patterns": [
+        "ReadingListTests"
+      ],
+      "testrail_keywords": [
+        "reader view",
+        "reading list",
+        "reader mode"
+      ]
+    },
+    {
+      "id": "find-in-page",
+      "name": "Find in Page",
+      "severity": 5,
+      "severity_rationale": "Self-contained; failure is obvious and has an easy workaround.",
+      "iso25010": [
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Browser/FindInPage/**"
+      ],
+      "page_objects": [
+        "FindInPage"
+      ],
+      "test_patterns": [
+        "FindInPageTests"
+      ],
+      "testrail_keywords": [
+        "find in page",
+        "find on page"
+      ]
+    },
+    {
+      "id": "translations",
+      "name": "Translations",
+      "severity": 5,
+      "severity_rationale": "Newer surface, opt-in, degrades to untranslated content.",
+      "iso25010": [
+        "functional_suitability",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Translations/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "translation",
+        "translate"
+      ]
+    },
+    {
+      "id": "summarization",
+      "name": "Page Summarization & Quick Answers",
+      "severity": 4,
+      "severity_rationale": "New, opt-in, and clearly attributable when wrong.",
+      "iso25010": [
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Summarizer/**",
+        "firefox-ios/Client/Frontend/QuickAnswers/**",
+        "BrowserKit/Sources/SummarizeKit/**",
+        "BrowserKit/Sources/QuickAnswersKit/**",
+        "BrowserKit/Sources/LLMKit/**",
+        "BrowserKit/Sources/MLPAKit/**"
+      ],
+      "page_objects": [
+        "SummarizeSettings"
+      ],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "summarize",
+        "summarization",
+        "summary",
+        "quick answer",
+        "shake to summarize"
+      ]
+    },
+    {
+      "id": "messaging-nimbus",
+      "name": "Nimbus Experiments & Messaging",
+      "severity": 6,
+      "severity_rationale": "Can change behaviour for a cohort after ship, so a bug is remotely triggerable.",
+      "iso25010": [
+        "reliability",
+        "maintainability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Experiments/**",
+        "firefox-ios/Client/Nimbus/**",
+        "firefox-ios/Client/FeatureFlags/**",
+        "firefox-ios/Client/Frontend/NotificationSurface/**",
+        "firefox-ios/nimbus-features/**",
+        "firefox-ios/nimbus.fml.yaml"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "FeatureFlaggedTestSuite",
+        "EngagementNotificationTests"
+      ],
+      "testrail_keywords": [
+        "nimbus",
+        "experiment",
+        "messaging",
+        "notification surface",
+        "re-engagement",
+        "reengagement",
+        "feature flag",
+        "microsurvey card"
+      ]
+    },
+    {
+      "id": "telemetry",
+      "name": "Telemetry & Data Collection",
+      "severity": 5,
+      "severity_rationale": "Data-quality and compliance risk rather than user-visible breakage.",
+      "iso25010": [
+        "compliance",
+        "maintainability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Glean/**",
+        "firefox-ios/Client/Telemetry/**",
+        "firefox-ios/SyncTelemetry/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "telemetry",
+        "glean",
+        "dau",
+        "ping",
+        "data collection",
+        "usage data",
+        "studies"
+      ]
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility",
+      "severity": 7,
+      "severity_rationale": "A regression locks out users who have no workaround at all.",
+      "iso25010": [
+        "usability",
+        "compliance"
+      ],
+      "source_globs": [
+        "BrowserKit/Sources/Common/Extensions/**",
+        "firefox-ios/Client/Frontend/Settings/**/Accessibility*/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "A11yHomePageTests",
+        "A11yOnboardingTests",
+        "A11ySearchTest",
+        "A11ySettingsTests",
+        "A11yTabTrayTests"
+      ],
+      "testrail_keywords": [
+        "accessibility",
+        "voiceover",
+        "dynamic type",
+        "a11y",
+        "screen reader"
+      ]
+    },
+    {
+      "id": "media",
+      "name": "Media Playback & Autoplay",
+      "severity": 6,
+      "severity_rationale": "Playback failures are highly visible; autoplay policy is a privacy setting.",
+      "iso25010": [
+        "functional_suitability",
+        "security"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/AutoplayAccessors.swift",
+        "firefox-ios/Client/Frontend/TabContentsScripts/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "autoplay",
+        "video",
+        "media",
+        "picture in picture",
+        "audio"
+      ]
+    },
+    {
+      "id": "notifications",
+      "name": "Push & Notifications",
+      "severity": 5,
+      "severity_rationale": "Out-of-app surface; failures are annoying rather than blocking.",
+      "iso25010": [
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/NotificationManager.swift",
+        "firefox-ios/Push/**"
+      ],
+      "page_objects": [
+        "NotificationsSettings"
+      ],
+      "test_patterns": [
+        "EngagementNotificationTests"
+      ],
+      "testrail_keywords": [
+        "notification",
+        "push notification",
+        "engagement notification"
+      ]
+    },
+    {
+      "id": "theme-customization",
+      "name": "Theming & Display",
+      "severity": 4,
+      "severity_rationale": "Cosmetic, but a broken dark mode is visible to everyone using it.",
+      "iso25010": [
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Theme/**",
+        "BrowserKit/Sources/ComponentLibrary/**"
+      ],
+      "page_objects": [
+        "DisplaySettings",
+        "PageZoom"
+      ],
+      "test_patterns": [
+        "DisplaySettingTests",
+        "NightModeTests"
+      ],
+      "testrail_keywords": [
+        "dark mode",
+        "light mode",
+        "theme",
+        "app icon",
+        "appearance",
+        "night mode",
+        "display setting"
+      ]
+    },
+    {
+      "id": "webcompat",
+      "name": "Web Compat Reporter",
+      "severity": 4,
+      "severity_rationale": "Reporting channel; breakage costs signal, not user function.",
+      "iso25010": [
+        "maintainability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/WebCompatReporter/**",
+        "BrowserKit/Sources/WebCompatReporterKit/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "web compat",
+        "report broken site",
+        "webcompat"
+      ]
+    },
+    {
+      "id": "microsurvey",
+      "name": "Microsurveys & Review Prompt",
+      "severity": 3,
+      "severity_rationale": "Low blast radius, but shows up unprompted so a bug is very visible.",
+      "iso25010": [
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Microsurvey/**",
+        "firefox-ios/Client/Frontend/SurveySurface/**",
+        "firefox-ios/Client/RatingPromptManager.swift"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "microsurvey",
+        "survey",
+        "review prompt",
+        "rating prompt"
+      ]
+    },
+    {
+      "id": "desktop-mode",
+      "name": "Desktop Mode",
+      "severity": 6,
+      "severity_rationale": "Changes the rendered page for the whole session; iOS-specific surface with its own tests.",
+      "iso25010": [
+        "compatibility",
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Browser/**UserAgent**"
+      ],
+      "page_objects": [
+        "RequestDesktopSite",
+        "RequestMobileSite"
+      ],
+      "test_patterns": [
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone"
+      ],
+      "testrail_keywords": [
+        "desktop site",
+        "desktop mode",
+        "request desktop",
+        "mobile site"
+      ]
+    },
+    {
+      "id": "authentication",
+      "name": "Device Authentication",
+      "severity": 9,
+      "severity_rationale": "Guards passwords and private tabs behind Face ID / passcode. iOS-specific feature.",
+      "iso25010": [
+        "security"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/AuthenticationManager/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "AuthenticationTest"
+      ],
+      "testrail_keywords": [
+        "authentication",
+        "face id",
+        "touch id",
+        "passcode",
+        "biometric"
+      ]
+    },
+    {
+      "id": "wayback",
+      "name": "Wayback Machine",
+      "severity": 4,
+      "severity_rationale": "Narrow recovery feature for dead pages. iOS-specific.",
+      "iso25010": [
+        "functional_suitability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Wayback/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "wayback",
+        "archive"
+      ]
+    },
+    {
+      "id": "contextual-hints",
+      "name": "Contextual Hints",
+      "severity": 4,
+      "severity_rationale": "Overlays on top of working features; a stuck hint can block interaction.",
+      "iso25010": [
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/ContextualHint/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "contextual hint",
+        "tooltip",
+        "cfr"
+      ]
+    },
+    {
+      "id": "settings-general",
+      "name": "Settings (General & Shell)",
+      "severity": 7,
+      "severity_rationale": "Every preference the user has set flows through it.",
+      "iso25010": [
+        "functional_suitability",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Frontend/Settings/**"
+      ],
+      "page_objects": [
+        "SettingsScreen",
+        "BrowsingSettings",
+        "MailAppSettings"
+      ],
+      "test_patterns": [
+        "SettingsTests",
+        "A11ySettingsTests"
+      ],
+      "testrail_keywords": [
+        "setting",
+        "preference",
+        "about firefox",
+        "mail app",
+        "siri shortcut"
+      ]
+    },
+    {
+      "id": "app-infrastructure",
+      "name": "App Infrastructure & Components",
+      "severity": 8,
+      "severity_rationale": "Shared foundations: a defect here surfaces as unrelated failures elsewhere.",
+      "iso25010": [
+        "maintainability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/Redux/**",
+        "BrowserKit/Sources/Redux/**",
+        "BrowserKit/Sources/Common/**",
+        "BrowserKit/Sources/Shared/**",
+        "firefox-ios/Client/Helpers/**",
+        "firefox-ios/Client/Protocols/**",
+        "firefox-ios/Client/Utils/**",
+        "MozillaRustComponents/**",
+        "firefox-ios/Client/BookmarkItemsHelper.swift",
+        "firefox-ios/Shared/**",
+        "firefox-ios/Providers/**",
+        "firefox-ios/Client/Extensions/**",
+        "BrowserKit/Sources/SiteImageView/**",
+        "firefox-ios/Client/UserNotificationCenterProtocol.swift"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "ScreenGraphTest",
+        "FxScreenGraphTests"
+      ],
+      "testrail_keywords": [
+        "keyboard shortcut",
+        "ipad",
+        "multitasking",
+        "split view",
+        "stage manager",
+        "screen graph",
+        "state restoration",
+        "memory"
+      ]
+    },
+    {
+      "id": "build-config",
+      "name": "Build, Project & Entitlements",
+      "severity": 8,
+      "severity_rationale": "A signing or capability mistake can make a build unshippable or unlaunchable.",
+      "iso25010": [
+        "portability",
+        "reliability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client.xcodeproj/**",
+        "firefox-ios/Client/Configuration/**",
+        "firefox-ios/Client/Entitlements/**",
+        "firefox-ios/Client/Info.plist",
+        "*.xcconfig",
+        "Package.swift",
+        "**/Package.swift"
+      ],
+      "page_objects": [],
+      "test_patterns": []
+    },
+    {
+      "id": "localization",
+      "name": "Strings & Localization",
+      "severity": 3,
+      "severity_rationale": "Wide but shallow: a bad string is visible everywhere and fixes cheaply.",
+      "iso25010": [
+        "usability",
+        "compliance"
+      ],
+      "source_globs": [
+        "**/*.lproj/**",
+        "firefox-ios/Shared/Strings.swift",
+        "BrowserKit/Sources/Shared/Strings*.swift"
+      ],
+      "page_objects": [],
+      "test_patterns": [
+        "L10nSnapshotTests"
+      ],
+      "testrail_keywords": [
+        "localization",
+        "locale",
+        "language",
+        "rtl",
+        "translation string"
+      ]
+    },
+    {
+      "id": "terms-distribution",
+      "name": "Terms of Use & Distribution",
+      "severity": 5,
+      "severity_rationale": "Legal-consent surface: wrong behaviour here is a compliance problem rather than a functional one.",
+      "iso25010": [
+        "compliance",
+        "usability"
+      ],
+      "source_globs": [
+        "firefox-ios/Client/TermsOfServiceManager.swift",
+        "firefox-ios/Client/Frontend/Settings/**/TermsOfService*/**"
+      ],
+      "page_objects": [],
+      "test_patterns": [],
+      "testrail_keywords": [
+        "terms of use",
+        "tos",
+        "privacy notice",
+        "distribution"
+      ]
+    }
+  ]
+}

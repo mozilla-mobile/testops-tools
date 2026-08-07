@@ -1,0 +1,35 @@
+name: release-test-planner-tests
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "release-test-planner/**"
+  pull_request:
+    paths:
+      - "release-test-planner/**"
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # No dependency install step: the planner is stdlib-only. The tests do
+      # not need a Firefox checkout either - Kotlin parsing runs against
+      # fixtures and git parsing against a temp repo.
+      - name: Run tests
+        run: python -m unittest discover -s release-test-planner/tests -p '*tests.py' -v

@@ -1,0 +1,463 @@
+{
+  "_comment": "Feature catalog for the Fenix release test planner PoC. Each entry binds a user-facing feature to (a) the production source it lives in, (b) the efficiency-framework page objects that drive it, and (c) test class name patterns. Severity is the FMEA S factor, 1-10, judged on blast radius if the feature breaks in a release build.",
+  "_severity_scale": {
+    "10": "Silent data loss, privacy/security leak, or app unusable. Ships = chemspill.",
+    "9": "Core journey broken or trust boundary weakened. Ships = dot release.",
+    "8": "Major feature broken for all users of it. Highly visible.",
+    "7": "Major feature degraded, or broken on a common path.",
+    "6": "Secondary feature broken. Noticeable, has workarounds.",
+    "5": "Secondary feature degraded.",
+    "4": "Cosmetic or low-traffic surface.",
+    "3": "Peripheral / opt-in surface.",
+    "2": "Internal or debug-only surface.",
+    "1": "No user-visible impact."
+  },
+  "_source_root": "mobile/android/fenix/app/src/main/java/org/mozilla/fenix",
+
+  "features": [
+    {
+      "id": "browser-core",
+      "name": "Core Browsing & Navigation",
+      "severity": 10,
+      "severity_rationale": "Every session passes through it; a break makes the app unusable.",
+      "iso25010": ["functional_suitability", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/browser/**", "**/org/mozilla/fenix/session/**", "**/org/mozilla/fenix/intent/**"],
+      "page_objects": ["browserPage", "toolbar"],
+      "test_patterns": ["BrowserTest", "NavigationToolbar", "DeepLink", "AboutURI", "BrowsingErrorPages"]
+    },
+    {
+      "id": "home",
+      "name": "Home Screen",
+      "severity": 9,
+      "severity_rationale": "First surface on every cold start; breakage blocks all entry points.",
+      "iso25010": ["functional_suitability", "usability"],
+      "source_globs": ["**/org/mozilla/fenix/home/**", "**/org/mozilla/fenix/historymetadata/**"],
+      "page_objects": ["home"],
+      "test_patterns": ["HomeScreen", "HomeTest", "Pocket", "SponsoredShortcuts"]
+    },
+    {
+      "id": "search",
+      "name": "Search & Suggestions",
+      "severity": 9,
+      "severity_rationale": "Primary navigation mechanism and a revenue surface.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/search/**"],
+      "page_objects": ["searchBar", "settingsSearch", "settingsSearchDefaultSearchEngine"],
+      "test_patterns": ["SearchTest", "SettingsSearch", "FirefoxSuggest"]
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs & Tabs Tray",
+      "severity": 9,
+      "severity_rationale": "Session state lives here; failures can lose user tabs.",
+      "iso25010": ["functional_suitability", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/tabstray/**", "**/org/mozilla/fenix/tabgroups/**", "**/org/mozilla/fenix/tabhistory/**"],
+      "page_objects": ["tabDrawer", "tabHistory", "settingsTabs"],
+      "test_patterns": ["TabbedBrowsing", "TabsTray", "SettingsTabs", "RecentlyClosedTabs"]
+    },
+    {
+      "id": "private-browsing",
+      "name": "Private Browsing & PBM Lock",
+      "severity": 10,
+      "severity_rationale": "Trust boundary. A leak of private state is a privacy incident.",
+      "iso25010": ["security", "functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/pbmlock/**", "**/org/mozilla/fenix/biometricauthentication/**"],
+      "page_objects": ["settingsPrivateBrowsing"],
+      "test_patterns": ["PrivateBrowsing", "SettingsPrivateBrowsing"]
+    },
+    {
+      "id": "tracking-protection",
+      "name": "Enhanced Tracking Protection",
+      "severity": 10,
+      "severity_rationale": "Core brand promise and a security control; silent failure is worst case.",
+      "iso25010": ["security"],
+      "source_globs": ["**/org/mozilla/fenix/trackingprotection/**"],
+      "page_objects": ["settingsEnhancedTrackingProtection", "settingsEnhancedTrackingProtectionExceptions", "unifiedTrustPanel"],
+      "test_patterns": ["EnhancedTrackingProtection", "TrackingProtection", "GlobalPrivacyControl"]
+    },
+    {
+      "id": "ip-protection",
+      "name": "IP Protection / VPN",
+      "severity": 9,
+      "severity_rationale": "Security feature where silent failure misleads users about their protection.",
+      "iso25010": ["security"],
+      "source_globs": ["**/org/mozilla/fenix/ipprotection/**"],
+      "page_objects": [],
+      "test_patterns": ["IPProtection", "Vpn"]
+    },
+    {
+      "id": "downloads",
+      "name": "Downloads",
+      "severity": 8,
+      "severity_rationale": "Touches storage and permissions; failures can lose user files.",
+      "iso25010": ["functional_suitability", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/downloads/**"],
+      "page_objects": ["downloads"],
+      "test_patterns": ["Download"]
+    },
+    {
+      "id": "bookmarks",
+      "name": "Bookmarks",
+      "severity": 7,
+      "severity_rationale": "User-generated data; corruption is unrecoverable without sync.",
+      "iso25010": ["functional_suitability", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/bookmarks/**", "**/org/mozilla/fenix/library/bookmarks/**"],
+      "page_objects": ["bookmarks", "bookmarkSearch"],
+      "test_patterns": ["Bookmark"]
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "severity": 7,
+      "severity_rationale": "User data plus a privacy surface when deletion fails.",
+      "iso25010": ["functional_suitability", "security"],
+      "source_globs": ["**/org/mozilla/fenix/library/history/**"],
+      "page_objects": ["history"],
+      "test_patterns": ["HistoryTest"]
+    },
+    {
+      "id": "logins-passwords",
+      "name": "Logins & Passwords",
+      "severity": 9,
+      "severity_rationale": "Credential store. Data loss or exposure is a security incident.",
+      "iso25010": ["security", "functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/settings/logins/**", "**/org/mozilla/fenix/settings/biometric/**"],
+      "page_objects": ["settingsPasswords", "settingsSavePasswords", "settingsSavedPasswords"],
+      "test_patterns": ["Logins", "Password"]
+    },
+    {
+      "id": "autofill",
+      "name": "Address & Credit Card Autofill",
+      "severity": 8,
+      "severity_rationale": "Stores PII and payment data; incorrect fill can leak between fields.",
+      "iso25010": ["security", "functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/autofill/**", "**/org/mozilla/fenix/settings/address/**", "**/org/mozilla/fenix/settings/creditcards/**"],
+      "page_objects": ["settingsAutofill"],
+      "test_patterns": ["AddressAutofill", "CreditCardAutofill", "Autofill"]
+    },
+    {
+      "id": "delete-browsing-data",
+      "name": "Delete Browsing Data",
+      "severity": 8,
+      "severity_rationale": "Privacy control. Failing to actually delete is a trust violation.",
+      "iso25010": ["security"],
+      "source_globs": ["**/org/mozilla/fenix/settings/deletebrowsingdata/**"],
+      "page_objects": ["settingsDeleteBrowsingData", "settingsDeleteBrowsingDataOnQuit"],
+      "test_patterns": ["DeleteBrowsingData"]
+    },
+    {
+      "id": "site-permissions",
+      "name": "Site Permissions",
+      "severity": 8,
+      "severity_rationale": "Gates camera, mic and location. Over-granting is a security bug.",
+      "iso25010": ["security"],
+      "source_globs": ["**/org/mozilla/fenix/settings/sitepermissions/**"],
+      "page_objects": ["settingsSiteSettings", "settingsSiteSettingsExceptions"],
+      "test_patterns": ["SitePermissions", "SiteSettings"]
+    },
+    {
+      "id": "https-only",
+      "name": "HTTPS-Only Mode",
+      "severity": 8,
+      "severity_rationale": "Transport security control; silent downgrade is a security bug.",
+      "iso25010": ["security"],
+      "source_globs": ["**/org/mozilla/fenix/settings/HttpsOnly**"],
+      "page_objects": ["settingsHTTPSOnlyMode"],
+      "test_patterns": ["HTTPSOnly"]
+    },
+    {
+      "id": "custom-tabs",
+      "name": "Custom Tabs",
+      "severity": 7,
+      "severity_rationale": "Third-party app integration surface; breakage affects external partners.",
+      "iso25010": ["functional_suitability", "compatibility"],
+      "source_globs": ["**/org/mozilla/fenix/customtabs/**"],
+      "page_objects": ["customTabs"],
+      "test_patterns": ["CustomTabs"]
+    },
+    {
+      "id": "main-menu",
+      "name": "Main Menu",
+      "severity": 7,
+      "severity_rationale": "Entry point to most secondary features; breakage blocks many journeys.",
+      "iso25010": ["functional_suitability", "usability"],
+      "source_globs": ["**/org/mozilla/fenix/components/menu/**"],
+      "page_objects": ["mainMenu"],
+      "test_patterns": ["MainMenu"]
+    },
+    {
+      "id": "onboarding",
+      "name": "Onboarding",
+      "severity": 8,
+      "severity_rationale": "Every new user sees it; a break damages activation and is highly visible.",
+      "iso25010": ["usability", "functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/onboarding/**"],
+      "page_objects": ["onboarding"],
+      "test_patterns": ["Onboarding"]
+    },
+    {
+      "id": "startup-perf",
+      "name": "Startup & Performance",
+      "severity": 9,
+      "severity_rationale": "Startup regressions affect 100% of sessions and are release blockers.",
+      "iso25010": ["performance_efficiency", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/perf/**", "**/org/mozilla/fenix/splashscreen/**", "**/org/mozilla/fenix/lifecycle/**"],
+      "page_objects": [],
+      "test_patterns": ["Startup", "NoNetworkAccess"]
+    },
+    {
+      "id": "crash-reporting",
+      "name": "Crash Reporting",
+      "severity": 9,
+      "severity_rationale": "Loss of crash telemetry blinds the release team during the cycle.",
+      "iso25010": ["reliability", "maintainability"],
+      "source_globs": ["**/org/mozilla/fenix/crashes/**", "**/org/mozilla/fenix/startupCrash/**"],
+      "page_objects": [],
+      "test_patterns": ["CrashReporting"]
+    },
+    {
+      "id": "sync",
+      "name": "Firefox Account & Sync",
+      "severity": 7,
+      "severity_rationale": "Cross-device data movement; failures can duplicate or drop records.",
+      "iso25010": ["functional_suitability", "reliability"],
+      "source_globs": ["**/org/mozilla/fenix/sync/**"],
+      "page_objects": ["settingsTurnOnSync"],
+      "test_patterns": ["Sync", "TurnOnSync"]
+    },
+    {
+      "id": "addons-extensions",
+      "name": "Add-ons & Extensions",
+      "severity": 6,
+      "severity_rationale": "Opt-in surface, but broken add-ons draw loud community feedback.",
+      "iso25010": ["functional_suitability", "compatibility"],
+      "source_globs": ["**/org/mozilla/fenix/addons/**", "**/org/mozilla/fenix/extension/**"],
+      "page_objects": ["settingsAddonsManager"],
+      "test_patterns": ["Addons", "Extension"]
+    },
+    {
+      "id": "share",
+      "name": "Share",
+      "severity": 6,
+      "severity_rationale": "Common outbound action; integrates with the system share sheet.",
+      "iso25010": ["functional_suitability", "compatibility"],
+      "source_globs": ["**/org/mozilla/fenix/share/**"],
+      "page_objects": ["shareOverlay"],
+      "test_patterns": ["ShareTest", "Share"]
+    },
+    {
+      "id": "pwa-shortcuts",
+      "name": "PWAs & Home Screen Shortcuts",
+      "severity": 6,
+      "severity_rationale": "Installed shortcuts persist on the device; breakage is sticky.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/shortcut/**", "**/org/mozilla/fenix/widget/**"],
+      "page_objects": ["addToHomescreen", "shortcuts"],
+      "test_patterns": ["Pwa", "Shortcut", "AddToHomeScreen"]
+    },
+    {
+      "id": "lens",
+      "name": "Google Lens Integration",
+      "severity": 7,
+      "severity_rationale": "New entry flow that takes camera permission; a failure is both a broken feature and a permissions surface.",
+      "iso25010": ["functional_suitability", "security"],
+      "source_globs": ["**/org/mozilla/fenix/components/lens/**", "**/LensCameraActivity*"],
+      "page_objects": [],
+      "test_patterns": ["Lens"]
+    },
+    {
+      "id": "collections",
+      "name": "Collections",
+      "severity": 5,
+      "severity_rationale": "User-generated grouping; lower traffic than bookmarks.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/collections/**"],
+      "page_objects": ["collections"],
+      "test_patterns": ["Collection"]
+    },
+    {
+      "id": "reader-view",
+      "name": "Reader View",
+      "severity": 5,
+      "severity_rationale": "Secondary reading surface with an accessibility dimension.",
+      "iso25010": ["functional_suitability", "usability"],
+      "source_globs": ["**/org/mozilla/fenix/readermode/**"],
+      "page_objects": ["readerView"],
+      "test_patterns": ["ReaderView"]
+    },
+    {
+      "id": "find-in-page",
+      "name": "Find in Page",
+      "severity": 5,
+      "severity_rationale": "Self-contained utility; failure is contained to the feature.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/findinpage/**"],
+      "page_objects": ["findInPage"],
+      "test_patterns": ["FindInPage"]
+    },
+    {
+      "id": "translations",
+      "name": "Translations",
+      "severity": 5,
+      "severity_rationale": "Newer opt-in feature; incorrect translation is visible but non-destructive.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/translations/**"],
+      "page_objects": [],
+      "test_patterns": ["Translation"]
+    },
+    {
+      "id": "messaging-nimbus",
+      "name": "Nimbus Experiments & Messaging",
+      "severity": 6,
+      "severity_rationale": "Controls rollout of everything else; a break can mis-target experiments.",
+      "iso25010": ["functional_suitability", "maintainability"],
+      "source_globs": ["**/org/mozilla/fenix/messaging/**", "**/org/mozilla/fenix/nimbus/**", "**/org/mozilla/fenix/experiments/**", "mobile/android/fenix/app/nimbus.fml.yaml", "mobile/android/fenix/app/.experimenter.yaml", "**/res/raw/initial_experiments.json"],
+      "page_objects": ["settingsExperiments"],
+      "test_patterns": ["Nimbus", "Messaging"]
+    },
+    {
+      "id": "telemetry",
+      "name": "Telemetry & Data Collection",
+      "severity": 5,
+      "severity_rationale": "Data quality issue rather than user-facing, but blinds decision making.",
+      "iso25010": ["maintainability", "security"],
+      "source_globs": ["**/org/mozilla/fenix/telemetry/**", "**/org/mozilla/fenix/components/metrics/**", "mobile/android/fenix/app/metrics.yaml", "mobile/android/fenix/app/pings.yaml"],
+      "page_objects": ["settingsDataCollection"],
+      "test_patterns": ["Telemetry", "DataCollection", "Glean"]
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility",
+      "severity": 7,
+      "severity_rationale": "Regressions here exclude users entirely and carry compliance risk.",
+      "iso25010": ["usability", "compatibility"],
+      "source_globs": ["**/org/mozilla/fenix/settings/accessibility/**"],
+      "page_objects": ["settingsAccessibility"],
+      "test_patterns": ["Accessibility"]
+    },
+    {
+      "id": "media",
+      "name": "Media Playback & Notifications",
+      "severity": 6,
+      "severity_rationale": "Background playback and notification controls; visible when broken.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/media/**"],
+      "page_objects": [],
+      "test_patterns": ["MediaNotification"]
+    },
+    {
+      "id": "notifications",
+      "name": "Push & Notifications",
+      "severity": 5,
+      "severity_rationale": "Delivery surface for re-engagement; failures are silent.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/push/**"],
+      "page_objects": ["notification"],
+      "test_patterns": ["Notification"]
+    },
+    {
+      "id": "theme-customization",
+      "name": "Theming, Wallpapers & App Icon",
+      "severity": 4,
+      "severity_rationale": "Largely cosmetic; contained blast radius.",
+      "iso25010": ["usability"],
+      "source_globs": ["**/org/mozilla/fenix/theme/**", "**/org/mozilla/fenix/wallpapers/**", "**/org/mozilla/fenix/iconpicker/**"],
+      "page_objects": ["settingsCustomize", "settingsAppIcon"],
+      "test_patterns": ["Customize", "Wallpaper", "AppIcon"]
+    },
+    {
+      "id": "webcompat",
+      "name": "Web Compat Reporter",
+      "severity": 4,
+      "severity_rationale": "Reporting utility; failure does not affect browsing.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/webcompat/**"],
+      "page_objects": ["webCompatReporter"],
+      "test_patterns": ["WebCompat"]
+    },
+    {
+      "id": "microsurvey",
+      "name": "Microsurveys & Review Prompt",
+      "severity": 3,
+      "severity_rationale": "Peripheral prompt surface; worst case is an annoying dialog.",
+      "iso25010": ["usability"],
+      "source_globs": ["**/org/mozilla/fenix/microsurvey/**", "**/org/mozilla/fenix/reviewprompt/**"],
+      "page_objects": ["microsurveys"],
+      "test_patterns": ["Microsurvey", "ReviewPrompt"]
+    },
+    {
+      "id": "summarization",
+      "name": "Page Summarization",
+      "severity": 4,
+      "severity_rationale": "New opt-in AI surface with limited rollout.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/summarization/**"],
+      "page_objects": [],
+      "test_patterns": ["Summar"]
+    },
+    {
+      "id": "terms-distribution",
+      "name": "Terms of Use & Distributions",
+      "severity": 5,
+      "severity_rationale": "Legal acceptance gate and partner build config; blocks first run when broken.",
+      "iso25010": ["compliance", "functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/termsofuse/**", "**/org/mozilla/fenix/distributions/**"],
+      "page_objects": [],
+      "test_patterns": ["TermsOfUse", "Distribution"]
+    },
+    {
+      "id": "settings-general",
+      "name": "Settings (General & Shell)",
+      "severity": 7,
+      "severity_rationale": "Container for most controls; a broken settings shell blocks many features.",
+      "iso25010": ["functional_suitability"],
+      "source_globs": ["**/org/mozilla/fenix/settings/**"],
+      "page_objects": ["settings", "settingsAbout", "settingsHomepage", "settingsLanguage", "settingsOpenLinksInApps"],
+      "test_patterns": ["SettingsTest", "SettingsGeneral", "SettingsAdvanced", "SettingsAbout", "SettingsCustomize", "SettingsHomepage", "SettingsLanguage", "SettingsOpenLinksInApps", "SettingsPageSummaries", "SettingsPrivacy"]
+    },
+    {
+      "id": "app-infrastructure",
+      "name": "App Infrastructure & Components",
+      "severity": 8,
+      "severity_rationale": "Shared plumbing. Changes here can destabilise every feature at once.",
+      "iso25010": ["reliability", "maintainability"],
+      "source_globs": ["**/org/mozilla/fenix/components/**", "**/org/mozilla/fenix/ext/**", "**/org/mozilla/fenix/utils/**", "**/org/mozilla/fenix/bindings/**", "**/org/mozilla/fenix/compose/**", "**/org/mozilla/fenix/datastore/**", "**/org/mozilla/fenix/navigation/**", "**/org/mozilla/fenix/HomeActivity.kt", "**/org/mozilla/fenix/FenixApplication.kt", "**/org/mozilla/fenix/AppRequestInterceptor.kt", "**/org/mozilla/fenix/gecko/**"],
+      "page_objects": [],
+      "test_patterns": [],
+      "indirect": true
+    },
+    {
+      "id": "build-config",
+      "name": "Build, Gradle & Manifest",
+      "severity": 8,
+      "severity_rationale": "Build config errors ship broken binaries or wrong permissions to everyone.",
+      "iso25010": ["reliability", "portability"],
+      "source_globs": ["mobile/android/fenix/**/*.gradle", "mobile/android/fenix/**/AndroidManifest.xml", "mobile/android/fenix/**/*.properties", "mobile/android/fenix/**/proguard*", "mobile/android/fenix/config/**"],
+      "page_objects": [],
+      "test_patterns": [],
+      "indirect": true
+    },
+    {
+      "id": "localization",
+      "name": "Strings & Localization",
+      "severity": 3,
+      "severity_rationale": "String-only changes; risk is truncation or an untranslated surface.",
+      "iso25010": ["usability"],
+      "source_globs": ["mobile/android/fenix/**/res/values*/**"],
+      "page_objects": [],
+      "test_patterns": [],
+      "indirect": true
+    },
+    {
+      "id": "resources-ui",
+      "name": "Layouts, Drawables & UI Resources",
+      "severity": 5,
+      "severity_rationale": "Visual and layout regressions; can break interaction if a view id changes.",
+      "iso25010": ["usability"],
+      "source_globs": ["mobile/android/fenix/**/res/layout*/**", "mobile/android/fenix/**/res/drawable*/**", "mobile/android/fenix/**/res/xml/**", "mobile/android/fenix/**/res/navigation/**", "mobile/android/fenix/**/res/color/**"],
+      "page_objects": [],
+      "test_patterns": [],
+      "indirect": true
+    }
+  ]
+}

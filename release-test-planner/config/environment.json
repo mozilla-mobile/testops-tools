@@ -1,0 +1,69 @@
+{
+  "_comment": "Execution-environment factors for the combinatorial test matrix, plus the policy that decides how much of the matrix each risk band earns. Factors marked source='real' are parsed out of BehaviorContextMatrix.kt in the tree; those marked 'stubbed' are plausible placeholders for the PoC.",
+
+  "_stub_note": "Real minSdk/targetSdk are computed in mach's Python build config rather than declared in the gradle files, and the device pool would come from Firebase Test Lab / the Autophone config. Both are stubbed here.",
+
+  "infrastructure_factors": [
+    {
+      "name": "ApiLevel",
+      "levels": ["23", "28", "33", "36"],
+      "source": "stubbed",
+      "origin": "Placeholder. Real values live in mach build config; the shipping matrix should come from the Play Console API-level distribution.",
+      "rationale": "Android behaviour changes at API boundaries (scoped storage at 29, notification permission at 33, foreground service types at 34) break features asymmetrically."
+    },
+    {
+      "name": "DeviceClass",
+      "levels": ["Phone", "Tablet", "Foldable"],
+      "source": "partly-real",
+      "origin": "Phone and Tablet are real levels in BehaviorContextMatrix.kt; Foldable is a stub.",
+      "rationale": "Layout and navigation diverge by form factor; tablets use a different toolbar and tabs-tray presentation."
+    },
+    {
+      "name": "BuildVariant",
+      "levels": ["Nightly", "Beta", "Release"],
+      "source": "stubbed",
+      "origin": "Placeholder for the real product flavors.",
+      "rationale": "Secret settings, debug menus and some Nimbus defaults differ by variant, so a Nightly-only pass can miss a Release-only path."
+    },
+    {
+      "name": "Network",
+      "levels": ["Online", "Offline"],
+      "source": "stubbed",
+      "origin": "Placeholder.",
+      "rationale": "Offline paths are a common source of unhandled states in downloads, sync and search."
+    },
+    {
+      "name": "Theme",
+      "levels": ["Light", "Dark"],
+      "source": "stubbed",
+      "origin": "Placeholder.",
+      "rationale": "Cheap to vary and catches contrast and drawable-tint regressions."
+    }
+  ],
+
+  "_allocation_comment": "How much matrix a feature earns is a function of its FMEA band. Spending 3-way coverage on an acceptable-band feature is how a test matrix becomes unaffordable; spending only the default config on an action-required feature is how a release ships broken.",
+
+  "allocation_policy": {
+    "action-required": {
+      "strength": 3,
+      "factors": ["ApiLevel", "DeviceClass", "BrowserMode", "Account", "BuildVariant", "Network", "Theme"],
+      "rationale": "High severity and high churn. 3-way catches interaction faults that pairwise provably cannot, and the empirical fault-detection literature puts 3-way in the 90%+ range."
+    },
+    "review": {
+      "strength": 2,
+      "factors": ["ApiLevel", "DeviceClass", "BrowserMode", "Account", "Theme"],
+      "rationale": "Pairwise. Most reported combinatorial faults are 2-way, so this is the standard value-for-money point."
+    },
+    "acceptable": {
+      "strength": 0,
+      "factors": ["ApiLevel", "DeviceClass"],
+      "rationale": "Baseline configuration only. Enough to notice a total break, not enough to characterise it. Strength 0 means one representative config rather than a combinatorial array."
+    }
+  },
+
+  "_cost_comment": "Device-minutes multipliers, stubbed. Real numbers would come from Firebase Test Lab billing or Treeherder task durations.",
+  "config_cost_multiplier": {
+    "DeviceClass": { "Phone": 1.0, "Tablet": 1.3, "Foldable": 1.6 },
+    "Network": { "Online": 1.0, "Offline": 1.15 }
+  }
+}
