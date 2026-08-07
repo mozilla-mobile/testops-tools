@@ -246,6 +246,31 @@ python -m unittest discover -s tests -p '*tests.py'
 
 `export FENIX_REPO=/path/to/firefox` to skip `--repo`.
 
+### Checking a change did not move the other platform
+
+Unit tests say the pieces behave; they cannot say "the Android report is still
+the report it was". `tests/ab_check.py` runs the pipeline at two revisions over
+the same range and compares the *decisions* — risk, selection and order, matrix,
+gaps — tolerating additive fields and failing on changed values. It uses git
+worktrees, so your working tree is untouched.
+
+```bash
+# did the iOS port change the Android analysis? (~10s)
+tests/ab_check.py --before 94ad20f --repo ~/Workspace/firefox --range "HEAD~300..HEAD"
+```
+
+```
+new top-level keys: ['testrail']
+meta        added ['has_factories', 'platform', ...]   changed none
+changes     identical: True
+attribution identical: True
+risk        identical: True
+matrix      identical: True
+plan        selected  same tests, same order: True (73)
+plan        redundant same tests, same order: True (244)
+SAME - every decision matches; differences are additive only.
+```
+
 ### Analysing a release branch
 
 `--range` is handed straight to `git log`, so any revision expression works.
@@ -425,4 +450,5 @@ testplanner/                one module per pipeline stage
   platforms.py              where the tests live, what language, factories or not
   testrail.py               the assumed denominator and its join rules
 tests/                      121 unit tests, no checkout required
+  ab_check.py               prove a change did not alter the other platform's report
 ```
