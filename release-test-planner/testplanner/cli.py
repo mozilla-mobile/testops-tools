@@ -154,7 +154,7 @@ def run_analysis(args, quiet: bool = False):
                 "addressable".format(rt["deliberately_manual"],
                                      rt["automated_ratio_addressable"],
                                      rt["addressable_cases"]))
-        if rt["status_counts"] and rt["status_counts"] != {"unknown": rt["cases"]}:
+        if rt["has_execution_data"]:
             log("      execution: {} ({} not run, {} not applicable)".format(
                 ", ".join("{} {}".format(v, k)
                           for k, v in sorted(rt["status_counts"].items(),

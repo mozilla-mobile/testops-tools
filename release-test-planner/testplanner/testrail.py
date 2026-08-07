@@ -414,6 +414,11 @@ def build(path: str, catalog, inventory: Dict, cov: Dict) -> Dict:
                   if s.lower() in NOT_RUN_STATUSES)
     excluded = sum(n for s, n in status_counts.items()
                    if s.lower() in EXCLUDED_STATUSES)
+    # A case export has no Status column at all, so every case reads "unknown".
+    # Reporting `executed = total - 0 - 0` there would claim the whole suite ran,
+    # which is the opposite of what the absence of data means.
+    has_status = any(s != "unknown" for s in status_counts)
+    executed = (total_cases - not_run - excluded) if has_status else None
 
     # How much the two populations actually overlap. This decides whether the
     # ratio above means anything at all: if the automation references 440 cases
@@ -475,10 +480,11 @@ def build(path: str, catalog, inventory: Dict, cov: Dict) -> Dict:
             "overlap_ratio": overlap_ratio,
             "tests_without_case_id": sum(
                 1 for t in inventory.get("tests", []) if not t.get("testrail_id")),
-            "status_counts": status_counts,
-            "not_run": not_run,
-            "excluded": excluded,
-            "executed": total_cases - not_run - excluded,
+            "status_counts": status_counts if has_status else {},
+            "has_execution_data": has_status,
+            "not_run": not_run if has_status else None,
+            "excluded": excluded if has_status else None,
+            "executed": executed,
             "malformed_rows": malformed_rows,
             # TestRail's own triage, and where it disagrees with the tree.
             "claims": claim_counts,
