@@ -308,22 +308,38 @@ merge, and `HEAD~300..HEAD` for a rough nightly cycle.
 
 #### On iOS
 
-firefox-ios is its own repository, so there is no sparse-checkout to do and no
-pathspec to scope — but two things differ:
+firefox-ios is its own repository, so there is no pathspec to scope. Release
+branches are `release/vNNN.N` — the bare `vNNN.N` names stop at v105 and predate
+the layout move, so their paths will not match the catalog.
 
 ```bash
-# release branches are release/vNNN.N. The bare vNNN.N branches stop at v105
-# and predate the layout move, so their paths will not match the catalog.
+# clone the release branch you want to report on, so the corpus IS that branch
 git clone --single-branch --branch release/v153.3 --depth 400 \
   https://github.com/mozilla-mobile/firefox-ios ~/Workspace/firefox-ios
 
+# the previous release, to diff against. --single-branch sets a narrow refspec,
+# so a bare `git fetch origin release/v153.2` silently creates no ref.
+cd ~/Workspace/firefox-ios
+git fetch --depth 400 origin \
+  release/v153.2:refs/remotes/origin/release/v153.2
+
+cd /path/to/testops-tools/release-test-planner
 ./plan.py analyze --platform ios --repo ~/Workspace/firefox-ios \
-  --range "HEAD~120..HEAD" --budget 240 --testrail-export cases.json --open
+  --range "origin/release/v153.2..release/v153.3" --budget 240 \
+  --testrail-export ~/Workspace/firefox_for_ios.csv \
+  --out out/ios-v153.3 --open
 ```
 
-Depth matters: churn is computed by diffing the range, so a `--depth 1` clone
-gives an empty analysis. For the uplift delta between two release branches,
-fetch both and use `release/v153.2..release/v153.3`.
+That is 83 commits, 878 files and ~23k churned lines for 153.2 → 153.3, and runs
+in about 16 seconds.
+
+Depth matters twice: churn is computed by diffing the range, so a `--depth 1`
+clone gives an empty analysis, and both branches need enough history for a merge
+base to exist. `--depth 400` is comfortable for a dot release; deepen for a
+whole cycle.
+
+Simpler ranges also work — `HEAD~120..HEAD` for a rough window on the branch you
+have checked out.
 
 The checkout also contains **focus-ios**, a separate product, and
 `SampleComponentLibraryApp`. Both are in the iOS catalog's `_ignored_globs`; a

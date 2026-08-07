@@ -51,6 +51,10 @@ class Platform:
     # from `label`, because the products have names people recognise and
     # "Firefox iOS Release Test Plan" is not one of them.
     report_title: str = "Release Test Plan"
+    # Paths a sparse worktree needs in order to analyse this platform. Used only
+    # to print correct remediation when the checkout does not contain the range -
+    # advice naming the wrong product's directories is worse than none.
+    sparse_paths: Tuple[str, ...] = ()
     notes: str = ""
 
     def roots(self, repo_root: str) -> List[Tuple[str, str]]:
@@ -72,6 +76,7 @@ ANDROID = Platform(
     source_root="mobile/android/fenix/app/src/main/java/org/mozilla/fenix",
     default_catalog="config/features.json",
     report_title="Fenix Release Test Plan",
+    sparse_paths=("mobile/android/fenix",),
     has_factories=True,
     factory_root=_FENIX_UI + "/efficiency",
     notes="Coverage has a derived denominator: the generation factories "
@@ -93,6 +98,7 @@ IOS = Platform(
     source_root="firefox-ios/Client",
     default_catalog="config/features-ios.json",
     report_title="Firefox for iOS Release Test Plan",
+    sparse_paths=("firefox-ios", "BrowserKit"),
     has_factories=False,
     test_plan_root="firefox-ios/firefox-ios-tests/Tests",
     test_target="XCUITests",

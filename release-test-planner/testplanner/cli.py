@@ -86,17 +86,25 @@ def run_analysis(args, quiet: bool = False):
     # nothing else in the pipeline would notice.
     stray_tip = changes.tip_in_working_tree(repo, change_data["commits"])
     if stray_tip:
+        # The remediation has to name this platform's branches and directories.
+        # It used to hardcode origin/beta and mobile/android/fenix, which on an
+        # iOS run is confidently wrong advice - worse than no advice.
+        tip_ref = args.range.split("..")[-1].strip() or "the branch"
+        worktree = "../%s-rc" % platform.id
+        sparse = (" && git sparse-checkout set %s" % " ".join(platform.sparse_paths)
+                  if platform.sparse_paths else "")
         log(
             "\n  !! WARNING - the checkout does not contain the code being analysed.\n"
             "     Range tip {} is not an ancestor of HEAD in {}.\n"
             "     Churn is being scored against a DIFFERENT revision's tests, so\n"
             "     coverage and confidence will be wrong (usually overstated).\n"
             "\n     Fix - analyse a branch from a worktree of that branch:\n"
-            "       git worktree add --no-checkout ../firefox-beta origin/beta\n"
-            "       cd ../firefox-beta && git sparse-checkout set mobile/android/fenix\n"
+            "       git worktree add --no-checkout {wt} {ref}\n"
+            "       cd {wt}{sparse}\n"
             "       git checkout\n"
-            "       ./plan.py analyze --repo ../firefox-beta --range \"{}\"\n"
-            .format(stray_tip, repo, args.range)
+            "       ./plan.py analyze --platform {plat} --repo {wt} --range \"{rng}\"\n"
+            .format(stray_tip, repo, wt=worktree, ref=tip_ref,
+                    sparse=sparse, plat=platform.id, rng=args.range)
         )
 
     log("[2/8] mapping paths to features")
