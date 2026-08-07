@@ -70,6 +70,45 @@ found and thin out where nobody got round to writing them. So:
 - A feature with 100% `automated_ratio` means every case someone wrote is
   automated. It does not mean the feature is well tested.
 
+### A run export is not a denominator
+
+This one only became obvious with real files in hand.
+
+A TestRail **run** ("Full Functional 153.3 RC 1") is a manual execution plan. Its
+737 cases are the ones humans were asked to click through. The automated tests
+reference 440 case ids, and only **35** of them are in that run — the two sets are
+almost disjoint, because the automation tracks a different population of cases.
+
+Computed naively that gives "3.4% automated", which is not an automation rate and
+not a coverage figure. It is an artefact of dividing by the wrong set. So
+`populations_disjoint` is set when overlap falls below half, and the report leads
+with that instead of the ratio.
+
+The **suite** export is the denominator: 1,779 cases, 417 of the 440 referenced
+ids present, 95% overlap. Merge both and you get the suite's completeness plus the
+run's section tree and execution statuses.
+
+### Trusting neither source, and comparing them
+
+The suite export carries TestRail's own triage — `Automation`,
+`Automation Coverage`, `Automated Test Name(s)`. That is a human decision, and the
+source tree is a fact. Neither is authoritative:
+
+| | in the tree | not in the tree |
+|---|---|---|
+| triaged automated | 376 — agreement | **22 — stale status or lost link** |
+| triaged `Unsuitable` | 0 | 335 — consistent |
+| triaged `Suitable` | 1 | 23 — the actionable backlog |
+| never triaged | 1 | 915 — nobody has decided |
+
+The two disagreement cells are the output worth acting on, and neither source
+could produce them alone.
+
+`Unsuitable` deserves special handling: those cases are deliberately manual
+forever. Leaving them in the denominator means the "gap" can never close, so the
+tool reports both the raw ratio and the addressable one (308/1,775 = 17.3% raw;
+308/1,440 = 21.4% addressable).
+
 ### Two rules that keep the ratio honest
 
 **Automation that never runs is not automated coverage.** A case whose only

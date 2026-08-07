@@ -84,7 +84,7 @@ bugs were once found, thin where nobody wrote cases. So the number is reported a
 **how much of the plan we wrote down will a machine run?** The remainder is the
 manual-testing gap, which is the number a release manager actually needs.
 
-Two rules keep it honest:
+Three rules keep it honest:
 
 - **A case automated only by a test that never runs is manual.** Same rule the
   corpus applies to `@Ignore` and xctestplan skips. On firefox-ios this is not a
@@ -92,12 +92,64 @@ Two rules keep it honest:
   test that no test plan runs.
 - **A referenced id absent from the export is reported, not counted.** A test
   pointing at another project's case would otherwise inflate the ratio.
+- **Cases triaged `Unsuitable` leave the denominator.** They are deliberately
+  manual forever, so counting them as an automation gap makes the gap
+  unshrinkable and the ratio meaningless.
+
+### Which export to ask TestRail for
+
+Two exports, two different jobs, and the tool merges several by case id because
+neither is sufficient alone:
+
+| | a **run** export | a **case/suite** export |
+|---|---|---|
+| e.g. | `full_functional_153.3_rc_1.csv` | `firefox_for_ios.csv` |
+| cases | only what that run selected (737) | the whole suite (1,779) |
+| has | `Section`, `Section Depth`, `Status`, `Priority` | `Automation`, `Automation Coverage`, `Automated Test Name(s)` |
+| gives | feature attribution, and what was actually executed | the real denominator, and TestRail's own triage |
+| overlap with automation | 35 of 440 ids | **417 of 440** |
+
+```bash
+./plan.py analyze --platform ios --repo ~/Workspace/firefox-ios \
+  --range "HEAD~120..HEAD" \
+  --testrail-export firefox_for_ios.csv full_functional_153.3_rc_1.csv
+```
+
+**A run export alone is the wrong denominator** and the tool now says so instead
+of printing the number. A run is a *manual* plan: the automated tests reference
+case ids that mostly are not in it, so the ratio comes out at 3.4% and means
+nothing. Where overlap is under half, the report leads with the warning.
+
+**Watch the id column.** A run export has both `ID` (the test-instance id,
+`T9474971`) and `Case ID` (`C2306813`). Only the case id appears in the source
+tree. The loader prefers case-id spellings for exactly this reason — reading `ID`
+joins nothing and reports 0–3% automated with no error at all.
 
 Accepted formats are JSON (the raw `get_cases` API response, or a bare list) and
 CSV (what the TestRail UI exports). Not xlsx — that needs a dependency this tool
 deliberately does not have, and
 `testrail/testcases-deduplication/fetch_testrail_export.py` can be pointed at the
-API response instead.
+API response instead. Rows whose columns have shifted (rich text in a case field
+pushes CSS fragments into the automation column) are detected by shape and not
+trusted.
+
+### What it said about Firefox iOS on release/v153.3
+
+| | |
+|---|---|
+| cases in the merged export | 1,775 |
+| automated by a test that actually runs | **308 (17.3%)** |
+| …of the 1,440 *addressable* cases | **21.4%** |
+| triaged manual forever (`Unsuitable`) | 335 |
+| triaged automatable, not yet done | 26 |
+| never triaged either way | 1,001 |
+| triaged automated but no test links to them | 22 |
+| linked by a test but not triaged as automated | 26 |
+| in the 153.3 RC1 run, left untested | 244 of 737 |
+
+The 1,001 untriaged cases are the largest number on that list, and they are the
+reason the automation ratio is hard to act on: over half the suite has no
+decision recorded about whether it *should* be automated.
 
 ## Read this first: why this is possible now and wasn't before
 
@@ -372,5 +424,5 @@ examples/                   a worked agent-answers file
 testplanner/                one module per pipeline stage
   platforms.py              where the tests live, what language, factories or not
   testrail.py               the assumed denominator and its join rules
-tests/                      108 unit tests, no checkout required
+tests/                      121 unit tests, no checkout required
 ```
