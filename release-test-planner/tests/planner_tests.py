@@ -13,6 +13,7 @@ in a temp dir. No network, no device, no API key.
     python -m unittest discover -s release-test-planner/tests -p '*tests.py'
 """
 
+import csv
 import json
 import os
 import shutil
@@ -1000,6 +1001,186 @@ class TestRailJoinTests(unittest.TestCase):
         self.assertEqual(out["denominator"], "assumed")
         self.assertIn("not how much of the app is covered",
                       out["denominator_note"])
+
+
+class TestRailRunExportTests(unittest.TestCase):
+    """Run exports: the columns that differ, and the one that silently lies."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _csv(self, header, rows, name="run.csv"):
+        path = os.path.join(self.tmp, name)
+        with open(path, "w", newline="") as fh:
+            w = csv.writer(fh)
+            w.writerow(header)
+            for r in rows:
+                w.writerow(r)
+        return path
+
+    def test_case_id_column_wins_over_the_run_instance_id(self):
+        # A run export has both. `ID` is the test-instance id and appears nowhere
+        # in the source tree, so preferring it joins nothing and reports 0%
+        # automated - plausible and completely wrong.
+        path = self._csv(["ID", "Title", "Case ID", "Status"],
+                         [["T9474971", "Update from previous version",
+                           "C2306813", "Passed"]])
+        [case] = testrail.load_export(path)
+        self.assertEqual(case["id"], "2306813")
+
+    def test_status_and_priority_are_read_when_present(self):
+        path = self._csv(["Case ID", "Title", "Status", "Priority"],
+                         [["C1", "t", "Untested", "Critical"]])
+        [case] = testrail.load_export(path)
+        self.assertEqual(case["status"], "Untested")
+        self.assertEqual(case["priority"], "Critical")
+
+    def test_section_ancestors_are_rebuilt_from_the_depth_column(self):
+        # TestRail exports only the leaf name, in tree order, with a depth. Many
+        # leaves are called "Layout" or "Other" and mean nothing alone.
+        path = self._csv(["Case ID", "Title", "Section", "Section Depth"],
+                         [["C1", "a", "Bookmarks", "0"],
+                          ["C2", "b", "Layout", "1"],
+                          ["C3", "c", "History", "0"],
+                          ["C4", "d", "Other", "1"]])
+        cases = testrail.load_export(path)
+        by_id = {c["id"]: c for c in cases}
+        self.assertEqual(by_id["2"]["section_path"], ["Bookmarks"])
+        # Depth returning to 0 must pop the stack, not accumulate.
+        self.assertEqual(by_id["4"]["section_path"], ["History"])
+
+    def test_ancestors_give_an_ambiguous_leaf_a_feature(self):
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7)])
+        ambiguous = {"section": "Layout", "section_path": ["Bookmarks"],
+                     "title": "Verify images across all cards"}
+        self.assertEqual(testrail._match_feature(ambiguous, catalog), "bookmarks")
+
+    def test_the_longest_match_wins_rather_than_catalog_order(self):
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="settings-general", name="Settings",
+                               severity=7, testrail_keywords=["setting"]),
+            featuremap.Feature(id="logins-passwords", name="Logins & Passwords",
+                               severity=9, testrail_keywords=["password"]),
+        ])
+        case = {"section": "Settings -> Passwords section", "section_path": [],
+                "title": ""}
+        # "password" is longer than "setting", so the more specific feature wins
+        # even though settings-general is listed first.
+        self.assertEqual(testrail._match_feature(case, catalog),
+                         "logins-passwords")
+
+    def test_a_row_with_shifted_columns_is_flagged(self):
+        # Rich text in a case field pushes the remaining columns along; the id
+        # column still parses, so the wrong values would look like real statuses.
+        path = self._csv(["Case ID", "Title", "Automation"],
+                         [["C1", "fine", "Completed"],
+                          ["sans-serif; font-size: 14px", "broken", "32"]])
+        cases = testrail.load_export(path)
+        self.assertFalse(cases[0]["malformed"])
+        self.assertTrue(cases[1]["malformed"])
+
+
+class TestRailMergeTests(unittest.TestCase):
+    """Two exports carry different columns; neither alone is enough."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.suite = os.path.join(self.tmp, "suite.csv")
+        with open(self.suite, "w", newline="") as fh:
+            w = csv.writer(fh)
+            w.writerow(["ID", "Title", "Automation", "Automation Coverage"])
+            w.writerow(["C1", "Bookmark a page", "Completed", "Full"])
+            w.writerow(["C2", "Verify swipe functionality", "Unsuitable", "None"])
+            w.writerow(["C3", "Something new", "Suitable", "None"])
+        self.run = os.path.join(self.tmp, "run.csv")
+        with open(self.run, "w", newline="") as fh:
+            w = csv.writer(fh)
+            w.writerow(["ID", "Case ID", "Title", "Section", "Section Depth",
+                        "Status"])
+            w.writerow(["T9", "C2", "Verify swipe functionality", "Bookmarks",
+                        "0", "Passed"])
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_merging_fills_blanks_without_overwriting(self):
+        cases = testrail.load_exports([self.suite, self.run])
+        by_id = {c["id"]: c for c in cases}
+        self.assertEqual(len(cases), 3)
+        # section came from the run export...
+        self.assertEqual(by_id["2"]["section"], "Bookmarks")
+        # ...and the automation triage from the suite export.
+        self.assertEqual(by_id["2"]["automation_status"], "Unsuitable")
+
+    def test_the_first_file_wins_a_contested_field(self):
+        cases = testrail.load_exports([self.suite, self.run])
+        by_id = {c["id"]: c for c in cases}
+        self.assertEqual(by_id["2"]["title"], "Verify swipe functionality")
+
+    def test_claims_normalise_to_four_verdicts(self):
+        self.assertEqual(testrail._claim({"automation_status": "Completed"}),
+                         "automated")
+        self.assertEqual(testrail._claim({"automation_status": "Unsuitable"}),
+                         "manual")
+        self.assertEqual(testrail._claim({"automation_status": "Suitable"}),
+                         "automatable")
+        self.assertEqual(testrail._claim({"automation_status": "Untriaged"}),
+                         "untriaged")
+        # Coverage alone is enough when the status column is absent.
+        self.assertEqual(testrail._claim({"automation_coverage": "Full"}),
+                         "automated")
+
+    def test_deliberately_manual_cases_leave_the_addressable_denominator(self):
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7)])
+        inv = {"tests": [{"class_name": "B", "name": "testA",
+                          "testrail_id": "1", "is_disabled": False}]}
+        out = testrail.build([self.suite], catalog, inv, {})
+        t = out["totals"]
+        self.assertEqual(t["cases"], 3)
+        self.assertEqual(t["deliberately_manual"], 1)
+        self.assertEqual(t["addressable_cases"], 2)
+        # 1 of 3 overall, but 1 of the 2 that could ever be automated.
+        self.assertEqual(t["automated_ratio"], round(1 / 3, 4))
+        self.assertEqual(t["automated_ratio_addressable"], 0.5)
+
+    def test_triage_disagreeing_with_the_tree_is_reported_both_ways(self):
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7)])
+        # C1 is triaged automated but nothing links to it; C3 is linked but
+        # triaged only "Suitable".
+        inv = {"tests": [{"class_name": "B", "name": "testC",
+                          "testrail_id": "3", "is_disabled": False}]}
+        out = testrail.build([self.suite], catalog, inv, {})
+        self.assertEqual(out["totals"]["claimed_not_in_code"], 1)
+        self.assertEqual(out["totals"]["in_code_not_claimed"], 1)
+        self.assertIn("1", out["claimed_not_in_code"])
+        self.assertIn("3", out["in_code_not_claimed"])
+
+    def test_near_disjoint_populations_are_flagged(self):
+        # A run export is usually a manual plan. If the automation references
+        # hundreds of ids and almost none are here, the ratio is meaningless and
+        # printing it without saying so would be the worst output of the tool.
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7)])
+        inv = {"tests": [{"class_name": "B", "name": "test%d" % i,
+                          "testrail_id": str(1000 + i), "is_disabled": False}
+                         for i in range(50)]}
+        out = testrail.build([self.suite], catalog, inv, {})
+        self.assertTrue(out["populations_disjoint"])
+        self.assertIn("different case sets", out["disjoint_note"])
+
+    def test_overlapping_populations_are_not_flagged(self):
+        catalog = featuremap.FeatureCatalog([
+            featuremap.Feature(id="bookmarks", name="Bookmarks", severity=7)])
+        inv = {"tests": [{"class_name": "B", "name": "testA",
+                          "testrail_id": "1", "is_disabled": False}]}
+        out = testrail.build([self.suite], catalog, inv, {})
+        self.assertFalse(out["populations_disjoint"])
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

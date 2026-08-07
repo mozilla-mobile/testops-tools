@@ -71,6 +71,26 @@
         "DomainAutocompleteTests",
         "CopiedLinksTests",
         "ClipBoardTests"
+      ],
+      "testrail_keywords": [
+        "load bar",
+        "website view",
+        "pdf",
+        "web page",
+        "page load",
+        "reload",
+        "external link",
+        "open link",
+        "deeplink",
+        "deep link",
+        "url bar",
+        "address bar",
+        "navigation",
+        "progress bar",
+        "context menu",
+        "long press link",
+        "zoom",
+        "print"
       ]
     },
     {
@@ -100,6 +120,18 @@
         "NewTabSettingsTest",
         "StoryTests",
         "A11yHomePageTests"
+      ],
+      "testrail_keywords": [
+        "homepage",
+        "home page",
+        "stories",
+        "jump back in",
+        "recently visited",
+        "top site",
+        "shortcut on homepage",
+        "customize homepage",
+        "pocket",
+        "wallpaper"
       ]
     },
     {
@@ -126,6 +158,17 @@
         "ThirdPartySearchTest",
         "FirefoxSuggestTest",
         "A11ySearchTest"
+      ],
+      "testrail_keywords": [
+        "search engine",
+        "suggestion",
+        "sponsored suggestion",
+        "firefox suggest",
+        "awesomebar",
+        "quick search",
+        "search bar",
+        "search widget",
+        "autocomplete"
       ]
     },
     {
@@ -156,6 +199,18 @@
         "A11yTabTrayTests",
         "TabsTestsIpad",
         "TabsTestsIphone"
+      ],
+      "testrail_keywords": [
+        "tab tray",
+        "top tabs",
+        "tab counter",
+        "new tab",
+        "private tab",
+        "inactive tab",
+        "tab group",
+        "close tab",
+        "undo close",
+        "tab bar"
       ]
     },
     {
@@ -180,6 +235,12 @@
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIphone"
+      ],
+      "testrail_keywords": [
+        "private browsing",
+        "private mode",
+        "private tab",
+        "incognito"
       ]
     },
     {
@@ -202,6 +263,15 @@
       "test_patterns": [
         "TrackingProtectionTests",
         "SecurityTests"
+      ],
+      "testrail_keywords": [
+        "etp",
+        "tracking protection",
+        "content blocking",
+        "shield",
+        "cookie protection",
+        "total cookie protection",
+        "trackers"
       ]
     },
     {
@@ -222,6 +292,11 @@
       ],
       "test_patterns": [
         "DownloadsTests"
+      ],
+      "testrail_keywords": [
+        "download",
+        "downloaded file",
+        "download manager"
       ]
     },
     {
@@ -243,6 +318,11 @@
       "test_patterns": [
         "BookmarksTests",
         "LibraryTests"
+      ],
+      "testrail_keywords": [
+        "bookmark",
+        "bookmark folder",
+        "reading list bookmark"
       ]
     },
     {
@@ -263,6 +343,12 @@
       ],
       "test_patterns": [
         "HistoryTests"
+      ],
+      "testrail_keywords": [
+        "history",
+        "recently closed",
+        "clear history",
+        "browsing history"
       ]
     },
     {
@@ -286,6 +372,16 @@
       "test_patterns": [
         "LoginTest",
         "AuthenticationTest"
+      ],
+      "testrail_keywords": [
+        "password",
+        "login",
+        "credential",
+        "password generator",
+        "autofill password",
+        "face id",
+        "touch id",
+        "passcode"
       ]
     },
     {
@@ -308,6 +404,13 @@
         "CreditCardsTests",
         "AddressesTests",
         "O_AddressesTests"
+      ],
+      "testrail_keywords": [
+        "credit card",
+        "address autofill",
+        "autofill address",
+        "saved card",
+        "payment method"
       ]
     },
     {
@@ -330,6 +433,13 @@
       ],
       "test_patterns": [
         "DataManagementTests"
+      ],
+      "testrail_keywords": [
+        "clear private data",
+        "data management",
+        "website data",
+        "delete browsing data",
+        "clear cookies"
       ]
     },
     {
@@ -355,6 +465,16 @@
         "PhotonActionSheetTests",
         "ToolbarMenuTests",
         "ShareMenuTests"
+      ],
+      "testrail_keywords": [
+        "main menu",
+        "hamburger",
+        "menu option",
+        "photon",
+        "action sheet",
+        "homepage menu",
+        "browser menu",
+        "more menu"
       ]
     },
     {
@@ -376,6 +496,14 @@
       "test_patterns": [
         "ToolbarTests",
         "ShareToolbarTests"
+      ],
+      "testrail_keywords": [
+        "toolbar",
+        "url toolbar",
+        "top placement",
+        "bottom placement",
+        "tab toolbar",
+        "navigation toolbar"
       ]
     },
     {
@@ -401,6 +529,16 @@
         "ModernKitOnboardingTests",
         "ModernOrangeAndBlueOnboardingTests",
         "A11yOnboardingTests"
+      ],
+      "testrail_keywords": [
+        "onboarding",
+        "first run",
+        "intro",
+        "default browser card",
+        "set as default browser",
+        "welcome",
+        "upgrade card",
+        "tour"
       ]
     },
     {
@@ -419,6 +557,12 @@
       "page_objects": [],
       "test_patterns": [
         "PerformanceTests"
+      ],
+      "testrail_keywords": [
+        "startup",
+        "launch time",
+        "performance",
+        "cold start"
       ]
     },
     {
@@ -435,7 +579,12 @@
         "firefox-ios/Client/Frontend/Settings/**/CrashReport*/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "crash",
+        "crash report",
+        "sentry"
+      ]
     },
     {
       "id": "sync",
@@ -466,6 +615,18 @@
         "IntegrationTests",
         "PairingTests",
         "DatabaseFixtureTest"
+      ],
+      "testrail_keywords": [
+        "sync",
+        "firefox account",
+        "fxa",
+        "account management",
+        "desktop app",
+        "pairing",
+        "signed in",
+        "sign in",
+        "send tab",
+        "synced tab"
       ]
     },
     {
@@ -487,6 +648,12 @@
         "ShareLongPressTests",
         "ShareToolbarTests",
         "PrintTests"
+      ],
+      "testrail_keywords": [
+        "share",
+        "share sheet",
+        "share extension",
+        "send to device"
       ]
     },
     {
@@ -508,6 +675,14 @@
       ],
       "test_patterns": [
         "TodayWidgetTests"
+      ],
+      "testrail_keywords": [
+        "widget",
+        "today widget",
+        "home screen shortcut",
+        "add to home screen",
+        "siri",
+        "shortcut"
       ]
     },
     {
@@ -523,7 +698,12 @@
         "firefox-ios/Client/Frontend/GoogleLens/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "lens",
+        "google lens",
+        "visual search"
+      ]
     },
     {
       "id": "reader-view",
@@ -542,6 +722,11 @@
       ],
       "test_patterns": [
         "ReadingListTests"
+      ],
+      "testrail_keywords": [
+        "reader view",
+        "reading list",
+        "reader mode"
       ]
     },
     {
@@ -560,6 +745,10 @@
       ],
       "test_patterns": [
         "FindInPageTests"
+      ],
+      "testrail_keywords": [
+        "find in page",
+        "find on page"
       ]
     },
     {
@@ -575,7 +764,11 @@
         "firefox-ios/Client/Frontend/Translations/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "translation",
+        "translate"
+      ]
     },
     {
       "id": "summarization",
@@ -596,7 +789,14 @@
       "page_objects": [
         "SummarizeSettings"
       ],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "summarize",
+        "summarization",
+        "summary",
+        "quick answer",
+        "shake to summarize"
+      ]
     },
     {
       "id": "messaging-nimbus",
@@ -619,6 +819,16 @@
       "test_patterns": [
         "FeatureFlaggedTestSuite",
         "EngagementNotificationTests"
+      ],
+      "testrail_keywords": [
+        "nimbus",
+        "experiment",
+        "messaging",
+        "notification surface",
+        "re-engagement",
+        "reengagement",
+        "feature flag",
+        "microsurvey card"
       ]
     },
     {
@@ -636,7 +846,16 @@
         "firefox-ios/SyncTelemetry/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "telemetry",
+        "glean",
+        "dau",
+        "ping",
+        "data collection",
+        "usage data",
+        "studies"
+      ]
     },
     {
       "id": "accessibility",
@@ -658,6 +877,13 @@
         "A11ySearchTest",
         "A11ySettingsTests",
         "A11yTabTrayTests"
+      ],
+      "testrail_keywords": [
+        "accessibility",
+        "voiceover",
+        "dynamic type",
+        "a11y",
+        "screen reader"
       ]
     },
     {
@@ -674,7 +900,14 @@
         "firefox-ios/Client/Frontend/TabContentsScripts/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "autoplay",
+        "video",
+        "media",
+        "picture in picture",
+        "audio"
+      ]
     },
     {
       "id": "notifications",
@@ -693,6 +926,11 @@
       ],
       "test_patterns": [
         "EngagementNotificationTests"
+      ],
+      "testrail_keywords": [
+        "notification",
+        "push notification",
+        "engagement notification"
       ]
     },
     {
@@ -714,6 +952,15 @@
       "test_patterns": [
         "DisplaySettingTests",
         "NightModeTests"
+      ],
+      "testrail_keywords": [
+        "dark mode",
+        "light mode",
+        "theme",
+        "app icon",
+        "appearance",
+        "night mode",
+        "display setting"
       ]
     },
     {
@@ -729,7 +976,12 @@
         "BrowserKit/Sources/WebCompatReporterKit/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "web compat",
+        "report broken site",
+        "webcompat"
+      ]
     },
     {
       "id": "microsurvey",
@@ -745,7 +997,13 @@
         "firefox-ios/Client/RatingPromptManager.swift"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "microsurvey",
+        "survey",
+        "review prompt",
+        "rating prompt"
+      ]
     },
     {
       "id": "desktop-mode",
@@ -766,6 +1024,12 @@
       "test_patterns": [
         "DesktopModeTestsIpad",
         "DesktopModeTestsIphone"
+      ],
+      "testrail_keywords": [
+        "desktop site",
+        "desktop mode",
+        "request desktop",
+        "mobile site"
       ]
     },
     {
@@ -782,6 +1046,13 @@
       "page_objects": [],
       "test_patterns": [
         "AuthenticationTest"
+      ],
+      "testrail_keywords": [
+        "authentication",
+        "face id",
+        "touch id",
+        "passcode",
+        "biometric"
       ]
     },
     {
@@ -796,7 +1067,11 @@
         "firefox-ios/Client/Frontend/Wayback/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "wayback",
+        "archive"
+      ]
     },
     {
       "id": "contextual-hints",
@@ -810,7 +1085,12 @@
         "firefox-ios/Client/Frontend/ContextualHint/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "contextual hint",
+        "tooltip",
+        "cfr"
+      ]
     },
     {
       "id": "settings-general",
@@ -832,6 +1112,13 @@
       "test_patterns": [
         "SettingsTests",
         "A11ySettingsTests"
+      ],
+      "testrail_keywords": [
+        "setting",
+        "preference",
+        "about firefox",
+        "mail app",
+        "siri shortcut"
       ]
     },
     {
@@ -863,6 +1150,16 @@
       "test_patterns": [
         "ScreenGraphTest",
         "FxScreenGraphTests"
+      ],
+      "testrail_keywords": [
+        "keyboard shortcut",
+        "ipad",
+        "multitasking",
+        "split view",
+        "stage manager",
+        "screen graph",
+        "state restoration",
+        "memory"
       ]
     },
     {
@@ -903,6 +1200,13 @@
       "page_objects": [],
       "test_patterns": [
         "L10nSnapshotTests"
+      ],
+      "testrail_keywords": [
+        "localization",
+        "locale",
+        "language",
+        "rtl",
+        "translation string"
       ]
     },
     {
@@ -919,7 +1223,13 @@
         "firefox-ios/Client/Frontend/Settings/**/TermsOfService*/**"
       ],
       "page_objects": [],
-      "test_patterns": []
+      "test_patterns": [],
+      "testrail_keywords": [
+        "terms of use",
+        "tos",
+        "privacy notice",
+        "distribution"
+      ]
     }
   ]
 }

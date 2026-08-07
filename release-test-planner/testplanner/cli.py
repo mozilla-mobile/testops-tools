@@ -30,6 +30,21 @@ DEFAULT_PATHSPEC = {
 }
 
 
+
+def _wrap(text: str, width: int):
+    """Minimal word wrap for terminal warnings. textwrap would do, but this keeps
+    the module's imports to what the pipeline needs."""
+    words, line, out = text.split(), "", []
+    for word in words:
+        if line and len(line) + 1 + len(word) > width:
+            out.append(line)
+            line = word
+        else:
+            line = word if not line else line + " " + word
+    if line:
+        out.append(line)
+    return out
+
 def _catalog_for(args, platform) -> str:
     if args.catalog:
         return os.path.abspath(args.catalog)
@@ -130,12 +145,43 @@ def run_analysis(args, quiet: bool = False):
     if args.testrail_export:
         log("      joining TestRail export")
         rail = testrail.build(args.testrail_export, catalog, inventory, cov)
+        rt = rail["totals"]
         log("      {} cases, {} automated ({:.1%}), {} manual-only".format(
-            rail["totals"]["cases"], rail["totals"]["automated"],
-            rail["totals"]["automated_ratio"], rail["totals"]["manual_only"]))
-        if rail["totals"]["unmatched_ids"]:
+            rt["cases"], rt["automated"], rt["automated_ratio"],
+            rt["manual_only"]))
+        if rt["deliberately_manual"]:
+            log("      excluding {} triaged manual-forever: {:.1%} of the {} "
+                "addressable".format(rt["deliberately_manual"],
+                                     rt["automated_ratio_addressable"],
+                                     rt["addressable_cases"]))
+        if rt["status_counts"] and rt["status_counts"] != {"unknown": rt["cases"]}:
+            log("      execution: {} ({} not run, {} not applicable)".format(
+                ", ".join("{} {}".format(v, k)
+                          for k, v in sorted(rt["status_counts"].items(),
+                                             key=lambda kv: -kv[1])),
+                rt["not_run"], rt["excluded"]))
+        if rt["claims"]:
+            log("      TestRail triage: {}".format(", ".join(
+                "{} {}".format(v, k) for k, v in sorted(
+                    rt["claims"].items(), key=lambda kv: -kv[1]))))
+            if rt["claimed_not_in_code"] or rt["in_code_not_claimed"]:
+                log("      disagreement: {} claimed automated with no test "
+                    "linking to them, {} linked by a test but not triaged as "
+                    "automated".format(rt["claimed_not_in_code"],
+                                       rt["in_code_not_claimed"]))
+        if rt["malformed_rows"]:
+            log("      {} row(s) had shifted columns (rich text in a case "
+                "field); their automation status was not trusted".format(
+                    rt["malformed_rows"]))
+        if rail["populations_disjoint"]:
+            log("\n  !! WARNING - this export and the automation reference "
+                "different case sets.")
+            for line in _wrap(rail["disjoint_note"], 72):
+                log("     " + line)
+            log("")
+        elif rt["unmatched_ids"]:
             log("      {} case ids referenced by tests but absent from the "
-                "export".format(rail["totals"]["unmatched_ids"]))
+                "export".format(rt["unmatched_ids"]))
 
     log("[5/8] scoring FMEA risk")
     risk_result = risk.score(attribution, cov)
@@ -338,9 +384,13 @@ def main(argv=None) -> int:
         p.add_argument("--tests-root", default="",
                        help="override the platform's UI test directory, for a "
                             "checkout whose layout differs from the current one")
-        p.add_argument("--testrail-export", default=None,
-                       help="TestRail case export (JSON or CSV) to use as an "
-                            "assumed coverage denominator")
+        p.add_argument("--testrail-export", nargs="*", default=None,
+                       metavar="FILE",
+                       help="TestRail export(s) (JSON or CSV) to use as an "
+                            "assumed coverage denominator. Several are merged "
+                            "by case id: a run export carries the section tree, "
+                            "a case export carries automation triage and the "
+                            "whole suite.")
         p.add_argument("--catalog", default=None,
                        help="feature catalog (default: the platform's)")
         p.add_argument("--environment", default=DEFAULT_ENV,

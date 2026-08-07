@@ -92,6 +92,9 @@ button.theme:hover { color: var(--text-primary); }
 section { background: var(--surface-1); border: 1px solid var(--border);
   border-radius: 12px; padding: 22px 24px; margin-bottom: 20px; }
 h2 { font-size: 15px; margin: 0 0 4px; letter-spacing: -0.005em; }
+.warn-box { color: var(--warn, #8a5a00); background: rgba(250,178,25,0.10);
+  border: 1px solid rgba(250,178,25,0.55); border-radius: 6px;
+  padding: 9px 11px; font-size: 12.5px; margin: 0 0 14px; }
 .note { color: var(--text-secondary); font-size: 12.5px; margin: 0 0 18px;
   max-width: 78ch; }
 
@@ -596,12 +599,29 @@ if (TR) {
       <td class="num">${e.automated_ratio == null ? '-' : pct(e.automated_ratio)}</td>
     </tr>`).join('') + '</tbody>';
   document.getElementById('testrailNote').innerHTML =
-    `<p class="note">${esc(TR.denominator_note)}</p>
-     <p class="note">${t.skipped_automation.toLocaleString()} case(s) are claimed by
+    (TR.populations_disjoint
+      ? `<p class="warn-box"><strong>These are different case sets.</strong>
+         ${esc(TR.disjoint_note)}</p>`
+      : '') +
+    `<p class="note">${esc(TR.denominator_note)}</p>` +
+    (t.deliberately_manual
+      ? `<p class="note"><strong>${pct(t.automated_ratio_addressable)}</strong> of the
+         ${t.addressable_cases.toLocaleString()} addressable cases are automated;
+         ${t.deliberately_manual.toLocaleString()} are triaged manual-forever and are
+         not a gap.</p>` : '') +
+    (t.claims ? `<p class="note">TestRail's own triage: ` +
+      Object.entries(t.claims).sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => `<span class="tag">${esc(k)} ${v}</span>`).join('') +
+      `. Disagreements with the tree: <strong>${t.claimed_not_in_code}</strong> triaged
+       automated with no test linking to them, <strong>${t.in_code_not_claimed}</strong>
+       linked by a test but not triaged as automated.</p>` : '') +
+    `<p class="note">${t.skipped_automation.toLocaleString()} case(s) are claimed by
      an automated test that no test plan runs, so they fall back to manual.
      ${t.tests_without_case_id.toLocaleString()} automated test(s) carry no case id and
      cannot be counted either way. ${t.unmatched_ids.toLocaleString()} id(s) referenced by
-     tests are absent from this export.</p>`;
+     tests are absent from this export` +
+    (t.malformed_rows ? `, and ${t.malformed_rows} export row(s) had shifted columns`
+                      : '') + `.</p>`;
 }
 
 /* matrix */

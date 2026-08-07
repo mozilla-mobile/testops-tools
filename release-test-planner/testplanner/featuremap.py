@@ -42,6 +42,10 @@ class Feature:
     source_globs: List[str] = field(default_factory=list)
     page_objects: List[str] = field(default_factory=list)
     test_patterns: List[str] = field(default_factory=list)
+    # Vocabulary used in TestRail section and case titles, which is prose written
+    # by hand over years and does not line up with the catalog's names by luck.
+    # Only used to attribute TestRail cases - never for source attribution.
+    testrail_keywords: List[str] = field(default_factory=list)
     # Cross-cutting code that no UI test is named for. It is exercised by the
     # whole suite rather than by a dedicated test, so a zero here means "not
     # directly covered", not "never executed".
