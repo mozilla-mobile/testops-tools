@@ -243,6 +243,7 @@ def run_analysis(args, quiet: bool = False):
             "platform_label": platform.label,
             "has_factories": platform.has_factories,
             "platform_notes": platform.notes,
+            "report_title": platform.report_title,
             "agent_overrides_applied": audit,
             "tree_mismatch_tip": stray_tip,
         },

@@ -47,6 +47,10 @@ class Platform:
     # and no XCUITests, so reading its skip lists made every UI test look like it
     # ran there.
     test_target: str = ""
+    # Heading for the HTML report. Spelled out per platform rather than derived
+    # from `label`, because the products have names people recognise and
+    # "Firefox iOS Release Test Plan" is not one of them.
+    report_title: str = "Release Test Plan"
     notes: str = ""
 
     def roots(self, repo_root: str) -> List[Tuple[str, str]]:
@@ -67,6 +71,7 @@ ANDROID = Platform(
     ),
     source_root="mobile/android/fenix/app/src/main/java/org/mozilla/fenix",
     default_catalog="config/features.json",
+    report_title="Fenix Release Test Plan",
     has_factories=True,
     factory_root=_FENIX_UI + "/efficiency",
     notes="Coverage has a derived denominator: the generation factories "
@@ -79,7 +84,7 @@ ANDROID = Platform(
 # before pointing this at an old branch.
 IOS = Platform(
     id="ios",
-    label="Firefox iOS",
+    label="Firefox for iOS",
     language="swift",
     extension=".swift",
     test_roots=(
@@ -87,6 +92,7 @@ IOS = Platform(
     ),
     source_root="firefox-ios/Client",
     default_catalog="config/features-ios.json",
+    report_title="Firefox for iOS Release Test Plan",
     has_factories=False,
     test_plan_root="firefox-ios/firefox-ios-tests/Tests",
     test_target="XCUITests",

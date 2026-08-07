@@ -39,7 +39,8 @@ import tempfile
 # Keys the port legitimately adds. Listed explicitly so that a *different* new
 # key still shows up as something to look at.
 EXPECTED_NEW = {
-    "meta": {"platform", "platform_label", "has_factories", "platform_notes"},
+    "meta": {"platform", "platform_label", "has_factories", "platform_notes",
+             "report_title"},
     "inventory": {"platform", "missing_roots", "test_plans"},
     "factories": {"platform", "has_candidate_space", "reason"},
     "_root": {"testrail"},

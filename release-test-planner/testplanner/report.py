@@ -10,14 +10,19 @@ report can be attached to a release ticket and still work.
 
 from __future__ import annotations
 
+import html as _html
 import json
+
+
+def _esc(text: str) -> str:
+    return _html.escape(str(text), quote=True)
 
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fenix Release Test Plan</title>
+<title>__TITLE__</title>
 <style>
 :root {
   color-scheme: light;
@@ -224,7 +229,7 @@ pre { background: var(--plane); border: 1px solid var(--border);
 
 <header>
   <div>
-    <h1>Fenix Release Test Plan</h1>
+    <h1>__TITLE__</h1>
     <div class="sub" id="meta"></div>
   </div>
   <button class="theme" id="themeBtn">Toggle theme</button>
@@ -728,7 +733,12 @@ document.getElementById('themeBtn').onclick = () => {
 
 def render(payload: dict, out_path: str) -> str:
     blob = json.dumps(payload).replace("</", "<\\/")
+    # The heading names the product, so it comes from the platform rather than
+    # being baked into the template - an iOS report headed "Fenix" is worse than
+    # no heading at all.
+    title = payload.get("meta", {}).get("report_title") or "Release Test Plan"
     html = TEMPLATE.replace("__PAYLOAD__", blob)
+    html = html.replace("__TITLE__", _esc(title))
     with open(out_path, "w") as fh:
         fh.write(html)
     return out_path
