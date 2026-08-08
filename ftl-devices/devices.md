@@ -51,6 +51,7 @@
 | a16x | Galaxy A16 5G | 36 | Low |
 | a16xeea | Galaxy A16 5G | 35 | Low |
 | a21 | Galaxy A21 | 31 | Low |
+| a23xq | Galaxy A23 5G | 34 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
 | a31 | Galaxy A31 | 31 | Medium |
@@ -83,6 +84,7 @@
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b5qxeea | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
+| b6qksx | Galaxy Z Flip6 | 36 | Medium |
 | b6qsqw | Galaxy Z Flip6 | 36 | None |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Low |
@@ -91,6 +93,7 @@
 | c1qksw | Galaxy Note20 5G | 33 | Low |
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | c2qksw | Galaxy Note20 Ultra 5G | 33 | Low |
+| c2s | Galaxy Note20 Ultra 5G | 33 | Low |
 | caiman | Pixel 9 Pro | 34 | Medium |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancun | moto g14 | 34 | Low |
@@ -131,6 +134,7 @@
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Low |
 | g0q | Galaxy S22+ | 36 | Low |
+| g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
 | gta4lwifi | Galaxy Tab A7 | 31 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | None |
