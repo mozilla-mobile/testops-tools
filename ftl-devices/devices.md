@@ -54,7 +54,7 @@
 | a23xq | Galaxy A23 5G | 34 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
-| a31 | Galaxy A31 | 31 | Medium |
+| a31 | Galaxy A31 | 31 | Low |
 | a32 | Galaxy A32 | 33 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
 | a35x | Galaxy A35 5G | 34 | Medium |
@@ -70,7 +70,7 @@
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
-| akita | Pixel 8a | 35 | Low |
+| akita | Pixel 8a | 35 | Medium |
 | arcfox | motorola razr plus 2024 | 34 | Medium |
 | aruba | moto e20 | 30 | Low |
 | austin | moto g 5G (2022) | 33 | Low |
