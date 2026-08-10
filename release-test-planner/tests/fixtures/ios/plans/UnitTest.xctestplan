@@ -1,0 +1,9 @@
+{
+  "configurations": [{"id": "1", "name": "Configuration 1", "options": {}}],
+  "defaultOptions": {},
+  "testTargets": [
+    {"target": {"containerPath": "container:Client.xcodeproj", "identifier": "Y", "name": "ClientTests"},
+     "skippedTests": []}
+  ],
+  "version": 1
+}

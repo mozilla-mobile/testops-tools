@@ -1,0 +1,6 @@
+# No third-party dependencies.
+#
+# The planner is deliberately stdlib-only so it runs on any Python 3.9+ with
+# no install step: no API key, no venv, no network. Tests use unittest.
+#
+# If that changes, anything added here should be justified in the README.
