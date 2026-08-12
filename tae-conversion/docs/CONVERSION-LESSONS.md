@@ -332,6 +332,119 @@ where the click problem appeared twice in one test, on two different layers.
   suspecting the code under test. Gotcha B14.
 - Tooling: 📖 judgment.
 
+## K. Harness-first authoring, and distrusting the legacy assertion (2026-08-07..12 smoke batches)
+
+From the SettingsDeleteBrowsingData, SettingsOpenLinksInApps, SettingsGeneral, PageSummaries, addons and
+SettingsSearch conversions. Sections A-J cover selectors and interaction; these are about where a fix belongs
+and which assertion to trust.
+
+**K1. When a `moz*` verb cannot express a case, extend the primitive — do not wrap or inline a workaround.**
+- Assumed: a screen-specific page-object helper is the cheap fix.
+- Reality: a raw `mDevice` wait or ad-hoc loop is a smell even when it works and even when it faithfully mirrors
+  the legacy robot. Concretely: instead of a bespoke `swipeToSwitchToTab`, add a `steps` param to
+  `mozSwipeElement`; instead of inlining a wait, add the smallest general `BasePage` primitive.
+- Rule: at the interaction gate, first ask "can I make the existing primitive flexible?" A general extension is
+  inherited by every later conversion; a wrapper helps one test and hides the capability. Cover all element
+  backends (ViewInteraction / UiObject / UiObject2 / SemanticsNodeInteraction), modelled on an existing verb.
+
+**K2. Collapse near-duplicate legacy helpers into one helper with a variant flag.**
+- Legacy `installAddon` vs `installAddonInPrivateMode` differ by one checkbox. The port is ONE
+  `installAddon(title, allowInPrivateBrowsing: Boolean = false)`, not two public methods over a shared private one.
+- Rule: mirror the legacy *behavior*, not its method shape or count. Default the flag to the common case and pass
+  it by name at call sites. Collapse unless the two paths diverge in more than one step.
+
+**K3. Name a `SelectorStrategy` after the matchers it calls, not where its value came from.**
+- A `UiSelector().resourceId(v).descriptionContains(s)` lookup is `UIAUTOMATOR_WITH_RES_ID_AND_DESCRIPTION_CONTAINS`
+  — NOT `..._WITH_COMPOSE_TAG_AND_...`, even when the res-id string originates from a Compose `testTag` surfaced
+  via `testTagsAsResourceId`. That origin is a property of one selector's value, not of the strategy.
+- Rule: strategy name == the matchers it runs, consistent with its siblings (`..._WITH_TEXT`, `..._WITH_RES_ID_AND_TEXT`).
+  Value origin and res-id prefixing behaviour go in the doc comment. A Compose strategy that really calls
+  `hasTestTag(...) and hasContentDescription(...)` IS correctly named `COMPOSE_BY_TAG_AND_CONTENT_DESCRIPTION_SUBSTRING`.
+
+**K4. Audit every legacy `verify*` before porting it — they fail in both directions.**
+- Vacuous-by-construction: `swipeNavBar*` asserted `itemWithText(fullHttpUrl)` was gone, but the toolbar strips the
+  scheme so that object never existed — the assert passed trivially and the REAL check was the following `verifyUrl`.
+- Dead-by-swallowing: legacy `BrowserRobot.verifyUrl` wraps its wait in `catch (ComposeTimeoutException) { Log.i }`
+  — it logs and returns, asserting nothing. Ported onto the efficiency `verifyUrl` (which THROWS) the test failed,
+  which looks like a conversion regression and is the opposite: the dead assertion finally firing.
+- Rule: at the parity gate, open the legacy robot helper for each `verify*` and determine whether it THROWS or
+  SWALLOWS, and what it actually checks against the live UI. If it swallows, re-derive the real observable behaviour
+  from the device and assert THAT, keyed on a fixed app-string handle rather than a locale/env-dependent one.
+- Pairs with G-section triage: legacy-RED + converted-GREEN on one build => legacy harness flake (product fine);
+  legacy-GREEN + converted-RED => the legacy assertion was already dead. Both say "trust the product path,
+  distrust the legacy assertion."
+
+**K5. A launch-flag-gated page needs `LaunchConfig` plumbing in THREE places — and is often already on.**
+- Add the field to the `LaunchConfig` data class, the `BaseTest` constructor (+ `defaultLaunchConfig`), AND the
+  `HomeActivityIntentTestRule(...)` construction inside `BaseTest.retryWithCompose`. A test then opts in with
+  `: BaseTest(flag = true)`. Default it to mirror the app's normal launch so `LaunchConfig()` stays == normal.
+- But check `nimbus.fml.yaml` first: FML defaults are compiled in and always applied in instrumented tests, so a
+  feature "behind a flag" (e.g. `shake-to-summarize`, `default: true`) may already be reachable under a plain
+  launch. The plumbing then makes the dependency EXPLICIT (robust if the default flips), not strictly necessary.
+
+**K6. Link every conversion bug to the tracking meta bug.**
+- Each Bugzilla ticket filed for a legacy-test conversion should block
+  [Bug 2030727 — [meta] TAE - Migrate and remove legacy tests](https://bugzilla.mozilla.org/show_bug.cgi?id=2030727)
+  so the campaign stays trackable in one place. `effbug` does not set it on `create`; use
+  `{ "bug":"update", "ids":[NNNNN], "blocks":[2030727] }` via the bridge, or the Bugzilla UI.
+
+**K7. The committed reachability case list is a STATIC generated file — new pages are not covered until it is regenerated.**
+- `NavigationReachabilityParameterizedTest.kt`'s `data()` is a hand-pasted `listOf(Case(...))` produced by
+  `devtools/NavigationCaseGeneratorTest#logPresenceCases` (it logs boilerplate to logcat; a human pastes it).
+  Registering a page in `PageContext` enrols it in the factory but does NOT add it here.
+- Observed stale: the committed list was missing two new search sub-pages AND the pre-existing
+  `SettingsSearchDefaultSearchEnginePage`. Adding just your own `Case(...)` entries by hand avoids pulling in
+  unrelated stale-missing pages; a full regen is a separate cleanup (good-first-bug).
+
+**K8. Tool verdicts: `effverify` crashes on a RED run, and duration is the first triage signal.**
+- `effverify`'s `failure_excerpt` path throws `NameError: name 'txt' is not defined`, so on any failure it gives no
+  verdict. Fall back to `effbuild --json <raw-run.log>` for the build verdict, then read the JUnit XML at
+  `objdir-frontend/gradle/build/.../androidTest-results/connected/debug/TEST-*.xml` for counts and per-testcase results.
+- `effloop_exit:2` in ~45s = COMPILE failure, not a run — read `effbuild --json` for the Kotlin error.
+  `effloop_exit:0` in ~50s = warm incremental build + quick run; still confirm `clean:true`, `failed_total:0`,
+  `retried:false` (green alone hides a skip or a retry-pass).
+- When `effbuild` says "build-infra, not test code", believe it: `mergeLibDexDebug` `NoSuchFileException` = corrupt
+  incremental dex (`rm -rf` those intermediates, not a full clean); `machStagePackage` "Required Gecko binaries are
+  missing" = run `./mach build`. Fix the objdir, not the port.
+
+**K9. `effwatch` is a blocking bridge with no `--help`, and needs its env pinned per checkout.**
+- `effwatch --help` / `--status` do not exist — they silently enter the poll loop with the WRONG default REPO and
+  burn a slot (`pkill -f effwatch.sh` to clean up strays). Start it ONCE in the background.
+- Override `REPO` when the checkout is not `$HOME/Workspace/firefox`, and `ANDROID_SERIAL` whenever more than one
+  device is attached (otherwise gradle `connectedDebugAndroidTest` fans out to a physical phone too).
+- Protocol: drop `conversion-runs/_queue/<id>.request.json` = `{"test_class":"Class#method","batch":"x"}`, poll for
+  `<id>.done.json`, then `effverify conversion-runs/<batch> <method> --json`. Budget ~7 min for one method.
+- A LEGACY test can be run through the same bridge by passing its fully-qualified `Class#method` — effloop treats
+  any `test_class` containing a dot as an FQN. That is how you establish legacy ground truth (K4).
+- When a nav failure saved no logcat, pull it live: `adb logcat -d -s PageNavigation:I EffScreenDump:I`.
+  `PageNavigation` prints the exact BFS path chosen; `EffScreenDump` shows the screen actually landed on.
+
+**K10. Cross-hierarchy return navigation is free — if every return edge is registered.**
+- `on.searchBar.navigateToPage()` from a deep Settings sub-page BFS-routes
+  ManageShortcuts -> SettingsSearch -> Settings -> Home -> SearchBar automatically, replacing legacy
+  `exitMenu()` + `openSearch()`. That only works because each back edge exists.
+- Rule: register the return edge on a new page even when your test only needs the forward one — the graph reuses it.
+  Prefer decomposed per-screen edges (`SettingsPage -> subpage`) over one Home-anchored mega-edge, so the page is
+  reachable from any entry the graph already knows.
+
+**K11. One Settings area can mix View and Compose surfaces — pick the strategy per surface.**
+- The SettingsSearch preferences screen is View-based (`ESPRESSO_BY_TEXT` keyed off string resources) while the
+  Manage Shortcuts screen it opens is Compose (`COMPOSE_BY_TEXT` on the arrival header). Do not choose one strategy
+  per settings-area.
+- View forms: set fields with `mDevice.findObject(By.res("$pkg:id/edit_engine_name")).text = v` (fires the
+  TextWatcher that enables Save), assert the Save button with `mozVerifyElementIsEnabled` on an `ESPRESSO_BY_ID`
+  selector (Espresso needs no visibility, so it works with the keyboard up), and `closeSoftKeyboard()` before
+  clicking a button below the fields in a ScrollView.
+- effcheck warns "R.id/x not obviously present in app source" for ids declared only in `res/layout/*.xml` — it
+  scans `values/`, not layouts. Benign; confirm with a grep of the layout.
+
+**K12. Do not assume a legacy mock-server dependency is real.**
+- Adding a custom search engine needs NO reachable URL: `SaveSearchEngineFragment.createCustomEngine` validates
+  locally (name non-empty + search string contains `%s`); `SearchStringValidator` (which does a network fetch) is
+  not wired into the add flow and the favicon fetch is best-effort. The legacy test's
+  `searchMockServerRule.server.port` URL is vestigial, so the efficiency test needs no mock-server rule.
+- Rule: check the fragment before inheriting a rule.
+
 ## Open gaps (unresolved — pick up on next attempt)
 
 - **Address-autofill suggestion not offered on-device.** With the stylus overlay removed AND stylus disabled,

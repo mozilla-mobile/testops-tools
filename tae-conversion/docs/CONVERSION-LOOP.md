@@ -64,6 +64,14 @@ also has a `{"bug":"update","ids":[…],"self_assign":true}` action to (re)assig
   clear summary, OR split — mirror the Jira split in step 4 if the enablement is substantial.
 
 ### 3. Commit with the real bug number (Claude → bridge → `effgit`)
+
+**Pre-commit gate: run `./mach gradle fenix:ktlint`.** This is the authoritative lint for anything under
+`mobile/android/fenix` — NOT `./mach format` and NOT `effcheck`. `./mach format` runs mozlint's own ktlint
+version and config; `mobile/android/fenix` has its own gradle `:fenix:ktlint` task with the project's config,
+and that task is what CI enforces. A commit passed `./mach format` clean and then failed CI on
+`import-ordering: aliases must be at the end`. `effcheck` does not run ktlint at all. Use
+`fenix:ktlintFormat` to auto-fix. Aliased imports (`... as R`) go LAST in the import block.
+
 Claude writes the commit message to `conversion-runs/<batch>/msg-<n>.txt`:
 ```
 Bug NNNNNNN - [efficiency] Convert <Test>.<method> to ui/efficiency r=isabel_rios,aaronmt

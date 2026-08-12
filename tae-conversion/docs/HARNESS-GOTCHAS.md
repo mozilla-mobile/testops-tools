@@ -403,3 +403,96 @@ Last updated: 2026-08-04.
   its reliability. Re-run immediately and compare against the previous baseline; if results get worse,
   suspect the switch before suspecting the code under test. Both dialog variants ship in the product, so a
   selector verified against one is not verified against the other.
+
+### A25. Re-loading a *different* URL on `BrowserPage` needs `forceNavigation = true` (2026-08)
+- **Symptom:** a second `on.browserPage.navigateToPage(otherUrl)` silently does nothing; you stay on the
+  previous page and a later content assertion fails confusingly.
+- **Cause:** `navigateToPage` early-returns when `mozIsOnPageNow()` is true, and BrowserPage's arrival anchor
+  is `ENGINE_VIEW`, which is present for ANY loaded page.
+- **Check:** every browser navigation after the first passes `forceNavigation = true`. Only the first load
+  from Home/AppEntry can omit it. (`verifyPageContentWithReload` / `clickDownloadLink` already do this.)
+
+### A26. `mozVerifyElementIsChecked` / `IsNotChecked` are single-shot — they race a data bind (2026-08)
+- **Symptom:** ~1/50 on Firebase, "expected checked, got unchecked" on a checkbox the fragment does check.
+- **Cause:** unlike `mozVerify`, these do ONE read with no polling. Native `MaterialCheckBox` rows inflate
+  unchecked and get their real state a beat later; `navigateToPage` can confirm arrival on a bottom-of-screen
+  anchor before the rows above finish binding.
+- **Check:** poll any state a UI action or bind updates asynchronously (checked/selected/enabled/text).
+  Prefer a page-object-local retry wrapper (`verifyCheckBox(selector, checked)`, deadline 5s / poll 250ms)
+  over hardening the shared BasePage verb — a framework-primitive change used by 20+ call sites needs its own
+  justification, not a drive-by inside a conversion.
+- **Triage:** classify a Firebase failure by DURATION first — a "failure" far faster than the test's real
+  runtime (20-30s vs 45-70s) is infra (device offline, install), not your assertion.
+
+### A27. `UiObject.click()` also returns false for a DISMISS tap with no window change (augments A22)
+- **Symptom:** "Stay in Firefox" on the applinks sheet throws `Failed to click UiObject`, while "Open in App"
+  on the SAME sheet passes.
+- **Cause:** `UiObject.click()` is `clickAndSync` — it reports false when no window-content-update arrives.
+  Dismissing a sheet and staying put produces no new window; launching another app does.
+- **Check:** for any button whose only effect is closing an in-app dialog/sheet, use a `UIAUTOMATOR2_*`
+  (UiObject2) strategy — its click injects the gesture without gating on the sync. Never read
+  `Failed to click UiObject` as proof the tap missed.
+
+### A28. Chaining breaks at the FIRST `moz*` verb, even with the covariant override (2026-08)
+- **Symptom:** `navigateToPage().mozVerifyElementIsNotEnabled(...).myHelper()` fails with
+  `Unresolved reference`, although the page DOES declare the covariant `navigateToPage` override.
+- **Cause:** every `moz*` verb returns `BasePage`, so a page-specific helper after one is off a `BasePage`
+  receiver. The override only fixes the first hop.
+- **Check:** bind a local val when interleaving — `val p = on.page.navigateToPage(); p.mozVerify...(); p.myHelper()`.
+  effcheck passes on this; only effbuild catches it.
+
+### A29. `navigateToPage` self-corrects a stale `PageStateTracker` — use it to re-anchor (2026-08)
+- After an imperative page-object helper that changes screens without touching the tracker (e.g. a save that
+  `popBackStack()`es to a different fragment), call `on.<actualScreen>.navigateToPage()`: it checks
+  `mozIsOnPageNow()` FIRST and, if already there, re-syncs the tracker with zero navigation instead of trying
+  to BFS from the stale origin. Subsequent `navigateToPage`s then route correctly.
+
+### A30. BFS can pick a DESTRUCTIVE equal-length edge out of an edit surface (2026-08)
+- **Symptom:** navigating to Settings from the search bar opened a browser tab and corrupted the back-stack,
+  so a later "Navigate up" chain landed on GeckoView instead of Home.
+- **Cause:** BFS chose `SearchBarComponent -> BrowserPage` (steps `EnterText(url) + PressEnter`); the box still
+  held the typed term, so PressEnter SUBMITTED it. A stateful edge is a landmine when the field has residual text.
+- **Check:** hop through a neutral page first (`on.home.navigateToPage()`) rather than letting BFS route out of
+  an edit surface. Structurally: give edit surfaces an explicit non-destructive outbound edge —
+  `SearchBarComponent -> HomePage` via `NavigationStep.PressBack` was added for this and makes the route
+  length-1, so BFS prefers it.
+
+### A31. Awesomebar suggestions are asserted as a COLLECTION by tag (2026-08)
+- Each row carries testTag `mozac.awesomebar.suggestion` (singular; the container is plural `...suggestions`).
+  Displayed: `mozVerifyAnyContainsText(COMPOSE_BY_TAG "mozac.awesomebar.suggestion", term)`. Absent:
+  `mozVerifyNoneContainText(same, term)` — note it passes VACUOUSLY when there are zero suggestion nodes, which
+  is exactly the "suggestions off" case, so pair it with a positive control.
+- effcheck's "literal testTag not found in app source" WARN is a false positive for tags defined in
+  android-components (outside `--app-root`).
+
+### A32. Below-the-fold Settings entries need a `Swipe` nav step, and `mozSwipeTo` to assert (2026-08)
+- Preference screens are RecyclerViews that recycle off-screen rows out of the hierarchy, so `mozVerify` alone
+  (it does not scroll) fails on an entry below the fold. Use
+  `on.settings.navigateToPage().mozSwipeTo(BTN).mozVerify(BTN)`, and put a `NavigationStep.Swipe(BTN)` before
+  the `Click` on the `Settings -> sub-page` edge.
+
+### A33. Compose sliders: drive with `mozSetSliderValue`, not a swipe (2026-08)
+- New `BasePage.mozSetSliderValue(selector, value)` uses `performSemanticsAction(SemanticsActions.SetProgress)`.
+  A synthetic swipe can only land on whatever step the gesture geometry hits; SetProgress asks for the exact
+  value. Compose-tag selectors only.
+
+### A34. Espresso `Intents` works in efficiency tests for free (2026-08)
+- `BaseTest` runs on `HomeActivityIntentTestRule`, which extends `IntentsTestRule` (auto `init()/release()`),
+  so a page object can assert `intended(hasAction(...))` with no per-test setup. This unblocks converting any
+  legacy test that used `intended(...)` — e.g. the default-browser role request
+  (`"android.app.role.action.REQUEST_ROLE"`).
+
+### A35. `SwitchPreferenceCompat` state is NOT readable with `mozVerifyElementIsChecked` (2026-08)
+- The Switch is a *cousin* of the title text, not the title node. Keep the legacy Espresso
+  `hasCousin(allOf(withClassName(endsWith("Switch")), isChecked()))` in a page-object helper. Two flavours:
+  toggles with no stable id (match by class) and ones with `R.id.switch_widget` (match by id). Page objects
+  legitimately hold Espresso here.
+- Corollary: do not trust pre-existing stub selectors. `USE_SYSTEM_FONT_SIZE_TOGGLE` referenced an espresso id
+  that does not exist on the real `SwitchPreferenceCompat` screen — effcheck's B-check had flagged it and it was
+  never verified.
+
+### A36. A Compose Checkbox with no tag or content-description leaves only a sibling index (2026-08)
+- The Manage Shortcuts `LazyColumn` renders each engine row with a bare `Checkbox`. No `SelectorStrategy`
+  expresses "checkbox that is a sibling of text X", so the faithful port is the legacy device call:
+  `mDevice.findObject(UiSelector().text(name)).getFromParent(UiSelector().index(i)).click()`.
+- **Check:** keep index-fragile device interactions as page-object helpers, NEVER as a shared BasePage verb.
