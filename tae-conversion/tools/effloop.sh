@@ -138,7 +138,20 @@ for f in xmls:
 if xmls:
     status.update(tests=tests, failures=failures, skipped=skipped,
                   results=results, failed=failed)
-    status["outcome"] = "pass" if failures == 0 and tests > 0 else ("fail" if failures else "no-tests")
+    # A SKIP IS NOT A PASS. `failures == 0` was enough to score a run green, so a test held back
+    # by an Assume()/feature gate reported outcome=pass having asserted nothing at all — the
+    # campaign's fifth false-green shape. Count what actually ran instead.
+    passed = tests - failures - skipped
+    if failures:
+        status["outcome"] = "fail"
+    elif tests == 0:
+        status["outcome"] = "no-tests"
+    elif skipped and passed == 0:
+        status["outcome"] = "skipped"   # nothing was verified
+    elif skipped:
+        status["outcome"] = "partial"   # something was verified, but not everything
+    else:
+        status["outcome"] = "pass"
 else:
     status["outcome"] = "unknown"
     status["note"] = "no JUnit XML newer than this run in RESULTS_DIR"
@@ -190,12 +203,23 @@ echo "▶ reports in $OUT"
 #   3  compiled but produced no usable test verdict (no JUnit XML) — inconclusive, treat as failure
 #   4  the test filter matched nothing — almost always a mistyped class/method, i.e. a caller error
 #      rather than a red run, so it is worth distinguishing from 1 and 3
+#   5  compiled and ran, but at least one test was SKIPPED, so the verdict is incomplete. A skip
+#      asserts nothing, so it must never read as a pass; distinguished from 1 because the test did
+#      not fail, it never ran (an Assume()/feature gate, a pref, or absent hardware)
 OUTCOME=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("outcome","unknown"))' \
     "$OUT/status.json" 2>/dev/null || echo unknown)
 case "$OUTCOME" in
     pass) exit 0 ;;
     fail) echo "✗ effloop: tests failed (see $OUT/status.json)"; exit 1 ;;
     no-tests) echo "✗ effloop: no tests matched '$TEST_CLASS' — check the class/method name"; exit 4 ;;
+    skipped)
+        echo "✗ effloop: every test was SKIPPED — nothing was verified, so this is not a pass."
+        echo "  Usually an Assume()/feature gate: a Nimbus flag, a pref, or absent hardware."
+        echo "  See $OUT/status.json"
+        exit 5 ;;
+    partial)
+        echo "✗ effloop: some tests were SKIPPED, so the verdict is incomplete (see $OUT/status.json)"
+        exit 5 ;;
     *)
         if [ "${COMPILE_OK:-1}" != "0" ]; then
             echo "✗ effloop: compile failure (see $OUT/build-report.txt)"; exit 2

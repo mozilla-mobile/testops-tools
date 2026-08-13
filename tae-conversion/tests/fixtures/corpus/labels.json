@@ -19,9 +19,11 @@
   },
   "T10-crash": {
     "expected_rules": [
+      "T11",
       "T10"
     ],
     "known_gap": false,
+    "note": "Also carries 2 silently SKIPPED tests (browserSearchBarItemsTest, homeSearchBarItemsTest) among 10 \u2014 invisible before T11 existed.",
     "outcome": "fail",
     "retried": false,
     "source_batch": "b10-searchclass"
@@ -106,6 +108,16 @@
     "outcome": "pass",
     "retried": false,
     "source_batch": "b17j-qrdialog"
+  },
+  "skipped-scored-as-pass": {
+    "expected_rules": [
+      "T11"
+    ],
+    "known_gap": false,
+    "note": "Legacy MainMenuTest summarize test is @Ignore'd (bug 2059592), so it SKIPPED. status.json scored it outcome=pass. efftriage must diagnose it from the per-test statuses, not the outcome.",
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b22-summarize-baseline"
   },
   "unknown-empty-report": {
     "expected_rules": [],

@@ -87,12 +87,21 @@ class CorpusTests(unittest.TestCase):
             with self.subTest(run=name):
                 self.assertEqual(bool(self.triage(name).get("retried")), want["retried"])
 
+    def has_skips(self, name):
+        with open(os.path.join(CORPUS, name, "status.json")) as fh:
+            status = json.load(fh)
+        return any(r.get("status") == "skipped" for r in status.get("results", []))
+
     def test_passing_nonretried_runs_are_never_triaged(self):
         # The invariant that a false positive violated: non-fatal [ERR] lines
         # (nav-graph polling, tolerated absence checks) made the rules invent a cause
         # for a green run.
+        #
+        # "outcome == pass" is NOT the same as genuinely green, so runs containing a skip
+        # are excluded: for those, `pass` is itself the bug (gotcha A44) and a finding is
+        # the correct output, not a false positive.
         for name, want in LABELS.items():
-            if want["outcome"] != "pass" or want["retried"]:
+            if want["outcome"] != "pass" or want["retried"] or self.has_skips(name):
                 continue
             with self.subTest(run=name):
                 self.assertEqual(self.triage(name)["findings"], [])
@@ -212,6 +221,58 @@ class CrashModeTests(SyntheticBatch, unittest.TestCase):
         res = efftriage.triage(self.batch(report=report, status={"outcome": "pass"}))
         self.assertTrue(res["retried"])
         self.assertIn("ONLY ON RETRY", " ".join(res["notes"]))
+
+
+class SkippedRunTests(SyntheticBatch, unittest.TestCase):
+    """A skip asserts nothing, so it must never read as green (gotcha A44).
+
+    This was the campaign's fifth false-green shape: effloop scored `outcome: pass` whenever
+    `failures == 0 and tests > 0`, which an @Ignore'd or Assume()-gated test satisfies without
+    running. effverify got it right (`passed: false`); efftriage trusted the outcome and said
+    "nothing to triage".
+    """
+
+    def test_all_skipped_is_diagnosed_even_when_outcome_claims_pass(self):
+        # The load-bearing case: the field that should raise the alarm is the one that lied, so the
+        # diagnosis must come from the per-test statuses instead.
+        res = efftriage.triage(self.batch(
+            report="run finished: 1 tests, 0 failed, 0 ignored\n",
+            status={"outcome": "pass", "tests": 1, "failures": 0, "skipped": 1,
+                    "results": [{"name": "someTest", "status": "skipped"}]},
+        ))
+        self.assertEqual([f["rule"] for f in res["findings"]], ["T11"])
+        self.assertEqual(res["findings"][0]["gotcha"], "A44")
+        self.assertIn("nothing was verified", res["findings"][0]["cause"])
+        self.assertIn("someTest", res["findings"][0]["cause"])
+
+    def test_skipped_test_names_are_reported(self):
+        res = efftriage.triage(self.batch(
+            report="x\n",
+            status={"outcome": "skipped",
+                    "results": [{"name": "aTest", "status": "skipped"},
+                                {"name": "bTest", "status": "skipped"}]},
+        ))
+        self.assertEqual(res["skipped"], ["aTest", "bTest"])
+
+    def test_partial_skip_alongside_a_pass_is_still_flagged(self):
+        res = efftriage.triage(self.batch(
+            report="x\n",
+            status={"outcome": "partial",
+                    "results": [{"name": "ranTest", "status": "pass"},
+                                {"name": "gatedTest", "status": "skipped"}]},
+        ))
+        self.assertEqual([f["rule"] for f in res["findings"]], ["T11"])
+        self.assertIn("incomplete", res["findings"][0]["cause"])
+        self.assertIn("gatedTest", res["findings"][0]["cause"])
+
+    def test_a_genuine_pass_is_not_flagged_as_skipped(self):
+        res = efftriage.triage(self.batch(
+            report="run finished: 1 tests, 0 failed, 0 ignored\n",
+            status={"outcome": "pass", "skipped": 0,
+                    "results": [{"name": "someTest", "status": "pass"}]},
+        ))
+        self.assertEqual(res["findings"], [])
+        self.assertEqual(res.get("skipped", []), [])
 
 
 class CliTests(unittest.TestCase):

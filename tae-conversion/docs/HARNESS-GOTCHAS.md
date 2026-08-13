@@ -585,3 +585,17 @@ Last updated: 2026-08-04.
 - **Check:** in the test, `pm clear-permission-flags <pkg> <permission> user-fixed user-set` **and**
   `pm revoke <pkg> <permission>`. Do **not** use the device-wide `pm reset-permissions` — it strips permissions
   the instrumentation itself relies on and crashes the test process.
+
+### A44. A skipped test was scored as a pass (2026-08-13)
+- **Symptom:** `status.json` reports `outcome: pass` with `failures: 0`, and `efftriage` says "run passed —
+  nothing to triage", for a test that never executed. `effverify` disagrees (`ok: false`, `passed: false`),
+  which is the tell. The campaign's **fifth** false-green shape.
+- **Cause:** `effloop` computed the verdict as `failures == 0 and tests > 0`, and a skip satisfies both. An
+  `@Ignore`d legacy test, an `Assume()`/`assumeTrue` gate, a Nimbus flag or absent hardware all produce a skip.
+  A skip asserts nothing, so it must never read as green. Found when a legacy summarize test skipped on account
+  of `@Ignore("Will be fixed in bug 2059592")`; the same rule then found **2 silently skipped tests** in an
+  earlier full-suite run that nobody had noticed.
+- **Check:** `outcome` is now `skipped` when nothing ran and `partial` when only some tests ran, both exiting
+  **5**. `efftriage` rule **T11** reports it, reading the per-test statuses rather than `outcome` — the field
+  that should raise the alarm was the one lying. Never read `failures: 0` as success on its own: confirm
+  `results[].status == "pass"` for every test you expected to run.

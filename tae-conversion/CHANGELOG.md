@@ -41,6 +41,14 @@ verdict semantics, changed flags. `git log` has the rest.
   app-services itself uses in its unit tests) and gotchas **A37–A43**.
 
 ### Fixed
+- `effloop.sh` — **a SKIPPED test was scored as a pass** (gotcha **A44**, the fifth false-green shape). The
+  verdict was `failures == 0 and tests > 0`, which a skip satisfies without running, so an `@Ignore`d legacy
+  test reported `outcome: pass` having asserted nothing. `outcome` is now `skipped` when nothing ran and
+  `partial` when only some tests did, both exiting **5** (new code: ran, but the verdict is incomplete).
+  `effverify` already scored these correctly, so a disagreement between the two was the tell.
+- `efftriage.py` — new rule **T11** for the above. It reads the per-test statuses rather than `outcome`,
+  because the field that should raise the alarm was the one lying. On its first run over the existing corpus it
+  found **2 silently skipped tests** in an earlier 10-test run that nothing had ever reported.
 - `efftriage.py` — **a green run was handed a failure diagnosis.** Traces routinely carry non-fatal `[ERR]`
   lines (nav-graph polling, tolerated absence checks), and the rules scanned them regardless of outcome, so a
   passing run was reported as an absence-assertion failure. Two of the campaign's own labelled runs were

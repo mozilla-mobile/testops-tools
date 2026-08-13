@@ -173,6 +173,25 @@ def triage(batch):
         )
         return res
 
+    # A SKIP IS NOT A PASS (gotcha A44). Read the per-test statuses rather than trusting
+    # status.json's `outcome`, because an older effloop scored an all-skipped run as `pass` — so the
+    # field that should raise the alarm is exactly the one that was lying.
+    skipped_tests = [r.get("name") for r in status.get("results", []) if r.get("status") == "skipped"]
+    if skipped_tests:
+        res["skipped"] = skipped_tests
+        verified = [r for r in status.get("results", []) if r.get("status") == "pass"]
+        res["findings"].append({
+            "rule": "T11", "gotcha": "A44", "line": 0,
+            "cause": ("every test was SKIPPED, so nothing was verified"
+                      if not verified else
+                      f"{len(skipped_tests)} test(s) were SKIPPED, so the verdict is incomplete")
+                     + ": " + ", ".join(t for t in skipped_tests if t),
+            "fix": "A skipped test asserts nothing and must not be read as green. Find the gate that "
+                   "held it back — an Assume()/assumeTrue in the test or its rule, a Nimbus feature "
+                   "flag, a pref, or absent hardware — and either satisfy it or drive the feature from "
+                   "the test. Cross-check effverify, which scores a skip as passed=false.",
+        })
+
     if re.search(r"^CRASH:", report, re.M):
         crash = re.search(r"^CRASH: (.+)$", report, re.M)
         res["findings"].append({
