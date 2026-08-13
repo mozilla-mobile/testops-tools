@@ -496,3 +496,38 @@ Last updated: 2026-08-04.
   expresses "checkbox that is a sibling of text X", so the faithful port is the legacy device call:
   `mDevice.findObject(UiSelector().text(name)).getFromParent(UiSelector().index(i)).click()`.
 - **Check:** keep index-fragile device interactions as page-object helpers, NEVER as a shared BasePage verb.
+
+### A37. effverify scored a CRASH-mode failure as passed — a false green (2026-08-12, FIXED)
+- **Symptom:** a class run whose `status.json` said `outcome=fail, failures=1` came back from
+  `effverify --json` as `{"ok": true, "clean": true, "failed_total": 0}`, with the failed test listed as
+  `"passed"`. `effloop_exit` was correctly `1`. The failing test was
+  `scanQRCodeToOpenAWebpageTest`, killed by `IllegalArgumentException: CaptureRequest contains unconfigured
+  Input/Output Surface!` from `QrFragment`.
+- **Cause:** the test died from an uncaught exception rather than a failed assertion, so the report contains
+  **no `failed:` marker** and the gradle log line does not say `FAILED`. effverify built its failed-set from
+  those two signals only and fell through to "appeared in `started:` and not otherwise flagged -> passed".
+  The tell in the JSON is `"gradle": null` on a test reported as passed. This is the same fall-through the
+  2026-08-03 fix closed for assertion failures; crashes survived it.
+- **Fix:** effverify now also reads the report's own `FAILURES (n of m)` header (which names each failed test)
+  and any `CRASH:` line inside a single-test block, and adds an `unattributed_failures` backstop: if the
+  declared failure count exceeds what it can pin to a name, it reports NOT DONE instead of guessing. Verified
+  against 7 real batches with no regressions.
+- **Check:** never take effverify alone as the done-gate. Read `status.json` (`outcome`, `failures`) next to it,
+  and if `effloop_exit` is non-zero while effverify says clean, believe the exit code.
+
+### A38. `mach lint` and every Gradle task serialize on one lockfile, and a killed run leaves it stale (2026-08-12)
+- **Symptom:** `A failure occurred in the android-format linter` with
+  `filelock._error.Timeout: The file lock 'objdir-frontend/gradle/mach_android.lockfile' could not be
+  acquired`, and `0 fixed` — which reads like a linter bug but is pure contention. Two concurrent
+  `mach lint` runs, or a lint started while an effwatch test run is building, will do this to each other.
+- **Cause:** `tools/lint/android/lints.py` wraps every gradle invocation in a `SoftFileLock` on
+  `mach_android.lockfile`. Being a *soft* lock, the file's existence IS the lock, so SIGTERM-ing a lint leaves
+  it behind and every later run waits out the timeout for nothing.
+- **Check:** run one at a time; never lint while a queued conversion run is in flight. After killing a lint,
+  `rm -f objdir-frontend/gradle/mach_android.lockfile`.
+- **Also:** `./mach lint <path>` on Kotlin selects `android-lint` too, which runs `:fenix:lintDebug` over the
+  whole module and takes ~10+ minutes; the path argument cannot narrow it, because the Android linters are
+  wired per Gradle module rather than per file. Use `-l android-format` (ktlint + detekt only), or skip mozlint
+  altogether with `./mach gradle :fenix:ktlint :fenix:detekt`. Note gradle caches those tasks — an `UP-TO-DATE`
+  run prints nothing and looks clean; add `--rerun-tasks` when you need certainty. `./mach format` (spotless)
+  does NOT catch the ktlint rules that fail the gate, e.g. `no-consecutive-blank-lines` and `standard:kdoc`.

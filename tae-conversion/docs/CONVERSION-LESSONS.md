@@ -396,10 +396,13 @@ and which assertion to trust.
   `SettingsSearchDefaultSearchEnginePage`. Adding just your own `Case(...)` entries by hand avoids pulling in
   unrelated stale-missing pages; a full regen is a separate cleanup (good-first-bug).
 
-**K8. Tool verdicts: `effverify` crashes on a RED run, and duration is the first triage signal.**
-- `effverify`'s `failure_excerpt` path throws `NameError: name 'txt' is not defined`, so on any failure it gives no
-  verdict. Fall back to `effbuild --json <raw-run.log>` for the build verdict, then read the JUnit XML at
-  `objdir-frontend/gradle/build/.../androidTest-results/connected/debug/TEST-*.xml` for counts and per-testcase results.
+**K8. Tool verdicts: duration is the first triage signal (the RED-run crash is FIXED).**
+- ~~`effverify`'s `failure_excerpt` path throws `NameError: name 'txt' is not defined`~~ — **fixed 2026-08-12**
+  (`txt` should have been `full`; it only ever triggered when there was no `raw-run.log` to read). effverify now
+  returns a verdict on a failing run, with a capped `failure_excerpt`, so the JUnit-XML fallback below is no
+  longer needed for the common case. It is still the right move when `run-report.txt` is missing entirely (A24).
+- **Cross-check `status.json` anyway.** A green effverify next to a non-zero `effloop_exit` means believe the exit
+  code: see A37 for the crash-mode false green that motivated this rule.
 - `effloop_exit:2` in ~45s = COMPILE failure, not a run — read `effbuild --json` for the Kotlin error.
   `effloop_exit:0` in ~50s = warm incremental build + quick run; still confirm `clean:true`, `failed_total:0`,
   `retried:false` (green alone hides a skip or a retry-pass).
