@@ -1,0 +1,47 @@
+# --------------------------------------------------------------------------- #
+# Secrets — never commit
+# --------------------------------------------------------------------------- #
+.env
+.env.*
+!.env.example
+
+# --------------------------------------------------------------------------- #
+# Work data — kept local
+#
+# inputs/  holds unreleased product material (PRDs, Figma exports, Jira
+#          screenshots). It must not enter git history.
+# outputs/ holds generated test suites, manifests, review and import reports.
+#          Regenerate them with the agents rather than versioning them.
+# --------------------------------------------------------------------------- #
+# Note the trailing /* — ignoring `work/inputs/` outright would stop git
+# descending into it, and the .gitkeep negations below would never apply.
+work/inputs/*
+work/outputs/*
+
+# Keep the folders themselves so a fresh clone has the expected layout.
+!work/inputs/.gitkeep
+!work/outputs/.gitkeep
+
+# --------------------------------------------------------------------------- #
+# Personal Claude Code overrides (team settings live in .claude/settings.json)
+# --------------------------------------------------------------------------- #
+.claude/settings.local.json
+
+# --------------------------------------------------------------------------- #
+# Python
+# --------------------------------------------------------------------------- #
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --------------------------------------------------------------------------- #
+# OS / editor noise
+# --------------------------------------------------------------------------- #
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

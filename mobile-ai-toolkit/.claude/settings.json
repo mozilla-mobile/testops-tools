@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(work/inputs/**)",
+      "Read(work/outputs/**)",
+      "Edit(work/outputs/**)",
+      "Write(work/outputs/**)",
+      "Read(./work/inputs/**)",
+      "Read(./work/outputs/**)",
+      "Edit(./work/outputs/**)",
+      "Write(./work/outputs/**)",
+      "Bash(python3 *)",
+      "Bash(cd *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(jq *)",
+      "Bash(echo *)",
+      "Bash(mkdir *)"
+    ]
+  }
+}
