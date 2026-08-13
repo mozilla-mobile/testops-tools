@@ -25,6 +25,12 @@ OUT_ROOT="${OUT_ROOT:-$(cd "$(dirname "$0")/.." && pwd)/conversion-runs}"   # de
 # Gradle's own per-run JUnit XML. Authoritative for pass/fail; the logcat trace is for *why*.
 RESULTS_DIR="${RESULTS_DIR:-$REPO/objdir-frontend/gradle/build/mobile/android/fenix/app/outputs/androidTest-results/connected/debug}"
 TOOLS="$(cd "$(dirname "$0")" && pwd)"
+# effpretty.py is NOT in this repo — it lives in-tree with the framework it renders, so resolve it under
+# $REPO. It used to be called as "$TOOLS/effpretty.py", which only worked for checkouts that happened to have
+# a local copy or symlink beside this script; anywhere else the renderer silently never ran, so run-report.txt
+# came out empty and effverify had no input to judge (see HARNESS-GOTCHAS A24).
+EFFPRETTY="${EFFPRETTY:-$REPO/mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/devtools/effpretty/effpretty.py}"
+[ -f "$EFFPRETTY" ] || EFFPRETTY="$TOOLS/effpretty.py"
 # resolve adb the way effpretty does (effwatch's shell often lacks it on PATH)
 ADB="${ADB:-$(command -v adb 2>/dev/null || echo "${ANDROID_SDK_ROOT:-${ANDROID_HOME:-$HOME/Library/Android/sdk}}/platform-tools/adb")}"
 # ────────────────────────────────────────────────────────────────────────────
@@ -35,6 +41,7 @@ TEST_CLASS="${1:?usage: effloop.sh <TestClass|FQN|Class#method> [batch]}"; BATCH
 case "$TEST_CLASS" in *.*) FQCLASS="$TEST_CLASS" ;; *) FQCLASS="$TESTS_PKG.$TEST_CLASS" ;; esac
 OUT="$OUT_ROOT/$BATCH"; mkdir -p "$OUT"
 cd "$REPO" || { echo "REPO not found: $REPO"; exit 2; }
+[ -f "$EFFPRETTY" ] || { echo "effpretty.py not found at: $EFFPRETTY (set EFFPRETTY or REPO)"; exit 2; }
 
 # Anything in RESULTS_DIR older than this is from a PREVIOUS run — never report it as this run's result.
 RUN_START=$(date +%s)
@@ -54,7 +61,7 @@ cleanup_pretty() {
   PRETTY_PID=""
 }
 trap 'cleanup_pretty' EXIT INT TERM
-python3 "$TOOLS/effpretty.py" capture --mode watch --out "$OUT/run-report.txt" &
+python3 "$EFFPRETTY" capture --mode watch --out "$OUT/run-report.txt" &
 PRETTY_PID=$!
 
 ./mach gradle "$MACH_TASK" $MACH_ARGS \
@@ -72,7 +79,7 @@ if [ "${COMPILE_OK:-1}" -eq 0 ]; then
   # Fall back to a snapshot if the live attach produced nothing (e.g. it lost the device mid-run) —
   # better a late trace than none. Buffers were cleared above, so this cannot pick up an older run.
   if [ ! -s "$OUT/run-report.txt" ]; then
-    python3 "$TOOLS/effpretty.py" capture --mode dump --out "$OUT/run-report.txt" 2>/dev/null || true
+    python3 "$EFFPRETTY" capture --mode dump --out "$OUT/run-report.txt" 2>/dev/null || true
   fi
   if [ -s "$OUT/run-report.txt" ]; then RAN=true; echo "▶ run trace → $OUT/run-report.txt"; else RAN=false; fi
 else

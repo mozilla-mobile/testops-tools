@@ -13,7 +13,7 @@ tools run on *your* machine; a small watcher (`effwatch.sh`) bridges the two.
 |---|---|
 | Agent skills (`efficiency-test-authoring`, `tae-test-review`, `efficiency-conversion-loop`) | [`firefox-aidev-plugins`](https://github.com/mozilla/firefox-aidev-plugins) → `plugins/tae` |
 | Framework reference docs (guides, gotchas, architecture) | mozilla-central, `mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/docs/` |
-| Device-side dump tools (`effview`, `effpretty`) | mozilla-central, same tree under `devtools/` |
+| Device-side dump tools (`effview`, `effpretty`) | mozilla-central, same tree under `devtools/` — `effloop` resolves `effpretty` from `$REPO`, so no copy or symlink is needed in this repo |
 | Host-side workflow tools | **here** |
 
 The skills tell the agent *how* to work and reference these tools by name. Install the

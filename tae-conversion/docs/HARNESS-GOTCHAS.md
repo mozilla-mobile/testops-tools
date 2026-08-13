@@ -383,7 +383,12 @@ Last updated: 2026-08-04.
 ### A24. effloop can finish without a `run-report.txt`, silently disabling effverify (2026-08-04)
 - **Symptom:** `effverify` returns `{"ok": false, "error": "no run-report.txt (did it compile/run?)"}` for a
   run that plainly executed, and `status.json` says `"ran": false` while listing per-test results.
-- **Cause:** the `effpretty capture` step produced no report. The consequence beyond effverify is worse: the
+- **Cause (root cause FIXED 2026-08-12):** the `effpretty capture` step produced no report. `effloop.sh`
+  invoked it as `$TOOLS/effpretty.py`, but effpretty lives **in-tree** under
+  `ui/efficiency/devtools/effpretty/` — so it only ever resolved for checkouts that happened to have a local
+  copy or symlink beside the script, and silently did nothing everywhere else. effloop now resolves it under
+  `$REPO` (override with `EFFPRETTY=`), falls back to `$TOOLS`, and exits 2 with a named error if neither
+  exists rather than producing an empty report. The consequence beyond effverify was worse: the
   on-failure ScreenDumps never reach `raw-run.log` either, so diagnostics look absent when they are merely
   unrouted. This is what led me to conclude "mozClick does not dump on click failure" — it does,
   `BasePage.kt:478`.
