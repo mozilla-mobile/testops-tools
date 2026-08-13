@@ -161,7 +161,7 @@
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
 | m1q | Galaxy S26 | 36 | Medium |
-| m2q | Galaxy S26+ | 36 | Medium |
+| m2q | Galaxy S26+ | 36 | High |
 | malmo | moto g85 5G | 36 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Low |
@@ -218,7 +218,7 @@
 | t2q | Galaxy S21+ 5G | 35 | Low |
 | tangorpro | Pixel Tablet | 33 | High |
 | tangorpro | Pixel Tablet | 36 | Medium |
-| tegu | Pixel 9a | 35 | Low |
+| tegu | Pixel 9a | 35 | Medium |
 | tokay | Pixel 9 | 34 | High |
 | tokay | Pixel 9 | 35 | High |
 | tokay | Pixel 9 | 36 | Medium |
