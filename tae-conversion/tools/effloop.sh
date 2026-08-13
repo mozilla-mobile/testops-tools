@@ -17,6 +17,13 @@
 #   status.json       machine-readable outcome INCLUDING per-test pass/fail — read this first
 #
 # ── configure once (or export as env) ──────────────────────────────────────
+# --version, before anything else parses args. python3 resolves the symlink so the VERSION lookup
+# works when this script is invoked through another checkout's tools/ dir.
+case "${1:-}" in
+  --version)
+    v="$(python3 -c "import os;p=os.path.join(os.path.dirname(os.path.dirname(os.path.realpath('$0'))),'VERSION');print(open(p).read().strip() if os.path.isfile(p) else 'unknown')" 2>/dev/null || echo unknown)"
+    echo "$(basename "$0") — tae-conversion $v"; exit 0 ;;
+esac
 REPO="${REPO:-$HOME/Workspace/firefox}"                 # mozilla-central root (where ./mach lives)
 MACH_TASK="${MACH_TASK:-fenix:connectedDebugAndroidTest}"   # confirmed working task
 MACH_ARGS="${MACH_ARGS:---stacktrace}"                      # extra gradle args (stacktrace ⇒ real errors)
