@@ -28,7 +28,7 @@ verdict semantics, changed flags. `git log` has the rest.
   resolving it against the caller's cwd yields a directory that never existed. A computed queue that is not on
   disk is reported as a failure, and an unreadable cwd as "undetermined": naming the wrong queue confidently is
   worse than declining to name one. (MTE-5766)
-- **Unit tests** (`tae-conversion/tests/`, 48 of them) and a CI job, where previously the toolchain had none.
+- **Unit tests** (`tae-conversion/tests/`, 58 of them) and a CI job, where previously the toolchain had none.
   Run them with `python -m unittest discover -s tae-conversion/tests -p '*tests.py'`; no device, emulator,
   Firefox checkout or network needed, since `ps`/`lsof`/`adb`/`git` are stubbed. The efftriage rule tests run
   against **real labelled conversion runs** checked in under `tests/fixtures/corpus` with a `labels.json`
@@ -36,6 +36,10 @@ verdict semantics, changed flags. `git log` has the rest.
   mismatches real output — a false green in the suite meant to prevent false greens. That corpus previously
   existed only as batch dirs in one person's `conversion-runs/`, unversioned and unrunnable in CI. Writing
   these found four defects, three of them in code that had already been reviewed by eye and pronounced fine.
+- `effbug.py` **update now accepts `comment`**, posting a new comment on an existing bug. Comment 0 cannot be
+  edited through the Bugzilla API, so a correction previously had nowhere to go — found the hard way after a
+  bug was filed with a wrong TestRail id. On `create` `comment` is still the description; on `update` it is a
+  new comment.
 - `ALT_TOOLS` env var on `effdoctor`, so the alt-checkout divergence check works for checkouts that are not at
   `~/Workspace/ui-test-modernization`.
 - `VERSION` + this changelog, and `--version` on all 12 tools. Version lookup resolves symlinks, so it stays

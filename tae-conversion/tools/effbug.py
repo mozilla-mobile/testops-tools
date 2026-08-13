@@ -218,6 +218,12 @@ def run(req):
             v = req.get(k)
             if v:
                 fields[k] = {"add": v} if isinstance(v, list) else v
+        # On create, `comment` is the description; on update it is a NEW comment. Without this there was no
+        # way to annotate a bug after filing it — which matters because comment 0 cannot be edited through
+        # the API, so a correction (a wrong TestRail id, say) has nowhere to go.
+        body = (req.get("comment") or "").strip()
+        if body:
+            fields["comment"] = {"body": body}
         if not fields:
             raise RuntimeError("update: nothing to change (pass assigned_to/self_assign or a field)")
         updated, failed = [], []
