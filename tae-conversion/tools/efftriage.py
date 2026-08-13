@@ -2,9 +2,19 @@
 """
 efftriage — map a failed conversion run to the gotcha that explains it.
 
-HARNESS-GOTCHAS is at 57 entries and CONVERSION-LESSONS ~40. Nobody recalls that mid-debug, so the
-same failures get re-derived on device at 1-2 cycles each with the answer already written down. This
-reads the run the loop already produced and names the likely cause, with the gotcha ID to go read.
+HARNESS-GOTCHAS and CONVERSION-LESSONS run to well over a hundred entries between them. Nobody recalls
+that mid-debug, so the same failures get re-derived on device at 1-2 cycles each with the answer already
+written down. This reads the run the loop already produced and names the likely cause, with the gotcha ID
+to go read. (Deliberately not stating a count here: it was hard-coded as "57" and was wrong twice, which
+is the same failure mode the rules themselves are meant to avoid -- a confident number nobody rechecks.)
+
+Two standing rules for anyone adding a rule, learned by breaking them:
+  1. Only match text OBSERVED in a real run. Every defect found on 2026-08-13 was a rule that looked
+     correct and could never fire (T4 matched Compose's zero-match text while claiming to detect
+     ambiguity; T14 matched only "checked" so the fix its own gotcha recommended became invisible to it).
+  2. A wrong diagnosis is worse than none, because it stops the reader looking. Prefer "no rule matched".
+     Every new rule needs a labelled corpus fixture, or an explicit UNVALIDATED_RULES entry; the test
+     suite enforces this across BOTH rule tiers.
 
 Read-only: it never touches the tree or the device, so it is safe to run on every failure.
 
@@ -65,7 +75,13 @@ RULES = [
         "COMPOSE_BY_TEXT resolves through the singular onNodeWithText, which throws when more than one "
         "node matches; the verb swallows that and says absent. Use COMPOSE_BY_TEXT_SUBSTRING, or scope "
         "to a container with COMPOSE_ON_ALL_NODES_BY_TAG_WITH_CHILD_TEXT_ON_FIRST.",
-        lambda w: re.search(r"Expected exactly '1' node|expected 1, found|Can't retrieve node at index", w),
+        # Must require the AMBIGUOUS phrasing ("but found 'N' nodes", N>1). The bare
+        # "Expected exactly '1' node ... could not find any node that satisfies" and
+        # "Can't retrieve node at index '0'" are Compose's ZERO-match messages, which say nothing about
+        # ambiguity -- they appear in T1-arrival-timeout, T7-multi and T2-selector-surface, so matching them
+        # here would confidently misdiagnose three labelled runs as A41 if T4 were ever ordered earlier.
+        lambda w: re.search(r"but found '[2-9]\d*' nodes", w)
+        or re.search(r"expected 1, found [2-9]", w),
     ),
     (
         "T5", "A9/F1",
@@ -111,6 +127,12 @@ RULES = [
         "The named anchor never appeared. Check the requiredForPage selectors cover this runtime state "
         "(gotcha B7): a layout variant, an empty-vs-populated list, or a different entry point often "
         "needs a second anchor.",
+        # Deliberately NOT matching "Failed to navigate to X" here: that is the text navigateToPage throws
+        # (BasePage.kt:184) and it only ever lands in the FAILURES summary, never inside an [ERR] window, so
+        # a branch for it would be dead code. It is handled by T18 in the report tier instead.
+        # "Navigation to 'X' failed" is emitted only when the step dies with an exception (BasePage.kt:191).
+        # The second branch is the weak one — any window pairing a nav poll with a timed-out locate — so it
+        # stays last.
         lambda w: re.search(r"Navigation to '.*' failed", w)
         or (re.search(r"not visible yet", w) and re.search(r"\[ERR\].*not found after \d+ms", w)),
     ),
@@ -122,11 +144,20 @@ RULES = [
         "can never pass — assert with mozVerifyElementIsSelected. The state also lives on the MERGED row, "
         "so COMPOSE_BY_TEXT (which forces useUnmergedTree) resolves a stateless descendant: use "
         "COMPOSE_BY_TEXT_MERGED. A surviving testTag on the switch/radio icon is a decoy; it is set before "
-        "the clearAndSetSemantics that strips the state. Read the dump these verbs now emit.",
+        "the clearAndSetSemantics that strips the state. Read the dump these verbs now emit.\n"
+        "      IF THE FAILURE IS ALREADY 'is not selected', the row is not the ListItem pattern above and "
+        "you have two candidates left: the click did not toggle anything (assert the PRE state first to "
+        "prove the click is what changed it), or the state is not on this node at all -- some rows are a "
+        "clickable row wrapping a control that owns the state, so the merged row has no `selected`. Read "
+        "the dump for a control child, and fall back to UiAutomator isChecked, which Compose does map from "
+        "`selected`.",
         # The [ERR] marker is required. Without it this matched the `[CMD] Verifying ... is checked...`
         # and `[OK] ... is checked` lines of runs that PASSED that assertion and failed elsewhere, and it
         # stole the diagnosis from two unrelated failures.
-        lambda w: re.search(r"\[ERR\][^\n]*' is (?:not )?checked", w),
+        # BOTH state words: A46's whole point is that the state is `selected` rather than `checked`, so its
+        # own recommended fix (mozVerifyElementIsSelected) emits "is not selected" -- which this rule could
+        # not see until 2026-08-13, meaning the gotcha silently stopped applying the moment you followed it.
+        lambda w: re.search(r"\[ERR\][^\n]*' is (?:not )?(?:checked|selected)", w),
     ),
     # LAST on purpose, and deliberately narrow. An earlier, looser version of this rule keyed on
     # "not found", which appears in almost every failing trace, and it stole the diagnosis from six
@@ -143,6 +174,71 @@ RULES = [
         "(and needs no scrolling); read the [uiautomator] block to confirm which screen you were on.",
         lambda w: re.search(r"already (?:visible|loaded)", w)
         and "missing required elements" in w,
+    ),
+    (
+        "T15", "A48",
+        "an external/native app assertion failed because a SYSTEM DIALOG is still on screen, not because "
+        "the app never opened",
+        "'<pkg> not found' from mozVerifyNativeAppOpens/mozVerifyFileOpensInExternalApp usually means "
+        "something is queued in front of the app you expected. Read the [windows] block of the dump these "
+        "verbs now emit: a window titled 'Allow <app> to ...' means a runtime permission chain is still "
+        "draining. AppAndSystemHelper.grantSystemPermission() handles exactly ONE dialog, and a single "
+        "action can fan out into several (a bare <input type='file'> asks for audio, then "
+        "music-and-audio), so one grant leaves the run parked on the next dialog. Use "
+        "SystemSettingsPage.grantAllPendingSystemPermissions(). Beware the legacy twin: "
+        "AppAndSystemHelper.assertExternalAppOpens swallows its AssertionFailedError, so the LEGACY test "
+        "passes in exactly this stuck state and gives you no baseline to trust.",
+        lambda w: re.search(r"(?:Native app verification|External app assertion) failed for", w),
+    ),
+]
+
+# REPORT-LEVEL rules. Same tuple shape, but the matcher receives status.json's PRIMARY failure
+# message(s) rather than a window of trace around an [ERR] line.
+#
+# Why this tier has to exist: some failures leave NO [ERR] line at all, so no window rule can ever reach
+# them. A crashed instrumentation process is the extreme case — its whole report is ~11 lines and ends
+# mid-step. Others put the real exception outside the window: failure_windows() takes 25 lines after the
+# [ERR], and the ads-client stack lands 36 lines later. Widening the window is the wrong fix, because it
+# would drag stack text into the windows of unrelated failures and cause exactly the cross-contamination
+# that already makes T6/T9 fire on the wrong evidence.
+#
+# status.json's failed[].message is the right surface: effloop has already reduced it to the PRIMARY
+# failure, so it does not carry the `Suppressed:` copies of the same exception that appear in the trace of
+# other runs (T0-absence-assert and T9-permission both contain the ads-client text as a suppressed
+# exception, and a report-wide substring match would steal both).
+REPORT_RULES = [
+    (
+        "T16", "A37",
+        "the instrumentation PROCESS crashed — there is no assertion failure to read",
+        "The run died rather than failed, so the trace stops mid-step and carries no [ERR] line. Do not "
+        "look for a bad selector. Read the per-test .txt the message names, and treat gotcha A1 as the "
+        "first suspect: a StrictMode penaltyDeath turns any local failure into an opaque crash, so the "
+        "real cause is usually a normal failure that could not report itself. Cross-check effverify — "
+        "crash-mode is where `outcome: pass` is itself the lie (A37/MTE-5822).",
+        lambda m: re.search(r"Test instrumentation process crashed", m),
+    ),
+    (
+        "T17", "K13",
+        "a UniFFI fake was constructed with NoHandle and a method that was NOT overridden got called",
+        "`uniffiCloneHandle() called on NoHandle object` means a fake built on an `open` UniFFI class had "
+        "a real method reach the Rust side. The NoHandle constructor gives an object with no backing "
+        "handle, so EVERY method the code under test touches must be overridden — including ones you did "
+        "not expect it to call. Find the method in the stack frame directly under the exception and "
+        "override it too. Note this can fail the test AFTER all its assertions have passed, during "
+        "teardown, which makes it read as an unrelated flake.",
+        lambda m: re.search(r"uniffiCloneHandle\(\) called on NoHandle", m),
+    ),
+    (
+        "T18", "A6/A45/B7",
+        "navigateToPage never reached the page — the arrival anchor did not resolve",
+        "This is the thrown form of the arrival failure, and the anchor is the first suspect, not the "
+        "click-path: check the [ERR] just above for WHICH requiredForPage selector missed, then check its "
+        "STRATEGY against the dump's tree. A very common cause is an anchor that exists but in the other "
+        "tree — an ESPRESSO_BY_TEXT selector cannot see a Compose node, and Settings screens are routinely "
+        "a View toolbar over Compose content, so the toolbar title resolves and the section header does "
+        "not. Then rule out A45: an anchor that also matches the page you came FROM reports arrival early, "
+        "and a destination row on the parent screen (same title text) is the classic case.",
+        lambda m: re.search(r"Failed to navigate to \w+", m),
     ),
 ]
 
@@ -296,6 +392,21 @@ def triage(batch):
             "This run PASSED ONLY ON RETRY — flaky, which the campaign counts as NOT done (clean=false). "
             "The diagnosis below is the first attempt's real failure, not a hard failure of this run."
         )
+
+    # Report-level rules first: they key on the primary failure message, so when one fires it is the most
+    # specific thing we know about the run, and a window rule matching incidental trace text should not
+    # outrank it.
+    primary = "\n".join(f.get("message", "") for f in (status.get("failed") or []))
+    if primary:
+        for rid, gotcha, cause, fix, match in REPORT_RULES:
+            try:
+                hit = match(primary)
+            except re.error:
+                hit = False
+            if hit:
+                res["findings"].append(
+                    {"rule": rid, "gotcha": gotcha, "line": 0, "cause": cause, "fix": fix}
+                )
 
     for lineno, window in failure_windows(atts[0]) if atts else []:
         for rid, gotcha, cause, fix, match in RULES:

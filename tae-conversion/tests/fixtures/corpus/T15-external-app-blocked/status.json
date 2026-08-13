@@ -1,0 +1,23 @@
+{
+  "batch": "b66-fileupload2",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.UploadPermissionsTest#fileUploadPermissionTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-13T12:51:51Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "fileUploadPermissionTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "fileUploadPermissionTest",
+      "message": "java.lang.AssertionError: MozUITestLog com.google.android.documentsui not found"
+    }
+  ],
+  "outcome": "fail"
+}

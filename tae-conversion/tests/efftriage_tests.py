@@ -126,7 +126,11 @@ class RuleInventoryTests(unittest.TestCase):
     """Keep the gap between 'rules that exist' and 'rules proven to work' visible."""
 
     def rule_ids(self):
-        return {r[0] for r in efftriage.RULES}
+        # REPORT_RULES must be included: they are a second tier evaluated on status.json's primary failure
+        # message rather than on a trace window, and when the tier was added this guard only inspected
+        # RULES -- so three new rules slipped in with no labelled example, which is precisely what this
+        # test exists to prevent.
+        return {r[0] for r in efftriage.RULES} | {r[0] for r in efftriage.REPORT_RULES}
 
     def test_every_rule_has_a_labelled_example_or_is_listed_unvalidated(self):
         exercised = {

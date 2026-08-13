@@ -1,0 +1,273 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ fileUploadPermissionTest
+      java.lang.AssertionError: MozUITestLog com.google.android.documentsui not found
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: fileUploadPermissionTest(org.mozilla.fenix.ui.efficiency.tests.UploadPermissionsTest)
+RetryTestRule: Started try #1.
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found ⚠️ SLOW (483.5 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (484.2 ms)
+Trying to find path from 'AppEntry' to 'BrowserPage'
+Navigation path found from 'AppEntry' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (175.9 ms)
+    [OK] ✔ Clicked 'URL box' (269.1 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.1 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (409.7 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (246.4 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (936.3 ms)
+    [OK] ✔ 'BrowserPage' loaded ⚠️ SLOW (937.8 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (2366.2 ms)
+        [OK] ✔ 'Web form file upload input' found ⚠️ SLOW (524.6 ms)
+    [OK] ✔ Clicked 'Web form file upload input' (758.9 ms)
+    [CMD] ➤ Verifying native app 'com.google.android.documentsui' opens...
+    [ERR] ✖ Native app verification failed for 'com.google.android.documentsui': MozUITestLog com.google.android.documentsui not found ⚠️ SLOW (16637.0 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerifyNativeAppOpens failed: com.google.android.documentsui
+screen dump unavailable: No compose hierarchies found in the app. Possible reasons include: (1) the Activity that calls setContent did not launch; (2) setContent was not called; (3) setContent was called before the ComposeTestRule ran. If setContent is called by the Activity, make sure the Activity is launched after the ComposeTestRule runs
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Allow Firefox Fenix to record audio?" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+• res-id="content"
+• res-id="grant_singleton" [clickable]
+• res-id="grant_dialog" [clickable]
+• res-id="content_container"
+• res-id="permission_icon"
+• res-id="permission_message"  text="Allow Firefox Fenix to record audio?"
+• res-id="permission_allow_foreground_only_button"  text="While using the app" [clickable]
+• res-id="permission_allow_one_time_button"  text="Only this time" [clickable]
+• res-id="permission_deny_button"  text="Don’t allow" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="7:50"  desc="7:50 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, signal full."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(36 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+espresso dump unavailable: No activities in stage RESUMED. Did you forget to launch the activity. (test.getActivity() or similar)?
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 2366.2 ms, avg 2366.2 ms)
+    [INFO] • Commands: 7 (total 19743.1 ms, avg 2820.4 ms)
+    [INFO] • Locators: 6 (total 2120.4 ms, avg 353.4 ms)
+    [INFO] • Successes: 11   Failures: 3   Skips: 0
+    [INFO] • Wall time: 55297.4 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found ⚠️ SLOW (622.1 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (626.0 ms)
+Trying to find path from 'AppEntry' to 'BrowserPage'
+Navigation path found from 'AppEntry' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (197.8 ms)
+    [OK] ✔ Clicked 'URL box' (261.0 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.1 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (325.1 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (186.5 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (742.3 ms)
+    [OK] ✔ 'BrowserPage' loaded (746.0 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (2152.6 ms)
+        [OK] ✔ 'Web form file upload input' found ⚠️ SLOW (507.3 ms)
+    [OK] ✔ Clicked 'Web form file upload input' (735.0 ms)
+    [CMD] ➤ Verifying native app 'com.google.android.documentsui' opens...
+    [ERR] ✖ Native app verification failed for 'com.google.android.documentsui': MozUITestLog com.google.android.documentsui not found ⚠️ SLOW (16948.2 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerifyNativeAppOpens failed: com.google.android.documentsui
+screen dump unavailable: No compose hierarchies found in the app. Possible reasons include: (1) the Activity that calls setContent did not launch; (2) setContent was not called; (3) setContent was called before the ComposeTestRule ran. If setContent is called by the Activity, make sure the Activity is launched after the ComposeTestRule runs
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Allow Firefox Fenix to access music and audio on this device?" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+• res-id="content"
+• res-id="grant_singleton" [clickable]
+• res-id="grant_dialog" [clickable]
+• res-id="content_container"
+• res-id="permission_icon"
+• res-id="permission_message"  text="Allow Firefox Fenix to access music and audio on this device?"
+• res-id="permission_allow_button"  text="Allow" [clickable]
+• res-id="permission_deny_button"  text="Don’t allow" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="7:51"  desc="7:51 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(35 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerifyNativeAppOpens failed: com.google.android.documentsui
+espresso dump unavailable: No activities in stage RESUMED. Did you forget to launch the activity. (test.getActivity() or similar)?
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 2152.6 ms, avg 2152.6 ms)
+    [INFO] • Commands: 7 (total 19827.8 ms, avg 2832.5 ms)
+    [INFO] • Locators: 6 (total 2069.7 ms, avg 344.9 ms)
+    [INFO] • Successes: 11   Failures: 3   Skips: 0
+    [INFO] • Wall time: 55325.3 ms
+failed: fileUploadPermissionTest(org.mozilla.fenix.ui.efficiency.tests.UploadPermissionsTest)
+----- begin exception -----
+java.lang.AssertionError: MozUITestLog com.google.android.documentsui not found
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.mozilla.fenix.helpers.AppAndSystemHelper.assertNativeAppOpens(AppAndSystemHelper.kt:405)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyNativeAppOpens(BasePage.kt:1911)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyNativeAppOpens$default(BasePage.kt:1907)
+	at org.mozilla.fenix.ui.efficiency.tests.UploadPermissionsTest.fileUploadPermissionTest(UploadPermissionsTest.kt:54)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:158)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

@@ -48,6 +48,36 @@
     "retried": true,
     "source_batch": "b33-nevertranslate"
   },
+  "T14-selected-not-checked": {
+    "expected_rules": [
+      "T14"
+    ],
+    "known_gap": false,
+    "note": "The 'is not selected' half of A46. Guards the 2026-08-13 widening of T14's matcher: it keyed on 'checked' only, so following A46's own advice (switch to mozVerifyElementIsSelected) produced a message the rule could not see. Keep both state words in the regex.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b73-shortcuts3"
+  },
+  "T15-external-app-blocked": {
+    "expected_rules": [
+      "T15"
+    ],
+    "known_gap": false,
+    "note": "Permission chain still draining behind the expected picker: grantSystemPermission() handled one of two dialogs. The legacy twin passes in this same state because assertExternalAppOpens swallows its AssertionFailedError.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b66-fileupload2"
+  },
+  "T18-arrival-wrong-tree": {
+    "expected_rules": [
+      "T18"
+    ],
+    "known_gap": false,
+    "note": "Arrival anchor existed on screen but as a COMPOSE node while the selector was ESPRESSO_BY_TEXT, on a Settings screen that is a View toolbar over Compose content. The click path succeeded; only the anchor missed. Neither T9 branch reaches this: 'Failed to navigate to X' lands in the FAILURES summary, never in an [ERR] window.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b72-shortcuts2"
+  },
   "T2-selector-surface": {
     "expected_rules": [
       "T2"
@@ -115,11 +145,14 @@
     "source_batch": "b18-fxsuggest"
   },
   "gap-qrdialog-b17d": {
-    "expected_rules": [],
-    "known_gap": true,
+    "expected_rules": [
+      "T16"
+    ],
+    "known_gap": false,
     "outcome": "fail",
     "retried": false,
-    "source_batch": "b17d-qrdialog"
+    "source_batch": "b17d-qrdialog",
+    "note": "Instrumentation PROCESS crash: the report is ~11 lines with no [ERR] line at all, so no window rule can reach it. Covered by the report-level tier (T16) keyed on status.json's primary failure message."
   },
   "gap-sponsored-b13d": {
     "expected_rules": [],
@@ -129,11 +162,14 @@
     "source_batch": "b13d-sponsored"
   },
   "gap-sponsored-b14e": {
-    "expected_rules": [],
-    "known_gap": true,
+    "expected_rules": [
+      "T17"
+    ],
+    "known_gap": false,
     "outcome": "fail",
     "retried": false,
-    "source_batch": "b14e-sponsored"
+    "source_batch": "b14e-sponsored",
+    "note": "Ads-client fake built with NoHandle had an un-overridden method called; the exception lands 36 lines past the [ERR], outside failure_windows()'s after=25. Covered by the report-level tier (T17). Do NOT match this text report-wide: it also appears as a Suppressed exception in T0-absence-assert and T9-permission."
   },
   "pass-clean": {
     "expected_rules": [],
