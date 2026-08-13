@@ -14,7 +14,10 @@ verdict semantics, changed flags. `git log` has the rest.
 - `efftriage.py` — reads a batch's `run-report.txt` + `status.json` and names the likely cause of a failure
   with its HARNESS-GOTCHAS id and the fix. Read-only, so it is safe to run on every failure. Scans the FIRST
   attempt only, because a failed attempt leaves state behind and later attempts die somewhere later and more
-  confusingly. 11 rules (T0–T10), hardened against 8 labelled failures from the search batch. (MTE-5827)
+  confusingly. 15 rules (T0–T14): 12 match the trace and live in `RULES`, while **T10 (crash), T11 (skip) and T12
+  (compile failure) are status-based checks** in `triage()` — so counting `RULES` alone gives 12, not 15.
+  Hardened against labelled failures from the search batch and then against batch 2's own, which is where
+  T11–T14 came from. (MTE-5827)
 - `effdoctor.py` slice 1 — read-only preflight, and specifically the **toolchain map**. The eff* tools exist
   once but are reachable from two checkouts, and `effwatch.sh` derives its queue from `dirname $0`, which does
   not resolve symlinks: the queue it watches depends on the path it was launched from, while the tools are
@@ -25,7 +28,7 @@ verdict semantics, changed flags. `git log` has the rest.
   resolving it against the caller's cwd yields a directory that never existed. A computed queue that is not on
   disk is reported as a failure, and an unreadable cwd as "undetermined": naming the wrong queue confidently is
   worse than declining to name one. (MTE-5766)
-- **Unit tests** (`tae-conversion/tests/`, 44 of them) and a CI job, where previously the toolchain had none.
+- **Unit tests** (`tae-conversion/tests/`, 48 of them) and a CI job, where previously the toolchain had none.
   Run them with `python -m unittest discover -s tae-conversion/tests -p '*tests.py'`; no device, emulator,
   Firefox checkout or network needed, since `ps`/`lsof`/`adb`/`git` are stubbed. The efftriage rule tests run
   against **real labelled conversion runs** checked in under `tests/fixtures/corpus` with a `labels.json`
