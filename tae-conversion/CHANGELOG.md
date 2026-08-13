@@ -15,6 +15,12 @@ verdict semantics, changed flags. `git log` has the rest.
   with its HARNESS-GOTCHAS id and the fix. Read-only, so it is safe to run on every failure. Scans the FIRST
   attempt only, because a failed attempt leaves state behind and later attempts die somewhere later and more
   confusingly. 11 rules (T0–T10), hardened against 8 labelled failures from the search batch. (MTE-5827)
+- `effdoctor.py` slice 1 — read-only preflight, and specifically the **toolchain map**. The eff* tools exist
+  once but are reachable from two checkouts, and `effwatch.sh` derives its queue from `dirname $0`, which does
+  not resolve symlinks: the queue it watches depends on the path it was launched from, while the tools are
+  identical either way. A request dropped in the other checkout's queue is never consumed and never errors.
+  effdoctor now prints which watcher is live and which queue to use, flags a diverged alt checkout, and checks
+  effpretty resolution, a stale gradle lock and the device. (MTE-5766)
 - `VERSION` + this changelog, and `--version` on all 12 tools. Version lookup resolves symlinks, so it stays
   correct when a tool is invoked through another checkout's `tools/` dir. (MTE-5770 slice 1)
 - Docs: lessons **K13** (ad surfaces are testable offline by faking the app-services client at the seam
