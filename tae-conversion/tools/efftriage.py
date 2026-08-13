@@ -252,6 +252,20 @@ def triage(batch):
             "non-zero, believe the exit code."
         )
 
+    # Whenever a selector did not resolve, point at the dump tool. It already exists in-tree and is easy to
+    # miss: without it the reflex is to provoke a failure with a throwaway assertion just to get a dump,
+    # which costs a device cycle per question and is how several selectors were authored the slow way.
+    if re.search(r"\[ERR\][^\n]*not found", report):
+        res["notes"].append(
+            "A selector did not resolve. Author selectors against a live dump rather than inferring them "
+            "from legacy robots, whose locators are often stale: queue "
+            '{"test_class": "org.mozilla.fenix.ui.efficiency.devtools.EffScreenDumpRunner", '
+            '"batch": "effdump", "mach_args": '
+            '"-Pandroid.testInstrumentationRunnerArguments.effdump.page=<pageContextProperty>"} '
+            "and read the EFF_SCREEN_DUMP back with effpretty. Graph-navigable pages only — a "
+            "launch-reached page such as customTabs has no nav edge, so dump it from within a test instead."
+        )
+
     atts = attempts(report)
     retried = bool(re.search(r"Started try #(?:[2-9]|\d\d)", report))
     res["retried"] = retried
