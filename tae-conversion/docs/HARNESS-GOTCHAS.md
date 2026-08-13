@@ -613,3 +613,24 @@ Last updated: 2026-08-04.
   by the destination's own feature — here `mozac_summarize_settings_summarize_pages` ("Summarize pages"). Keep
   the title and the back button as *assertions* in a verification group, just not as anchors. `efftriage` rule
   **T13** detects this shape.
+
+### A46. A toggle whose state is `selected` on the MERGED row, not `checked` (2026-08-13)
+- **Symptom:** `mozVerifyElementIsChecked` reports `'<row>' is not checked` for a toggle that is visibly on.
+  The element *was* found, so the message looks like a genuine product failure. Worse, before this was fixed
+  these two verbs emitted **no ScreenDump at all**, so there was nothing to inspect.
+- **Cause:** two independent traps, both present in fenix's `SwitchListItem` / `RadioButtonListItem`
+  (`ListItem.kt`):
+  1. The row declares `semantics { this.selected = checked; role = Role.Switch }` and the `Switch` itself is
+     wrapped in `Modifier.clearAndSetSemantics {}`, which wipes Material3's internal `toggleable`. So **no
+     `ToggleableState` exists anywhere in the tree** and `assertIsOn()`/`assertIsChecked` can never pass —
+     the state is `selected`, so assert with `mozVerifyElementIsSelected`.
+  2. That state sits on the **merging** row node, which absorbs its label. `COMPOSE_BY_TEXT` forces
+     `useUnmergedTree = true` and therefore resolves a *stateless descendant* text node. Use
+     **`COMPOSE_BY_TEXT_MERGED`**, where the node matching the text is the node carrying the state.
+- **Check:** for any Compose toggle/radio row, assert `selected` on a MERGED text match. A surviving
+  `testTag` is not evidence of assertable state: `RadioButtonListItem` tags the icon
+  (`"<label>.radio.button"`) *before* a `clearAndSetSemantics` that strips `selected`, `role` and `onClick`,
+  so the tag identifies a node that knows nothing. This is also why legacy tests resort to positional
+  `UiSelector().index(n)`: in the unmerged a11y tree the stateful row has no text, no content-desc and no
+  resource-id. Compose does map `selected` onto UiAutomator's `isChecked`, so `By.text(label).parent.isChecked`
+  is a fallback if a UiAutomator path is ever needed.
