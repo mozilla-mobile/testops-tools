@@ -1,0 +1,23 @@
+{
+  "batch": "b33-nevertranslate",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.TranslationsTest#verifyTheNeverTranslateOptionTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-13T10:25:05Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyTheNeverTranslateOptionTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifyTheNeverTranslateOptionTest",
+      "message": "java.lang.AssertionError: 'Translation bottom sheet' not found on screen after 25000ms"
+    }
+  ],
+  "outcome": "fail"
+}

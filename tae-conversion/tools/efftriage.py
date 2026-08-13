@@ -114,6 +114,20 @@ RULES = [
         lambda w: re.search(r"Navigation to '.*' failed", w)
         or (re.search(r"not visible yet", w) and re.search(r"\[ERR\].*not found after \d+ms", w)),
     ),
+    (
+        "T14", "A46",
+        "a checked-state assertion failed on a node that does not carry the state",
+        "Compose toggle/radio rows put the state on the row as `semantics { selected = ... }` and blank "
+        "the Switch with clearAndSetSemantics, so no ToggleableState exists and mozVerifyElementIsChecked "
+        "can never pass — assert with mozVerifyElementIsSelected. The state also lives on the MERGED row, "
+        "so COMPOSE_BY_TEXT (which forces useUnmergedTree) resolves a stateless descendant: use "
+        "COMPOSE_BY_TEXT_MERGED. A surviving testTag on the switch/radio icon is a decoy; it is set before "
+        "the clearAndSetSemantics that strips the state. Read the dump these verbs now emit.",
+        # The [ERR] marker is required. Without it this matched the `[CMD] Verifying ... is checked...`
+        # and `[OK] ... is checked` lines of runs that PASSED that assertion and failed elsewhere, and it
+        # stole the diagnosis from two unrelated failures.
+        lambda w: re.search(r"\[ERR\][^\n]*' is (?:not )?checked", w),
+    ),
     # LAST on purpose, and deliberately narrow. An earlier, looser version of this rule keyed on
     # "not found", which appears in almost every failing trace, and it stole the diagnosis from six
     # other rules. It now requires the group-level failure line together with the short-circuit, and

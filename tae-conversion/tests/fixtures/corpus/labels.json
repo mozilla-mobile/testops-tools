@@ -38,6 +38,16 @@
     "retried": true,
     "source_batch": "b26-pagesummaries"
   },
+  "T14-checked-wrong-node": {
+    "expected_rules": [
+      "T14"
+    ],
+    "known_gap": false,
+    "note": "mozVerifyElementIsChecked on a COMPOSE_BY_TEXT selector: the state is `selected` on the MERGED row, so the unmerged text node carries none. Previously answered 'no rule matched'. This run also predates the ScreenDump those verbs now emit, so it has no dump \u2014 which is what made it opaque.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b33-nevertranslate"
+  },
   "T2-selector-surface": {
     "expected_rules": [
       "T2"

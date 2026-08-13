@@ -46,6 +46,11 @@ verdict semantics, changed flags. `git log` has the rest.
   test reported `outcome: pass` having asserted nothing. `outcome` is now `skipped` when nothing ran and
   `partial` when only some tests did, both exiting **5** (new code: ran, but the verdict is incomplete).
   `effverify` already scored these correctly, so a disagreement between the two was the tell.
+- `efftriage.py` — new rule **T14** for gotcha **A46**: a checked-state assertion that failed because the
+  node it matched does not carry the state. Compose toggle/radio rows keep `selected` on the MERGED row and
+  blank the switch with `clearAndSetSemantics`, so `mozVerifyElementIsChecked` can never pass and
+  `COMPOSE_BY_TEXT` resolves a stateless descendant. This is the shape behind legacy tests that assert
+  checked state via positional `UiSelector().index(n)`, so it will recur. (MTE-5827)
 - `efftriage.py` — new rule **T11** for the above. It reads the per-test statuses rather than `outcome`,
   because the field that should raise the alarm was the one lying. On its first run over the existing corpus it
   found **2 silently skipped tests** in an earlier 10-test run that nothing had ever reported.

@@ -1,0 +1,877 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifyTheNeverTranslateOptionTest
+      java.lang.AssertionError: 'Translation bottom sheet' not found on screen after 25000ms
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifyTheNeverTranslateOptionTest(org.mozilla.fenix.ui.efficiency.tests.TranslationsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found ⚠️ SLOW (467.8 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (469.6 ms)
+Trying to find path from 'AppEntry' to 'BrowserPage'
+Navigation path found from 'AppEntry' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (182.9 ms)
+    [OK] ✔ Clicked 'URL box' (260.1 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (321.3 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (233.5 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (919.2 ms)
+    [OK] ✔ 'BrowserPage' loaded ⚠️ SLOW (923.6 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (2227.2 ms)
+    [CMD] ➤ Verifying 'Translation bottom sheet' is present...
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (23.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (88.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [OK] ✔ 'Translation bottom sheet' found ⚠️ SLOW (540.6 ms)
+    [OK] ✔ 'Translation bottom sheet' verified ⚠️ SLOW (3179.1 ms)
+    [CMD] ➤ Attempting to verify group 'notTranslatedPageTranslationSheet' loads...
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [OK] ✔ 'Translation bottom sheet' found ⚠️ SLOW (573.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet not now button'...
+        [OK] ✔ 'Translation bottom sheet not now button' found (79.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet title'...
+        [OK] ✔ 'Translation bottom sheet title' found (30.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet translate button'...
+        [OK] ✔ 'Translation bottom sheet translate button' found (45.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet translate from dropdown'...
+        [OK] ✔ 'Translation bottom sheet translate from dropdown' found (31.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet translate to dropdown'...
+        [OK] ✔ 'Translation bottom sheet translate to dropdown' found (31.1 ms)
+    [OK] ✔ Group 'notTranslatedPageTranslationSheet' verified ⚠️ SLOW (803.7 ms)
+    [CMD] ➤ Attempting to click 'Translations sheet options button'...
+        [LOC] 🔎 Attempting to locate 'Translations sheet options button'...
+        [OK] ✔ 'Translations sheet options button' found (45.2 ms)
+    [OK] ✔ Clicked 'Translations sheet options button' (99.8 ms)
+    [CMD] ➤ Attempting to click 'the Never translate French row'...
+        [LOC] 🔎 Attempting to locate 'the Never translate French row'...
+        [OK] ✔ 'the Never translate French row' found (158.5 ms)
+    [OK] ✔ Clicked 'the Never translate French row' (213.7 ms)
+    [CMD] ➤ Verifying 'the never-translate override description' is present...
+        [LOC] 🔎 Attempting to locate 'the never-translate override description'...
+        [OK] ✔ 'the never-translate override description' found (127.8 ms)
+    [OK] ✔ 'the never-translate override description' verified (128.3 ms)
+    [CMD] ➤ Verifying 'the Never translate French row' is checked...
+        [LOC] 🔎 Attempting to locate 'the Never translate French row'...
+        [OK] ✔ 'the Never translate French row' found (0.0 ms)
+    [ERR] ✖ 'the Never translate French row' is not checked (0.4 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 2227.2 ms, avg 2227.2 ms)
+    [INFO] • Commands: 11 (total 6633.2 ms, avg 603.0 ms)
+    [INFO] • Locators: 21 (total 3359.3 ms, avg 160.0 ms)
+    [INFO] • Successes: 25   Failures: 8   Skips: 0
+    [INFO] • Wall time: 6720.4 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found ⚠️ SLOW (505.3 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (508.3 ms)
+Trying to find path from 'AppEntry' to 'BrowserPage'
+Navigation path found from 'AppEntry' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (74.0 ms)
+    [OK] ✔ Clicked 'URL box' (135.8 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (260.8 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (168.8 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (677.4 ms)
+    [OK] ✔ 'BrowserPage' loaded (678.4 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (1761.6 ms)
+    [CMD] ➤ Verifying 'Translation bottom sheet' is present...
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (37.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (75.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (17.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (20.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (14.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (17.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (16.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found ⚠️ SLOW (262.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (12.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (20.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (14.8 ms)
+    [ERR] ✖ 'Translation bottom sheet' not found after 25000ms ⚠️ SLOW (25477.7 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerify failed: Translation bottom sheet
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc=" localhost:55093/pages/firstForeignWebPage.html. Search or enter address"
+• text="‎localhost:55093/pages/firstForeignWebPage.html"  testTag="ADDRESSBAR_URL"
+• desc="New tab" [clickable]
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• testTag="ADDRESSBAR_PROGRESSBAR"
+(12 nodes with a text/testTag/desc handle, of 25 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerify failed: Translation bottom sheet
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id= text="Page_de_test_FR_1" desc=""
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerify failed: Translation bottom sheet
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="gestureLayout"
+• res-id="browserWindow"
+• res-id="browserLayout"
+• res-id="swipeRefresh"
+• res-id="engineView"
+• text="Page_de_test_FR_1"
+• desc="Article du jour"
+• res-id="firstFrenchPageContent"
+• text="Article du jour"
+• text="Pasqua Rosée est un domestique du XVIIe siècle célèbre pour avoir ouvert le premier café de Londres, et peut-être même de toute la Grande-Bretagne. "
+• res-id="composable_toolbar"
+• res-id="browser.toolbar.site.info.unknown"  desc="Site information" [clickable]
+• res-id="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• desc="New tab" [clickable]
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="5:24"  desc="5:24 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(51 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerify failed: Translation bottom sheet
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="gestureLayout"  class=SwipeGestureLayout
+•                     id="browserWindow"  class=ConstraintLayout
+•                       id="browserLayout"  class=CoordinatorLayout
+•                         id="swipeRefresh"  class=VerticalSwipeRefreshLayout
+•                           id="engineView"  class=GeckoEngineView
+•                         id="findInPageViewStub"  class=ViewStub  [gone]
+•                         id="readerViewControlsBar"  class=ReaderViewControlsBar  [clickable]  [gone]
+•                         id="crash_reporter_view"  class=CrashContentView  [gone]
+•                         id="dynamicSnackbarContainer"  class=ConstraintLayout
+•                         id="loginSelectBarStub"  class=ViewStub  [gone]
+•                         id="suggestStrongPasswordBarStub"  class=ViewStub  [gone]
+•                         id="emailMaskBarStub"  class=ViewStub  [gone]
+•                         id="addressSelectBarStub"  class=ViewStub  [gone]
+•                         id="creditCardSelectBarStub"  class=ViewStub  [gone]
+•                         id="translationsBannerStub"  class=ViewStub  [gone]
+•                         id="navigation_bar"  class=NavigationBarComposeView
+•                         id="composable_toolbar"  class=ScrollableToolbarComposeView
+•                     id="tabPreview"  class=TabPreview  [gone]
+•                       id="previewThumbnail"  class=TabThumbnailView
+•                       id="composableTopToolbar"  class=ComposeView
+•                       id="composableBottomToolbar"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[STEP] ★ Attempting to Navigate to BrowserPage
+Trying to find path from 'BrowserPage' to 'BrowserPage'
+Navigation path found from 'BrowserPage' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_COMPOSE_TAG, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (19.6 ms)
+    [OK] ✔ Clicked 'URL box' (175.2 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (563.8 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (152.8 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (761.2 ms)
+    [OK] ✔ 'BrowserPage' loaded (763.2 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (1659.8 ms)
+    [CMD] ➤ Verifying 'Translation bottom sheet' is present...
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (24.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (89.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (13.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (14.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (17.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (20.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (15.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (11.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (20.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (16.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (71.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (10.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (12.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (12.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (16.3 ms)
+    [ERR] ✖ 'Translation bottom sheet' not found after 25000ms ⚠️ SLOW (25310.5 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerify failed: Translation bottom sheet
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc=" localhost:55093/pages/firstForeignWebPage.html. Search or enter address"
+• text="‎localhost:55093/pages/firstForeignWebPage.html"  testTag="ADDRESSBAR_URL"
+• desc="New tab" [clickable]
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• testTag="ADDRESSBAR_PROGRESSBAR"
+(12 nodes with a text/testTag/desc handle, of 25 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerify failed: Translation bottom sheet
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id= text="Page_de_test_FR_1" desc=""
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerify failed: Translation bottom sheet
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="gestureLayout"
+• res-id="browserWindow"
+• res-id="browserLayout"
+• res-id="swipeRefresh"
+• res-id="engineView"
+• text="Page_de_test_FR_1"
+• desc="Article du jour"
+• res-id="firstFrenchPageContent"
+• text="Article du jour"
+• text="Pasqua Rosée est un domestique du XVIIe siècle célèbre pour avoir ouvert le premier café de Londres, et peut-être même de toute la Grande-Bretagne. "
+• res-id="composable_toolbar"
+• res-id="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• res-id="ADDRESSBAR_URL_BOX"  desc=" localhost:55093/pages/firstForeignWebPage.html. Search or enter address"
+• desc="New tab" [clickable]
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="5:24"  desc="5:24 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, one bar."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(51 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerify failed: Translation bottom sheet
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="gestureLayout"  class=SwipeGestureLayout
+•                     id="browserWindow"  class=ConstraintLayout
+•                       id="browserLayout"  class=CoordinatorLayout
+•                         id="swipeRefresh"  class=VerticalSwipeRefreshLayout
+•                           id="engineView"  class=GeckoEngineView
+•                         id="findInPageViewStub"  class=ViewStub  [gone]
+•                         id="readerViewControlsBar"  class=ReaderViewControlsBar  [clickable]  [gone]
+•                         id="crash_reporter_view"  class=CrashContentView  [gone]
+•                         id="dynamicSnackbarContainer"  class=ConstraintLayout
+•                         id="loginSelectBarStub"  class=ViewStub  [gone]
+•                         id="suggestStrongPasswordBarStub"  class=ViewStub  [gone]
+•                         id="emailMaskBarStub"  class=ViewStub  [gone]
+•                         id="addressSelectBarStub"  class=ViewStub  [gone]
+•                         id="creditCardSelectBarStub"  class=ViewStub  [gone]
+•                         id="translationsBannerStub"  class=ViewStub  [gone]
+•                         id="navigation_bar"  class=NavigationBarComposeView
+•                         id="composable_toolbar"  class=ScrollableToolbarComposeView
+•                     id="tabPreview"  class=TabPreview  [gone]
+•                       id="previewThumbnail"  class=TabThumbnailView
+•                       id="composableTopToolbar"  class=ComposeView
+•                       id="composableBottomToolbar"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[STEP] ★ Attempting to Navigate to BrowserPage
+Trying to find path from 'BrowserPage' to 'BrowserPage'
+Navigation path found from 'BrowserPage' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_COMPOSE_TAG, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (16.8 ms)
+    [OK] ✔ Clicked 'URL box' (167.5 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (523.1 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (145.7 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (645.3 ms)
+    [OK] ✔ 'BrowserPage' loaded (647.6 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed (1492.0 ms)
+    [CMD] ➤ Verifying 'Translation bottom sheet' is present...
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (22.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (86.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (18.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (18.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (10.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (13.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (19.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.3 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (17.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (10.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (26.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (4.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (23.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (21.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (9.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.6 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (19.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (8.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (3.7 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (23.4 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.0 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (41.1 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (29.8 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (7.9 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (6.2 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found (5.5 ms)
+        [LOC] 🔎 Attempting to locate 'Translation bottom sheet'...
+        [ERR] ✖ 'Translation bottom sheet' not found ⚠️ SLOW (429.7 ms)
+    [ERR] ✖ 'Translation bottom sheet' not found after 25000ms ⚠️ SLOW (25779.9 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerify failed: Translation bottom sheet
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc=" localhost:55093/pages/firstForeignWebPage.html. Search or enter address"
+• text="‎localhost:55093/pages/firstForeignWebPage.html"  testTag="ADDRESSBAR_URL"
+• desc="New tab" [clickable]
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• testTag="ADDRESSBAR_PROGRESSBAR"
+(12 nodes with a text/testTag/desc handle, of 25 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerify failed: Translation bottom sheet
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id= text="Page_de_test_FR_1" desc=""
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerify failed: Translation bottom sheet
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="gestureLayout"
+• res-id="browserWindow"
+• res-id="browserLayout"
+• res-id="swipeRefresh"
+• res-id="engineView"
+• text="Page_de_test_FR_1"
+• desc="Article du jour"
+• res-id="firstFrenchPageContent"
+• text="Article du jour"
+• text="Pasqua Rosée est un domestique du XVIIe siècle célèbre pour avoir ouvert le premier café de Londres, et peut-être même de toute la Grande-Bretagne. "
+• res-id="composable_toolbar"
+• res-id="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• res-id="ADDRESSBAR_URL_BOX"  desc=" localhost:55093/pages/firstForeignWebPage.html. Search or enter address"
+• desc="New tab" [clickable]
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 1. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text1"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="5:25"  desc="5:25 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, signal full."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(51 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerify failed: Translation bottom sheet
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="gestureLayout"  class=SwipeGestureLayout
+•                     id="browserWindow"  class=ConstraintLayout
+•                       id="browserLayout"  class=CoordinatorLayout
+•                         id="swipeRefresh"  class=VerticalSwipeRefreshLayout
+•                           id="engineView"  class=GeckoEngineView
+•                         id="findInPageViewStub"  class=ViewStub  [gone]
+•                         id="readerViewControlsBar"  class=ReaderViewControlsBar  [clickable]  [gone]
+•                         id="crash_reporter_view"  class=CrashContentView  [gone]
+•                         id="dynamicSnackbarContainer"  class=ConstraintLayout
+•                         id="loginSelectBarStub"  class=ViewStub  [gone]
+•                         id="suggestStrongPasswordBarStub"  class=ViewStub  [gone]
+•                         id="emailMaskBarStub"  class=ViewStub  [gone]
+•                         id="addressSelectBarStub"  class=ViewStub  [gone]
+•                         id="creditCardSelectBarStub"  class=ViewStub  [gone]
+•                         id="translationsBannerStub"  class=ViewStub  [gone]
+•                         id="navigation_bar"  class=NavigationBarComposeView
+•                         id="composable_toolbar"  class=ScrollableToolbarComposeView
+•                     id="tabPreview"  class=TabPreview  [gone]
+•                       id="previewThumbnail"  class=TabThumbnailView
+•                       id="composableTopToolbar"  class=ComposeView
+•                       id="composableBottomToolbar"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 3 (total 4913.4 ms, avg 1637.8 ms)
+    [INFO] • Commands: 16 (total 81459.3 ms, avg 5091.2 ms)
+    [INFO] • Locators: 160 (total 5111.6 ms, avg 31.9 ms)
+    [INFO] • Successes: 27   Failures: 152   Skips: 0
+    [INFO] • Wall time: 82224.7 ms
+failed: verifyTheNeverTranslateOptionTest(org.mozilla.fenix.ui.efficiency.tests.TranslationsTest)
+----- begin exception -----
+java.lang.AssertionError: 'Translation bottom sheet' not found on screen after 25000ms
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerify(BasePage.kt:366)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerify$default(BasePage.kt:344)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.BrowserPage.verifyTranslationSheetWithReload(BrowserPage.kt:153)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.BrowserPage.verifyTranslationSheetWithReload$default(BrowserPage.kt:150)
+	at org.mozilla.fenix.ui.efficiency.tests.TranslationsTest.verifyTheNeverTranslateOptionTest(TranslationsTest.kt:84)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:158)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored
