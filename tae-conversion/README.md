@@ -13,7 +13,7 @@ tools run on *your* machine; a small watcher (`effwatch.sh`) bridges the two.
 |---|---|
 | Agent skills (`efficiency-test-authoring`, `tae-test-review`, `efficiency-conversion-loop`) | [`firefox-aidev-plugins`](https://github.com/mozilla/firefox-aidev-plugins) → `plugins/tae` |
 | Framework reference docs (guides, gotchas, architecture) | mozilla-central, `mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/docs/` |
-| Device-side dump tools (`effview`, `effpretty`) | mozilla-central, same tree under `devtools/` |
+| Device-side dump tools (`effview`, `effpretty`) | mozilla-central, same tree under `devtools/` — `effloop` resolves `effpretty` from `$REPO`, so no copy or symlink is needed in this repo |
 | Host-side workflow tools | **here** |
 
 The skills tell the agent *how* to work and reference these tools by name. Install the
@@ -51,7 +51,7 @@ Optional environment, all with sane fallbacks:
 | `effscaffold.py` | agent | Front-loads a conversion: legacy body, TestRail id, already-converted check, robots + selector lines, existing coverage. |
 | `effcheck.py` | agent | Static pre-flight, no device. Resolution, empty nav paths, inline selectors, missing verbs, test-class boilerplate. Exit ≠ 0 = fix something. |
 | `effbuild.py` | agent | Gradle log → one-line verdict plus only the compile errors. `--json`. |
-| `effverify.py` | agent | **Done-gate.** Confirms the named test ran, wasn't skipped, and its *last* run is 0-failed. `clean=false` = passed only on retry, i.e. flaky. `--json`. |
+| `effverify.py` | agent | **Done-gate.** Confirms the named test ran, wasn't skipped, and did not fail in *any* run block. Reads the report's `failed:` markers, its `FAILURES (n of m)` header and `CRASH:` lines, so a test that died from an uncaught exception is not scored as passed. `clean=false` = passed only on retry, i.e. flaky. Refuses to report clean when the declared failure count exceeds what it can attribute (`unattributed_failures`). `--json`. |
 | `effloop.sh` | you | One command: build → run on device → write `build-report.txt`, `run-report.txt`, `status.json`. |
 | `effwatch.sh` | you | Start once, leave running. Polls `conversion-runs/_queue/`, runs the build and the git/Bugzilla actions, writes results back. |
 | `effbug.py` | via bridge | Files a Bugzilla bug, rewords the title to match the commit subject, self-assigns. |

@@ -56,18 +56,46 @@ def main():
     def names(pattern, text):
         return set(re.findall(pattern + r":\s*([A-Za-z0-9_]+)\s*\(", text))
 
+    # --- Failure signals the `failed:` marker does not carry (MTE-5822).
+    #
+    # A test that dies from an uncaught exception rather than a failed assertion — a crash, e.g. a camera
+    # `CaptureRequest contains unconfigured Input/Output Surface!` — produces NO `failed:` marker line and
+    # no gradle FAILED line. The marker-based scoring below then fell through to "started and not otherwise
+    # flagged → passed" and reported a red test green, with clean=true and failed_total=0.
+    #
+    # The report does record such a failure, just not as a marker:
+    #   - a FAILURES header block above the first `run started:`, which names each failed test and states
+    #     the count ("FAILURES (1 of 10)");
+    #   - `CRASH:` lines inside the failing test's own run block.
+    # Both are read here, and the declared count is used as a backstop below.
+    preamble = full[:starts[0]] if starts else ""
+    header_failed = set(re.findall(r"^\s*✖\s+([A-Za-z0-9_]+)\s*$", preamble, re.M))
+    m_declared = re.search(r"^FAILURES\s*\((\d+)\s+of\s+\d+\)", preamble, re.M)
+    declared_failures = int(m_declared.group(1)) if m_declared else None
+
     started, ignored, failed_names = set(), set(), set()
     passed_in_some_block = set()
     for b in blocks:
         b_started, b_ignored, b_failed = names("started", b), names("ignored", b), names("failed", b)
+        # A CRASH line means the test in this block died. Only attributable by position when the block ran
+        # a single test; for a multi-test block the FAILURES header is the reliable source of the name.
+        if len(b_started) == 1 and re.search(r"^CRASH:", b, re.M):
+            b_failed |= b_started
         started |= b_started
         ignored |= b_ignored
         failed_names |= b_failed
         # Ran in this block and this block did not record it failing → it passed here.
         passed_in_some_block |= (b_started - b_failed - b_ignored)
 
+    failed_names |= header_failed
+
     # Count actual per-test failures observed anywhere in the report, not one block's summary line.
     failed_total = len(failed_names)
+
+    # Backstop: if the report declares more failures than we could pin to a name, then something failed in
+    # a way this parser still does not understand. Say so and refuse to report clean, rather than let an
+    # unrecognised failure mode read as green — which is exactly how MTE-5822 escaped.
+    unattributed_failures = max(0, (declared_failures or 0) - failed_total)
 
     n_runs = len(starts)
     # Retried if the harness logged a second attempt anywhere, or a test both failed and later passed.
@@ -89,13 +117,13 @@ def main():
     def failure_excerpt(name, cap_lines=30, cap_chars=1800):
         """Capped exception+frames for a FAILED test, so a failure never needs a raw-log read.
         Pull from the gradle raw log (has the stack); fall back to the run trace's [ERR] lines."""
-        src = raw_txt or txt
+        src = raw_txt or full
         # anchor on the test's FAILED marker if present, else its name
         anchor = re.search(r"(?:>\s*)?" + re.escape(name) + r"\b.*?(?:FAILED|Exception|Error)", src, re.S)
         start_i = anchor.start() if anchor else (src.find(name) if name in src else -1)
         if start_i < 0:
             # last resort: the run-trace error lines from the last run block
-            errs = re.findall(r"^\s*\[ERR\].*$", txt, re.M)
+            errs = re.findall(r"^\s*\[ERR\].*$", full, re.M)
             return "\n".join(errs[:cap_lines])[:cap_chars] or None
         chunk = src[start_i:start_i + cap_chars * 3]
         lines = [l for l in chunk.splitlines() if l.strip()][:cap_lines]
@@ -130,12 +158,14 @@ def main():
             if exc:
                 entry["failure_excerpt"] = exc
         tests.append(entry)
-    if failed_total > 0:
+    if failed_total > 0 or unattributed_failures > 0:
         ok = False
     clean = ok and not retried  # a retry-pass is green-but-flaky, not "done"
     if as_json:
         print(json.dumps({"tool": "effverify", "ok": ok, "clean": clean, "batch": batch,
                           "failed_total": failed_total, "runs": n_runs, "retried": retried,
+                          "declared_failures": declared_failures,
+                          "unattributed_failures": unattributed_failures,
                           "tests": tests}))
     else:
         print(f"effverify — {batch}")
@@ -148,7 +178,10 @@ def main():
                        "not-run": "never executed (no 'started:' line)"}[t["status"]]
                 print(f"  ✖ {t['name']}: {lbl}")
         if failed_total > 0:
-            print(f"  ✖ last run reports {failed_total} failed test-run(s)")
+            print(f"  ✖ report records {failed_total} failed test(s): {', '.join(sorted(failed_names))}")
+        if unattributed_failures > 0:
+            print(f"  ✖ report declares {declared_failures} failure(s) but only {failed_total} could be "
+                  f"attributed to a test name — unrecognised failure mode, treating as NOT DONE")
         if retried:
             print(f"  ⚠ retry detected (runs={n_runs}) — passed-on-retry is flaky, NOT clean-done")
         print("RESULT:", ("ALL PASS ✅" if clean else "PASS BUT FLAKY ⚠️") if ok else "NOT DONE ❌")

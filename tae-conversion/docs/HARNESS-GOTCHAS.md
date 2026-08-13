@@ -383,7 +383,12 @@ Last updated: 2026-08-04.
 ### A24. effloop can finish without a `run-report.txt`, silently disabling effverify (2026-08-04)
 - **Symptom:** `effverify` returns `{"ok": false, "error": "no run-report.txt (did it compile/run?)"}` for a
   run that plainly executed, and `status.json` says `"ran": false` while listing per-test results.
-- **Cause:** the `effpretty capture` step produced no report. The consequence beyond effverify is worse: the
+- **Cause (root cause FIXED 2026-08-12):** the `effpretty capture` step produced no report. `effloop.sh`
+  invoked it as `$TOOLS/effpretty.py`, but effpretty lives **in-tree** under
+  `ui/efficiency/devtools/effpretty/` — so it only ever resolved for checkouts that happened to have a local
+  copy or symlink beside the script, and silently did nothing everywhere else. effloop now resolves it under
+  `$REPO` (override with `EFFPRETTY=`), falls back to `$TOOLS`, and exits 2 with a named error if neither
+  exists rather than producing an empty report. The consequence beyond effverify was worse: the
   on-failure ScreenDumps never reach `raw-run.log` either, so diagnostics look absent when they are merely
   unrouted. This is what led me to conclude "mozClick does not dump on click failure" — it does,
   `BasePage.kt:478`.
@@ -496,3 +501,87 @@ Last updated: 2026-08-04.
   expresses "checkbox that is a sibling of text X", so the faithful port is the legacy device call:
   `mDevice.findObject(UiSelector().text(name)).getFromParent(UiSelector().index(i)).click()`.
 - **Check:** keep index-fragile device interactions as page-object helpers, NEVER as a shared BasePage verb.
+
+### A37. effverify scored a CRASH-mode failure as passed — a false green (2026-08-12, FIXED)
+- **Symptom:** a class run whose `status.json` said `outcome=fail, failures=1` came back from
+  `effverify --json` as `{"ok": true, "clean": true, "failed_total": 0}`, with the failed test listed as
+  `"passed"`. `effloop_exit` was correctly `1`. The failing test was
+  `scanQRCodeToOpenAWebpageTest`, killed by `IllegalArgumentException: CaptureRequest contains unconfigured
+  Input/Output Surface!` from `QrFragment`.
+- **Cause:** the test died from an uncaught exception rather than a failed assertion, so the report contains
+  **no `failed:` marker** and the gradle log line does not say `FAILED`. effverify built its failed-set from
+  those two signals only and fell through to "appeared in `started:` and not otherwise flagged -> passed".
+  The tell in the JSON is `"gradle": null` on a test reported as passed. This is the same fall-through the
+  2026-08-03 fix closed for assertion failures; crashes survived it.
+- **Fix:** effverify now also reads the report's own `FAILURES (n of m)` header (which names each failed test)
+  and any `CRASH:` line inside a single-test block, and adds an `unattributed_failures` backstop: if the
+  declared failure count exceeds what it can pin to a name, it reports NOT DONE instead of guessing. Verified
+  against 7 real batches with no regressions.
+- **Check:** never take effverify alone as the done-gate. Read `status.json` (`outcome`, `failures`) next to it,
+  and if `effloop_exit` is non-zero while effverify says clean, believe the exit code.
+
+### A38. `mach lint` and every Gradle task serialize on one lockfile, and a killed run leaves it stale (2026-08-12)
+- **Symptom:** `A failure occurred in the android-format linter` with
+  `filelock._error.Timeout: The file lock 'objdir-frontend/gradle/mach_android.lockfile' could not be
+  acquired`, and `0 fixed` — which reads like a linter bug but is pure contention. Two concurrent
+  `mach lint` runs, or a lint started while an effwatch test run is building, will do this to each other.
+- **Cause:** `tools/lint/android/lints.py` wraps every gradle invocation in a `SoftFileLock` on
+  `mach_android.lockfile`. Being a *soft* lock, the file's existence IS the lock, so SIGTERM-ing a lint leaves
+  it behind and every later run waits out the timeout for nothing.
+- **Check:** run one at a time; never lint while a queued conversion run is in flight. After killing a lint,
+  `rm -f objdir-frontend/gradle/mach_android.lockfile`.
+- **Also:** `./mach lint <path>` on Kotlin selects `android-lint` too, which runs `:fenix:lintDebug` over the
+  whole module and takes ~10+ minutes; the path argument cannot narrow it, because the Android linters are
+  wired per Gradle module rather than per file. Use `-l android-format` (ktlint + detekt only), or skip mozlint
+  altogether with `./mach gradle :fenix:ktlint :fenix:detekt`. Note gradle caches those tasks — an `UP-TO-DATE`
+  run prints nothing and looks clean; add `--rerun-tasks` when you need certainty. `./mach format` (spotless)
+  does NOT catch the ktlint rules that fail the gate, e.g. `no-consecutive-blank-lines` and `standard:kdoc`.
+
+### A39. An arrival check can be satisfied by an element BEHIND an overlay (2026-08-12)
+- **Symptom:** `navigateToPage` reports arrival on a page the test never reached, and the run fails several
+  steps later somewhere unrelated. Cost 5 device cycles on one conversion before the test was parked, then
+  landed in 2 once the dumps were read.
+- **Cause:** `requiredForPage` selectors resolve on nodes that are still in the tree underneath a modal
+  surface. Two confirmed cases: `BrowserPage`'s `ENGINE_VIEW` resolves under the addressbar's edit-mode
+  overlay, and `HomeSelectors.HOMEPAGE_VIEW` resolves under the search overlay while the toolbar is covered.
+- **Check:** after any query submit, `mozWaitUntilAbsent(SearchBarSelectors.TOOLBAR_IN_EDIT_MODE)` before the
+  next hop. When backing out to a page, anchor on something that is genuinely occluded — `MAIN_MENU_BUTTON`,
+  not `HOMEPAGE_VIEW` — or the loop returns while you are still covered and the next `navigateToPage` takes a
+  destructive edge (for HomePage that is the "New tab" click).
+
+### A40. `mozLongClick` is not held long enough for a View-based list row (2026-08-12)
+- **Symptom:** a long press on a history row silently behaves as a TAP: the item opens in the browser, and the
+  next step's "More options" click then hits the browser's main menu instead of a multi-select toolbar. The
+  dump gives it away — the Compose tree starts at `ADDRESSBAR_URL_BOX`.
+- **Cause:** `UiObject.longClick()` uses UiAutomator's default press duration, which this row treats as a tap.
+- **Check:** select the row with an **Espresso** strategy (e.g. `ESPRESSO_BY_TEXT`) so `mozLongClick` goes
+  through Espresso's `longClick()`, which honours the platform long-press timeout. This is what the legacy
+  robots rely on.
+
+### A41. `COMPOSE_BY_TEXT` reports an AMBIGUOUS match as "not found" (2026-08-12)
+- **Symptom:** `mozVerify` fails with "not found after 5000ms" for text that is plainly on screen.
+- **Cause:** the strategy resolves through the singular `onNodeWithText`, which throws when more than one node
+  matches; `mozVerifyElement` swallows that and degrades to `false`. Two sponsored tiles, two identical
+  captions, and the verb says the text is absent.
+- **Check:** use `COMPOSE_BY_TEXT_SUBSTRING` (`onAllNodesWithText(...).onFirst()`) when duplicates are
+  possible, or scope to a container with `COMPOSE_ON_ALL_NODES_BY_TAG_WITH_CHILD_TEXT_ON_FIRST`.
+
+### A42. A caption is not unique to the surface you are testing (2026-08-12)
+- **Symptom:** an absence assertion for the "Sponsored" label can never come true on the homepage, even with
+  sponsored top sites disabled and visibly gone.
+- **Cause:** the Pocket sponsored *story* further down the homepage carries its own "Sponsored" identifier
+  (`pocket.sponsoredContent.identifier`). A bare text match hits it.
+- **Check:** scope the selector to the tile
+  (`COMPOSE_ON_ALL_NODES_BY_TAG_WITH_CHILD_TEXT_ON_FIRST` on `top_sites_list.top_site_item` + the caption).
+  Note the tile root is a plain `Box` that does not merge descendants, so a tag-only text query cannot see the
+  caption either.
+
+### A43. Revoking a runtime permission is not enough to reset a "don't ask again" (2026-08-12)
+- **Symptom:** a permission-dialog test passes on the first attempt and fails on BaseTest's retry, looking for
+  a Deny button that never appears — because the OS auto-denies with no dialog at all.
+- **Cause:** "Deny and don't ask again" sets `FLAG_PERMISSION_USER_FIXED`, which `pm revoke` leaves in place.
+  Legacy gets away with it only because the orchestrator wipes package data between test *methods*; a retry
+  runs in the same process.
+- **Check:** in the test, `pm clear-permission-flags <pkg> <permission> user-fixed user-set` **and**
+  `pm revoke <pkg> <permission>`. Do **not** use the device-wide `pm reset-permissions` — it strips permissions
+  the instrumentation itself relies on and crashes the test process.

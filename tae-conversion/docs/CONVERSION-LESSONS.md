@@ -396,10 +396,13 @@ and which assertion to trust.
   `SettingsSearchDefaultSearchEnginePage`. Adding just your own `Case(...)` entries by hand avoids pulling in
   unrelated stale-missing pages; a full regen is a separate cleanup (good-first-bug).
 
-**K8. Tool verdicts: `effverify` crashes on a RED run, and duration is the first triage signal.**
-- `effverify`'s `failure_excerpt` path throws `NameError: name 'txt' is not defined`, so on any failure it gives no
-  verdict. Fall back to `effbuild --json <raw-run.log>` for the build verdict, then read the JUnit XML at
-  `objdir-frontend/gradle/build/.../androidTest-results/connected/debug/TEST-*.xml` for counts and per-testcase results.
+**K8. Tool verdicts: duration is the first triage signal (the RED-run crash is FIXED).**
+- ~~`effverify`'s `failure_excerpt` path throws `NameError: name 'txt' is not defined`~~ — **fixed 2026-08-12**
+  (`txt` should have been `full`; it only ever triggered when there was no `raw-run.log` to read). effverify now
+  returns a verdict on a failing run, with a capped `failure_excerpt`, so the JUnit-XML fallback below is no
+  longer needed for the common case. It is still the right move when `run-report.txt` is missing entirely (A24).
+- **Cross-check `status.json` anyway.** A green effverify next to a non-zero `effloop_exit` means believe the exit
+  code: see A37 for the crash-mode false green that motivated this rule.
 - `effloop_exit:2` in ~45s = COMPILE failure, not a run — read `effbuild --json` for the Kotlin error.
   `effloop_exit:0` in ~50s = warm incremental build + quick run; still confirm `clean:true`, `failed_total:0`,
   `retried:false` (green alone hides a skip or a retry-pass).
@@ -444,6 +447,33 @@ and which assertion to trust.
   not wired into the add flow and the favicon fetch is best-effort. The legacy test's
   `searchMockServerRule.server.port` URL is vestigial, so the efficiency test needs no mock-server rule.
 - Rule: check the fragment before inheriting a rule.
+
+**K13. Ad surfaces (sponsored tiles, Firefox Suggest) are testable locally — fake the app-services client, not the UI.**
+- Both surfaces fetch from region-gated remote inventory that a dev machine or emulator generally is not served,
+  and Suggest additionally races a ~9s startup ingestion whose completion is **not observable anywhere** (no store
+  state, no pref, no Glean metric, no Fact; the result is discarded into `GlobalScope`). You cannot await it.
+- The seam is the app-services client/store, and it is the same one app-services uses in its OWN unit tests:
+  `MozAdsClientProvider.client` (private field, `service-mars`) and `FxSuggestStorage.store`
+  (`internal @VisibleForTesting Lazy<SuggestStore>`). Both `MozAdsClient` and `SuggestStore` are **open** UniFFI
+  classes with a public `NoHandle` constructor, so a fake subclass + reflection is all it takes. See
+  `FakeSponsoredTopSites.kt` / `FakeFxSuggest.kt` in fenix androidTest (bugs 2063093, 2063105).
+- Everything downstream stays real — provider, storage, presenter, store, Compose UI, Glean facts — so the
+  behaviour under test is still the product's. Faking the *network boundary* is not the same as faking the test.
+- Four things that will each cost you a cycle:
+  1. Resolve the component lazy (`components.ads.lazyAdsClientProvider`, `components.fxSuggest.storage`)
+     **before** swapping, or its initializer rebuilds the real object over your fake.
+  2. Override **every** interface method, not just the one you need. A `NoHandle` object throws
+     `uniffiCloneHandle() called on NoHandle object` on any un-overridden call, and displaying a sponsored tile
+     makes the app record an impression on a background coroutine — which failed a test *after* all of its
+     assertions had passed.
+  3. Nimbus gates Suggest's types: `fxsuggest.fml.yaml` defaults `amp`/`ampMobile` to **false**, so the provider
+     never requests AMP and no fake store can make a sponsored-suggestion test pass. Override
+     `availableSuggestionTypes` with `withCachedValue`.
+  4. The artifact is `implementation` inside the AC module, so androidTest cannot see it. Add
+     `androidTestCompileOnly` — **not** `androidTestImplementation`, which puts it on the androidTest runtime
+     classpath and makes Gradle fail to align that with the app's, since both then pull `project(':geckoview')`.
+- `#[cfg(test)]` Rust test utilities (the ads client's `Environment::Test`, suggest's `testing::MockRemoteSettingsClient`)
+  are compiled out of the shipped library and absent from the UniFFI bindings — do not plan around them.
 
 ## Open gaps (unresolved — pick up on next attempt)
 
