@@ -28,6 +28,16 @@
     "retried": false,
     "source_batch": "b10-searchclass"
   },
+  "T13-arrival-wrong-screen": {
+    "expected_rules": [
+      "T13"
+    ],
+    "known_gap": false,
+    "note": "Arrival anchors ('Page summaries' title, 'Navigate up') also matched the PARENT Settings screen, so mozIsOnPageNow() reported arrival and navigateToPage skipped its own click. efftriage originally answered T5 (a system overlay) here, blaming the status bar \u2014 T5's first real firing was a false positive, which is why it stayed in UNVALIDATED_RULES.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b26-pagesummaries"
+  },
   "T2-selector-surface": {
     "expected_rules": [
       "T2"
@@ -74,6 +84,26 @@
     "retried": true,
     "source_batch": "b14c-sponsored"
   },
+  "compile-failed": {
+    "expected_rules": [
+      "T12"
+    ],
+    "known_gap": false,
+    "note": "compiled=false. Previously answered 'no rule matched', sending the reader to a trace that was never produced.",
+    "outcome": "unknown",
+    "retried": false,
+    "source_batch": "b25-pagesummaries"
+  },
+  "compile-failed-fxsuggest": {
+    "expected_rules": [
+      "T12"
+    ],
+    "known_gap": false,
+    "note": "compiled=false, so this is a COMPILE FAILURE, not an empty-report case. It was previously labelled the latter and drew the misleading A24 advice (check effpretty, pull dumps off the device) when the real problem was a Kotlin error. The genuine empty-report/A24 path is covered by a synthetic case in BadInputTests instead.",
+    "outcome": "unknown",
+    "retried": false,
+    "source_batch": "b18-fxsuggest"
+  },
   "gap-qrdialog-b17d": {
     "expected_rules": [],
     "known_gap": true,
@@ -118,12 +148,5 @@
     "outcome": "pass",
     "retried": false,
     "source_batch": "b22-summarize-baseline"
-  },
-  "unknown-empty-report": {
-    "expected_rules": [],
-    "known_gap": false,
-    "outcome": "unknown",
-    "retried": false,
-    "source_batch": "b18-fxsuggest"
   }
 }

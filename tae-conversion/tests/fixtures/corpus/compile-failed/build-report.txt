@@ -1,0 +1,4 @@
+❌ COMPILE FAILED — 2 Kotlin error(s)
+
+  ui/efficiency/helpers/BaseTest.kt:28:30  Unresolved reference 'settings'.
+  ui/efficiency/helpers/BaseTest.kt:121:47  Unresolved reference 'settings'.

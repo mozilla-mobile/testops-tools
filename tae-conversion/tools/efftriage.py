@@ -73,7 +73,11 @@ RULES = [
         "A system overlay (stylus prompt, permission dialog, keyboard) masks as absence. Read the "
         "[windows] dump block: it names the blocking window. dismissKnownOverlaysIfPresent covers the "
         "known ones; a new one needs adding there.",
-        lambda w: "non-application window(s) present" in w and "not found" in w,
+        # The status bar is itself a SYSTEM window, so the "non-application window(s) present" warning
+        # appears in nearly every dump and this rule used to fire on almost any not-found. Require that
+        # the app does NOT hold focus: if an APPLICATION window is active+focused, nothing is masking it.
+        lambda w: "non-application window(s) present" in w and "not found" in w
+        and not re.search(r"type=APPLICATION \[[^\]]*focused", w),
     ),
     (
         "T6", "A40",
@@ -109,6 +113,22 @@ RULES = [
         "needs a second anchor.",
         lambda w: re.search(r"Navigation to '.*' failed", w)
         or (re.search(r"not visible yet", w) and re.search(r"\[ERR\].*not found after \d+ms", w)),
+    ),
+    # LAST on purpose, and deliberately narrow. An earlier, looser version of this rule keyed on
+    # "not found", which appears in almost every failing trace, and it stole the diagnosis from six
+    # other rules. It now requires the group-level failure line together with the short-circuit, and
+    # sits at the end so anything more specific wins first.
+    (
+        "T13", "A45",
+        "the arrival check passed on the WRONG screen, so navigateToPage short-circuited and never "
+        "performed its steps",
+        "'already visible/already loaded' followed by a group-level miss means a requiredForPage anchor "
+        "also matches the page you were coming FROM — typically a parent Settings screen carrying a row "
+        "with the destination's own title, or a generic control like Navigate up. mozIsOnPageNow() then "
+        "reports arrival before any click happens. Pick an anchor that exists ONLY on the destination "
+        "(and needs no scrolling); read the [uiautomator] block to confirm which screen you were on.",
+        lambda w: re.search(r"already (?:visible|loaded)", w)
+        and "missing required elements" in w,
     ),
 ]
 
@@ -171,6 +191,17 @@ def triage(batch):
             "`adb logcat -d -s EffScreenDump:I`. If this is a clean checkout, check effpretty resolves "
             "(effloop resolves it under $REPO; override with EFFPRETTY=)."
         )
+        return res
+
+    # A compile failure is stated outright in status.json, so there is never a reason to answer
+    # "no rule matched" for one and send the reader hunting through a trace that was never produced.
+    if status.get("compiled") is False:
+        res["findings"].append({
+            "rule": "T12", "gotcha": "A24", "line": 0,
+            "cause": "the test did not COMPILE, so no run happened and there is no trace to read",
+            "fix": "Read build-report.txt — effloop puts the Kotlin errors there with file:line. "
+                   "run-report.txt is empty by design here, and effloop exits 2.",
+        })
         return res
 
     # A SKIP IS NOT A PASS (gotcha A44). Read the per-test statuses rather than trusting

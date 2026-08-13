@@ -599,3 +599,17 @@ Last updated: 2026-08-04.
   **5**. `efftriage` rule **T11** reports it, reading the per-test statuses rather than `outcome` — the field
   that should raise the alarm was the one lying. Never read `failures: 0` as success on its own: confirm
   `results[].status == "pass"` for every test you expected to run.
+
+### A45. An arrival check that also matches the page you came FROM (2026-08-13)
+- **Symptom:** the trace says `'<Page>' already visible` / `already loaded`, no navigation step is ever
+  performed, and the test then fails on an element that genuinely is not there. The `[uiautomator]` dump shows
+  a *different* screen than the one the harness believes it is on.
+- **Cause:** every selector in `requiredForPage` resolved on the **origin** screen, so `mozIsOnPageNow()`
+  short-circuited `navigateToPage` before its Swipe/Click ran. The classic pair: a Settings **row** carrying the
+  destination screen's own title (both read "Page summaries"), plus a generic control like `Navigate up` that
+  exists on every sub-screen. Related to A42 (a selector matching a different surface) and to the fourth
+  nav-graph gap, where an arrival check resolved the engine view underneath an edit-mode overlay.
+- **Check:** an arrival anchor must exist **only** on the destination and need no scrolling. Prefer a row owned
+  by the destination's own feature — here `mozac_summarize_settings_summarize_pages` ("Summarize pages"). Keep
+  the title and the back button as *assertions* in a verification group, just not as anchors. `efftriage` rule
+  **T13** detects this shape.
