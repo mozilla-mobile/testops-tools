@@ -1,0 +1,23 @@
+{
+  "batch": "b13-sponsored",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest#verifySponsoredShortcutsListTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T20:14:13Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "message": "java.lang.AssertionError: No 'Top site item' found containing text 'Sponsored' after 15000ms"
+    }
+  ],
+  "outcome": "fail"
+}

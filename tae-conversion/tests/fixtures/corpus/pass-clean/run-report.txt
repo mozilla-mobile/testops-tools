@@ -1,0 +1,75 @@
+--------- beginning of main
+run started: 2 tests
+started: verifyFirefoxSuggestSponsoredSearchResultsTest(org.mozilla.fenix.ui.efficiency.tests.FirefoxSuggestTest)
+started: verifyFirefoxSuggestNonSponsoredSearchResultsTest(org.mozilla.fenix.ui.efficiency.tests.FirefoxSuggestTest)
+run finished: 2 tests, 0 failed, 0 ignored
+run started: 1 tests
+started: verifyFirefoxSuggestSponsoredSearchResultsTest(org.mozilla.fenix.ui.efficiency.tests.FirefoxSuggestTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (121.9 ms)
+    [OK] ✔ Clicked 'URL box' (219.9 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (118.9 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (119.4 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (344.0 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (136.5 ms)
+    [CMD] ➤ Verifying 'Firefox Suggest suggestions header' is present...
+        [LOC] 🔎 Attempting to locate 'Firefox Suggest suggestions header'...
+        [OK] ✔ 'Firefox Suggest suggestions header' found (159.2 ms)
+    [OK] ✔ 'Firefox Suggest suggestions header' verified (159.9 ms)
+    [CMD] ➤ Verifying any 'Search suggestion' contains text 'Mozilla Sponsored Result'...
+    [OK] ✔ Found 'Search suggestion' containing text 'Mozilla Sponsored Result' (335.1 ms)
+    [CMD] ➤ Verifying any 'Search suggestion' contains text 'Sponsored'...
+    [OK] ✔ Found 'Search suggestion' containing text 'Sponsored' (433.2 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 344.0 ms, avg 344.0 ms)
+    [INFO] • Commands: 6 (total 1403.9 ms, avg 234.0 ms)
+    [INFO] • Locators: 4 (total 400.0 ms, avg 100.0 ms)
+    [INFO] • Successes: 11   Failures: 0   Skips: 0
+    [INFO] • Wall time: 1443.4 ms
+run finished: 1 tests, 0 failed, 0 ignored
+run started: 1 tests
+started: verifyFirefoxSuggestNonSponsoredSearchResultsTest(org.mozilla.fenix.ui.efficiency.tests.FirefoxSuggestTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (258.3 ms)
+    [OK] ✔ Clicked 'URL box' (368.1 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (136.6 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (137.1 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (506.8 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (156.8 ms)
+    [CMD] ➤ Verifying 'Firefox Suggest suggestions header' is present...
+        [LOC] 🔎 Attempting to locate 'Firefox Suggest suggestions header'...
+        [OK] ✔ 'Firefox Suggest suggestions header' found (224.0 ms)
+    [OK] ✔ 'Firefox Suggest suggestions header' verified (224.8 ms)
+    [CMD] ➤ Verifying any 'Search suggestion' contains text 'Mozilla Wikipedia Result'...
+    [OK] ✔ Found 'Search suggestion' containing text 'Mozilla Wikipedia Result' (336.6 ms)
+    [CMD] ➤ Verifying no 'Search suggestion' contains text 'Sponsored'...
+    [OK] ✔ No 'Search suggestion' contains text 'Sponsored' (335.3 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 506.8 ms, avg 506.8 ms)
+    [INFO] • Commands: 6 (total 1558.7 ms, avg 259.8 ms)
+    [INFO] • Locators: 4 (total 618.9 ms, avg 154.7 ms)
+    [INFO] • Successes: 11   Failures: 0   Skips: 0
+    [INFO] • Wall time: 1579.4 ms
+run finished: 1 tests, 0 failed, 0 ignored

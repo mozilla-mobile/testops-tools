@@ -27,6 +27,7 @@ import json, os, re, subprocess, sys
 CANON_TOOLS = os.path.dirname(os.path.realpath(__file__))
 CANON_ROOT = os.path.dirname(CANON_TOOLS)
 REPO = os.environ.get("REPO", os.path.expanduser("~/Workspace/firefox"))
+ALT_TOOLS = os.path.expanduser(os.environ.get("ALT_TOOLS", "~/Workspace/ui-test-modernization/tools"))
 EFFPRETTY_REL = "mobile/android/fenix/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/devtools/effpretty/effpretty.py"
 
 
@@ -54,7 +55,14 @@ def proc_cwd(pid):
     effwatch is usually launched by a RELATIVE path (`./tae-conversion/tools/effwatch.sh`), so the
     queue it watches depends on the cwd of *that* process. Resolving such a path against effdoctor's
     own cwd invents a directory that never existed and sends requests into a black hole.
+
+    /proc first, because it is exact and always present on Linux; lsof is the macOS path and is not
+    installed everywhere.
     """
+    try:
+        return os.readlink(f"/proc/{pid}/cwd")
+    except OSError:
+        pass
     for line in sh(f"lsof -a -p {pid} -d cwd -Fn").splitlines():
         if line.startswith("n"):
             return line[1:]
@@ -72,9 +80,14 @@ def check():
     ps = sh("ps -eo pid,command")
     for line in ps.splitlines():
         m = re.search(r"^\s*(\d+)\s+.*?(\S*effwatch\.sh)", line)
-        if not m or "effdoctor" in line:
+        if not m:
             continue
         pid, path = m.group(1), m.group(2)
+        # Skip only THIS process, not every line containing the string "effdoctor": a watcher
+        # running from a directory whose name happens to contain it would otherwise be invisible,
+        # and an unnoticed watcher is the whole problem this tool exists to surface.
+        if pid == str(os.getpid()) or re.search(r"effdoctor\.py", line):
+            continue
         cwd = proc_cwd(pid)
         if os.path.isabs(path):
             tools_dir = os.path.dirname(path)
@@ -122,7 +135,7 @@ def check():
             "(MTE-5768). Kill all but one.")
 
     # --- are the two checkouts really the same files?
-    alt = os.path.expanduser("~/Workspace/ui-test-modernization/tools")
+    alt = ALT_TOOLS
     if os.path.isdir(alt):
         divergent = []
         for name in sorted(os.listdir(CANON_TOOLS)):

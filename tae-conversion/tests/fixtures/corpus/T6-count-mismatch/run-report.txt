@@ -1,0 +1,541 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ deleteIndividualHistoryItemsFromSearchGroupTest
+      androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: (((view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() to return non-empty rectangle) and view.getContentDescription() is "More options") or ((view has effective visibility <VISIBLE> and view.ge
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: deleteIndividualHistoryItemsFromSearchGroupTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (322.9 ms)
+    [OK] ✔ Clicked 'URL box' (444.7 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (183.2 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (183.7 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (629.4 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (231.5 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (225.4 ms)
+    [CMD] ➤ Waiting until 'Toolbar in edit mode' is absent...
+    [OK] ✔ 'Toolbar in edit mode' is absent (540.8 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (319.9 ms)
+    [OK] ✔ 'BrowserPage' already visible (321.9 ms)
+[OK] ✔ 'BrowserPage' already loaded (323.1 ms)
+    [CMD] ➤ Verifying ''Link 1' link in web content' is present...
+        [LOC] 🔎 Attempting to locate ''Link 1' link in web content'...
+        [OK] ✔ ''Link 1' link in web content' found ⚠️ SLOW (596.4 ms)
+    [OK] ✔ ''Link 1' link in web content' verified (597.7 ms)
+    [CMD] ➤ Attempting to long click ''Link 1' link in web content'...
+        [LOC] 🔎 Attempting to locate ''Link 1' link in web content'...
+        [OK] ✔ ''Link 1' link in web content' found (2.3 ms)
+    [OK] ✔ Long clicked ''Link 1' link in web content' (700.3 ms)
+    [CMD] ➤ Verifying ''Open link in new tab' context menu item' is present...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found ⚠️ SLOW (527.5 ms)
+    [OK] ✔ ''Open link in new tab' context menu item' verified (528.8 ms)
+    [CMD] ➤ Attempting to click ''Open link in new tab' context menu item'...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found (11.2 ms)
+    [OK] ✔ Clicked ''Open link in new tab' context menu item' (52.1 ms)
+    [CMD] ➤ Attempting to click 'Snackbar action button'...
+        [LOC] 🔎 Attempting to locate 'Snackbar action button'...
+        [OK] ✔ 'Snackbar action button' found (180.2 ms)
+    [OK] ✔ Clicked 'Snackbar action button' (256.5 ms)
+    [CMD] ➤ Pressing back...
+    [OK] ✔ Pressed back ⚠️ SLOW (1520.1 ms)
+    [CMD] ➤ Verifying ''Link 2' link in web content' is present...
+        [LOC] 🔎 Attempting to locate ''Link 2' link in web content'...
+        [OK] ✔ ''Link 2' link in web content' found (10.7 ms)
+    [OK] ✔ ''Link 2' link in web content' verified (11.2 ms)
+    [CMD] ➤ Attempting to long click ''Link 2' link in web content'...
+        [LOC] 🔎 Attempting to locate ''Link 2' link in web content'...
+        [OK] ✔ ''Link 2' link in web content' found (2.5 ms)
+    [OK] ✔ Long clicked ''Link 2' link in web content' (651.9 ms)
+    [CMD] ➤ Verifying ''Open link in new tab' context menu item' is present...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found ⚠️ SLOW (927.3 ms)
+    [OK] ✔ ''Open link in new tab' context menu item' verified ⚠️ SLOW (928.3 ms)
+    [CMD] ➤ Attempting to click ''Open link in new tab' context menu item'...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found (47.9 ms)
+    [OK] ✔ Clicked ''Open link in new tab' context menu item' (82.8 ms)
+    [CMD] ➤ Attempting to click 'Snackbar action button'...
+        [LOC] 🔎 Attempting to locate 'Snackbar action button'...
+        [OK] ✔ 'Snackbar action button' found (154.2 ms)
+    [OK] ✔ Clicked 'Snackbar action button' (230.0 ms)
+[STEP] ★ Attempting to Navigate to TabDrawerPage
+    [CMD] ➤ Checking if 'TabDrawerPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Tabs tray container'...
+        [ERR] ✖ 'Tabs tray container' not found (20.6 ms)
+    [ERR] ✖ 'TabDrawerPage' not visible yet (21.5 ms)
+Trying to find path from 'BrowserPage' to 'TabDrawerPage'
+Navigation path found from 'BrowserPage' to 'TabDrawerPage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS, value=Tabs Open:, secondaryValue=null, description=Tab counter button (either toolbar layout), groups=[], name=null))
+    [CMD] ➤ Attempting to click 'Tab counter button (either toolbar layout)'...
+        [LOC] 🔎 Attempting to locate 'Tab counter button (either toolbar layout)'...
+        [OK] ✔ 'Tab counter button (either toolbar layout)' found ⚠️ SLOW (435.4 ms)
+    [OK] ✔ Clicked 'Tab counter button (either toolbar layout)' (596.4 ms)
+    [CMD] ➤ Attempting to verify TabDrawerPage loads...
+        [LOC] 🔎 Attempting to locate 'Tabs tray container'...
+        [OK] ✔ 'Tabs tray container' found ⚠️ SLOW (282.2 ms)
+        [LOC] 🔎 Attempting to locate 'Normal browsing tabs tray button'...
+        [OK] ✔ 'Normal browsing tabs tray button' found (31.8 ms)
+        [LOC] 🔎 Attempting to locate 'Synced tabs button'...
+        [OK] ✔ 'Synced tabs button' found (32.0 ms)
+        [LOC] 🔎 Attempting to locate 'Private browsing tabs tray button'...
+        [OK] ✔ 'Private browsing tabs tray button' found (31.6 ms)
+        [LOC] 🔎 Attempting to locate 'Tab groups button'...
+        [OK] ✔ 'Tab groups button' found (28.4 ms)
+        [LOC] 🔎 Attempting to locate 'Three dot menu button'...
+        [OK] ✔ 'Three dot menu button' found (30.9 ms)
+        [LOC] 🔎 Attempting to locate 'Floating action button'...
+        [OK] ✔ 'Floating action button' found (30.7 ms)
+    [OK] ✔ 'TabDrawerPage' loaded (485.4 ms)
+[OK] ✔ Navigation to 'TabDrawerPage' completed (1113.7 ms)
+    [CMD] ➤ Attempting to click 'Three dot menu button'...
+        [LOC] 🔎 Attempting to locate 'Three dot menu button'...
+        [OK] ✔ 'Three dot menu button' found (42.8 ms)
+    [OK] ✔ Clicked 'Three dot menu button' (96.5 ms)
+    [CMD] ➤ Attempting to click 'Close all tabs menu button'...
+        [LOC] 🔎 Attempting to locate 'Close all tabs menu button'...
+        [OK] ✔ 'Close all tabs menu button' found (145.6 ms)
+    [OK] ✔ Clicked 'Close all tabs menu button' (204.3 ms)
+    [CMD] ➤ Verifying 'Close tabs confirmation button' is present...
+        [LOC] 🔎 Attempting to locate 'Close tabs confirmation button'...
+        [OK] ✔ 'Close tabs confirmation button' found (141.5 ms)
+    [OK] ✔ 'Close tabs confirmation button' verified (141.9 ms)
+    [CMD] ➤ Attempting to click 'Close tabs confirmation button'...
+        [LOC] 🔎 Attempting to locate 'Close tabs confirmation button'...
+        [OK] ✔ 'Close tabs confirmation button' found (47.7 ms)
+    [OK] ✔ Clicked 'Close tabs confirmation button' (120.5 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (224.5 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (48.6 ms)
+    [OK] ✔ 'HomePage' already visible (276.9 ms)
+[OK] ✔ 'HomePage' already loaded (277.3 ms)
+    [CMD] ➤ Verifying 'Recently visited section header' is present...
+        [LOC] 🔎 Attempting to locate 'Recently visited section header'...
+        [OK] ✔ 'Recently visited section header' found (29.4 ms)
+    [OK] ✔ 'Recently visited section header' verified (30.6 ms)
+    [CMD] ➤ Verifying ''firefox' search group' has sibling with text '3 pages'...
+        [LOC] 🔎 Attempting to locate ''firefox' search group'...
+        [OK] ✔ ''firefox' search group' found (0.0 ms)
+    [OK] ✔ ''firefox' search group' has sibling with text '3 pages' (14.3 ms)
+    [CMD] ➤ Attempting to click ''firefox' search group'...
+        [LOC] 🔎 Attempting to locate ''firefox' search group'...
+        [OK] ✔ ''firefox' search group' found (48.4 ms)
+    [OK] ✔ Clicked ''firefox' search group' (106.1 ms)
+    [CMD] ➤ Verifying ''firefox' search group toolbar title' is present...
+        [LOC] 🔎 Attempting to locate ''firefox' search group toolbar title'...
+        [OK] ✔ ''firefox' search group toolbar title' found ⚠️ SLOW (720.1 ms)
+    [OK] ✔ ''firefox' search group toolbar title' verified (721.5 ms)
+    [CMD] ➤ Verifying 'Search group item URL' is present...
+        [LOC] 🔎 Attempting to locate 'Search group item URL'...
+        [OK] ✔ 'Search group item URL' found (4.5 ms)
+    [OK] ✔ 'Search group item URL' verified (5.7 ms)
+    [CMD] ➤ Attempting to click 'Delete button for 'http://localhost:46657/pages/generic1.html''...
+        [LOC] 🔎 Attempting to locate 'Delete button for 'http://localhost:46657/pages/generic1.html''...
+        [OK] ✔ 'Delete button for 'http://localhost:46657/pages/generic1.html'' found (10.5 ms)
+    [OK] ✔ Clicked 'Delete button for 'http://localhost:46657/pages/generic1.html'' (284.5 ms)
+    [CMD] ➤ Waiting until 'Snackbar container' is absent...
+    [OK] ✔ 'Snackbar container' is absent ⚠️ SLOW (5421.7 ms)
+    [CMD] ➤ Attempting to long click 'Search group item 'http://localhost:46657/pages/generic2.html''...
+        [LOC] 🔎 Attempting to locate 'Search group item 'http://localhost:46657/pages/generic2.html''...
+        [OK] ✔ 'Search group item 'http://localhost:46657/pages/generic2.html'' found (1.5 ms)
+    [OK] ✔ Long clicked 'Search group item 'http://localhost:46657/pages/generic2.html'' (751.7 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 4 (total 2343.5 ms, avg 585.9 ms)
+    [INFO] • Commands: 33 (total 16787.1 ms, avg 508.7 ms)
+    [INFO] • Locators: 37 (total 5675.0 ms, avg 153.4 ms)
+    [INFO] • Successes: 72   Failures: 2   Skips: 0
+    [INFO] • Wall time: 17190.2 ms
+RETRY (first attempt failed): RetryTestRule: NoMatchingViewException caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (51.8 ms)
+    [OK] ✔ Clicked 'URL box' (108.9 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (160.0 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (161.4 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (271.9 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (98.3 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (190.1 ms)
+    [CMD] ➤ Waiting until 'Toolbar in edit mode' is absent...
+    [OK] ✔ 'Toolbar in edit mode' is absent (291.3 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (419.8 ms)
+    [OK] ✔ 'BrowserPage' already visible (421.5 ms)
+[OK] ✔ 'BrowserPage' already loaded (424.1 ms)
+        [LOC] 🔎 Attempting to locate ''Link 1' link in web content'...
+        [OK] ✔ ''Link 1' link in web content' found ⚠️ SLOW (606.1 ms)
+    [OK] ✔ ''Link 1' link in web content' verified (608.4 ms)
+    [CMD] ➤ Attempting to long click ''Link 1' link in web content'...
+        [LOC] 🔎 Attempting to locate ''Link 1' link in web content'...
+        [OK] ✔ ''Link 1' link in web content' found (1.4 ms)
+    [OK] ✔ Long clicked ''Link 1' link in web content' (636.2 ms)
+    [CMD] ➤ Verifying ''Open link in new tab' context menu item' is present...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found ⚠️ SLOW (542.0 ms)
+    [OK] ✔ ''Open link in new tab' context menu item' verified (544.5 ms)
+    [CMD] ➤ Attempting to click ''Open link in new tab' context menu item'...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found (19.0 ms)
+    [OK] ✔ Clicked ''Open link in new tab' context menu item' (87.0 ms)
+    [CMD] ➤ Attempting to click 'Snackbar action button'...
+        [LOC] 🔎 Attempting to locate 'Snackbar action button'...
+        [OK] ✔ 'Snackbar action button' found (142.8 ms)
+    [OK] ✔ Clicked 'Snackbar action button' (202.3 ms)
+    [CMD] ➤ Pressing back...
+    [OK] ✔ Pressed back ⚠️ SLOW (1490.8 ms)
+    [CMD] ➤ Verifying ''Link 2' link in web content' is present...
+        [LOC] 🔎 Attempting to locate ''Link 2' link in web content'...
+        [OK] ✔ ''Link 2' link in web content' found (14.0 ms)
+    [OK] ✔ ''Link 2' link in web content' verified (15.3 ms)
+    [CMD] ➤ Attempting to long click ''Link 2' link in web content'...
+        [LOC] 🔎 Attempting to locate ''Link 2' link in web content'...
+        [OK] ✔ ''Link 2' link in web content' found (4.0 ms)
+    [OK] ✔ Long clicked ''Link 2' link in web content' (675.5 ms)
+    [CMD] ➤ Verifying ''Open link in new tab' context menu item' is present...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found ⚠️ SLOW (491.6 ms)
+    [OK] ✔ ''Open link in new tab' context menu item' verified (492.7 ms)
+    [CMD] ➤ Attempting to click ''Open link in new tab' context menu item'...
+        [LOC] 🔎 Attempting to locate ''Open link in new tab' context menu item'...
+        [OK] ✔ ''Open link in new tab' context menu item' found (50.2 ms)
+    [OK] ✔ Clicked ''Open link in new tab' context menu item' (89.5 ms)
+    [CMD] ➤ Attempting to click 'Snackbar action button'...
+        [LOC] 🔎 Attempting to locate 'Snackbar action button'...
+        [OK] ✔ 'Snackbar action button' found (155.8 ms)
+    [OK] ✔ Clicked 'Snackbar action button' (214.9 ms)
+    [CMD] ➤ Checking if 'TabDrawerPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Tabs tray container'...
+        [ERR] ✖ 'Tabs tray container' not found (28.3 ms)
+    [ERR] ✖ 'TabDrawerPage' not visible yet (29.0 ms)
+Trying to find path from 'BrowserPage' to 'TabDrawerPage'
+Navigation path found from 'BrowserPage' to 'TabDrawerPage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS, value=Tabs Open:, secondaryValue=null, description=Tab counter button (either toolbar layout), groups=[], name=null))
+    [CMD] ➤ Attempting to click 'Tab counter button (either toolbar layout)'...
+        [LOC] 🔎 Attempting to locate 'Tab counter button (either toolbar layout)'...
+        [OK] ✔ 'Tab counter button (either toolbar layout)' found ⚠️ SLOW (451.6 ms)
+    [OK] ✔ Clicked 'Tab counter button (either toolbar layout)' (614.8 ms)
+    [CMD] ➤ Attempting to verify TabDrawerPage loads...
+        [LOC] 🔎 Attempting to locate 'Tabs tray container'...
+        [OK] ✔ 'Tabs tray container' found (179.9 ms)
+        [LOC] 🔎 Attempting to locate 'Normal browsing tabs tray button'...
+        [OK] ✔ 'Normal browsing tabs tray button' found (42.1 ms)
+        [LOC] 🔎 Attempting to locate 'Synced tabs button'...
+        [OK] ✔ 'Synced tabs button' found (21.9 ms)
+        [LOC] 🔎 Attempting to locate 'Private browsing tabs tray button'...
+        [OK] ✔ 'Private browsing tabs tray button' found (32.9 ms)
+        [LOC] 🔎 Attempting to locate 'Tab groups button'...
+        [OK] ✔ 'Tab groups button' found (32.7 ms)
+        [LOC] 🔎 Attempting to locate 'Three dot menu button'...
+        [OK] ✔ 'Three dot menu button' found (32.7 ms)
+        [LOC] 🔎 Attempting to locate 'Floating action button'...
+        [OK] ✔ 'Floating action button' found (30.7 ms)
+    [OK] ✔ 'TabDrawerPage' loaded (381.4 ms)
+[OK] ✔ Navigation to 'TabDrawerPage' completed (1029.6 ms)
+    [CMD] ➤ Attempting to click 'Three dot menu button'...
+        [LOC] 🔎 Attempting to locate 'Three dot menu button'...
+        [OK] ✔ 'Three dot menu button' found (48.9 ms)
+    [OK] ✔ Clicked 'Three dot menu button' (101.7 ms)
+    [CMD] ➤ Attempting to click 'Close all tabs menu button'...
+        [LOC] 🔎 Attempting to locate 'Close all tabs menu button'...
+        [OK] ✔ 'Close all tabs menu button' found (146.7 ms)
+    [OK] ✔ Clicked 'Close all tabs menu button' (202.8 ms)
+    [CMD] ➤ Verifying 'Close tabs confirmation button' is present...
+        [LOC] 🔎 Attempting to locate 'Close tabs confirmation button'...
+        [OK] ✔ 'Close tabs confirmation button' found (126.1 ms)
+    [OK] ✔ 'Close tabs confirmation button' verified (126.6 ms)
+    [CMD] ➤ Attempting to click 'Close tabs confirmation button'...
+        [LOC] 🔎 Attempting to locate 'Close tabs confirmation button'...
+        [OK] ✔ 'Close tabs confirmation button' found (46.9 ms)
+    [OK] ✔ Clicked 'Close tabs confirmation button' (100.9 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found ⚠️ SLOW (277.2 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (32.6 ms)
+    [OK] ✔ 'HomePage' already visible (311.7 ms)
+[OK] ✔ 'HomePage' already loaded (312.5 ms)
+    [CMD] ➤ Verifying 'Recently visited section header' is present...
+        [LOC] 🔎 Attempting to locate 'Recently visited section header'...
+        [OK] ✔ 'Recently visited section header' found (27.2 ms)
+    [OK] ✔ 'Recently visited section header' verified (31.3 ms)
+    [CMD] ➤ Verifying ''firefox' search group' has sibling with text '3 pages'...
+        [LOC] 🔎 Attempting to locate ''firefox' search group'...
+        [OK] ✔ ''firefox' search group' found (0.0 ms)
+    [OK] ✔ ''firefox' search group' has sibling with text '3 pages' (13.9 ms)
+    [CMD] ➤ Attempting to click ''firefox' search group'...
+        [LOC] 🔎 Attempting to locate ''firefox' search group'...
+        [OK] ✔ ''firefox' search group' found (46.4 ms)
+    [OK] ✔ Clicked ''firefox' search group' (101.8 ms)
+    [CMD] ➤ Verifying ''firefox' search group toolbar title' is present...
+        [LOC] 🔎 Attempting to locate ''firefox' search group toolbar title'...
+        [OK] ✔ ''firefox' search group toolbar title' found ⚠️ SLOW (645.9 ms)
+    [OK] ✔ ''firefox' search group toolbar title' verified (647.8 ms)
+    [CMD] ➤ Verifying 'Search group item URL' is present...
+        [LOC] 🔎 Attempting to locate 'Search group item URL'...
+        [OK] ✔ 'Search group item URL' found (2.1 ms)
+    [OK] ✔ 'Search group item URL' verified (2.9 ms)
+    [CMD] ➤ Attempting to click 'Delete button for 'http://localhost:46657/pages/generic1.html''...
+        [LOC] 🔎 Attempting to locate 'Delete button for 'http://localhost:46657/pages/generic1.html''...
+        [OK] ✔ 'Delete button for 'http://localhost:46657/pages/generic1.html'' found (9.5 ms)
+    [OK] ✔ Clicked 'Delete button for 'http://localhost:46657/pages/generic1.html'' (279.3 ms)
+    [CMD] ➤ Waiting until 'Snackbar container' is absent...
+    [OK] ✔ 'Snackbar container' is absent ⚠️ SLOW (5426.3 ms)
+    [CMD] ➤ Attempting to long click 'Search group item 'http://localhost:46657/pages/generic2.html''...
+        [LOC] 🔎 Attempting to locate 'Search group item 'http://localhost:46657/pages/generic2.html''...
+        [OK] ✔ 'Search group item 'http://localhost:46657/pages/generic2.html'' found (2.3 ms)
+    [OK] ✔ Long clicked 'Search group item 'http://localhost:46657/pages/generic2.html'' (740.2 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 4 (total 2038.2 ms, avg 509.5 ms)
+    [INFO] • Commands: 33 (total 15440.9 ms, avg 467.9 ms)
+    [INFO] • Locators: 37 (total 4923.5 ms, avg 133.1 ms)
+    [INFO] • Successes: 72   Failures: 2   Skips: 0
+    [INFO] • Wall time: 15810.3 ms
+failed: deleteIndividualHistoryItemsFromSearchGroupTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+----- begin exception -----
+androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: (((view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() to return non-empty rectangle) and view.getContentDescription() is "More options") or ((view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() to return non-empty rectangle) and view.getClass().getName() matches: a string ending with "OverflowMenuButton"))
+
+View Hierarchy:
++>DecorView{id=-1, visibility=VISIBLE, width=1080, height=2400, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params={(0,0)(fillxfill) sim={adjust=resize} ty=BASE_APPLICATION wanim=0x7f150697
+  fl=LAYOUT_IN_SCREEN LAYOUT_INSET_DECOR HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS
+  pfl=NO_MOVE_ANIMATION EDGE_TO_EDGE_ENFORCED FIT_INSETS_CONTROLLED
+  rh=FORCE_DRAW_BAR_BACKGROUNDS
+  bhv=DEFAULT
+  fitSides=
+  frameRateBoostOnTouch=true
+  dvrrWindowFrameRateHint=true}, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++->LinearLayout{id=-1, visibility=VISIBLE, width=1080, height=2400, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2} 
+|
++-->ViewStub{id=16908800, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++-->FrameLayout{id=-1, visibility=VISIBLE, width=1080, height=2400, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++--->FitWindowsLinearLayout{id=2131361882, res-name=action_bar_root, visibility=VISIBLE, width=1080, height=2400, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2} 
+|
++---->ViewStubCompat{id=2131361985, res-name=action_mode_bar_stub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++---->ContentFrameLayout{id=16908290, res-name=content, visibility=VISIBLE, width=1080, height=2400, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++----->FrameLayout{id=-1, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=63.0, child-count=2} 
+|
++------>HomeActivityRootLinearLayout{id=2131362973, res-name=rootContainer, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2} 
+|
++------->Toolbar{id=2131362792, res-name=navigationToolbar, visibility=GONE, width=1080, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=4} 
+|
++-------->FrameLayout{id=2131363201, res-name=toolbar_child_container, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0} 
+|
++-------->AppCompatTextView{id=-1, visibility=VISIBLE, width=180, height=85, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=189.0, y=31.0, text=firefox, input-type=0, ime-target=false, has-links=false} 
+|
++-------->AppCompatImageButton{id=-1, desc=Navigate up, visibility=VISIBLE, width=147, height=147, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++-------->ActionMenuView{id=-1, visibility=VISIBLE, width=254, height=147, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.appcompat.widget.Toolbar$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=826.0, y=0.0, child-count=0} 
+|
++------->FragmentContainerView{id=2131362274, res-name=container, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.LinearLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------->FragmentContainerView{id=2131362274, res-name=container, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++--------->SwipeGestureLayout{id=2131362481, res-name=gestureLayout, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=2} 
+|
++---------->ConstraintLayout{id=2131362197, res-name=browserWindow, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++----------->CoordinatorLayout{id=2131362196, res-name=browserLayout, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.constraintlayout.widget.ConstraintLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=14} 
+|
++------------>VerticalSwipeRefreshLayout{id=2131363139, res-name=swipeRefresh, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=168.0, child-count=2} 
+|
++------------->CircleImageView{id=-1, visibility=GONE, width=104, height=105, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=488.0, y=-105.0} 
+|
++------------->GeckoEngineView{id=2131362422, res-name=engineView, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------------->null{id=-1, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++--------------->MagnifiableSurfaceView{id=-1, visibility=VISIBLE, width=1080, height=2274, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131362457, res-name=findInPageViewStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ReaderViewControlsBar{id=2131362935, res-name=readerViewControlsBar, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0} 
+|
++------------>CrashContentView{id=2131362292, res-name=crash_reporter_view, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0} 
+|
++------------>ConstraintLayout{id=2131362398, res-name=dynamicSnackbarContainer, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=2274.0, child-count=0} 
+|
++------------>ViewStub{id=2131362652, res-name=loginSelectBarStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131363136, res-name=suggestStrongPasswordBarStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131362412, res-name=emailMaskBarStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131362103, res-name=addressSelectBarStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131362301, res-name=creditCardSelectBarStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ViewStub{id=2131363236, res-name=translationsBannerStub, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>NavigationBarComposeView{id=2131362794, res-name=navigation_bar, visibility=VISIBLE, width=1080, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=2274.0, child-count=1} 
+|
++------------->AndroidComposeView{id=-1, visibility=VISIBLE, width=1080, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ComposeView{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------->AndroidComposeView{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------------>ScrollableToolbarComposeView{id=2131362263, res-name=composable_toolbar, visibility=VISIBLE, width=1080, height=168, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=false, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------->AndroidComposeView{id=-1, visibility=VISIBLE, width=1080, height=168, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++---------->TabPreview{id=2131363151, res-name=tabPreview, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=3} 
+|
++----------->TabThumbnailView{id=2131362914, res-name=previewThumbnail, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++----------->ComposeView{id=2131362262, res-name=composableTopToolbar, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------>AndroidComposeView{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++----------->ComposeView{id=2131362261, res-name=composableBottomToolbar, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------>AndroidComposeView{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+|
++------>ComposeView{id=2131362333, res-name=debugOverlay, visibility=GONE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++------->AndroidComposeView{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=1} 
+|
++-------->View{id=-1, visibility=VISIBLE, width=0, height=0, has-focus=false, has-focusable=false, has-window-focus=true, is-clickable=false, is-enabled=true, is-focused=false, is-focusable=false, is-layout-requested=true, is-selected=false, layout-params=android.view.ViewGroup$LayoutParams@YYYYYY, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0} 
+The complete view hierarchy is available in artifact file 'view-hierarchy-2.txt'.
+	at androidx.test.espresso.NoMatchingViewException$Builder.build(NoMatchingViewException.java:185)
+	at androidx.test.espresso.base.DefaultFailureHandler.lambda$getNoMatchingViewExceptionTruncater$0(DefaultFailureHandler.java:93)
+	at androidx.test.espresso.base.DefaultFailureHandler$$ExternalSyntheticLambda1.truncateExceptionMessage(D8$$SyntheticClass:0)
+	at androidx.test.espresso.base.ViewHierarchyExceptionHandler.handleSafely(ViewHierarchyExceptionHandler.java:72)
+	at androidx.test.espresso.base.ViewHierarchyExceptionHandler.handleSafely(ViewHierarchyExceptionHandler.java:38)
+	at androidx.test.espresso.base.DefaultFailureHandler$TypedFailureHandler.handle(DefaultFailureHandler.java:158)
+	at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:120)
+	at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:385)
+	at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:212)
+	at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:140)
+	at androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu(Espresso.java:279)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.HistorySearchGroupPage.deleteItemWithMultiSelectOverflow(HistorySearchGroupPage.kt:59)
+	at org.mozilla.fenix.ui.efficiency.tests.SearchTest.deleteIndividualHistoryItemsFromSearchGroupTest(SearchTest.kt:389)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

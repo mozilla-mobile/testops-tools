@@ -1,0 +1,23 @@
+{
+  "batch": "b17e-qrdialog",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SearchTest#verifyQRScanningCameraAccessDialogTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T21:34:28Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyQRScanningCameraAccessDialogTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifyQRScanningCameraAccessDialogTest",
+      "message": "java.lang.AssertionError: Failed: assertExists."
+    }
+  ],
+  "outcome": "fail"
+}

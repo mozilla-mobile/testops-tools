@@ -1,0 +1,23 @@
+{
+  "batch": "b14e-sponsored",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest#verifySponsoredShortcutsListTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T20:57:19Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "message": "mozilla.appservices.adsclient.InternalException: uniffiCloneHandle() called on NoHandle object"
+    }
+  ],
+  "outcome": "fail"
+}

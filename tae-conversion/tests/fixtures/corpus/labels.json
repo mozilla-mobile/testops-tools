@@ -1,0 +1,117 @@
+{
+  "T0-absence-assert": {
+    "expected_rules": [
+      "T0"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b14d-sponsored"
+  },
+  "T1-arrival-timeout": {
+    "expected_rules": [
+      "T1"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b4e-privhist"
+  },
+  "T10-crash": {
+    "expected_rules": [
+      "T10"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b10-searchclass"
+  },
+  "T2-selector-surface": {
+    "expected_rules": [
+      "T2"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b17e-qrdialog"
+  },
+  "T6-count-mismatch": {
+    "expected_rules": [
+      "T6"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b9-deletegroup"
+  },
+  "T7-multi": {
+    "expected_rules": [
+      "T7",
+      "T1"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b4d-privhist"
+  },
+  "T8-ad-surface": {
+    "expected_rules": [
+      "T8"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b13-sponsored"
+  },
+  "T9-permission": {
+    "expected_rules": [
+      "T9"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b14c-sponsored"
+  },
+  "gap-qrdialog-b17d": {
+    "expected_rules": [],
+    "known_gap": true,
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b17d-qrdialog"
+  },
+  "gap-sponsored-b13d": {
+    "expected_rules": [],
+    "known_gap": true,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b13d-sponsored"
+  },
+  "gap-sponsored-b14e": {
+    "expected_rules": [],
+    "known_gap": true,
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b14e-sponsored"
+  },
+  "pass-clean": {
+    "expected_rules": [],
+    "known_gap": false,
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b19-fxsuggest-confirm"
+  },
+  "pass-with-nonfatal-errs": {
+    "expected_rules": [],
+    "known_gap": false,
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b17j-qrdialog"
+  },
+  "unknown-empty-report": {
+    "expected_rules": [],
+    "known_gap": false,
+    "outcome": "unknown",
+    "retried": false,
+    "source_batch": "b18-fxsuggest"
+  }
+}

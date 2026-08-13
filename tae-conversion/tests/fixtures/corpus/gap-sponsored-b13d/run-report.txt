@@ -1,0 +1,332 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifySponsoredShortcutsListTest
+      androidx.test.espresso.PerformException: Error performing 'close keyboard' on view 'view.getRootView() to equal view'.
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found ⚠️ SLOW (269.2 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (30.1 ms)
+    [OK] ✔ 'HomePage' already visible (302.3 ms)
+[OK] ✔ 'HomePage' already loaded (302.6 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (32.4 ms)
+    [OK] ✔ 'Top Sites List' verified (33.0 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (32.1 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (32.7 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (32.0 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (32.6 ms)
+    [CMD] ➤ Verifying 'Add shortcut button' is present...
+        [LOC] 🔎 Attempting to locate 'Add shortcut button'...
+        [OK] ✔ 'Add shortcut button' found (31.4 ms)
+    [OK] ✔ 'Add shortcut button' verified (31.9 ms)
+    [CMD] ➤ Verifying 'Add shortcut button title' is present...
+        [LOC] 🔎 Attempting to locate 'Add shortcut button title'...
+        [OK] ✔ 'Add shortcut button title' found (31.9 ms)
+    [OK] ✔ 'Add shortcut button title' verified (32.5 ms)
+[STEP] ★ Attempting to Navigate to SettingsHomepagePage
+    [CMD] ➤ Checking if 'SettingsHomepagePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [ERR] ✖ 'The Homepage Settings menu item' not found (115.0 ms)
+    [ERR] ✖ 'SettingsHomepagePage' not visible yet (116.0 ms)
+Trying to find path from 'HomePage' to 'SettingsHomepagePage'
+Navigation path found from 'HomePage' to 'SettingsHomepagePage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Homepage, secondaryValue=null, description=the Homepage button, groups=[generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (81.0 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (146.7 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (235.0 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (236.6 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (31.0 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (31.7 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (32.3 ms)
+        [OK] ✔ 'Main menu Settings button' found (78.4 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (183.0 ms)
+    [CMD] ➤ Attempting to click 'the Homepage button'...
+        [LOC] 🔎 Attempting to locate 'the Homepage button'...
+        [OK] ✔ 'the Homepage button' found (220.7 ms)
+    [OK] ✔ Clicked 'the Homepage button' (517.3 ms)
+    [CMD] ➤ Attempting to verify SettingsHomepagePage loads...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [OK] ✔ 'The Homepage Settings menu item' found ⚠️ SLOW (421.0 ms)
+        [LOC] 🔎 Attempting to locate 'the Shortcuts button'...
+        [OK] ✔ 'the Shortcuts button' found (3.3 ms)
+    [OK] ✔ 'SettingsHomepagePage' loaded (426.2 ms)
+[OK] ✔ Navigation to 'SettingsHomepagePage' completed ⚠️ SLOW (1637.7 ms)
+    [CMD] ➤ Verifying 'Sponsored shortcuts setting' is checked...
+    [OK] ✔ 'Sponsored shortcuts setting' is checked (7.7 ms)
+    [CMD] ➤ Attempting to click 'Sponsored shortcuts setting'...
+        [LOC] 🔎 Attempting to locate 'Sponsored shortcuts setting'...
+        [OK] ✔ 'Sponsored shortcuts setting' found (17.6 ms)
+    [OK] ✔ Clicked 'Sponsored shortcuts setting' (283.9 ms)
+    [CMD] ➤ Verifying 'Sponsored shortcuts setting' is unchecked...
+    [OK] ✔ 'Sponsored shortcuts setting' is unchecked (1.6 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (21.1 ms)
+    [ERR] ✖ 'HomePage' not visible yet (22.7 ms)
+Trying to find path from 'SettingsHomepagePage' to 'HomePage'
+Navigation path found from 'SettingsHomepagePage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+   Step 2: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (11.1 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (279.9 ms)
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (15.6 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (507.2 ms)
+    [CMD] ➤ Attempting to verify HomePage loads...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (23.3 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (27.2 ms)
+    [OK] ✔ 'HomePage' loaded (61.8 ms)
+[OK] ✔ Navigation to 'HomePage' completed (875.6 ms)
+    [CMD] ➤ Verifying no 'Top site item' contains text 'Sponsored'...
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 3 (total 2815.9 ms, avg 938.6 ms)
+    [INFO] • Commands: 22 (total 3319.7 ms, avg 150.9 ms)
+    [INFO] • Locators: 21 (total 1760.4 ms, avg 83.8 ms)
+    [INFO] • Successes: 41   Failures: 4   Skips: 0
+    [INFO] • Wall time: 9392.5 ms
+RETRY (first attempt failed): RetryTestRule: PerformException caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (92.5 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (45.2 ms)
+    [OK] ✔ 'HomePage' already visible (140.5 ms)
+[OK] ✔ 'HomePage' already loaded (141.8 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (49.4 ms)
+    [OK] ✔ 'Top Sites List' verified (51.4 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (50.4 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (55.6 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (20.3 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (21.9 ms)
+    [CMD] ➤ Verifying 'Add shortcut button' is present...
+        [LOC] 🔎 Attempting to locate 'Add shortcut button'...
+        [OK] ✔ 'Add shortcut button' found (29.3 ms)
+    [OK] ✔ 'Add shortcut button' verified (31.9 ms)
+    [CMD] ➤ Verifying 'Add shortcut button title' is present...
+        [LOC] 🔎 Attempting to locate 'Add shortcut button title'...
+        [OK] ✔ 'Add shortcut button title' found (31.7 ms)
+    [OK] ✔ 'Add shortcut button title' verified (32.9 ms)
+        [ERR] ✖ 'The Homepage Settings menu item' not found (206.8 ms)
+    [ERR] ✖ 'SettingsHomepagePage' not visible yet (207.8 ms)
+Trying to find path from 'HomePage' to 'SettingsHomepagePage'
+Navigation path found from 'HomePage' to 'SettingsHomepagePage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Homepage, secondaryValue=null, description=the Homepage button, groups=[generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (113.3 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (159.7 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (160.5 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (164.7 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (30.2 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (36.2 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (36.8 ms)
+        [OK] ✔ 'Main menu Settings button' found (78.8 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (135.9 ms)
+    [CMD] ➤ Attempting to click 'the Homepage button'...
+        [LOC] 🔎 Attempting to locate 'the Homepage button'...
+        [OK] ✔ 'the Homepage button' found (94.0 ms)
+    [OK] ✔ Clicked 'the Homepage button' (375.3 ms)
+    [CMD] ➤ Attempting to verify SettingsHomepagePage loads...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [OK] ✔ 'The Homepage Settings menu item' found ⚠️ SLOW (439.2 ms)
+        [LOC] 🔎 Attempting to locate 'the Shortcuts button'...
+        [OK] ✔ 'the Shortcuts button' found (4.4 ms)
+    [OK] ✔ 'SettingsHomepagePage' loaded (445.1 ms)
+[OK] ✔ Navigation to 'SettingsHomepagePage' completed (1493.2 ms)
+    [CMD] ➤ Verifying 'Sponsored shortcuts setting' is checked...
+    [OK] ✔ 'Sponsored shortcuts setting' is checked (1.4 ms)
+    [CMD] ➤ Attempting to click 'Sponsored shortcuts setting'...
+        [LOC] 🔎 Attempting to locate 'Sponsored shortcuts setting'...
+        [OK] ✔ 'Sponsored shortcuts setting' found (16.2 ms)
+    [OK] ✔ Clicked 'Sponsored shortcuts setting' (286.3 ms)
+    [CMD] ➤ Verifying 'Sponsored shortcuts setting' is unchecked...
+    [OK] ✔ 'Sponsored shortcuts setting' is unchecked (1.7 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (35.6 ms)
+    [ERR] ✖ 'HomePage' not visible yet (36.1 ms)
+Trying to find path from 'SettingsHomepagePage' to 'HomePage'
+Navigation path found from 'SettingsHomepagePage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+   Step 2: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (4.6 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (270.7 ms)
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (15.7 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (449.2 ms)
+    [CMD] ➤ Attempting to verify HomePage loads...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (33.9 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (32.0 ms)
+    [OK] ✔ 'HomePage' loaded (68.0 ms)
+[OK] ✔ Navigation to 'HomePage' completed (827.4 ms)
+    [CMD] ➤ Verifying no 'Top site item' contains text 'Sponsored'...
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 3 (total 2462.3 ms, avg 820.8 ms)
+    [INFO] • Commands: 22 (total 3009.2 ms, avg 136.8 ms)
+    [INFO] • Locators: 21 (total 1584.1 ms, avg 75.4 ms)
+    [INFO] • Successes: 41   Failures: 4   Skips: 0
+    [INFO] • Wall time: 8982.1 ms
+failed: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+----- begin exception -----
+androidx.test.espresso.PerformException: Error performing 'close keyboard' on view 'view.getRootView() to equal view'.
+	at androidx.test.espresso.PerformException$Builder.build(PerformException.java:86)
+	at androidx.test.espresso.base.PerformExceptionHandler.handleSafely(PerformExceptionHandler.java:56)
+	at androidx.test.espresso.base.PerformExceptionHandler.handleSafely(PerformExceptionHandler.java:31)
+	at androidx.test.espresso.base.DefaultFailureHandler$TypedFailureHandler.handle(DefaultFailureHandler.java:158)
+	at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:120)
+	at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:385)
+	at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:212)
+	at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:140)
+	at androidx.test.espresso.Espresso.closeSoftKeyboard(Espresso.java:206)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyNoneContainText(BasePage.kt:441)
+	at org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest.verifySponsoredShortcutsListTest(SponsoredShortcutsTest.kt:47)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+Caused by: java.util.concurrent.TimeoutException: Wait on operation result timed out.
+	at androidx.test.espresso.action.CloseKeyboardAction.tryToCloseKeyboard(CloseKeyboardAction.java:106)
+	at androidx.test.espresso.action.CloseKeyboardAction.perform(CloseKeyboardAction.java:64)
+	at androidx.test.espresso.ViewInteraction$SingleExecutionViewAction.perform(ViewInteraction.java:429)
+	at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:297)
+	at androidx.test.espresso.ViewInteraction.-$$Nest$mdoPerform(ViewInteraction.java:0)
+	at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:193)
+	at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:182)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at android.os.Handler.handleCallback(Handler.java:1082)
+	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+	at android.os.Handler.dispatchMessage(Handler.java:126)
+	at android.os.Looper.loopOnce(Looper.java:295)
+	at android.os.Looper.loop(Looper.java:398)
+	at android.app.ActivityThread.main(ActivityThread.java:9572)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:575)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:842)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

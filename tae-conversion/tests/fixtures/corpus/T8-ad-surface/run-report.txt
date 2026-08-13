@@ -1,0 +1,151 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifySponsoredShortcutsListTest
+      java.lang.AssertionError: No 'Top site item' found containing text 'Sponsored' after 15000ms
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found ⚠️ SLOW (275.3 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (34.1 ms)
+    [OK] ✔ 'HomePage' already visible (312.9 ms)
+[OK] ✔ 'HomePage' already loaded (313.2 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (27.5 ms)
+    [OK] ✔ 'Top Sites List' verified (28.1 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (32.8 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (33.3 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (32.2 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (32.7 ms)
+    [CMD] ➤ Verifying any 'Top site item' contains text 'Sponsored'...
+    [ERR] ✖ No 'Top site item' containing text 'Sponsored' after 15000ms ⚠️ SLOW (15835.0 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 313.2 ms, avg 313.2 ms)
+    [INFO] • Commands: 5 (total 16241.9 ms, avg 3248.4 ms)
+    [INFO] • Locators: 5 (total 401.9 ms, avg 80.4 ms)
+    [INFO] • Successes: 10   Failures: 1   Skips: 0
+    [INFO] • Wall time: 16277.7 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (117.3 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (27.7 ms)
+    [OK] ✔ 'HomePage' already visible (146.3 ms)
+[OK] ✔ 'HomePage' already loaded (147.3 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (193.7 ms)
+    [OK] ✔ 'Top Sites List' verified (200.0 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (31.1 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (31.6 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (32.1 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (33.0 ms)
+    [CMD] ➤ Verifying any 'Top site item' contains text 'Sponsored'...
+    [ERR] ✖ No 'Top site item' containing text 'Sponsored' after 15000ms ⚠️ SLOW (15382.9 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 147.3 ms, avg 147.3 ms)
+    [INFO] • Commands: 5 (total 15793.8 ms, avg 3158.8 ms)
+    [INFO] • Locators: 5 (total 401.8 ms, avg 80.4 ms)
+    [INFO] • Successes: 10   Failures: 1   Skips: 0
+    [INFO] • Wall time: 15809.6 ms
+failed: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+----- begin exception -----
+java.lang.AssertionError: No 'Top site item' found containing text 'Sponsored' after 15000ms
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyAnyContainsText(BasePage.kt:416)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyAnyContainsText$default(BasePage.kt:399)
+	at org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest.verifySponsoredShortcutsListTest(SponsoredShortcutsTest.kt:39)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

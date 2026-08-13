@@ -1,0 +1,23 @@
+{
+  "batch": "b9-deletegroup",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SearchTest#deleteIndividualHistoryItemsFromSearchGroupTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T19:42:13Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "deleteIndividualHistoryItemsFromSearchGroupTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "deleteIndividualHistoryItemsFromSearchGroupTest",
+      "message": "androidx.test.espresso.NoMatchingViewException: No views in hierarchy found matching: (((view has effective visibility <VISIBLE> and view.getGlobalVisibleRect() to return non-empty rectangle) and view.getContentDescription() is \"More options\") or ((view has effective visibility <VISIBLE> and view.ge"
+    }
+  ],
+  "outcome": "fail"
+}

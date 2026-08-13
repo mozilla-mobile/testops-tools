@@ -114,7 +114,10 @@ RULES = [
 
 
 def read(p):
-    return open(p, encoding="utf-8", errors="ignore").read() if os.path.isfile(p) else ""
+    if not os.path.isfile(p):
+        return ""
+    with open(p, encoding="utf-8", errors="ignore") as fh:
+        return fh.read()
 
 
 def attempts(report):
@@ -138,7 +141,21 @@ def failure_windows(attempt, before=60, after=25):
 
 def triage(batch):
     report, status_raw = read(os.path.join(batch, "run-report.txt")), read(os.path.join(batch, "status.json"))
-    res = {"tool": "efftriage", "batch": batch, "findings": [], "notes": []}
+    # Every key main() reads is initialised here: an early return below must not be able to
+    # leave one unset, which is how a bad path turned into a KeyError traceback.
+    res = {"tool": "efftriage", "batch": batch, "findings": [], "notes": [],
+           "outcome": "unknown", "failed": [], "retried": False}
+
+    # A path that does not exist is a mistyped batch name, not a harness problem. Without this it fell
+    # through to the A24 "run-report.txt is missing" diagnosis and sent the reader off to check effpretty
+    # resolution and pull dumps off the device, none of which has anything to do with a typo.
+    if not os.path.isdir(batch):
+        res["outcome"] = "no-such-batch"
+        res["notes"].append(
+            f"no such batch directory: {batch}. Check the name against `ls conversion-runs/`; this is a "
+            "bad path, not a failed run."
+        )
+        return res
 
     try:
         status = json.loads(status_raw) if status_raw else {}
@@ -172,10 +189,34 @@ def triage(batch):
         )
 
     atts = attempts(report)
-    if re.search(r"Started try #(?:[2-9]|\d\d)", report):
+    retried = bool(re.search(r"Started try #(?:[2-9]|\d\d)", report))
+    res["retried"] = retried
+    if retried:
         res["notes"].append(
             "This report contains a RETRY. Everything below is from the FIRST attempt: a failed attempt "
             "leaves state behind, so later attempts die somewhere later and more confusingly."
+        )
+
+    # A green single-attempt run must not be handed a failure diagnosis. Traces routinely carry
+    # non-fatal [ERR] lines — nav-graph polling ("not visible yet") and tolerated absence checks — and
+    # the rules below would otherwise invent a cause for a run that is fine, which trains the reader to
+    # ignore the tool. Two deliberate exceptions: a RETRY pass, where attempt 1 really did fail and
+    # clean=false means flaky-not-done, and an already-recorded CRASH finding, because crash-mode is
+    # exactly the case where `outcome: pass` is itself the lie (MTE-5822).
+    if res["outcome"] == "pass" and not retried and not res["findings"]:
+        nonfatal = len(re.findall(r"^\s*\[ERR\]", report, re.M))
+        if nonfatal:
+            res["notes"].append(
+                f"This run PASSED on its first attempt. Its trace contains {nonfatal} non-fatal [ERR] "
+                "line(s), which is normal (nav-graph polling, tolerated absence checks) and is NOT "
+                "triaged. If you expected a failure here, check status.json rather than the trace."
+            )
+        return res
+
+    if res["outcome"] == "pass" and retried:
+        res["notes"].append(
+            "This run PASSED ONLY ON RETRY — flaky, which the campaign counts as NOT done (clean=false). "
+            "The diagnosis below is the first attempt's real failure, not a hard failure of this run."
         )
 
     for lineno, window in failure_windows(atts[0]) if atts else []:
@@ -235,7 +276,9 @@ def main():
     for n in res["notes"]:
         print(f"  ⚠ {n}")
     if not res["findings"]:
-        if res["outcome"] == "pass":
+        if res["outcome"] == "no-such-batch":
+            pass  # the note above already says it, and there is no run to comment on
+        elif res["outcome"] == "pass":
             print("  run passed — nothing to triage")
         else:
             print("  no rule matched — triage by hand, and add a rule (MTE-5827) once you know why")

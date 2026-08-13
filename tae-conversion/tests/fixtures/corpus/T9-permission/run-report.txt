@@ -1,0 +1,833 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifySponsoredShortcutsListTest
+      java.lang.AssertionError: 'Sponsored tile label' not found on screen after 5000ms
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SettingsHomepagePage
+    [CMD] ➤ Checking if 'SettingsHomepagePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [ERR] ✖ 'The Homepage Settings menu item' not found ⚠️ SLOW (463.5 ms)
+    [ERR] ✖ 'SettingsHomepagePage' not visible yet (466.4 ms)
+Trying to find path from 'AppEntry' to 'SettingsHomepagePage'
+Navigation path found from 'AppEntry' to 'SettingsHomepagePage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Homepage, secondaryValue=null, description=the Homepage button, groups=[generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (216.2 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (283.4 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (349.5 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (352.0 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (31.4 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (32.8 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (35.9 ms)
+        [OK] ✔ 'Main menu Settings button' found (78.4 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (209.2 ms)
+    [CMD] ➤ Attempting to click 'the Homepage button'...
+        [LOC] 🔎 Attempting to locate 'the Homepage button'...
+        [OK] ✔ 'the Homepage button' found (171.8 ms)
+    [OK] ✔ Clicked 'the Homepage button' (469.6 ms)
+    [CMD] ➤ Attempting to verify SettingsHomepagePage loads...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [OK] ✔ 'The Homepage Settings menu item' found ⚠️ SLOW (436.6 ms)
+        [LOC] 🔎 Attempting to locate 'the Shortcuts button'...
+        [OK] ✔ 'the Shortcuts button' found (3.8 ms)
+    [OK] ✔ 'SettingsHomepagePage' loaded (442.5 ms)
+[OK] ✔ Navigation to 'SettingsHomepagePage' completed ⚠️ SLOW (2243.6 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (24.8 ms)
+    [ERR] ✖ 'HomePage' not visible yet (25.4 ms)
+Trying to find path from 'SettingsHomepagePage' to 'HomePage'
+Navigation path found from 'SettingsHomepagePage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+   Step 2: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (16.0 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (282.8 ms)
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (15.4 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (616.5 ms)
+    [CMD] ➤ Attempting to verify HomePage loads...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (66.3 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (31.1 ms)
+    [OK] ✔ 'HomePage' loaded (99.2 ms)
+[OK] ✔ Navigation to 'HomePage' completed (1026.2 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (32.9 ms)
+    [OK] ✔ 'Top Sites List' verified (33.4 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (32.4 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (33.0 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (31.9 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (32.8 ms)
+    [CMD] ➤ Verifying 'Sponsored tile label' is present...
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (42.9 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (70.5 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (48.6 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (11.6 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (14.4 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (26.1 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (6.2 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (13.5 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (13.1 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (14.4 ms)
+    [ERR] ✖ 'Sponsored tile label' not found after 5000ms ⚠️ SLOW (5924.4 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerify failed: Sponsored tile label
+• testTag="homepage.view"
+• testTag="homepage.wordmark.logo"
+• testTag="homepage.wordmark.text"  desc="Firefox Fenix"
+• testTag="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• testTag="top_sites_list"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Google"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Mozilla"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Firefox"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Wikipedia"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.add_shortcut_item"
+• text="Add shortcut"  testTag="top_sites_list.add_shortcut_item.add_shortcut_title"
+• testTag="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• text="Stories"
+• text="All stories"  desc="Discover more stories"
+• testTag="pocket.stories"
+• testTag="homepage.story"
+• text="A Painful Condition Is Rising in Young Men. Scientists Are Racing to Figure Out Why."  testTag="pocket.contentRecommendation.title"
+• text="Men's Health"
+• testTag="homepage.sponsored.story"
+• text="My Title"  testTag="pocket.sponsoredContent.title"
+• text="Sponsored"  testTag="pocket.sponsoredContent.identifier"
+• testTag="homepage.story"
+• text="Lucy Davis, ‘The Office’ and ‘Shaun of the Dead’ actor, announces incurable cancer"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="Hundreds of California stonecutters fall ill with deadly disease ‘for a product we do not need’"  testTag="pocket.contentRecommendation.title"
+• text="Los Angeles Times"
+• testTag="homepage.story"
+• text="I Can’t Take Ted Lasso Seriously Anymore"  testTag="pocket.contentRecommendation.title"
+• text="Esquire"
+• testTag="homepage.story"
+• text="The Trump administration claims oil is flowing normally again. There’s just one problem"  testTag="pocket.contentRecommendation.title"
+• text="CNN"
+• testTag="homepage.story"
+• text="Katmai bear cub spotted with a paw full of porcupine quills"  testTag="pocket.contentRecommendation.title"
+• text="Popular Science"
+• testTag="homepage.story"
+• text="A 72-hour train from LA to New York was planned. Where is it?"  testTag="pocket.contentRecommendation.title"
+• text="USA TODAY"
+• testTag="homepage.story"
+• text="A Snowy, Cold Winter Is Coming to Much of the U.S.—and These Ski Destinations Could Get the Best Snow"  testTag="pocket.contentRecommendation.title"
+• text="Travel + Leisure"
+• testTag="homepage.story"
+• text="I Asked 3 Restaurant Pros if You Should Stack Your Plates After Eating—Their Answer Was Clear"  testTag="pocket.contentRecommendation.title"
+• text="Allrecipes"
+• testTag="homepage.story"
+• text="Perez Hilton’s mother seeks temporary custody of his children, records show"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="5 Things Professional Organizers Always Get Rid Of First"  testTag="pocket.contentRecommendation.title"
+• text="Southern Living"
+• testTag="homepage.story"
+• text="This Stunning Country Was Named the Healthiest and Safest Place for Digital Nomads Thanks to Its Safety, Peace, and Life Expectancy"  testTag="pocket.contentRecommendation.title"
+• text="Travel + Leisure"
+• testTag="homepage.story"
+• text="10 Medieval Words You Use Every Day"  testTag="pocket.contentRecommendation.title"
+• text="Mental Floss"
+• testTag="homepage.story"
+• text="River tubers’ 4-hour tour turned into 3 days of survival in remote Michigan woods"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="I Asked 6 Chefs To Name the Best Hot Dog Bun—These Are Their Top Picks"  testTag="pocket.contentRecommendation.title"
+• text="Allrecipes"
+• testTag="homepage.story"
+• text="Flesh‑eating bacteria are devouring limbs in warming waters worldwide − here’s how to protect yourself"  testTag="pocket.contentRecommendation.title"
+• text="The Conversation"
+• testTag="homepage.story"
+• text="7 Perennials to Plant in August for a Lush Spring Garden"  testTag="pocket.contentRecommendation.title"
+• text="Martha Stewart"
+• testTag="homepage.story"
+• text="Movie Review: ‘The End of Oak Street’ is a gonzo good time"  testTag="pocket.contentRecommendation.title"
+• text="The Associated Press"
+• testTag="homepage.story"
+• text="I Asked My Husband to Watch Our Son for Just a Second in the Grocery Store. I Shouldn’t Have Trusted Him."  testTag="pocket.contentRecommendation.title"
+• text="Slate"
+• testTag="homepage.story"
+• text="Ukraine’s Zelenskyy says a nighttime blitz damages Russia’s Black Sea naval stronghold"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="How to Get Rid of Yellow Jackets—and Prevent Them From Returning"  testTag="pocket.contentRecommendation.title"
+• text="Martha Stewart"
+• testTag="homepage.story"
+• text="Making Way for the Giant Anteaters of Brazil"  testTag="pocket.contentRecommendation.title"
+• text="National Geographic"
+• testTag="homepage.story"
+• text="This Midwestern City is an Unexpected Destination for Arts, Music, and Culture"  testTag="pocket.contentRecommendation.title"
+• text="AFAR"
+• testTag="homepage.story"
+• text="Four takeaways from Tuesday's primaries in six states"  testTag="pocket.contentRecommendation.title"
+• text="NPR"
+• testTag="homepage.story"
+• text="Ever Heard of a Repositioning Cruise? Why Some Travelers Love These Lesser-Known Sailings"  testTag="pocket.contentRecommendation.title"
+• text="Condé Nast Traveler"
+• testTag="homepage.story"
+• text="Telescope Spots Two Black Holes on the Cusp of Merging"  testTag="pocket.contentRecommendation.title"
+• text="The New York Times"
+• testTag="homepage.story"
+• text="50 Years Later, Star Wars Is Finally Doing The One Thing It Could Have Done All Along"  testTag="pocket.contentRecommendation.title"
+• text="Inverse"
+• testTag="homepage.story"
+• text="Andrew Tate’s extradition fight tests his influence with Trump’s America"  testTag="pocket.contentRecommendation.title"
+• text="NPR"
+• testTag="homepage.story"
+• text="Adéla Ascending"  testTag="pocket.contentRecommendation.title"
+• text="Teen Vogue"
+• testTag="org.mozilla.fenix.debug:id/composable_toolbar"
+• testTag="SEARCH_SELECTOR"  desc="Google: search engine selector" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 0. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text0"
+• desc="More options" [clickable]
+(128 nodes with a text/testTag/desc handle, of 215 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerify failed: Sponsored tile label
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Settings" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerify failed: Sponsored tile label
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="homepageView"
+• res-id="homepage.view"
+• res-id="homepage.wordmark.logo"
+• res-id="homepage.wordmark.text"  desc="Firefox Fenix"
+• res-id="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• res-id="top_sites_list"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Google"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Mozilla"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Firefox"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Wikipedia"
+• res-id="top_sites_list.add_shortcut_item"
+• res-id="top_sites_list.add_shortcut_item.add_shortcut_title"  text="Add shortcut"
+• res-id="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• text="Stories"
+• text="All stories"  desc="Discover more stories"
+• res-id="pocket.stories"
+• res-id="homepage.story"
+• res-id="pocket.contentRecommendation.title"  text="A Painful Condition Is Rising in Young Men. Scientists Are Racing to Figure Out Why."
+• text="Men's Health"
+• res-id="homepage.sponsored.story"
+• res-id="pocket.sponsoredContent.title"  text="My Title"
+• res-id="pocket.sponsoredContent.identifier"  text="Sponsored"
+• res-id="composable_toolbar"
+• res-id="SEARCH_SELECTOR" [clickable]
+• desc="Google: search engine selector"
+• res-id="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 0. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text0"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="3:53"  desc="3:53 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, signal full."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(77 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerify failed: Sponsored tile label
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar  [gone]
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Settings"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="homepageView"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 3269.9 ms, avg 1634.9 ms)
+    [INFO] • Commands: 16 (total 9339.4 ms, avg 583.7 ms)
+    [INFO] • Locators: 26 (total 2263.2 ms, avg 87.0 ms)
+    [INFO] • Successes: 29   Failures: 15   Skips: 0
+    [INFO] • Wall time: 9409.6 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SettingsHomepagePage
+    [CMD] ➤ Checking if 'SettingsHomepagePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [ERR] ✖ 'The Homepage Settings menu item' not found ⚠️ SLOW (508.4 ms)
+    [ERR] ✖ 'SettingsHomepagePage' not visible yet (508.9 ms)
+Trying to find path from 'AppEntry' to 'SettingsHomepagePage'
+Navigation path found from 'AppEntry' to 'SettingsHomepagePage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Homepage, secondaryValue=null, description=the Homepage button, groups=[generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (115.2 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (183.6 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (146.4 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (149.1 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (32.1 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (33.3 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (36.3 ms)
+        [OK] ✔ 'Main menu Settings button' found (163.8 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (221.6 ms)
+    [CMD] ➤ Attempting to click 'the Homepage button'...
+        [LOC] 🔎 Attempting to locate 'the Homepage button'...
+        [OK] ✔ 'the Homepage button' found (98.2 ms)
+    [OK] ✔ Clicked 'the Homepage button' (385.3 ms)
+    [CMD] ➤ Attempting to verify SettingsHomepagePage loads...
+        [LOC] 🔎 Attempting to locate 'The Homepage Settings menu item'...
+        [OK] ✔ 'The Homepage Settings menu item' found ⚠️ SLOW (431.7 ms)
+        [LOC] 🔎 Attempting to locate 'the Shortcuts button'...
+        [OK] ✔ 'the Shortcuts button' found (5.2 ms)
+    [OK] ✔ 'SettingsHomepagePage' loaded (439.1 ms)
+[OK] ✔ Navigation to 'SettingsHomepagePage' completed ⚠️ SLOW (1891.4 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (29.7 ms)
+    [ERR] ✖ 'HomePage' not visible yet (30.6 ms)
+Trying to find path from 'SettingsHomepagePage' to 'HomePage'
+Navigation path found from 'SettingsHomepagePage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+   Step 2: Click(selector=Selector(strategy=ESPRESSO_BY_CONTENT_DESC, value=Navigate up, secondaryValue=null, description=the Back Arrow button, groups=[requiredForPage, generalSettingsSection], name=null))
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (14.4 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (281.3 ms)
+    [CMD] ➤ Attempting to click 'the Back Arrow button'...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (15.3 ms)
+    [OK] ✔ Clicked 'the Back Arrow button' (471.5 ms)
+    [CMD] ➤ Attempting to verify HomePage loads...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (60.7 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (32.3 ms)
+    [OK] ✔ 'HomePage' loaded (94.5 ms)
+[OK] ✔ Navigation to 'HomePage' completed (881.6 ms)
+    [CMD] ➤ Verifying 'Top Sites List' is present...
+        [LOC] 🔎 Attempting to locate 'Top Sites List'...
+        [OK] ✔ 'Top Sites List' found (31.8 ms)
+    [OK] ✔ 'Top Sites List' verified (32.4 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Google' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Google'...
+        [OK] ✔ 'Top site item with title: Google' found (67.0 ms)
+    [OK] ✔ 'Top site item with title: Google' verified (67.9 ms)
+    [CMD] ➤ Verifying 'Top site item with title: Wikipedia' is present...
+        [LOC] 🔎 Attempting to locate 'Top site item with title: Wikipedia'...
+        [OK] ✔ 'Top site item with title: Wikipedia' found (45.3 ms)
+    [OK] ✔ 'Top site item with title: Wikipedia' verified (45.8 ms)
+    [CMD] ➤ Verifying 'Sponsored tile label' is present...
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (1.7 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (14.0 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (82.2 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (9.0 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (9.6 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (12.0 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (20.7 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (3.8 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (11.3 ms)
+        [LOC] 🔎 Attempting to locate 'Sponsored tile label'...
+        [ERR] ✖ 'Sponsored tile label' not found (16.5 ms)
+    [ERR] ✖ 'Sponsored tile label' not found after 5000ms ⚠️ SLOW (5867.2 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerify failed: Sponsored tile label
+• testTag="homepage.view"
+• testTag="homepage.wordmark.logo"
+• testTag="homepage.wordmark.text"  desc="Firefox Fenix"
+• testTag="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• testTag="top_sites_list"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Google"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Mozilla"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Firefox"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Wikipedia"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.add_shortcut_item"
+• text="Add shortcut"  testTag="top_sites_list.add_shortcut_item.add_shortcut_title"
+• testTag="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• text="Stories"
+• text="All stories"  desc="Discover more stories"
+• testTag="pocket.stories"
+• testTag="homepage.story"
+• text="A Painful Condition Is Rising in Young Men. Scientists Are Racing to Figure Out Why."  testTag="pocket.contentRecommendation.title"
+• text="Men's Health"
+• testTag="homepage.sponsored.story"
+• text="My Title"  testTag="pocket.sponsoredContent.title"
+• text="Sponsored"  testTag="pocket.sponsoredContent.identifier"
+• testTag="homepage.story"
+• text="Lucy Davis, ‘The Office’ and ‘Shaun of the Dead’ actor, announces incurable cancer"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="Hundreds of California stonecutters fall ill with deadly disease ‘for a product we do not need’"  testTag="pocket.contentRecommendation.title"
+• text="Los Angeles Times"
+• testTag="homepage.story"
+• text="I Can’t Take Ted Lasso Seriously Anymore"  testTag="pocket.contentRecommendation.title"
+• text="Esquire"
+• testTag="homepage.story"
+• text="The Trump administration claims oil is flowing normally again. There’s just one problem"  testTag="pocket.contentRecommendation.title"
+• text="CNN"
+• testTag="homepage.story"
+• text="Katmai bear cub spotted with a paw full of porcupine quills"  testTag="pocket.contentRecommendation.title"
+• text="Popular Science"
+• testTag="homepage.story"
+• text="A 72-hour train from LA to New York was planned. Where is it?"  testTag="pocket.contentRecommendation.title"
+• text="USA TODAY"
+• testTag="homepage.story"
+• text="A Snowy, Cold Winter Is Coming to Much of the U.S.—and These Ski Destinations Could Get the Best Snow"  testTag="pocket.contentRecommendation.title"
+• text="Travel + Leisure"
+• testTag="homepage.story"
+• text="I Asked 3 Restaurant Pros if You Should Stack Your Plates After Eating—Their Answer Was Clear"  testTag="pocket.contentRecommendation.title"
+• text="Allrecipes"
+• testTag="homepage.story"
+• text="Perez Hilton’s mother seeks temporary custody of his children, records show"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="5 Things Professional Organizers Always Get Rid Of First"  testTag="pocket.contentRecommendation.title"
+• text="Southern Living"
+• testTag="homepage.story"
+• text="This Stunning Country Was Named the Healthiest and Safest Place for Digital Nomads Thanks to Its Safety, Peace, and Life Expectancy"  testTag="pocket.contentRecommendation.title"
+• text="Travel + Leisure"
+• testTag="homepage.story"
+• text="10 Medieval Words You Use Every Day"  testTag="pocket.contentRecommendation.title"
+• text="Mental Floss"
+• testTag="homepage.story"
+• text="River tubers’ 4-hour tour turned into 3 days of survival in remote Michigan woods"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="I Asked 6 Chefs To Name the Best Hot Dog Bun—These Are Their Top Picks"  testTag="pocket.contentRecommendation.title"
+• text="Allrecipes"
+• testTag="homepage.story"
+• text="Flesh‑eating bacteria are devouring limbs in warming waters worldwide − here’s how to protect yourself"  testTag="pocket.contentRecommendation.title"
+• text="The Conversation"
+• testTag="homepage.story"
+• text="7 Perennials to Plant in August for a Lush Spring Garden"  testTag="pocket.contentRecommendation.title"
+• text="Martha Stewart"
+• testTag="homepage.story"
+• text="Movie Review: ‘The End of Oak Street’ is a gonzo good time"  testTag="pocket.contentRecommendation.title"
+• text="The Associated Press"
+• testTag="homepage.story"
+• text="I Asked My Husband to Watch Our Son for Just a Second in the Grocery Store. I Shouldn’t Have Trusted Him."  testTag="pocket.contentRecommendation.title"
+• text="Slate"
+• testTag="homepage.story"
+• text="Ukraine’s Zelenskyy says a nighttime blitz damages Russia’s Black Sea naval stronghold"  testTag="pocket.contentRecommendation.title"
+• text="NBC News"
+• testTag="homepage.story"
+• text="How to Get Rid of Yellow Jackets—and Prevent Them From Returning"  testTag="pocket.contentRecommendation.title"
+• text="Martha Stewart"
+• testTag="homepage.story"
+• text="Making Way for the Giant Anteaters of Brazil"  testTag="pocket.contentRecommendation.title"
+• text="National Geographic"
+• testTag="homepage.story"
+• text="This Midwestern City is an Unexpected Destination for Arts, Music, and Culture"  testTag="pocket.contentRecommendation.title"
+• text="AFAR"
+• testTag="homepage.story"
+• text="Four takeaways from Tuesday's primaries in six states"  testTag="pocket.contentRecommendation.title"
+• text="NPR"
+• testTag="homepage.story"
+• text="Ever Heard of a Repositioning Cruise? Why Some Travelers Love These Lesser-Known Sailings"  testTag="pocket.contentRecommendation.title"
+• text="Condé Nast Traveler"
+• testTag="homepage.story"
+• text="50 Years Later, Star Wars Is Finally Doing The One Thing It Could Have Done All Along"  testTag="pocket.contentRecommendation.title"
+• text="Inverse"
+• testTag="homepage.story"
+• text="Andrew Tate’s extradition fight tests his influence with Trump’s America"  testTag="pocket.contentRecommendation.title"
+• text="NPR"
+• testTag="homepage.story"
+• text="Adéla Ascending"  testTag="pocket.contentRecommendation.title"
+• text="Teen Vogue"
+• testTag="homepage.story"
+• text="Rod Stewart Undergoes Successful Heart Procedure, Cancels Tour Dates to Recover"  testTag="pocket.contentRecommendation.title"
+• text="Rolling Stone"
+• testTag="org.mozilla.fenix.debug:id/composable_toolbar"
+• testTag="SEARCH_SELECTOR"  desc="Google: search engine selector" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 0. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text0"
+• desc="More options" [clickable]
+(128 nodes with a text/testTag/desc handle, of 215 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerify failed: Sponsored tile label
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Settings" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerify failed: Sponsored tile label
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="homepageView"
+• res-id="homepage.view"
+• res-id="homepage.wordmark.logo"
+• res-id="homepage.wordmark.text"  desc="Firefox Fenix"
+• res-id="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• res-id="top_sites_list"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Google"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Mozilla"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Firefox"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Wikipedia"
+• res-id="top_sites_list.add_shortcut_item"
+• res-id="top_sites_list.add_shortcut_item.add_shortcut_title"  text="Add shortcut"
+• res-id="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• text="Stories"
+• text="All stories"  desc="Discover more stories"
+• res-id="pocket.stories"
+• res-id="homepage.story"
+• res-id="pocket.contentRecommendation.title"  text="A Painful Condition Is Rising in Young Men. Scientists Are Racing to Figure Out Why."
+• text="Men's Health"
+• res-id="homepage.sponsored.story"
+• res-id="pocket.sponsoredContent.title"  text="My Title"
+• res-id="pocket.sponsoredContent.identifier"  text="Sponsored"
+• res-id="composable_toolbar"
+• res-id="SEARCH_SELECTOR" [clickable]
+• desc="Google: search engine selector"
+• res-id="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Non-private Tabs Open: 0. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text0"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="3:53"  desc="3:53 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(77 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerify failed: Sponsored tile label
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar  [gone]
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Settings"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="homepageView"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 2773.1 ms, avg 1386.5 ms)
+    [INFO] • Commands: 16 (total 8848.4 ms, avg 553.0 ms)
+    [INFO] • Locators: 26 (total 1978.3 ms, avg 76.1 ms)
+    [INFO] • Successes: 29   Failures: 15   Skips: 0
+    [INFO] • Wall time: 8881.0 ms
+failed: verifySponsoredShortcutsListTest(org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest)
+----- begin exception -----
+java.lang.AssertionError: 'Sponsored tile label' not found on screen after 5000ms
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerify(BasePage.kt:342)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerify$default(BasePage.kt:320)
+	at org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest.verifySponsoredShortcutsListTest(SponsoredShortcutsTest.kt:44)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+	Suppressed: mozilla.appservices.adsclient.InternalException: uniffiCloneHandle() called on NoHandle object
+		at mozilla.appservices.adsclient.MozAdsClient.uniffiCloneHandle(ads_client.kt:1103)
+		at mozilla.appservices.adsclient.FfiConverterTypeMozAdsClient.lower(ads_client.kt:1357)
+		at mozilla.appservices.adsclient.MozAdsClient.recordImpression(ads_client.kt:1180)
+		at mozilla.appservices.adsclient.MozAdsClientInterface.recordImpression$default(ads_client.kt:996)
+		at mozilla.components.service.mars.MozAdsUseCases.recordImpressionInteraction$lambda$0(MozAdsUseCases.kt:50)
+		at mozilla.components.service.mars.MozAdsUseCases$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+		at mozilla.components.service.mars.MozAdsUseCases$recordInteraction$2.invokeSuspend(MozAdsUseCases.kt:58)
+		at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+		at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+		at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+		at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+	Suppressed: mozilla.appservices.adsclient.InternalException: uniffiCloneHandle() called on NoHandle object
+		at mozilla.appservices.adsclient.MozAdsClient.uniffiCloneHandle(ads_client.kt:1103)
+		at mozilla.appservices.adsclient.FfiConverterTypeMozAdsClient.lower(ads_client.kt:1357)
+		at mozilla.appservices.adsclient.MozAdsClient.recordImpression(ads_client.kt:1180)
+		at mozilla.appservices.adsclient.MozAdsClientInterface.recordImpression$default(ads_client.kt:996)
+		at mozilla.components.service.mars.MozAdsUseCases.recordImpressionInteraction$lambda$0(MozAdsUseCases.kt:50)
+		at mozilla.components.service.mars.MozAdsUseCases$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+		at mozilla.components.service.mars.MozAdsUseCases$recordInteraction$2.invokeSuspend(MozAdsUseCases.kt:58)
+		at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+		at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+		at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+		at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+	Suppressed: mozilla.appservices.adsclient.InternalException: uniffiCloneHandle() called on NoHandle object
+		at mozilla.appservices.adsclient.MozAdsClient.uniffiCloneHandle(ads_client.kt:1103)
+		at mozilla.appservices.adsclient.FfiConverterTypeMozAdsClient.lower(ads_client.kt:1357)
+		at mozilla.appservices.adsclient.MozAdsClient.recordImpression(ads_client.kt:1180)
+		at mozilla.appservices.adsclient.MozAdsClientInterface.recordImpression$default(ads_client.kt:996)
+		at mozilla.components.service.mars.MozAdsUseCases.recordImpressionInteraction$lambda$0(MozAdsUseCases.kt:50)
+		at mozilla.components.service.mars.MozAdsUseCases$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+		at mozilla.components.service.mars.MozAdsUseCases$recordInteraction$2.invokeSuspend(MozAdsUseCases.kt:58)
+		at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+		at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+		at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+		at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+	Suppressed: mozilla.appservices.adsclient.InternalException: uniffiCloneHandle() called on NoHandle object
+		at mozilla.appservices.adsclient.MozAdsClient.uniffiCloneHandle(ads_client.kt:1103)
+		at mozilla.appservices.adsclient.FfiConverterTypeMozAdsClient.lower(ads_client.kt:1357)
+		at mozilla.appservices.adsclient.MozAdsClient.recordImpression(ads_client.kt:1180)
+		at mozilla.appservices.adsclient.MozAdsClientInterface.recordImpression$default(ads_client.kt:996)
+		at mozilla.components.service.mars.MozAdsUseCases.recordImpressionInteraction$lambda$0(MozAdsUseCases.kt:50)
+		at mozilla.components.service.mars.MozAdsUseCases$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+		at mozilla.components.service.mars.MozAdsUseCases$recordInteraction$2.invokeSuspend(MozAdsUseCases.kt:58)
+		at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+		at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+		at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+		at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+		at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

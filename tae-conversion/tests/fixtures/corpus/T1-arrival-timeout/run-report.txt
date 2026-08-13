@@ -1,0 +1,279 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ searchHistoryNotRememberedInPrivateBrowsingTest
+      java.lang.AssertionError: Failed to enter text for selector: Toolbar in edit mode
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: searchHistoryNotRememberedInPrivateBrowsingTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (205.6 ms)
+    [OK] ✔ Clicked 'URL box' (320.2 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (187.2 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (187.8 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (509.6 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (151.6 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.1 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (229.8 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (937.5 ms)
+    [OK] ✔ 'BrowserPage' already visible ⚠️ SLOW (939.3 ms)
+[OK] ✔ 'BrowserPage' already loaded (939.5 ms)
+    [CMD] ➤ Pressing back until 'Engine view' is gone...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' found (11.2 ms)
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' not found ⚠️ SLOW (3112.3 ms)
+    [OK] ✔ 'Engine view' gone after 1 back press(es) ⚠️ SLOW (4015.6 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (214.4 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (192.2 ms)
+    [OK] ✔ 'HomePage' already visible (410.3 ms)
+[OK] ✔ 'HomePage' already loaded (411.0 ms)
+    [CMD] ➤ Attempting to click 'Private browsing button'...
+        [LOC] 🔎 Attempting to locate 'Private browsing button'...
+        [OK] ✔ 'Private browsing button' found (79.6 ms)
+    [OK] ✔ Clicked 'Private browsing button' (123.3 ms)
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'HomePage' to 'SearchBarComponent'
+Navigation path found from 'HomePage' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (229.5 ms)
+    [OK] ✔ Clicked 'URL box' (303.9 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (112.7 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (113.3 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (420.2 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (134.6 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (164.8 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (714.8 ms)
+    [OK] ✔ 'BrowserPage' already visible (716.4 ms)
+[OK] ✔ 'BrowserPage' already loaded (717.1 ms)
+    [CMD] ➤ Attempting to click 'URL box' if present...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (598.4 ms)
+    [OK] ✔ Clicked 'URL box' ⚠️ SLOW (3735.7 ms)
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [ERR] ✖ Enter text failed for 'Toolbar in edit mode': Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'ADDRESSBAR_SEARCH_BOX')
+ (89.5 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 5 (total 2997.4 ms, avg 599.5 ms)
+    [INFO] • Commands: 15 (total 11636.0 ms, avg 775.7 ms)
+    [INFO] • Locators: 17 (total 6595.6 ms, avg 388.0 ms)
+    [INFO] • Successes: 35   Failures: 2   Skips: 0
+    [INFO] • Wall time: 11740.5 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (68.6 ms)
+    [OK] ✔ Clicked 'URL box' (137.7 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (158.0 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (161.3 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (301.3 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (105.2 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (204.1 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (875.9 ms)
+    [OK] ✔ 'BrowserPage' already visible ⚠️ SLOW (876.7 ms)
+[OK] ✔ 'BrowserPage' already loaded (877.0 ms)
+    [CMD] ➤ Pressing back until 'Engine view' is gone...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' found ⚠️ SLOW (605.0 ms)
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' not found ⚠️ SLOW (3087.1 ms)
+    [OK] ✔ 'Engine view' gone after 1 back press(es) ⚠️ SLOW (4344.7 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found (52.7 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (32.5 ms)
+    [OK] ✔ 'HomePage' already visible (86.7 ms)
+[OK] ✔ 'HomePage' already loaded (87.0 ms)
+    [CMD] ➤ Attempting to click 'Private browsing button'...
+        [LOC] 🔎 Attempting to locate 'Private browsing button'...
+        [OK] ✔ 'Private browsing button' found (49.4 ms)
+    [OK] ✔ Clicked 'Private browsing button' (102.2 ms)
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'HomePage' to 'SearchBarComponent'
+Navigation path found from 'HomePage' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (290.0 ms)
+    [OK] ✔ Clicked 'URL box' (347.6 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (243.1 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (244.6 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (593.4 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (99.0 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.1 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (179.6 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (663.0 ms)
+    [OK] ✔ 'BrowserPage' already visible (663.8 ms)
+[OK] ✔ 'BrowserPage' already loaded (665.2 ms)
+        [OK] ✔ 'URL box' found ⚠️ SLOW (606.0 ms)
+    [OK] ✔ Clicked 'URL box' ⚠️ SLOW (3747.6 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [ERR] ✖ Enter text failed for 'Toolbar in edit mode': Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'ADDRESSBAR_SEARCH_BOX')
+ (74.9 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 5 (total 2523.9 ms, avg 504.8 ms)
+    [INFO] • Commands: 15 (total 11375.6 ms, avg 758.4 ms)
+    [INFO] • Locators: 17 (total 6731.4 ms, avg 396.0 ms)
+    [INFO] • Successes: 35   Failures: 2   Skips: 0
+    [INFO] • Wall time: 11449.9 ms
+failed: searchHistoryNotRememberedInPrivateBrowsingTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+----- begin exception -----
+java.lang.AssertionError: Failed to enter text for selector: Toolbar in edit mode
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozEnterText(BasePage.kt:1062)
+	at org.mozilla.fenix.ui.efficiency.tests.SearchTest.searchHistoryNotRememberedInPrivateBrowsingTest(SearchTest.kt:122)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+Caused by: java.lang.AssertionError: Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'ADDRESSBAR_SEARCH_BOX')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus(TextActions.kt:124)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus$default(TextActions.kt:119)
+	at androidx.compose.ui.test.TextActionsKt.performTextInput(TextActions.kt:39)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozEnterText(BasePage.kt:1054)
+	... 76 more
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

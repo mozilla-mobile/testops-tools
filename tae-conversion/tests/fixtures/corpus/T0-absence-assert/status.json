@@ -1,0 +1,23 @@
+{
+  "batch": "b14d-sponsored",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest#verifySponsoredShortcutsListTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T20:55:22Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "message": "java.lang.AssertionError: 'Sponsored tile label' was expected to disappear but is still visible after 15000ms"
+    }
+  ],
+  "outcome": "fail"
+}

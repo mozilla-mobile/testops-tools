@@ -1,0 +1,11 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifyQRScanningCameraAccessDialogTest
+      Test instrumentation process crashed. Check org.mozilla.fenix.ui.efficiency.tests.SearchTest#verifyQRScanningCameraAccessDialogTest.txt for details
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifyQRScanningCameraAccessDialogTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+RetryTestRule: Started try #1.
