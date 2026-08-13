@@ -448,6 +448,33 @@ and which assertion to trust.
   `searchMockServerRule.server.port` URL is vestigial, so the efficiency test needs no mock-server rule.
 - Rule: check the fragment before inheriting a rule.
 
+**K13. Ad surfaces (sponsored tiles, Firefox Suggest) are testable locally — fake the app-services client, not the UI.**
+- Both surfaces fetch from region-gated remote inventory that a dev machine or emulator generally is not served,
+  and Suggest additionally races a ~9s startup ingestion whose completion is **not observable anywhere** (no store
+  state, no pref, no Glean metric, no Fact; the result is discarded into `GlobalScope`). You cannot await it.
+- The seam is the app-services client/store, and it is the same one app-services uses in its OWN unit tests:
+  `MozAdsClientProvider.client` (private field, `service-mars`) and `FxSuggestStorage.store`
+  (`internal @VisibleForTesting Lazy<SuggestStore>`). Both `MozAdsClient` and `SuggestStore` are **open** UniFFI
+  classes with a public `NoHandle` constructor, so a fake subclass + reflection is all it takes. See
+  `FakeSponsoredTopSites.kt` / `FakeFxSuggest.kt` in fenix androidTest (bugs 2063093, 2063105).
+- Everything downstream stays real — provider, storage, presenter, store, Compose UI, Glean facts — so the
+  behaviour under test is still the product's. Faking the *network boundary* is not the same as faking the test.
+- Four things that will each cost you a cycle:
+  1. Resolve the component lazy (`components.ads.lazyAdsClientProvider`, `components.fxSuggest.storage`)
+     **before** swapping, or its initializer rebuilds the real object over your fake.
+  2. Override **every** interface method, not just the one you need. A `NoHandle` object throws
+     `uniffiCloneHandle() called on NoHandle object` on any un-overridden call, and displaying a sponsored tile
+     makes the app record an impression on a background coroutine — which failed a test *after* all of its
+     assertions had passed.
+  3. Nimbus gates Suggest's types: `fxsuggest.fml.yaml` defaults `amp`/`ampMobile` to **false**, so the provider
+     never requests AMP and no fake store can make a sponsored-suggestion test pass. Override
+     `availableSuggestionTypes` with `withCachedValue`.
+  4. The artifact is `implementation` inside the AC module, so androidTest cannot see it. Add
+     `androidTestCompileOnly` — **not** `androidTestImplementation`, which puts it on the androidTest runtime
+     classpath and makes Gradle fail to align that with the app's, since both then pull `project(':geckoview')`.
+- `#[cfg(test)]` Rust test utilities (the ads client's `Environment::Test`, suggest's `testing::MockRemoteSettingsClient`)
+  are compiled out of the shipped library and absent from the UniFFI bindings — do not plan around them.
+
 ## Open gaps (unresolved — pick up on next attempt)
 
 - **Address-autofill suggestion not offered on-device.** With the stylus overlay removed AND stylus disabled,

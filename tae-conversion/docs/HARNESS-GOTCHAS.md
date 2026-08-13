@@ -536,3 +536,52 @@ Last updated: 2026-08-04.
   altogether with `./mach gradle :fenix:ktlint :fenix:detekt`. Note gradle caches those tasks — an `UP-TO-DATE`
   run prints nothing and looks clean; add `--rerun-tasks` when you need certainty. `./mach format` (spotless)
   does NOT catch the ktlint rules that fail the gate, e.g. `no-consecutive-blank-lines` and `standard:kdoc`.
+
+### A39. An arrival check can be satisfied by an element BEHIND an overlay (2026-08-12)
+- **Symptom:** `navigateToPage` reports arrival on a page the test never reached, and the run fails several
+  steps later somewhere unrelated. Cost 5 device cycles on one conversion before the test was parked, then
+  landed in 2 once the dumps were read.
+- **Cause:** `requiredForPage` selectors resolve on nodes that are still in the tree underneath a modal
+  surface. Two confirmed cases: `BrowserPage`'s `ENGINE_VIEW` resolves under the addressbar's edit-mode
+  overlay, and `HomeSelectors.HOMEPAGE_VIEW` resolves under the search overlay while the toolbar is covered.
+- **Check:** after any query submit, `mozWaitUntilAbsent(SearchBarSelectors.TOOLBAR_IN_EDIT_MODE)` before the
+  next hop. When backing out to a page, anchor on something that is genuinely occluded — `MAIN_MENU_BUTTON`,
+  not `HOMEPAGE_VIEW` — or the loop returns while you are still covered and the next `navigateToPage` takes a
+  destructive edge (for HomePage that is the "New tab" click).
+
+### A40. `mozLongClick` is not held long enough for a View-based list row (2026-08-12)
+- **Symptom:** a long press on a history row silently behaves as a TAP: the item opens in the browser, and the
+  next step's "More options" click then hits the browser's main menu instead of a multi-select toolbar. The
+  dump gives it away — the Compose tree starts at `ADDRESSBAR_URL_BOX`.
+- **Cause:** `UiObject.longClick()` uses UiAutomator's default press duration, which this row treats as a tap.
+- **Check:** select the row with an **Espresso** strategy (e.g. `ESPRESSO_BY_TEXT`) so `mozLongClick` goes
+  through Espresso's `longClick()`, which honours the platform long-press timeout. This is what the legacy
+  robots rely on.
+
+### A41. `COMPOSE_BY_TEXT` reports an AMBIGUOUS match as "not found" (2026-08-12)
+- **Symptom:** `mozVerify` fails with "not found after 5000ms" for text that is plainly on screen.
+- **Cause:** the strategy resolves through the singular `onNodeWithText`, which throws when more than one node
+  matches; `mozVerifyElement` swallows that and degrades to `false`. Two sponsored tiles, two identical
+  captions, and the verb says the text is absent.
+- **Check:** use `COMPOSE_BY_TEXT_SUBSTRING` (`onAllNodesWithText(...).onFirst()`) when duplicates are
+  possible, or scope to a container with `COMPOSE_ON_ALL_NODES_BY_TAG_WITH_CHILD_TEXT_ON_FIRST`.
+
+### A42. A caption is not unique to the surface you are testing (2026-08-12)
+- **Symptom:** an absence assertion for the "Sponsored" label can never come true on the homepage, even with
+  sponsored top sites disabled and visibly gone.
+- **Cause:** the Pocket sponsored *story* further down the homepage carries its own "Sponsored" identifier
+  (`pocket.sponsoredContent.identifier`). A bare text match hits it.
+- **Check:** scope the selector to the tile
+  (`COMPOSE_ON_ALL_NODES_BY_TAG_WITH_CHILD_TEXT_ON_FIRST` on `top_sites_list.top_site_item` + the caption).
+  Note the tile root is a plain `Box` that does not merge descendants, so a tag-only text query cannot see the
+  caption either.
+
+### A43. Revoking a runtime permission is not enough to reset a "don't ask again" (2026-08-12)
+- **Symptom:** a permission-dialog test passes on the first attempt and fails on BaseTest's retry, looking for
+  a Deny button that never appears — because the OS auto-denies with no dialog at all.
+- **Cause:** "Deny and don't ask again" sets `FLAG_PERMISSION_USER_FIXED`, which `pm revoke` leaves in place.
+  Legacy gets away with it only because the orchestrator wipes package data between test *methods*; a retry
+  runs in the same process.
+- **Check:** in the test, `pm clear-permission-flags <pkg> <permission> user-fixed user-set` **and**
+  `pm revoke <pkg> <permission>`. Do **not** use the device-wide `pm reset-permissions` — it strips permissions
+  the instrumentation itself relies on and crashes the test process.
