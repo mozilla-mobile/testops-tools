@@ -20,7 +20,11 @@ verdict semantics, changed flags. `git log` has the rest.
   not resolve symlinks: the queue it watches depends on the path it was launched from, while the tools are
   identical either way. A request dropped in the other checkout's queue is never consumed and never errors.
   effdoctor now prints which watcher is live and which queue to use, flags a diverged alt checkout, and checks
-  effpretty resolution, a stale gradle lock and the device. (MTE-5766)
+  effpretty resolution, a stale gradle lock and the device. The watched queue is resolved against the *watcher
+  process's* cwd (read via `lsof`), not effdoctor's, because effwatch is normally launched by a relative path —
+  resolving it against the caller's cwd yields a directory that never existed. A computed queue that is not on
+  disk is reported as a failure, and an unreadable cwd as "undetermined": naming the wrong queue confidently is
+  worse than declining to name one. (MTE-5766)
 - `VERSION` + this changelog, and `--version` on all 12 tools. Version lookup resolves symlinks, so it stays
   correct when a tool is invoked through another checkout's `tools/` dir. (MTE-5770 slice 1)
 - Docs: lessons **K13** (ad surfaces are testable offline by faking the app-services client at the seam

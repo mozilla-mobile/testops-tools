@@ -12,6 +12,11 @@ forever: nothing consumes it, no error is printed, and the run simply never happ
 That has now bitten us more than once, so this prints where the live watcher is actually listening
 rather than leaving anyone to remember which checkout was used this time.
 
+Note the subtlety that `dirname $0` is relative when effwatch was launched by a relative path: the
+queue is then a function of that PROCESS's cwd, which is why the cwd is read from the process itself
+(see proc_cwd) instead of being resolved against effdoctor's. A queue path that does not exist on
+disk is reported as a failure, because pointing anyone at one is worse than saying nothing.
+
 Usage:
   effdoctor.py [--json]
 
@@ -43,6 +48,19 @@ def queue_for(tools_dir):
     return os.path.join(os.path.dirname(tools_dir), "conversion-runs", "_queue")
 
 
+def proc_cwd(pid):
+    """CWD of another process, via lsof. Returns None if it cannot be determined.
+
+    effwatch is usually launched by a RELATIVE path (`./tae-conversion/tools/effwatch.sh`), so the
+    queue it watches depends on the cwd of *that* process. Resolving such a path against effdoctor's
+    own cwd invents a directory that never existed and sends requests into a black hole.
+    """
+    for line in sh(f"lsof -a -p {pid} -d cwd -Fn").splitlines():
+        if line.startswith("n"):
+            return line[1:]
+    return None
+
+
 def check():
     out = {"tool": "effdoctor", "version": version(), "canonical_tools": CANON_TOOLS,
            "canonical_queue": queue_for(CANON_TOOLS), "watchers": [], "findings": []}
@@ -57,12 +75,36 @@ def check():
         if not m or "effdoctor" in line:
             continue
         pid, path = m.group(1), m.group(2)
-        tools_dir = os.path.dirname(os.path.abspath(path))
-        q = queue_for(tools_dir)
-        w = {"pid": pid, "launched_from": path, "watching_queue": q,
-             "canonical": os.path.realpath(q) == os.path.realpath(out["canonical_queue"])}
+        cwd = proc_cwd(pid)
+        if os.path.isabs(path):
+            tools_dir = os.path.dirname(path)
+        elif cwd:
+            tools_dir = os.path.dirname(os.path.normpath(os.path.join(cwd, path)))
+        else:
+            tools_dir = None
+
+        q = queue_for(tools_dir) if tools_dir else None
+        w = {"pid": pid, "launched_from": path, "proc_cwd": cwd, "watching_queue": q,
+             "exists": bool(q) and os.path.isdir(q),
+             "canonical": bool(q) and os.path.realpath(q) == os.path.realpath(out["canonical_queue"])}
         out["watchers"].append(w)
-        if not w["canonical"]:
+
+        if not q:
+            add("WARN",
+                f"effwatch (pid {pid}) was launched by the relative path {path}, and its cwd could not "
+                "be read, so the queue it watches cannot be determined",
+                "Find it with: lsof -a -p %s -d cwd. Do NOT guess — a request in the wrong queue is "
+                "never consumed and never errors." % pid)
+            continue
+
+        # A computed queue that does not exist means the resolution above is wrong, or this watcher is
+        # broken. Either way it is worse than non-canonical: never send anyone to a path with no dir.
+        if not w["exists"]:
+            add("FAIL",
+                f"effwatch (pid {pid}) appears to watch\n      {q}\n    but that directory DOES NOT EXIST",
+                "Do not queue into it. Confirm the watcher's real queue (lsof -a -p %s -d cwd) and "
+                "restart it from %s/effwatch.sh if needed." % (pid, CANON_TOOLS))
+        elif not w["canonical"]:
             add("WARN",
                 f"effwatch (pid {pid}) was launched from {path}, so it is watching\n"
                 f"      {q}\n"
@@ -146,9 +188,13 @@ def main():
     print("\nlive effwatch")
     if r["watchers"]:
         for w in r["watchers"]:
-            flag = "canonical" if w["canonical"] else "NON-CANONICAL"
-            print(f"  pid {w['pid']}  launched from {w['launched_from']}")
-            print(f"     -> queue requests into: {w['watching_queue']}  [{flag}]")
+            print(f"  pid {w['pid']}  launched from {w['launched_from']}  (cwd {w['proc_cwd'] or 'unknown'})")
+            if not w["watching_queue"]:
+                print("     -> queue UNDETERMINED — see below")
+            else:
+                flag = ("canonical" if w["canonical"] else "NON-CANONICAL") if w["exists"] \
+                    else "DOES NOT EXIST"
+                print(f"     -> queue requests into: {w['watching_queue']}  [{flag}]")
     else:
         print("  none running")
     print(f"\nrepo   : {r['repo']['path']}  (branch {r['repo']['branch']})")
