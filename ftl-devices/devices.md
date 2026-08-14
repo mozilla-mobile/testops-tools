@@ -13,7 +13,7 @@
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
-| RE58C2 | realme C53 | 35 | Low |
+| RE58C2 | realme C53 | 35 | None |
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-51C | Galaxy S22 | 36 | Low |
 | SC-51E | Galaxy S24 | 36 | Low |
