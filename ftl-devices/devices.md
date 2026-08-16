@@ -105,7 +105,7 @@
 | comet | Pixel 9 Pro Fold | 36 | Medium |
 | cuscoi | moto g96 5G | 35 | Low |
 | dm1q | Galaxy S23 | 35 | Low |
-| dm1q-SM-S911U | Galaxy S23 | 36 | Low |
+| dm1q-SM-S911U | Galaxy S23 | 36 | Medium |
 | dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | Galaxy S23+ | 34 | Low |
 | dm2qksx | Galaxy S23+ | 36 | Medium |
@@ -165,7 +165,7 @@
 | malmo | moto g85 5G | 36 | Low |
 | manaus | motorola edge 40 neo | 34 | Low |
 | maui | moto g play - 2023 | 33 | Low |
-| mustang | Pixel 10 Pro XL | 36 | Low |
+| mustang | Pixel 10 Pro XL | 36 | Medium |
 | o1q | Galaxy S21 5G | 34 | Medium |
 | o1q | Galaxy S21 5G | 35 | Low |
 | o1s | Galaxy S21 5G | 35 | Low |
@@ -192,7 +192,7 @@
 | q6qksx | Galaxy Z Fold6 | 36 | Low |
 | q6qsqw | Galaxy Z Fold6 | 36 | Medium |
 | q7mq | Galaxy Z TriFold | 36 | Medium |
-| r0q | Galaxy S22 | 34 | High |
+| r0q | Galaxy S22 | 34 | Medium |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
 | r0qksx | Galaxy S22 | 36 | Medium |
