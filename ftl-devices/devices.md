@@ -54,7 +54,7 @@
 | a23xq | Galaxy A23 5G | 34 | Low |
 | a25x | Galaxy A25 5G | 34 | Medium |
 | a26x | Galaxy A26 5G | 36 | Low |
-| a31 | Galaxy A31 | 31 | Medium |
+| a31 | Galaxy A31 | 31 | Low |
 | a32 | Galaxy A32 | 33 | Low |
 | a34x | Galaxy A34 5G | 36 | Low |
 | a35x | Galaxy A35 5G | 34 | Medium |
@@ -156,7 +156,7 @@
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
-| lamul | moto g05 | 35 | Low |
+| lamul | moto g05 | 35 | Medium |
 | lion | moto g04 | 34 | Low |
 | lynx | Pixel 7a | 33 | Medium |
 | lyriq | motorola edge 40 | 34 | Low |
@@ -207,7 +207,7 @@
 | r9q | Galaxy S21 FE 5G | 36 | Low |
 | r9q-SM-G990U | Galaxy S21 FE 5G | 36 | Low |
 | r9q2csx | Galaxy S21 FE 5G | 36 | Low |
-| rango | Pixel 10 Pro Fold | 36 | Low |
+| rango | Pixel 10 Pro Fold | 36 | Medium |
 | redfin | Pixel 5 | 30 | High |
 | shiba | Pixel 8 | 35 | High |
 | shiba | Pixel 8 | 34 | High |
