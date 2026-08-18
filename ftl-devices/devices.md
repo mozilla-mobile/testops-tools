@@ -198,7 +198,7 @@
 | r0qksx | Galaxy S22 | 36 | Medium |
 | r11 | Pixel Watch | 30 | Medium |
 | r11q | Galaxy S23 FE | 34 | Low |
-| r11qcs | Galaxy S23 FE | 36 | Low |
+| r11qcs | Galaxy S23 FE | 36 | Medium |
 | r11s | Galaxy S23 FE | 36 | Low |
 | r12s | Galaxy S24 FE | 35 | Low |
 | r8q | Galaxy S20 FE 5G | 33 | Low |
