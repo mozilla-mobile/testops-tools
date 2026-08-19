@@ -65,7 +65,7 @@
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a52xq | Galaxy A52 5G | 34 | Low |
 | a54x | Galaxy A54 5G | 34 | High |
-| a54xue | Galaxy A54 5G | 36 | Medium |
+| a54xue | Galaxy A54 5G | 36 | Low |
 | a55xzh | Galaxy A55 5G | 36 | Low |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
