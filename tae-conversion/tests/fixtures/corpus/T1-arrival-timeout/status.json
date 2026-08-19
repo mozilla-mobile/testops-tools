@@ -1,0 +1,23 @@
+{
+  "batch": "b4e-privhist",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SearchTest#searchHistoryNotRememberedInPrivateBrowsingTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T18:20:34Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "searchHistoryNotRememberedInPrivateBrowsingTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "searchHistoryNotRememberedInPrivateBrowsingTest",
+      "message": "java.lang.AssertionError: Failed to enter text for selector: Toolbar in edit mode"
+    }
+  ],
+  "outcome": "fail"
+}

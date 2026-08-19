@@ -1,0 +1,23 @@
+{
+  "batch": "b72-shortcuts2",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SettingsSearchTest#verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-13T13:11:36Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest",
+      "message": "java.lang.AssertionError: Failed to navigate to SettingsSearchManageShortcutsPage"
+    }
+  ],
+  "outcome": "fail"
+}

@@ -218,6 +218,12 @@ def run(req):
             v = req.get(k)
             if v:
                 fields[k] = {"add": v} if isinstance(v, list) else v
+        # On create, `comment` is the description; on update it is a NEW comment. Without this there was no
+        # way to annotate a bug after filing it — which matters because comment 0 cannot be edited through
+        # the API, so a correction (a wrong TestRail id, say) has nowhere to go.
+        body = (req.get("comment") or "").strip()
+        if body:
+            fields["comment"] = {"body": body}
         if not fields:
             raise RuntimeError("update: nothing to change (pass assigned_to/self_assign or a field)")
         updated, failed = [], []
@@ -307,7 +313,24 @@ def run(req):
     lines.append(f"\ncommit subject to use:\n{final_summary}")
     return "\n".join(lines) + "\n", result
 
+def _tae_version():
+    """Version of the whole tae-conversion toolchain (tools + docs are stamped together).
+
+    realpath, not __file__: these tools are commonly invoked through symlinks from another checkout's
+    tools/ dir, and an unresolved path would look for VERSION in the wrong repo and report "unknown"
+    exactly where a staleness check matters most.
+    """
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "VERSION")
+    try:
+        return open(p).read().strip()
+    except OSError:
+        return "unknown"
+
+
 def main():
+    if "--version" in sys.argv[1:]:
+        print(f"{os.path.basename(__file__)} \u2014 tae-conversion {_tae_version()}")
+        sys.exit(0)
     req_path, out_path = sys.argv[1], sys.argv[2]
     req = json.load(open(req_path))
     result_path = out_path.replace("-report.txt", "-result.json")

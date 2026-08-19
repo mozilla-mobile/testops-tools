@@ -25,7 +25,7 @@ Usage:
   effnext.py --include-skipped                   # ignore the skiplist for this call
 Exit 0 always (unless files are missing, or --skip/--unskip names something not in the pool).
 """
-import csv, datetime, json, os, re, sys
+import csv, datetime, json, os, re, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -111,11 +111,73 @@ def converted_in_tree(repo):
     return names
 
 
+def converted_on_other_branches(repo, methods):
+    """Which local branches already have `fun <method>(` in the efficiency tests package, per method.
+
+    ADVISORY ONLY — deliberately not folded into the filter above. Branches carry work in three different
+    states: pending review, abandoned, and dropped. The two faker conversions (bugs 2063093/2063105) still sit
+    on backup branches and were REJECTED, so filtering on any branch would silently remove genuinely
+    outstanding tests from the pool. Filtering stays on the checkout; other branches only produce a warning,
+    which is enough to stop you re-converting something you have already sent for review from another branch.
+
+    backup/* is excluded: those are snapshots of states we deliberately moved away from.
+    """
+    if not os.path.isdir(os.path.join(repo, ".git")) or not methods:
+        return {}
+    try:
+        refs = subprocess.run(
+            ["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/"],
+            cwd=repo, capture_output=True, text=True, timeout=30,
+        ).stdout.split()
+    except Exception:
+        # Not silent: an unlistable ref set must not read as "no other branch has it". That swallowed a
+        # NameError once and reported a clean result while checking nothing at all.
+        return {"__unchecked__": ["<could not list local branches>"]}
+    hits, unchecked = {}, []
+    for ref in refs:
+        if ref.startswith("backup/"):
+            continue
+        try:
+            out = subprocess.run(
+                ["git", "grep", "-h", "-E", "fun +[A-Za-z0-9_]+ *\\(", ref, "--", EFF_TESTS],
+                # 120s, not 30: a COLD `git grep <ref>` on mozilla-central can take well over 30 seconds, and a
+                # timeout here used to be swallowed for every ref -- reporting "no other branch has it", which is
+                # the false green this check exists to prevent. Failures are collected and surfaced instead.
+                cwd=repo, capture_output=True, text=True, timeout=120,
+            ).stdout
+        except Exception:
+            unchecked.append(ref)
+            continue
+        found = set(re.findall(r"\bfun\s+([A-Za-z0-9_]+)\s*\(", out))
+        for m in methods & found:
+            hits.setdefault(m, []).append(ref)
+    if unchecked:
+        hits["__unchecked__"] = unchecked
+    return hits
+
+
 def emit(payload, as_json, lines):
     print(json.dumps(payload) if as_json else "\n".join(lines))
 
 
+def _tae_version():
+    """Version of the whole tae-conversion toolchain (tools + docs are stamped together).
+
+    realpath, not __file__: these tools are commonly invoked through symlinks from another checkout's
+    tools/ dir, and an unresolved path would look for VERSION in the wrong repo and report "unknown"
+    exactly where a staleness check matters most.
+    """
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "VERSION")
+    try:
+        return open(p).read().strip()
+    except OSError:
+        return "unknown"
+
+
 def main():
+    if "--version" in sys.argv[1:]:
+        print(f"{os.path.basename(__file__)} \u2014 tae-conversion {_tae_version()}")
+        sys.exit(0)
     args = sys.argv[1:]
     as_json = "--json" in args
     args = [a for a in args if a != "--json"]
@@ -186,13 +248,19 @@ def main():
             continue
         pending.append((c, m, fq))
     picks = pending[:n]
+    elsewhere = converted_on_other_branches(repo, {m for (_, m, _) in picks}) if tree_check else {}
+    unchecked_branches = elsewhere.pop("__unchecked__", [])
 
     payload = {
         "tool": "effnext", "ok": True,
         "pool_total": len(pool), "done": len(done), "pending": len(pending),
         "skipped": len(skips), "already_in_tree": already_in_tree,
         "tree_checked": in_tree is not None,
-        "next": [{"class": c, "method": m, "fqmethod": fq} for (c, m, fq) in picks],
+        "branches_unchecked": unchecked_branches,
+        "next": [
+            {"class": c, "method": m, "fqmethod": fq, **({"also_on_branches": elsewhere[m]} if m in elsewhere else {})}
+            for (c, m, fq) in picks
+        ],
     }
     if to_skip:
         payload["just_skipped"] = to_skip
@@ -210,9 +278,21 @@ def main():
     if skips and not include_skipped:
         summary += f", {len(skips)} skipped"
     lines.append(summary + ")")
+    if unchecked_branches:
+        lines.append(
+            f"  ⚠ {len(unchecked_branches)} branch(es) could not be searched "
+            f"({', '.join(unchecked_branches[:3])}{'…' if len(unchecked_branches) > 3 else ''}) — "
+            "an unlanded conversion there would not be flagged"
+        )
     if in_tree is None and tree_check:
         lines.append(f"  (no checkout at {repo} — tree check skipped; pass --repo or set $REPO)")
-    lines += [f"  → {fq}" for (_, _, fq) in picks]
+    for (_, m, fq) in picks:
+        lines.append(f"  → {fq}")
+        if m in elsewhere:
+            lines.append(
+                f"      ⚠ already converted on {', '.join(elsewhere[m])} but not in this checkout — "
+                "confirm it is not already in review before redoing it"
+            )
     if not picks:
         lines.append("  (nothing pending — pool exhausted, or everything left is converted or skipped)")
     emit(payload, as_json, lines)

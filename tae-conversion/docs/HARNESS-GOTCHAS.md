@@ -6,12 +6,35 @@ catch them. Use it two ways: (1) a **review checklist** against new page objects
 
 Each entry: **symptom → cause → check**. Add new ones as we find them; link the Jira/bug where relevant.
 
-Last updated: 2026-08-04.
+Last updated: 2026-08-13 (A1-A53, B1-B14).
 
 > The distilled, landed subset of this catalog lives in-tree at
 > `<fenix>/app/src/androidTest/java/org/mozilla/fenix/ui/efficiency/docs/gotchas.md`.
 > This file runs ahead of it: entries land here first and are folded in-tree once confirmed.
-> At the time of writing, in-tree carries A1–A8 and B1–B8; A9–A19 and B9–B13 are here only.
+> The in-tree copy is a deliberate SUBSET and its numbering is kept aligned with this file, so it has gaps
+> (it jumps A8 -> A47). Never renumber to close a gap: the ids are what `efftriage` prints.
+
+## How to write an entry (read before adding one)
+
+Two kinds of claim live here and they need opposite treatment.
+
+**Claims about the HARNESS** (a verb's behaviour, a strategy's resolution, a report's text) generalise fine,
+because there is one implementation. State them plainly.
+
+**Claims about PRODUCT code** — "toggle rows expose state as X", "this screen is Compose" — do NOT generalise,
+and writing them as laws has actively cost time. A46 asserted that Compose toggle rows carry `selected` on the
+merged row; that is true of `ListItem.kt` and false of `SearchEngineShortcuts.kt`, and following it as a rule
+burned two cycles on 2026-08-13. So:
+
+* **Scope the entry to the file it was observed in**, in the title or the first line. "`ListItem.kt`'s toggle
+  rows do X", not "toggle rows do X".
+* **Say what to verify before relying on it** — usually "read the composable first".
+* **Record any counter-example you know**, with its file. A48 and A46 both carry one.
+* If the claim is worth enforcing rather than remembering, it belongs in a **mechanical premise check**
+  (effcheck, MTE-5828), not in prose here. Prose that must be remembered to be correct is a trap.
+
+A wrong entry is worse than a missing one, for the same reason a wrong `efftriage` diagnosis is worse than
+`no rule matched`: it stops you looking.
 
 ---
 
@@ -585,3 +608,238 @@ Last updated: 2026-08-04.
 - **Check:** in the test, `pm clear-permission-flags <pkg> <permission> user-fixed user-set` **and**
   `pm revoke <pkg> <permission>`. Do **not** use the device-wide `pm reset-permissions` — it strips permissions
   the instrumentation itself relies on and crashes the test process.
+
+### A44. A skipped test was scored as a pass (2026-08-13)
+- **Symptom:** `status.json` reports `outcome: pass` with `failures: 0`, and `efftriage` says "run passed —
+  nothing to triage", for a test that never executed. `effverify` disagrees (`ok: false`, `passed: false`),
+  which is the tell. The campaign's **fifth** false-green shape.
+- **Cause:** `effloop` computed the verdict as `failures == 0 and tests > 0`, and a skip satisfies both. An
+  `@Ignore`d legacy test, an `Assume()`/`assumeTrue` gate, a Nimbus flag or absent hardware all produce a skip.
+  A skip asserts nothing, so it must never read as green. Found when a legacy summarize test skipped on account
+  of `@Ignore("Will be fixed in bug 2059592")`; the same rule then found **2 silently skipped tests** in an
+  earlier full-suite run that nobody had noticed.
+- **Check:** `outcome` is now `skipped` when nothing ran and `partial` when only some tests ran, both exiting
+  **5**. `efftriage` rule **T11** reports it, reading the per-test statuses rather than `outcome` — the field
+  that should raise the alarm was the one lying. Never read `failures: 0` as success on its own: confirm
+  `results[].status == "pass"` for every test you expected to run.
+
+### A45. An arrival check that also matches the page you came FROM (2026-08-13)
+- **Symptom:** the trace says `'<Page>' already visible` / `already loaded`, no navigation step is ever
+  performed, and the test then fails on an element that genuinely is not there. The `[uiautomator]` dump shows
+  a *different* screen than the one the harness believes it is on.
+- **Cause:** every selector in `requiredForPage` resolved on the **origin** screen, so `mozIsOnPageNow()`
+  short-circuited `navigateToPage` before its Swipe/Click ran. The classic pair: a Settings **row** carrying the
+  destination screen's own title (both read "Page summaries"), plus a generic control like `Navigate up` that
+  exists on every sub-screen. Related to A42 (a selector matching a different surface) and to the fourth
+  nav-graph gap, where an arrival check resolved the engine view underneath an edit-mode overlay.
+- **Check:** an arrival anchor must exist **only** on the destination and need no scrolling. Prefer a row owned
+  by the destination's own feature — here `mozac_summarize_settings_summarize_pages` ("Summarize pages"). Keep
+  the title and the back button as *assertions* in a verification group, just not as anchors. `efftriage` rule
+  **T13** detects this shape.
+
+### A46. `ListItem.kt`'s toggle rows put state on the MERGED row as `selected`, not `checked` (2026-08-13)
+**SCOPE: `fenix/.../compose/list/ListItem.kt` (`SwitchListItem`, `RadioButtonListItem`) ONLY. This is NOT how
+Compose toggles work in general, and it is NOT true of every fenix toggle row. VERIFY THE COMPOSABLE FIRST.**
+Counter-example in-tree: `settings/search/SearchEngineShortcuts.kt`'s `SearchItem` is a plain `Row` with no
+semantics block at all and a bare Material3 `Checkbox`, which publishes `ToggleableState` and **no `selected`**
+— so on that screen `assertIsSelected` can never pass and this entry's advice is actively wrong. Reading this
+entry as a law cost two cycles on 2026-08-13.
+- **Symptom:** `mozVerifyElementIsChecked` reports `'<row>' is not checked` for a toggle that is visibly on.
+  The element *was* found, so the message looks like a genuine product failure. Worse, before this was fixed
+  these two verbs emitted **no ScreenDump at all**, so there was nothing to inspect.
+- **Cause:** two independent traps, both present in fenix's `SwitchListItem` / `RadioButtonListItem`
+  (`ListItem.kt`):
+  1. The row declares `semantics { this.selected = checked; role = Role.Switch }` and the `Switch` itself is
+     wrapped in `Modifier.clearAndSetSemantics {}`, which wipes Material3's internal `toggleable`. So **no
+     `ToggleableState` exists anywhere in the tree** and `assertIsOn()`/`assertIsChecked` can never pass —
+     the state is `selected`, so assert with `mozVerifyElementIsSelected`.
+  2. That state sits on the **merging** row node, which absorbs its label. `COMPOSE_BY_TEXT` forces
+     `useUnmergedTree = true` and therefore resolves a *stateless descendant* text node. Use
+     **`COMPOSE_BY_TEXT_MERGED`**, where the node matching the text is the node carrying the state.
+- **Correction (2026-08-13):** this entry told you to "read the dump these verbs now emit" and to switch to `mozVerifyElementIsSelected`, but **that verb and `mozVerifyElementIsNotSelected` did not dump at all** -- only the *checked* pair did. Fixed 2026-08-13; both selected verbs now dump on failure. If you hit `Failed to assert the following: (Selected = 'true')` on a build without that fix, there will be no dump to read.
+- **Check:** for any Compose toggle/radio row, assert `selected` on a MERGED text match. A surviving
+  `testTag` is not evidence of assertable state: `RadioButtonListItem` tags the icon
+  (`"<label>.radio.button"`) *before* a `clearAndSetSemantics` that strips `selected`, `role` and `onClick`,
+  so the tag identifies a node that knows nothing. This is also why legacy tests resort to positional
+  `UiSelector().index(n)`: in the unmerged a11y tree the stateful row has no text, no content-desc and no
+  resource-id. Compose does map `selected` onto UiAutomator's `isChecked`, so `By.text(label).parent.isChecked`
+  is a fallback if a UiAutomator path is ever needed.
+
+### A47. `requiresScroll` does nothing for `mozVerify`, and `mozSwipeTo`'s direction default is the opposite (2026-08-13)
+- **Symptom:** a selector correctly tagged `requiresScroll` still fails with `'<x>' not found on screen after
+  5000ms`, and the run report shows the repeated locate attempts with **no** "Attempting to bring '<x>' into
+  view" line — the scroll never ran. Switching to an explicit `mozSwipeTo(selector)` then fails *differently*,
+  with `not found after 10 swipe(s)`, which reads convincingly like the element not existing at all.
+- **Cause:** two separate mismatches.
+  1. `mozVerify` calls `mozVerifyElement(selector, applyPreconditions = false)`, and the `requiresScroll`
+     check lives behind `applyPreconditions` in `resolve()`/`mozGetElement`. So the group only takes effect
+     for verbs that pass `applyPreconditions = true` -- `mozClick` and, note, `mozVerifyElementsByGroup`
+     (`BasePage.kt:268`), which DOES scroll. It is only the singular `mozVerify` that does not. The selector
+     is tagged, the tag is right, and it is simply not consulted on that one path.
+  2. `mozSwipeTo`'s own parameter defaults to `SwipeDirection.DOWN`, while the precondition path
+     (`desiredSwipeDirection`) defaults to `SwipeDirection.UP` unless the selector carries
+     `swipeDown`/`swipeLeft`/`swipeRight`. Moving from the group to an explicit call therefore **reverses**
+     the scroll direction silently.
+- **Check:** to assert on anything below the fold, call `mozSwipeTo(selector, direction = SwipeDirection.UP)`
+  explicitly, then assert. Precedent: `SettingsPage.verifyDefaultBrowserToggleIsOff`,
+  `SettingsPageSummariesTest`, `SettingsAddonsTest`, `TranslationsTest`. The guide previously claimed
+  `requiresScroll` means "the harness scrolls to it" without qualification; corrected 2026-08-13.
+  `mozSwipeTo` also now emits a ScreenDump on failure — it was the only BasePage verb that did not.
+
+### A48. An external/native app assertion fails because a SYSTEM DIALOG is still in front (2026-08-13)
+- **Symptom:** `mozVerifyNativeAppOpens` / `mozVerifyFileOpensInExternalApp` fails with `<pkg> not found`,
+  which reads as "the app never launched".
+- **Cause:** something else owns the window. Two real cases, both hit converting
+  `UploadPermissionsTest.fileUploadPermissionTest`:
+  1. **A runtime permission chain is still draining.** `AppAndSystemHelper.grantSystemPermission()` handles
+     exactly **one** dialog, and a single action can fan out into several — tapping a bare
+     `<input type="file">` asks for audio, then for music-and-audio. One grant leaves the run parked on the
+     next dialog. Use `SystemSettingsPage.grantAllPendingSystemPermissions()`.
+  2. **Android shows an intent chooser first.** That same file input does not open a picker directly at all:
+     a chooser ("Choose an action" — Camera, Camcorder, Files) comes first, so the picker package is not
+     foreground until an option is clicked. Assert the chooser
+     (`SystemSettingsSelectors.FILE_CHOOSER`), click through it, then assert the picker.
+- **Check:** read the **`[windows]`** block of the dump these verbs now emit — it names the window that is
+  actually focused, which settles this in one read. `efftriage` rule **T15** matches this shape.
+- **The legacy twin is a trap:** `AppAndSystemHelper.assertExternalAppOpens` catches the
+  `AssertionFailedError` from `intended()` and only logs it, so whenever the package is installed the
+  assertion **cannot fail**. The legacy test passes in exactly this stuck state, which means there is no
+  trustworthy baseline to port against — and three already-converted efficiency tests
+  (`DownloadTest`, `MainMenuTest` ×2) inherit the same hole via `mozVerifyFileOpensInExternalApp`.
+
+### A49. Clicking a page's own arrival anchor can dismiss the thing you were waiting for (2026-08-13)
+- **Symptom:** a `mozVerify` for something inside an overlay/menu fails, and the ScreenDump shows the plain
+  **homepage** (`testTag="homepage.view"`, top sites, Pocket stories). It reads as though the state you set up
+  earlier never applied — in the run that found this, as though a search-shortcut toggle had silently failed —
+  when in fact the overlay was open and then closed.
+- **Cause:** `SearchBarComponent`'s `requiredForPage` anchor **is the search-engine selector button**, which
+  resolves as soon as the toolbar is drawn, before the search overlay has taken focus. `navigateToPage`
+  reports arrival in that window; the test's next action clicks that same button, and the click lands while
+  the overlay is still settling, dismissing it instead of opening the menu. The generalisation: when a page's
+  arrival anchor is also the control the test clicks first, arrival and readiness are not the same thing.
+- **Check:** gate on a selector that proves the overlay is really live before touching it — for the search bar,
+  `mozVerify(SearchBarSelectors.TOOLBAR_IN_EDIT_MODE)` after `navigateToPage()`. More generally, prefer an
+  arrival anchor the test does not immediately interact with.
+- **NOT mechanised in efftriage, deliberately.** The only distinctive signature is "the dump shows the
+  homepage", and `testTag="homepage.view"` appears in 10 of the 14 failure windows of the run that found it —
+  and legitimately in every homepage test. A rule keyed on it would fire on incidental evidence, which is the
+  same defect that made T4, T6 and T9 unreliable. Read the dump instead; that is what it is for.
+
+### A50. The stylus-handwriting prompt STEALS KEYSTROKES, and causes no locate miss (2026-08-13)
+- **Symptom:** text entry silently truncates. `"SuggestTestEngine"` arrives in the field as `"Su"` or `"S"`, the
+  next field is never filled at all, and the run dies much later looking for something that was never created.
+  Nothing reports an error at the point of failure.
+- **Cause:** Android's "Try out your stylus" dialog opens in its own window when a text field takes focus and
+  consumes the remaining input events. This is NOT the usual blocking-overlay shape: nothing fails to resolve,
+  so `dismissKnownOverlaysIfPresent` — which only runs on a **locate miss** — never fires, and
+  `OverlayRegistry.STYLUS_HANDWRITING_PROMPT` never gets consulted. A9 covers the *covering* case; this is the
+  *input-stealing* case.
+- **Check:** `BaseTest.setUp` now runs `settings put secure stylus_handwriting_enabled 0` suite-wide. It used
+  to be set inside `BrowserPage.clickAddressFormStreetField` only, so exactly one flow was protected. Note the
+  setting is applied in `@Before`, i.e. AFTER the app and IME are up, so the very first typing on a fresh
+  device can still race it — assert that a field kept what you typed rather than trusting the flag
+  (`SettingsSearchAddSearchEnginePage.typeAndConfirm` is the pattern). It is a persistent secure setting, so a
+  device converges to 0 after one run; a fresh CI device does not.
+- **Found by watching a visible emulator.** No dump shows this: by the time anything fails, the prompt is gone.
+
+### A51. `mozEnterText` can leave a Compose field looking filled while the app never saw it (2026-08-13)
+- **Symptom:** the field visibly contains the text **and the placeholder is still drawn over it**, and whatever
+  the text was supposed to trigger does not happen. On the address bar: the query is there, no suggestion fetch
+  is made, and the awesomebar stays empty — which reads exactly like "the suggestions never arrived".
+- **Cause:** `mozEnterText` uses `performTextInput`, which inserts at the cursor and does not force a full
+  value change, so the composable's `onValueChange` path — and therefore the app's state — is not driven.
+  Legacy's `SearchRobot.typeSearch` uses `performTextReplacement` followed by `waitForIdle`, which is why the
+  legacy test does not hit this.
+- **Check:** use **`mozReplaceText`** (added 2026-08-13; `performTextReplacement` + `waitForIdle`, falling back
+  to `mozEnterText` for Espresso/UiAutomator elements where `setText` already replaces) for any field whose
+  CONTENTS drive app state. `mozEnterText` remains fine for fields that are only read back.
+- **Worth auditing:** existing conversions that type a query with `mozEnterText` and then assert on downstream
+  state may be passing for incidental reasons. Not changed; `effparity` (MTE-5829) is the mechanical way to find
+  them.
+
+### A52. A custom search engine survives a retry but MockWebServer's PORT does not (2026-08-13)
+- **Symptom:** attempt 1 can pass and every retry is guaranteed to fail. Suggestions/results stop appearing with
+  no error, and name-based selectors start throwing `AmbiguousViewMatcherException`.
+- **Cause:** a custom engine created through the UI persists in the profile across retry attempts (retries
+  inherit state; only a fresh run resets it), but `SearchMockServerRule` starts a NEW server on a NEW port for
+  every attempt. The engine's saved search/suggest URLs then point at a dead port, and the fetch fails
+  silently. Worse, the attempt adds a SECOND engine with the same name, so any selector keyed on that name
+  matches twice.
+- **Check:** `BaseTest`'s per-attempt cleanup now dispatches
+  `SearchAction.RemoveCustomSearchEngineAction` for every entry in `store.state.search.customSearchEngines`,
+  alongside the existing bookmarks/tabs/autofill/logins wipes. Anything else that bakes a per-run port into
+  persistent app state has the same hazard.
+
+### A53. `settings/search/SearchEngineShortcuts.kt`-style suggestion rows are outside the Compose test tree (2026-08-13)
+**SCOPE: search-engine suggestion rows served by an engine's suggestion API. VERIFY WITH A DUMP before
+assuming it applies to other awesomebar rows** — `SEARCH_SUGGESTION_WITH_TEXT` works for the rows other
+converted tests assert on, so this is not a blanket statement about the awesomebar.
+- **Symptom:** a `COMPOSE_BY_TAG_AND_TEXT` selector cannot find a suggestion that is plainly on screen.
+- **Cause:** those rows are not in the Compose hierarchy `composeRule` queries. With three mock suggestions
+  visible, the dump's **compose** block listed only homepage nodes while the **uiautomator** block listed
+  `text="mozilla firefox"`, `"mozilla thunderbird"` and `"mozilla vpn"`.
+- **Check:** use `SearchBarSelectors.SEARCH_ENGINE_SUGGESTION` (UIAutomator text). **And read the right block
+  of the dump:** believing the compose block was the whole picture produced a confidently wrong diagnosis
+  ("the search overlay was dismissed") that survived two cycles. `EFF_SCREEN_DUMP` emits compose, windows,
+  uiautomator and espresso sections — a node missing from one may be present in another.
+
+### A54. A radio/option's text is the label AND its subtext, joined by a newline (2026-08-19)
+- **Symptom:** an exact-text selector built from the option's `strings.xml` label never resolves, even though the
+  label is plainly on screen. Surfaces as an arrival-anchor miss, which reads like a navigation problem.
+- **Cause:** the widget's text is label + `\n` + subtext. A live dump of the Autoplay screen shows
+  `res-id="block_radio" text="Block audio and video on cellular data only&#10;Audio and video will play on Wi-Fi"`
+  and `third_radio text="Block audio only&#10;Recommended"`. `ESPRESSO_BY_TEXT`/`UIAUTOMATOR_WITH_TEXT` are exact
+  matches, so they cannot hit either half.
+- **Check:** match a fragment (`UIAUTOMATOR_WITH_TEXT_CONTAINS`) or the res-id. The same shape appears on the
+  permission screens (`ask_to_allow_radio text="Ask to allow\nRecommended"`), so assume it for any
+  RadioButtonListItem with a "Recommended"/explanatory subtitle.
+
+### A55. Permission-screen res-ids are shared across every permission, and ESPRESSO_BY_ID ignores visibility (2026-08-19)
+- **Symptom:** an arrival anchor built from a radio id "resolves" on the wrong permission screen, so
+  `navigateToPage()` reports success somewhere it never reached (an A45 false arrival).
+- **Cause:** `ask_to_allow_radio`, `block_radio`, `third_radio` and `fourth_radio` all live in the one layout
+  shared by Autoplay, Camera, Location, Microphone and DRM; the 3rd and 4th are merely hidden on the screens that
+  do not use them. `ESPRESSO_BY_ID` resolves `onView(withId(...))` with **no** visibility constraint, so the
+  hidden ones still match.
+- **Check:** anchor on text that only that screen has (Autoplay: "cellular data only"). Keep res-ids for the
+  per-option assertions, and prefer `UIAUTOMATOR_WITH_RES_ID` when you want presence to imply visibility — the
+  accessibility tree contains only displayed nodes, which is also the honest replacement for legacy's
+  `withEffectiveVisibility(VISIBLE)`.
+
+### A56. BrowserPage has inbound edges only from HomePage and itself (2026-08-19)
+- **Symptom:** `AssertionError: No navigation path found from '<SomeSettingsPage>' to 'BrowserPage'`.
+- **Cause:** a graph gap, not a selector problem — nothing was searched for on screen. Leaving a settings screen
+  to load a URL needs **both** halves: a return edge on the settings page
+  (`NavigationStep.PressBackUntilGone(SettingsSelectors.NAVIGATION_TOOLBAR)`, which is depth-independent) **and**
+  an explicit `on.home.navigateToPage()` hop in the test — the harness equivalent of legacy's `exitMenu()`.
+- **Check:** the edge alone is not enough, because `findPath` only searches from the CURRENT tracked page. This is
+  **efftriage rule T19**, with `tests/fixtures/corpus/T19-no-nav-path` as its labelled example.
+
+### A57. A page-content text selector can resolve a non-clickable heading (2026-08-19)
+- **Symptom:** `Failed to click UiObject` while the log says the element was **found** — the locate succeeded and
+  the click did not.
+- **Cause:** `UIAUTOMATOR_WITH_TEXT_CONTAINS` matched a heading rather than the control. The permissions test page
+  prints "Test Camera & Microphone Dialogue" above the button labelled "Camera & Microphone", and the heading wins.
+- **Check:** match web content by its DOM id plus label (`UIAUTOMATOR_WITH_WEB_ID_AND_TEXT`); the ids are in the
+  dump (`location`, `notify`, `audioVideo`, `audio`, `video`). The harness auto-dumps on a failed `mozClick`, so
+  the handle you need is already in the report.
+
+### A58. A system app-permission row title is present whether the permission is allowed or denied (2026-08-19)
+- **Symptom:** nothing — which is the problem. The assertion cannot fail.
+- **Cause:** on the Android app-permissions screen the row text is the permission name in both the "Allowed" and
+  "Not allowed" sections; only the section differs. The "Only while app is in use" summary that would disambiguate
+  it is rendered only up to API 30, which is why the legacy robot branched on `Build.VERSION` — and above R it was
+  left asserting a row that always exists.
+- **Check:** assert the OS state, not the settings UI:
+  `appContext.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED` (see
+  `SystemSettingsPage.verifySystemPermissionGranted`). No version branch, and it cannot pass for a denied
+  permission. Generalises: prefer an OS/state oracle over any system-UI text.
+
+### A59. A page object that is not in PageContext never registers its navigation (2026-08-19)
+- **Symptom:** a page object exists, looks complete, and no test can navigate to it; or its edge is silently
+  absent from `NavigationRegistry.logGraph()`.
+- **Cause:** edges are registered in the page's `init`, which only runs when `PageContext` constructs it.
+  `SitePermissionsPage` and `SettingsSiteSettingsPermissionsPage` were both dead this way — and the latter's edge
+  also stopped one screen short of its own `requiredForPage` anchor, so it could not have worked if it had run.
+- **Check:** when adding a page, wire it into `PageContext` in the same change, and confirm the edge appears in the
+  graph log. Treat an unreferenced page object as untested scaffolding rather than as available API.

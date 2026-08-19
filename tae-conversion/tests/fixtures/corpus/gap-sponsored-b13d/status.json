@@ -1,0 +1,23 @@
+{
+  "batch": "b13d-sponsored",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SponsoredShortcutsTest#verifySponsoredShortcutsListTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T20:20:00Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifySponsoredShortcutsListTest",
+      "message": "androidx.test.espresso.PerformException: Error performing 'close keyboard' on view 'view.getRootView() to equal view'."
+    }
+  ],
+  "outcome": "fail"
+}

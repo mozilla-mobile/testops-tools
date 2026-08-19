@@ -14,6 +14,13 @@
 #   effwatch runs effloop, writes reports to conversion-runs/<batch>/, then
 #            writes conversion-runs/_queue/<id>.done.json      = { id, test, batch, effloop_exit, reports, ts }
 #   Claude polls for <id>.done.json, then reads the reports.
+# --version, before anything else parses args. python3 resolves the symlink so the VERSION lookup
+# works when this script is invoked through another checkout's tools/ dir.
+case "${1:-}" in
+  --version)
+    v="$(python3 -c "import os;p=os.path.join(os.path.dirname(os.path.dirname(os.path.realpath('$0'))),'VERSION');print(open(p).read().strip() if os.path.isfile(p) else 'unknown')" 2>/dev/null || echo unknown)"
+    echo "$(basename "$0") — tae-conversion $v"; exit 0 ;;
+esac
 set -uo pipefail
 TOOLS="$(cd "$(dirname "$0")" && pwd)"
 RUNS="${RUNS:-$(cd "$TOOLS/.." && pwd)/conversion-runs}"   # default: tae-conversion/conversion-runs

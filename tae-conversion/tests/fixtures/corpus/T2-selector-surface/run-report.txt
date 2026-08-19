@@ -1,0 +1,910 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifyQRScanningCameraAccessDialogTest
+      java.lang.AssertionError: Failed: assertExists.
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifyQRScanningCameraAccessDialogTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+RetryTestRule: Started try #1.
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (236.7 ms)
+    [OK] ✔ Clicked 'URL box' (329.8 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (137.8 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (138.3 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (470.8 ms)
+    [CMD] ➤ Attempting to click 'Search engine selector button'...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (52.4 ms)
+    [OK] ✔ Clicked 'Search engine selector button' (168.8 ms)
+    [CMD] ➤ Attempting to click ''DuckDuckGo' search shortcut'...
+        [LOC] 🔎 Attempting to locate ''DuckDuckGo' search shortcut'...
+        [OK] ✔ ''DuckDuckGo' search shortcut' found ⚠️ SLOW (381.2 ms)
+    [OK] ✔ Clicked ''DuckDuckGo' search shortcut' (520.5 ms)
+    [CMD] ➤ Attempting to click 'QR scan button'...
+        [LOC] 🔎 Attempting to locate 'QR scan button'...
+        [OK] ✔ 'QR scan button' found (219.2 ms)
+    [OK] ✔ Clicked 'QR scan button' (277.2 ms)
+    [CMD] ➤ Attempting to click 'System permission Deny button'...
+        [LOC] 🔎 Attempting to locate 'System permission Deny button'...
+        [OK] ✔ 'System permission Deny button' found ⚠️ SLOW (898.8 ms)
+    [OK] ✔ Clicked 'System permission Deny button' ⚠️ SLOW (1203.3 ms)
+    [CMD] ➤ Attempting to click 'QR scan button'...
+        [LOC] 🔎 Attempting to locate 'QR scan button'...
+        [OK] ✔ 'QR scan button' found (74.4 ms)
+    [OK] ✔ Clicked 'QR scan button' (128.1 ms)
+    [CMD] ➤ Attempting to click 'System permission Deny and don't ask again button'...
+        [LOC] 🔎 Attempting to locate 'System permission Deny and don't ask again button'...
+        [OK] ✔ 'System permission Deny and don't ask again button' found ⚠️ SLOW (791.9 ms)
+    [ERR] ✖ Click 'System permission Deny and don't ask again button' failed: Failed to click UiObject ⚠️ SLOW (3931.2 ms)
+EFF_SCREEN_DUMP:BEGIN mozClick failed: System permission Deny and don't ask again button
+• testTag="homepage.view"
+• testTag="homepage.wordmark.logo"
+• testTag="homepage.wordmark.text"  desc="Firefox Fenix"
+• testTag="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• testTag="top_sites_list"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Google"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Amazon"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Chewy"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Wikipedia"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.add_shortcut_item"
+• text="Add shortcut"  testTag="top_sites_list.add_shortcut_item.add_shortcut_title"
+• testTag="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• testTag="org.mozilla.fenix.debug:id/composable_toolbar"
+• testTag="ADDRESSBAR_EDIT_MODE"
+• testTag="SEARCH_SELECTOR"  desc="DuckDuckGo: search engine selector" [clickable]
+• testTag="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• testTag="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+(34 nodes with a text/testTag/desc handle, of 59 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozClick failed: System permission Deny and don't ask again button
+windows on screen: 3
+• window title="null" type=SYSTEM
+• window title="English (US) (QWERTY)" type=INPUT_METHOD(keyboard)
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3), "English (US) (QWERTY)" (2)
+focused input: pkg=org.mozilla.fenix.debug id=null text="null" desc="null"
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozClick failed: System permission Deny and don't ask again button
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="homepageView"
+• res-id="homepage.view"
+• res-id="homepage.wordmark.logo"
+• res-id="homepage.wordmark.text"  desc="Firefox Fenix"
+• res-id="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• res-id="top_sites_list"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Google"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Amazon"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Chewy"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Wikipedia"
+• res-id="top_sites_list.add_shortcut_item"
+• res-id="top_sites_list.add_shortcut_item.add_shortcut_title"  text="Add shortcut"
+• res-id="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• res-id="composable_toolbar"
+• res-id="ADDRESSBAR_EDIT_MODE"
+• res-id="SEARCH_SELECTOR" [clickable]
+• desc="DuckDuckGo: search engine selector"
+• res-id="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• res-id="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="4:34"  desc="4:34 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+• res-id="content"
+• res-id="parentPanel"
+• res-id="inputArea"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="keyboard_holder"
+• res-id="keyboard_header_view_holder"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_access_points_menu"  desc="Open features menu" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Clipboard" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Translate" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Settings" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_power_key"  desc="Use voice typing" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_area"
+• res-id="D01"  desc="q" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="q"
+• res-id="0_resource_name_obfuscated"  text="1"
+• res-id="D02"  desc="w" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="w"
+• res-id="0_resource_name_obfuscated"  text="2"
+• res-id="D03"  desc="e" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="e"
+• res-id="0_resource_name_obfuscated"  text="3"
+• res-id="D04"  desc="r" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="r"
+• res-id="0_resource_name_obfuscated"  text="4"
+• res-id="D05"  desc="t" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="t"
+• res-id="0_resource_name_obfuscated"  text="5"
+• res-id="D06"  desc="y" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="y"
+• res-id="0_resource_name_obfuscated"  text="6"
+• res-id="D07"  desc="u" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="u"
+• res-id="0_resource_name_obfuscated"  text="7"
+• res-id="D08"  desc="i" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="i"
+• res-id="0_resource_name_obfuscated"  text="8"
+• res-id="D09"  desc="o" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="o"
+• res-id="0_resource_name_obfuscated"  text="9"
+• res-id="D10"  desc="p" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="p"
+• res-id="0_resource_name_obfuscated"  text="0"
+• res-id="C01"  desc="a" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="a"
+• res-id="C02"  desc="s" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="s"
+• res-id="C03"  desc="d" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="d"
+• res-id="C04"  desc="f" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="f"
+• res-id="C05"  desc="g" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="g"
+• res-id="C06"  desc="h" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="h"
+• res-id="C07"  desc="j" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="j"
+• res-id="C08"  desc="k" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="k"
+• res-id="C09"  desc="l" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="l"
+• res-id="key_pos_shift"  desc="Shift" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="B01"  desc="z" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="z"
+• res-id="B02"  desc="x" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="x"
+• res-id="B03"  desc="c" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="c"
+• res-id="B04"  desc="v" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="v"
+• res-id="B05"  desc="b" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="b"
+• res-id="B06"  desc="n" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="n"
+• res-id="B07"  desc="m" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="m"
+• res-id="key_pos_del"  desc="Delete" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_switch_to_symbol"  desc="Symbol keyboard" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="?123"
+• res-id="A02"  desc="slash" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="/"
+• res-id="key_pos_switch_to_next_language"  desc="Emoji button" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_space"  desc="Space" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="A08"  desc="Period" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="."
+• res-id="key_pos_ime_action"  desc="Go" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_method_navigation_bar_view"
+• res-id="input_method_nav_inflater"
+• res-id="input_method_nav_horizontal"
+• res-id="input_method_nav_buttons"
+• res-id="input_method_nav_ends_group"
+• res-id="input_method_nav_back"  desc="Back" [clickable]
+• res-id="input_method_nav_center_group"
+(187 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozClick failed: System permission Deny and don't ask again button
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="homepageView"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 470.8 ms, avg 470.8 ms)
+    [INFO] • Commands: 8 (total 6697.2 ms, avg 837.2 ms)
+    [INFO] • Locators: 8 (total 2792.2 ms, avg 349.0 ms)
+    [INFO] • Successes: 16   Failures: 1   Skips: 0
+    [INFO] • Wall time: 7493.4 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (47.1 ms)
+    [ERR] ✖ Click 'URL box' failed: Failed: assertExists.
+Can't retrieve node at index '0' of 'TestTag = 'ADDRESSBAR_URL_BOX''
+There are no existing nodes for that selector.
+ (67.9 ms)
+EFF_SCREEN_DUMP:BEGIN mozClick failed: URL box
+• testTag="homepage.view"
+• testTag="homepage.wordmark.logo"
+• testTag="homepage.wordmark.text"  desc="Firefox Fenix"
+• testTag="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• testTag="top_sites_list"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Google"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Amazon"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Chewy"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Wikipedia"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.add_shortcut_item"
+• text="Add shortcut"  testTag="top_sites_list.add_shortcut_item.add_shortcut_title"
+• testTag="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• testTag="org.mozilla.fenix.debug:id/composable_toolbar"
+• testTag="ADDRESSBAR_EDIT_MODE"
+• testTag="SEARCH_SELECTOR"  desc="DuckDuckGo: search engine selector" [clickable]
+• testTag="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• testTag="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+(34 nodes with a text/testTag/desc handle, of 59 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozClick failed: URL box
+windows on screen: 3
+• window title="null" type=SYSTEM
+• window title="English (US) (QWERTY)" type=INPUT_METHOD(keyboard)
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3), "English (US) (QWERTY)" (2)
+focused input: pkg=org.mozilla.fenix.debug id=null text="null" desc="null"
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozClick failed: URL box
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="homepageView"
+• res-id="homepage.view"
+• res-id="homepage.wordmark.logo"
+• res-id="homepage.wordmark.text"  desc="Firefox Fenix"
+• res-id="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• res-id="top_sites_list"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Google"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Amazon"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Chewy"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Wikipedia"
+• res-id="top_sites_list.add_shortcut_item"
+• res-id="top_sites_list.add_shortcut_item.add_shortcut_title"  text="Add shortcut"
+• res-id="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• res-id="composable_toolbar"
+• res-id="ADDRESSBAR_EDIT_MODE"
+• res-id="SEARCH_SELECTOR" [clickable]
+• desc="DuckDuckGo: search engine selector"
+• res-id="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• res-id="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="4:34"  desc="4:34 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+• res-id="content"
+• res-id="parentPanel"
+• res-id="inputArea"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="keyboard_holder"
+• res-id="keyboard_header_view_holder"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_access_points_menu"  desc="Open features menu" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Clipboard" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Translate" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Settings" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_power_key"  desc="Use voice typing" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_area"
+• res-id="D01"  desc="q" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="q"
+• res-id="0_resource_name_obfuscated"  text="1"
+• res-id="D02"  desc="w" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="w"
+• res-id="0_resource_name_obfuscated"  text="2"
+• res-id="D03"  desc="e" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="e"
+• res-id="0_resource_name_obfuscated"  text="3"
+• res-id="D04"  desc="r" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="r"
+• res-id="0_resource_name_obfuscated"  text="4"
+• res-id="D05"  desc="t" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="t"
+• res-id="0_resource_name_obfuscated"  text="5"
+• res-id="D06"  desc="y" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="y"
+• res-id="0_resource_name_obfuscated"  text="6"
+• res-id="D07"  desc="u" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="u"
+• res-id="0_resource_name_obfuscated"  text="7"
+• res-id="D08"  desc="i" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="i"
+• res-id="0_resource_name_obfuscated"  text="8"
+• res-id="D09"  desc="o" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="o"
+• res-id="0_resource_name_obfuscated"  text="9"
+• res-id="D10"  desc="p" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="p"
+• res-id="0_resource_name_obfuscated"  text="0"
+• res-id="C01"  desc="a" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="a"
+• res-id="C02"  desc="s" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="s"
+• res-id="C03"  desc="d" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="d"
+• res-id="C04"  desc="f" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="f"
+• res-id="C05"  desc="g" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="g"
+• res-id="C06"  desc="h" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="h"
+• res-id="C07"  desc="j" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="j"
+• res-id="C08"  desc="k" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="k"
+• res-id="C09"  desc="l" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="l"
+• res-id="key_pos_shift"  desc="Shift" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="B01"  desc="z" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="z"
+• res-id="B02"  desc="x" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="x"
+• res-id="B03"  desc="c" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="c"
+• res-id="B04"  desc="v" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="v"
+• res-id="B05"  desc="b" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="b"
+• res-id="B06"  desc="n" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="n"
+• res-id="B07"  desc="m" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="m"
+• res-id="key_pos_del"  desc="Delete" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_switch_to_symbol"  desc="Symbol keyboard" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="?123"
+• res-id="A02"  desc="slash" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="/"
+• res-id="key_pos_switch_to_next_language"  desc="Emoji button" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_space"  desc="Space" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="A08"  desc="Period" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="."
+• res-id="key_pos_ime_action"  desc="Go" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_method_navigation_bar_view"
+• res-id="input_method_nav_inflater"
+• res-id="input_method_nav_horizontal"
+• res-id="input_method_nav_buttons"
+• res-id="input_method_nav_ends_group"
+• res-id="input_method_nav_back"  desc="Back" [clickable]
+• res-id="input_method_nav_center_group"
+(187 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozClick failed: URL box
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="homepageView"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[ERR] ✖ Navigation to 'SearchBarComponent' failed: Failed: assertExists.
+Can't retrieve node at index '0' of 'TestTag = 'ADDRESSBAR_URL_BOX''
+There are no existing nodes for that selector.
+ (827.0 ms)
+EFF_SCREEN_DUMP:BEGIN navigateToPage failed: SearchBarComponent
+• testTag="homepage.view"
+• testTag="homepage.wordmark.logo"
+• testTag="homepage.wordmark.text"  desc="Firefox Fenix"
+• testTag="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• testTag="top_sites_list"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Google"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Amazon"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Chewy"  testTag="top_sites_list.top_site_item.top_site_title"
+• text="Sponsored"
+• testTag="top_sites_list.top_site_item"
+• testTag="top_sites_list.top_site_item.top_site_card_favicon"
+• text="Wikipedia"  testTag="top_sites_list.top_site_item.top_site_title"
+• testTag="top_sites_list.add_shortcut_item"
+• text="Add shortcut"  testTag="top_sites_list.add_shortcut_item.add_shortcut_title"
+• testTag="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• testTag="org.mozilla.fenix.debug:id/composable_toolbar"
+• testTag="ADDRESSBAR_EDIT_MODE"
+• testTag="SEARCH_SELECTOR"  desc="DuckDuckGo: search engine selector" [clickable]
+• testTag="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• testTag="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+(34 nodes with a text/testTag/desc handle, of 59 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] navigateToPage failed: SearchBarComponent
+windows on screen: 3
+• window title="null" type=SYSTEM
+• window title="English (US) (QWERTY)" type=INPUT_METHOD(keyboard)
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3), "English (US) (QWERTY)" (2)
+focused input: pkg=com.google.android.inputmethod.latin id=com.google.android.inputmethod.latin:id/key_pos_header_access_points_menu text="null" desc="Open features menu"
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] navigateToPage failed: SearchBarComponent
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="homepageView"
+• res-id="homepage.view"
+• res-id="homepage.wordmark.logo"
+• res-id="homepage.wordmark.text"  desc="Firefox Fenix"
+• res-id="private.browsing.homepage.button" [clickable]
+• desc="Private browsing"
+• text="Shortcuts"
+• text="Show all"  desc="Show all shortcuts"
+• res-id="top_sites_list"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Google"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Amazon"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Chewy"
+• text="Sponsored"
+• res-id="top_sites_list.top_site_item"
+• res-id="top_sites_list.top_site_item.top_site_card_favicon"
+• res-id="top_sites_list.top_site_item.top_site_title"  text="Wikipedia"
+• res-id="top_sites_list.add_shortcut_item"
+• res-id="top_sites_list.add_shortcut_item.add_shortcut_title"  text="Add shortcut"
+• res-id="trackersBlockedCard.protectionStatusPill" [clickable]
+• text="Help catch trackers"
+• res-id="composable_toolbar"
+• res-id="ADDRESSBAR_EDIT_MODE"
+• res-id="SEARCH_SELECTOR" [clickable]
+• desc="DuckDuckGo: search engine selector"
+• res-id="ADDRESSBAR_SEARCH_BOX" [clickable]
+• text="Search the web"
+• desc="Voice search" [clickable]
+• desc="QR scanner" [clickable]
+• res-id="ADDRESSBAR_EDIT_MODE_HORIZONTAL_DIVIDER"
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="4:34"  desc="4:34 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+• res-id="content"
+• res-id="parentPanel"
+• res-id="inputArea"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="keyboard_holder"
+• res-id="keyboard_header_view_holder"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_access_points_menu"  desc="Open features menu" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Clipboard" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Translate" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• desc="Settings" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_header_power_key"  desc="Use voice typing" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_area"
+• res-id="D01"  desc="q" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="q"
+• res-id="0_resource_name_obfuscated"  text="1"
+• res-id="D02"  desc="w" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="w"
+• res-id="0_resource_name_obfuscated"  text="2"
+• res-id="D03"  desc="e" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="e"
+• res-id="0_resource_name_obfuscated"  text="3"
+• res-id="D04"  desc="r" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="r"
+• res-id="0_resource_name_obfuscated"  text="4"
+• res-id="D05"  desc="t" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="t"
+• res-id="0_resource_name_obfuscated"  text="5"
+• res-id="D06"  desc="y" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="y"
+• res-id="0_resource_name_obfuscated"  text="6"
+• res-id="D07"  desc="u" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="u"
+• res-id="0_resource_name_obfuscated"  text="7"
+• res-id="D08"  desc="i" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="i"
+• res-id="0_resource_name_obfuscated"  text="8"
+• res-id="D09"  desc="o" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="o"
+• res-id="0_resource_name_obfuscated"  text="9"
+• res-id="D10"  desc="p" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="p"
+• res-id="0_resource_name_obfuscated"  text="0"
+• res-id="C01"  desc="a" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="a"
+• res-id="C02"  desc="s" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="s"
+• res-id="C03"  desc="d" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="d"
+• res-id="C04"  desc="f" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="f"
+• res-id="C05"  desc="g" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="g"
+• res-id="C06"  desc="h" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="h"
+• res-id="C07"  desc="j" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="j"
+• res-id="C08"  desc="k" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="k"
+• res-id="C09"  desc="l" [clickable]
+• res-id="host"
+• res-id="0_resource_name_obfuscated"  desc="l"
+• res-id="key_pos_shift"  desc="Shift" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="B01"  desc="z" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="z"
+• res-id="B02"  desc="x" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="x"
+• res-id="B03"  desc="c" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="c"
+• res-id="B04"  desc="v" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="v"
+• res-id="B05"  desc="b" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="b"
+• res-id="B06"  desc="n" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="n"
+• res-id="B07"  desc="m" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="m"
+• res-id="key_pos_del"  desc="Delete" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_switch_to_symbol"  desc="Symbol keyboard" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="?123"
+• res-id="A02"  desc="slash" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="/"
+• res-id="key_pos_switch_to_next_language"  desc="Emoji button" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="key_pos_space"  desc="Space" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="A08"  desc="Period" [clickable]
+• res-id="0_resource_name_obfuscated"  desc="."
+• res-id="key_pos_ime_action"  desc="Go" [clickable]
+• res-id="0_resource_name_obfuscated"
+• res-id="0_resource_name_obfuscated"
+• res-id="input_method_navigation_bar_view"
+• res-id="input_method_nav_inflater"
+• res-id="input_method_nav_horizontal"
+• res-id="input_method_nav_buttons"
+• res-id="input_method_nav_ends_group"
+• res-id="input_method_nav_back"  desc="Back" [clickable]
+• res-id="input_method_nav_center_group"
+(187 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] navigateToPage failed: SearchBarComponent
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="homepageView"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 827.0 ms, avg 827.0 ms)
+    [INFO] • Commands: 1 (total 67.9 ms, avg 67.9 ms)
+    [INFO] • Locators: 1 (total 47.1 ms, avg 47.1 ms)
+    [INFO] • Successes: 1   Failures: 2   Skips: 0
+    [INFO] • Wall time: 879.9 ms
+failed: verifyQRScanningCameraAccessDialogTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+----- begin exception -----
+java.lang.AssertionError: Failed: assertExists.
+Can't retrieve node at index '0' of 'TestTag = 'ADDRESSBAR_URL_BOX''
+There are no existing nodes for that selector.
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:175)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at org.mozilla.fenix.ui.efficiency.core.ComposeUiElement.click(UiElement.kt:53)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozClick(BasePage.kt:549)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage(BasePage.kt:164)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.SearchBarComponent.navigateToPage(SearchBarComponent.kt:47)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.SearchBarComponent.navigateToPage(SearchBarComponent.kt:22)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage$default(BasePage.kt:137)
+	at org.mozilla.fenix.ui.efficiency.tests.SearchTest.verifyQRScanningCameraAccessDialogTest(SearchTest.kt:432)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

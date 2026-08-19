@@ -1,0 +1,59 @@
+{
+  "batch": "b10-searchclass",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SearchTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T19:50:54Z",
+  "tests": 10,
+  "failures": 1,
+  "skipped": 2,
+  "results": [
+    {
+      "name": "scanQRCodeToOpenAWebpageTest",
+      "status": "fail"
+    },
+    {
+      "name": "browserSearchBarItemsTest",
+      "status": "skipped"
+    },
+    {
+      "name": "deleteIndividualHistoryItemsFromSearchGroupTest",
+      "status": "pass"
+    },
+    {
+      "name": "verifyTabsSearchWithOpenTabsTest",
+      "status": "pass"
+    },
+    {
+      "name": "searchResultsOpenedInNewTabsGenerateSearchGroupsTest",
+      "status": "pass"
+    },
+    {
+      "name": "searchEnginesCanBeChangedTemporarilyFromSearchSelectorMenuTest",
+      "status": "pass"
+    },
+    {
+      "name": "searchHistoryNotRememberedInPrivateBrowsingTest",
+      "status": "pass"
+    },
+    {
+      "name": "homeSearchBarItemsTest",
+      "status": "skipped"
+    },
+    {
+      "name": "verifyHistorySearchWithBrowsingHistoryTest",
+      "status": "pass"
+    },
+    {
+      "name": "searchGroupIsNotGeneratedForLinksOpenedInPrivateTabsTest",
+      "status": "pass"
+    }
+  ],
+  "failed": [
+    {
+      "name": "scanQRCodeToOpenAWebpageTest",
+      "message": "java.lang.IllegalArgumentException: CaptureRequest contains unconfigured Input/Output Surface!"
+    }
+  ],
+  "outcome": "fail"
+}

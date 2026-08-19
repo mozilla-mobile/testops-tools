@@ -1,0 +1,207 @@
+{
+  "T0-absence-assert": {
+    "expected_rules": [
+      "T0"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b14d-sponsored"
+  },
+  "T1-arrival-timeout": {
+    "expected_rules": [
+      "T1"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b4e-privhist"
+  },
+  "T10-crash": {
+    "expected_rules": [
+      "T11",
+      "T10"
+    ],
+    "known_gap": false,
+    "note": "Also carries 2 silently SKIPPED tests (browserSearchBarItemsTest, homeSearchBarItemsTest) among 10 \u2014 invisible before T11 existed.",
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b10-searchclass"
+  },
+  "T13-arrival-wrong-screen": {
+    "expected_rules": [
+      "T13"
+    ],
+    "known_gap": false,
+    "note": "Arrival anchors ('Page summaries' title, 'Navigate up') also matched the PARENT Settings screen, so mozIsOnPageNow() reported arrival and navigateToPage skipped its own click. efftriage originally answered T5 (a system overlay) here, blaming the status bar \u2014 T5's first real firing was a false positive, which is why it stayed in UNVALIDATED_RULES.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b26-pagesummaries"
+  },
+  "T14-checked-wrong-node": {
+    "expected_rules": [
+      "T14"
+    ],
+    "known_gap": false,
+    "note": "mozVerifyElementIsChecked on a COMPOSE_BY_TEXT selector: the state is `selected` on the MERGED row, so the unmerged text node carries none. Previously answered 'no rule matched'. This run also predates the ScreenDump those verbs now emit, so it has no dump \u2014 which is what made it opaque.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b33-nevertranslate"
+  },
+  "T14-selected-not-checked": {
+    "expected_rules": [
+      "T14"
+    ],
+    "known_gap": false,
+    "note": "The 'is not selected' half of A46. Guards the 2026-08-13 widening of T14's matcher: it keyed on 'checked' only, so following A46's own advice (switch to mozVerifyElementIsSelected) produced a message the rule could not see. Keep both state words in the regex.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b73-shortcuts3"
+  },
+  "T15-external-app-blocked": {
+    "expected_rules": [
+      "T15"
+    ],
+    "known_gap": false,
+    "note": "Permission chain still draining behind the expected picker: grantSystemPermission() handled one of two dialogs. The legacy twin passes in this same state because assertExternalAppOpens swallows its AssertionFailedError.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b66-fileupload2"
+  },
+  "T18-arrival-wrong-tree": {
+    "expected_rules": [
+      "T18"
+    ],
+    "known_gap": false,
+    "note": "Arrival anchor existed on screen but as a COMPOSE node while the selector was ESPRESSO_BY_TEXT, on a Settings screen that is a View toolbar over Compose content. The click path succeeded; only the anchor missed. Neither T9 branch reaches this: 'Failed to navigate to X' lands in the FAILURES summary, never in an [ERR] window.",
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b72-shortcuts2"
+  },
+  "T19-no-nav-path": {
+    "expected_rules": [
+      "T19"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "sp02-autoplay"
+  },
+  "T2-selector-surface": {
+    "expected_rules": [
+      "T2"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b17e-qrdialog"
+  },
+  "T6-count-mismatch": {
+    "expected_rules": [
+      "T6"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b9-deletegroup"
+  },
+  "T7-multi": {
+    "expected_rules": [
+      "T7",
+      "T1"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b4d-privhist"
+  },
+  "T8-ad-surface": {
+    "expected_rules": [
+      "T8"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b13-sponsored"
+  },
+  "T9-permission": {
+    "expected_rules": [
+      "T9"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b14c-sponsored"
+  },
+  "compile-failed": {
+    "expected_rules": [
+      "T12"
+    ],
+    "known_gap": false,
+    "note": "compiled=false. Previously answered 'no rule matched', sending the reader to a trace that was never produced.",
+    "outcome": "unknown",
+    "retried": false,
+    "source_batch": "b25-pagesummaries"
+  },
+  "compile-failed-fxsuggest": {
+    "expected_rules": [
+      "T12"
+    ],
+    "known_gap": false,
+    "note": "compiled=false, so this is a COMPILE FAILURE, not an empty-report case. It was previously labelled the latter and drew the misleading A24 advice (check effpretty, pull dumps off the device) when the real problem was a Kotlin error. The genuine empty-report/A24 path is covered by a synthetic case in BadInputTests instead.",
+    "outcome": "unknown",
+    "retried": false,
+    "source_batch": "b18-fxsuggest"
+  },
+  "gap-qrdialog-b17d": {
+    "expected_rules": [
+      "T16"
+    ],
+    "known_gap": false,
+    "note": "Instrumentation PROCESS crash: the report is ~11 lines with no [ERR] line at all, so no window rule can reach it. Covered by the report-level tier (T16) keyed on status.json's primary failure message.",
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b17d-qrdialog"
+  },
+  "gap-sponsored-b13d": {
+    "expected_rules": [],
+    "known_gap": true,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "b13d-sponsored"
+  },
+  "gap-sponsored-b14e": {
+    "expected_rules": [
+      "T17"
+    ],
+    "known_gap": false,
+    "note": "Ads-client fake built with NoHandle had an un-overridden method called; the exception lands 36 lines past the [ERR], outside failure_windows()'s after=25. Covered by the report-level tier (T17). Do NOT match this text report-wide: it also appears as a Suppressed exception in T0-absence-assert and T9-permission.",
+    "outcome": "fail",
+    "retried": false,
+    "source_batch": "b14e-sponsored"
+  },
+  "pass-clean": {
+    "expected_rules": [],
+    "known_gap": false,
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b19-fxsuggest-confirm"
+  },
+  "pass-with-nonfatal-errs": {
+    "expected_rules": [],
+    "known_gap": false,
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b17j-qrdialog"
+  },
+  "skipped-scored-as-pass": {
+    "expected_rules": [
+      "T11"
+    ],
+    "known_gap": false,
+    "note": "Legacy MainMenuTest summarize test is @Ignore'd (bug 2059592), so it SKIPPED. status.json scored it outcome=pass. efftriage must diagnose it from the per-test statuses, not the outcome.",
+    "outcome": "pass",
+    "retried": false,
+    "source_batch": "b22-summarize-baseline"
+  }
+}

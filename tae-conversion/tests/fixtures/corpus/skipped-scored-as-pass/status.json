@@ -1,0 +1,18 @@
+{
+  "batch": "b22-summarize-baseline",
+  "test": "org.mozilla.fenix.ui.MainMenuTest#verifyTheMoreMainMenuSummarizePageButtonTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-13T09:26:48Z",
+  "tests": 1,
+  "failures": 0,
+  "skipped": 1,
+  "results": [
+    {
+      "name": "verifyTheMoreMainMenuSummarizePageButtonTest",
+      "status": "skipped"
+    }
+  ],
+  "failed": [],
+  "outcome": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "batch": "b17d-qrdialog",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SearchTest#verifyQRScanningCameraAccessDialogTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T21:33:24Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyQRScanningCameraAccessDialogTest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifyQRScanningCameraAccessDialogTest",
+      "message": "Test instrumentation process crashed. Check org.mozilla.fenix.ui.efficiency.tests.SearchTest#verifyQRScanningCameraAccessDialogTest.txt for details"
+    }
+  ],
+  "outcome": "fail"
+}

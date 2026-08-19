@@ -1,0 +1,27 @@
+{
+  "batch": "sp02-autoplay",
+  "test": "SettingsSitePermissionsTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-19T17:45:54Z",
+  "tests": 2,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest",
+      "status": "fail"
+    },
+    {
+      "name": "verifyAutoplayBlockAudioOnlySettingOnMutedVideoTest",
+      "status": "pass"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest",
+      "message": "java.lang.AssertionError: No navigation path found from 'SettingsSiteSettingsAutoplayPage' to 'BrowserPage'"
+    }
+  ],
+  "outcome": "fail"
+}

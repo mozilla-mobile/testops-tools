@@ -1,0 +1,204 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest
+      java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSearchTest)
+RetryTestRule: Started try #1.
+        [ERR] ✖ 'the Engines visible on the search menu header' not found (152.7 ms)
+    [ERR] ✖ 'SettingsSearchManageShortcutsPage' not visible yet (153.4 ms)
+Trying to find path from 'AppEntry' to 'SettingsSearchManageShortcutsPage'
+Navigation path found from 'AppEntry' to 'SettingsSearchManageShortcutsPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 3: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Search, secondaryValue=null, description=the Search button, groups=[generalSettingsSection], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Manage alternative search engines, secondaryValue=null, description=Manage alternative search engines option, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (48.1 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (115.6 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (40.8 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (43.1 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (44.5 ms)
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (477.6 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (561.4 ms)
+    [CMD] ➤ Attempting to click 'the Search button'...
+        [LOC] 🔎 Attempting to locate 'the Search button'...
+        [OK] ✔ 'the Search button' found ⚠️ SLOW (1045.0 ms)
+    [OK] ✔ Clicked 'the Search button' ⚠️ SLOW (1182.9 ms)
+    [CMD] ➤ Attempting to click 'Manage alternative search engines option'...
+        [LOC] 🔎 Attempting to locate 'Manage alternative search engines option'...
+        [OK] ✔ 'Manage alternative search engines option' found (79.9 ms)
+    [OK] ✔ Clicked 'Manage alternative search engines option' (379.8 ms)
+    [CMD] ➤ Attempting to verify SettingsSearchManageShortcutsPage loads...
+        [LOC] 🔎 Attempting to locate 'the Engines visible on the search menu header'...
+        [OK] ✔ 'the Engines visible on the search menu header' found (26.9 ms)
+    [OK] ✔ 'SettingsSearchManageShortcutsPage' loaded (30.0 ms)
+[OK] ✔ Navigation to 'SettingsSearchManageShortcutsPage' completed ⚠️ SLOW (2439.4 ms)
+    [CMD] ➤ Attempting to click ''Reddit' search shortcut row'...
+        [LOC] 🔎 Attempting to locate ''Reddit' search shortcut row'...
+        [OK] ✔ ''Reddit' search shortcut row' found (166.6 ms)
+    [OK] ✔ Clicked ''Reddit' search shortcut row' (350.4 ms)
+    [CMD] ➤ Verifying ''Reddit' search shortcut row' is selected...
+        [LOC] 🔎 Attempting to locate ''Reddit' search shortcut row'...
+        [OK] ✔ ''Reddit' search shortcut row' found (0.1 ms)
+    [ERR] ✖ ''Reddit' search shortcut row' is not selected (32.7 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 2439.4 ms, avg 2439.4 ms)
+    [INFO] • Commands: 10 (total 2893.8 ms, avg 289.4 ms)
+    [INFO] • Locators: 9 (total 2037.6 ms, avg 226.4 ms)
+    [INFO] • Successes: 17   Failures: 3   Skips: 0
+    [INFO] • Wall time: 2851.6 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+        [ERR] ✖ 'the Engines visible on the search menu header' not found (73.6 ms)
+    [ERR] ✖ 'SettingsSearchManageShortcutsPage' not visible yet (74.5 ms)
+Trying to find path from 'AppEntry' to 'SettingsSearchManageShortcutsPage'
+Navigation path found from 'AppEntry' to 'SettingsSearchManageShortcutsPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 3: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Search, secondaryValue=null, description=the Search button, groups=[generalSettingsSection], name=null))
+   Step 4: Click(selector=Selector(strategy=ESPRESSO_BY_TEXT, value=Manage alternative search engines, secondaryValue=null, description=Manage alternative search engines option, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (48.7 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (102.6 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (89.6 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (90.3 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (90.9 ms)
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (290.7 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (350.3 ms)
+    [CMD] ➤ Attempting to click 'the Search button'...
+        [LOC] 🔎 Attempting to locate 'the Search button'...
+        [OK] ✔ 'the Search button' found ⚠️ SLOW (997.5 ms)
+    [OK] ✔ Clicked 'the Search button' ⚠️ SLOW (1124.6 ms)
+    [CMD] ➤ Attempting to click 'Manage alternative search engines option'...
+        [LOC] 🔎 Attempting to locate 'Manage alternative search engines option'...
+        [OK] ✔ 'Manage alternative search engines option' found (50.6 ms)
+    [OK] ✔ Clicked 'Manage alternative search engines option' (317.4 ms)
+    [CMD] ➤ Attempting to verify SettingsSearchManageShortcutsPage loads...
+        [LOC] 🔎 Attempting to locate 'the Engines visible on the search menu header'...
+        [OK] ✔ 'the Engines visible on the search menu header' found (25.7 ms)
+    [OK] ✔ 'SettingsSearchManageShortcutsPage' loaded (27.1 ms)
+[OK] ✔ Navigation to 'SettingsSearchManageShortcutsPage' completed ⚠️ SLOW (2008.2 ms)
+    [CMD] ➤ Attempting to click ''Reddit' search shortcut row'...
+        [LOC] 🔎 Attempting to locate ''Reddit' search shortcut row'...
+        [OK] ✔ ''Reddit' search shortcut row' found (40.3 ms)
+    [OK] ✔ Clicked ''Reddit' search shortcut row' (93.6 ms)
+    [CMD] ➤ Verifying ''Reddit' search shortcut row' is selected...
+        [LOC] 🔎 Attempting to locate ''Reddit' search shortcut row'...
+        [OK] ✔ ''Reddit' search shortcut row' found (0.0 ms)
+    [ERR] ✖ ''Reddit' search shortcut row' is not selected (52.8 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 1 (total 2008.2 ms, avg 2008.2 ms)
+    [INFO] • Commands: 10 (total 2324.0 ms, avg 232.4 ms)
+    [INFO] • Locators: 9 (total 1616.6 ms, avg 179.6 ms)
+    [INFO] • Successes: 17   Failures: 3   Skips: 0
+    [INFO] • Wall time: 2173.5 ms
+failed: verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSearchTest)
+----- begin exception -----
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #809 at (l=295.0, t=809.0, r=1038.0, b=872.0)px
+Text = '[Reddit]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+Has 16 siblings
+Selector used: (Text + InputText + EditableText contains 'Reddit' (ignoreCase: false))
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyElementIsSelected(BasePage.kt:1211)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyElementIsSelected$default(BasePage.kt:1193)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.SettingsSearchManageShortcutsPage.enableSearchShortcut(SettingsSearchManageShortcutsPage.kt:58)
+	at org.mozilla.fenix.ui.efficiency.tests.SettingsSearchTest.verifySearchShortcutChangesAreReflectedInSearchSelectorMenuTest(SettingsSearchTest.kt:23)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:158)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

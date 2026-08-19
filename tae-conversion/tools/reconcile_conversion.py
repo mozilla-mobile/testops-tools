@@ -91,7 +91,24 @@ def parse_efficiency(ui_dir):
                         names.add(m.group(1).strip("`")); break
     return names
 
+def _tae_version():
+    """Version of the whole tae-conversion toolchain (tools + docs are stamped together).
+
+    realpath, not __file__: these tools are commonly invoked through symlinks from another checkout's
+    tools/ dir, and an unresolved path would look for VERSION in the wrong repo and report "unknown"
+    exactly where a staleness check matters most.
+    """
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "VERSION")
+    try:
+        return open(p).read().strip()
+    except OSError:
+        return "unknown"
+
+
 def main():
+    if "--version" in sys.argv[1:]:
+        print(f"{os.path.basename(__file__)} \u2014 tae-conversion {_tae_version()}")
+        sys.exit(0)
     ap = argparse.ArgumentParser()
     ap.add_argument("--ui-dir", default=None)
     ap.add_argument("--sheet-tsv", default=None, help="TSV Class<TAB>Method in Detail-tab order")

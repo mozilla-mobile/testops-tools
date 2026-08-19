@@ -1,0 +1,474 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ searchHistoryNotRememberedInPrivateBrowsingTest
+      java.lang.AssertionError: Element not found for selector: New tab button (UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS -> New tab)
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: searchHistoryNotRememberedInPrivateBrowsingTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (194.5 ms)
+    [OK] ✔ Clicked 'URL box' (299.7 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (142.1 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (144.4 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (452.2 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.9 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (166.9 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (351.6 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (1510.4 ms)
+    [OK] ✔ 'BrowserPage' already visible ⚠️ SLOW (1511.4 ms)
+[OK] ✔ 'BrowserPage' already loaded ⚠️ SLOW (1511.6 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (62.8 ms)
+    [ERR] ✖ 'HomePage' not visible yet (66.5 ms)
+Trying to find path from 'BrowserPage' to 'HomePage'
+Navigation path found from 'BrowserPage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS, value=New tab, secondaryValue=null, description=New tab button, groups=[], name=null))
+   Step 2: org.mozilla.fenix.ui.efficiency.navigation.NavigationStep$PressBack@22c2b75
+    [CMD] ➤ Attempting to click 'New tab button'...
+        [LOC] 🔎 Attempting to locate 'New tab button'...
+        [OK] ✔ 'New tab button' found ⚠️ SLOW (437.6 ms)
+    [OK] ✔ Clicked 'New tab button' (599.1 ms)
+    [CMD] ➤ Attempting to verify HomePage loads...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [OK] ✔ 'Homepage view' found ⚠️ SLOW (348.9 ms)
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (32.4 ms)
+    [OK] ✔ 'HomePage' loaded (382.7 ms)
+[OK] ✔ Navigation to 'HomePage' completed ⚠️ SLOW (2883.2 ms)
+    [CMD] ➤ Attempting to click 'Private browsing button'...
+        [LOC] 🔎 Attempting to locate 'Private browsing button'...
+        [OK] ✔ 'Private browsing button' found (50.3 ms)
+    [OK] ✔ Clicked 'Private browsing button' (104.3 ms)
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'HomePage' to 'SearchBarComponent'
+Navigation path found from 'HomePage' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (229.9 ms)
+    [OK] ✔ Clicked 'URL box' (290.0 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (141.9 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (142.7 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (436.9 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (96.7 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (174.3 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (952.6 ms)
+    [OK] ✔ 'BrowserPage' already visible ⚠️ SLOW (953.5 ms)
+[OK] ✔ 'BrowserPage' already loaded (953.8 ms)
+    [CMD] ➤ Attempting to click 'URL box' if present...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (601.6 ms)
+    [OK] ✔ Clicked 'URL box' ⚠️ SLOW (3736.3 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [ERR] ✖ Enter text failed for 'Toolbar in edit mode': Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'ADDRESSBAR_SEARCH_BOX')
+ (61.2 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 5 (total 6237.6 ms, avg 1247.5 ms)
+    [INFO] • Commands: 16 (total 9081.3 ms, avg 567.6 ms)
+    [INFO] • Locators: 17 (total 4706.0 ms, avg 276.8 ms)
+    [INFO] • Successes: 35   Failures: 3   Skips: 0
+    [INFO] • Wall time: 11025.9 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SearchBarComponent
+Trying to find path from 'AppEntry' to 'SearchBarComponent'
+Navigation path found from 'AppEntry' to 'SearchBarComponent':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (40.0 ms)
+    [OK] ✔ Clicked 'URL box' (95.0 ms)
+    [CMD] ➤ Attempting to verify SearchBarComponent loads...
+        [LOC] 🔎 Attempting to locate 'Search engine selector button'...
+        [OK] ✔ 'Search engine selector button' found (92.8 ms)
+    [OK] ✔ 'SearchBarComponent' loaded (93.5 ms)
+[OK] ✔ Navigation to 'SearchBarComponent' completed (189.9 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (154.5 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (180.6 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (938.7 ms)
+    [OK] ✔ 'BrowserPage' already visible ⚠️ SLOW (940.9 ms)
+[OK] ✔ 'BrowserPage' already loaded (942.6 ms)
+[STEP] ★ Attempting to Navigate to HomePage
+    [CMD] ➤ Checking if 'HomePage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Homepage view'...
+        [ERR] ✖ 'Homepage view' not found (81.9 ms)
+    [ERR] ✖ 'HomePage' not visible yet (82.9 ms)
+Trying to find path from 'BrowserPage' to 'HomePage'
+Navigation path found from 'BrowserPage' to 'HomePage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS, value=New tab, secondaryValue=null, description=New tab button, groups=[], name=null))
+   Step 2: org.mozilla.fenix.ui.efficiency.navigation.NavigationStep$PressBack@22c2b75
+    [CMD] ➤ Attempting to click 'New tab button'...
+        [LOC] 🔎 Attempting to locate 'New tab button'...
+        [ERR] ✖ 'New tab button' not found ⚠️ SLOW (450.9 ms)
+    [ERR] ✖ Click 'New tab button' failed: element not found (451.7 ms)
+EFF_SCREEN_DUMP:BEGIN mozClick target not found: New tab button
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc=" test page 1. Search or enter address"
+• text="‎test page 1"  testTag="ADDRESSBAR_URL"
+• desc="New private tab" [clickable]
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Private Tabs Open: 1. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text1"
+• testTag="TabCounterTestTags.privacy_badge"
+• desc="More options" [clickable]
+• testTag="ADDRESSBAR_PROGRESSBAR"
+(13 nodes with a text/testTag/desc handle, of 26 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozClick target not found: New tab button
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id= text="Test_Page_4" desc=""
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozClick target not found: New tab button
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="gestureLayout"
+• res-id="browserWindow"
+• res-id="browserLayout"
+• res-id="swipeRefresh"
+• res-id="engineView"
+• text="Test_Page_4"
+• res-id="testContent"
+• text="Page content: 4"
+• desc="Link 1" [clickable]
+• text="Link 1"
+• desc="Link 2" [clickable]
+• text="Link 2"
+• desc="Link 3" [clickable]
+• text="Link 3"
+• desc="test_link_image" [clickable]
+• text="test_link_image" [clickable]
+• text="test_link_image" [clickable]
+• text="test_no_link_image"
+• text="test_no_link_image"
+• res-id="composable_toolbar"
+• res-id="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• res-id="ADDRESSBAR_URL_BOX"  desc=" test page 1. Search or enter address"
+• desc="New private tab" [clickable]
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Private Tabs Open: 1. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text1"
+• res-id="TabCounterTestTags.privacy_badge"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="1:18"  desc="1:18 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, two bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery charging, 100 percent."
+(60 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozClick target not found: New tab button
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="gestureLayout"  class=SwipeGestureLayout
+•                     id="browserWindow"  class=ConstraintLayout
+•                       id="browserLayout"  class=CoordinatorLayout
+•                         id="swipeRefresh"  class=VerticalSwipeRefreshLayout
+•                           id="engineView"  class=GeckoEngineView
+•                         id="findInPageViewStub"  class=ViewStub  [gone]
+•                         id="readerViewControlsBar"  class=ReaderViewControlsBar  [clickable]  [gone]
+•                         id="crash_reporter_view"  class=CrashContentView  [gone]
+•                         id="dynamicSnackbarContainer"  class=ConstraintLayout
+•                         id="loginSelectBarStub"  class=ViewStub  [gone]
+•                         id="suggestStrongPasswordBarStub"  class=ViewStub  [gone]
+•                         id="emailMaskBarStub"  class=ViewStub  [gone]
+•                         id="addressSelectBarStub"  class=ViewStub  [gone]
+•                         id="creditCardSelectBarStub"  class=ViewStub  [gone]
+•                         id="translationsBannerStub"  class=ViewStub  [gone]
+•                         id="navigation_bar"  class=NavigationBarComposeView
+•                         id="composable_toolbar"  class=ScrollableToolbarComposeView
+•                     id="tabPreview"  class=TabPreview  [gone]
+•                       id="previewThumbnail"  class=TabThumbnailView
+•                       id="composableTopToolbar"  class=ComposeView
+•                       id="composableBottomToolbar"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[ERR] ✖ Navigation to 'HomePage' failed: Element not found for selector: New tab button (UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS -> New tab) (580.5 ms)
+EFF_SCREEN_DUMP:BEGIN navigateToPage failed: HomePage
+• testTag="ADDRESSBAR_URL_BOX"  desc="Search or enter address"
+• text="‎Search or enter address"  testTag="ADDRESSBAR_URL"
+• testTag="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• testTag="ADDRESSBAR_URL_BOX"  desc=" test page 1. Search or enter address"
+• text="‎test page 1"  testTag="ADDRESSBAR_URL"
+• desc="New private tab" [clickable]
+• testTag="ADDRESSBAR_TABS_COUNTER" [clickable]
+• testTag="TabCounterTestTags.tabCounter"  desc="Private Tabs Open: 1. Tap to switch tabs."
+• testTag="TabCounterTestTags.icon"
+• testTag="TabCounterTestTags.text1"
+• testTag="TabCounterTestTags.privacy_badge"
+• desc="More options" [clickable]
+• testTag="ADDRESSBAR_PROGRESSBAR"
+(13 nodes with a text/testTag/desc handle, of 26 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] navigateToPage failed: HomePage
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Firefox Fenix" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id= text="Test_Page_4" desc=""
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] navigateToPage failed: HomePage
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="container"
+• res-id="container"
+• res-id="gestureLayout"
+• res-id="browserWindow"
+• res-id="browserLayout"
+• res-id="swipeRefresh"
+• res-id="engineView"
+• text="Test_Page_4"
+• res-id="testContent"
+• text="Page content: 4"
+• desc="Link 1" [clickable]
+• text="Link 1"
+• desc="Link 2" [clickable]
+• text="Link 2"
+• desc="Link 3" [clickable]
+• text="Link 3"
+• desc="test_link_image" [clickable]
+• text="test_link_image" [clickable]
+• text="test_link_image" [clickable]
+• text="test_no_link_image"
+• text="test_no_link_image"
+• res-id="composable_toolbar"
+• res-id="browser.toolbar.site.info.insecure.connection"  desc="Site information" [clickable]
+• res-id="ADDRESSBAR_URL_BOX"  desc=" test page 1. Search or enter address"
+• desc="New private tab" [clickable]
+• res-id="ADDRESSBAR_TABS_COUNTER" [clickable]
+• res-id="TabCounterTestTags.tabCounter"  desc="Private Tabs Open: 1. Tap to switch tabs."
+• res-id="TabCounterTestTags.icon"
+• res-id="TabCounterTestTags.text1"
+• res-id="TabCounterTestTags.privacy_badge"
+• desc="More options" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="1:18"  desc="1:18 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, two bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery charging, 100 percent."
+(60 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] navigateToPage failed: HomePage
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbarStub"  class=ViewStub  [gone]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                   id="gestureLayout"  class=SwipeGestureLayout
+•                     id="browserWindow"  class=ConstraintLayout
+•                       id="browserLayout"  class=CoordinatorLayout
+•                         id="swipeRefresh"  class=VerticalSwipeRefreshLayout
+•                           id="engineView"  class=GeckoEngineView
+•                         id="findInPageViewStub"  class=ViewStub  [gone]
+•                         id="readerViewControlsBar"  class=ReaderViewControlsBar  [clickable]  [gone]
+•                         id="crash_reporter_view"  class=CrashContentView  [gone]
+•                         id="dynamicSnackbarContainer"  class=ConstraintLayout
+•                         id="loginSelectBarStub"  class=ViewStub  [gone]
+•                         id="suggestStrongPasswordBarStub"  class=ViewStub  [gone]
+•                         id="emailMaskBarStub"  class=ViewStub  [gone]
+•                         id="addressSelectBarStub"  class=ViewStub  [gone]
+•                         id="creditCardSelectBarStub"  class=ViewStub  [gone]
+•                         id="translationsBannerStub"  class=ViewStub  [gone]
+•                         id="navigation_bar"  class=NavigationBarComposeView
+•                         id="composable_toolbar"  class=ScrollableToolbarComposeView
+•                     id="tabPreview"  class=TabPreview  [gone]
+•                       id="previewThumbnail"  class=TabThumbnailView
+•                       id="composableTopToolbar"  class=ComposeView
+•                       id="composableBottomToolbar"  class=ComposeView
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 3 (total 1712.9 ms, avg 571.0 ms)
+    [INFO] • Commands: 7 (total 1999.0 ms, avg 285.6 ms)
+    [INFO] • Locators: 7 (total 1604.4 ms, avg 229.2 ms)
+    [INFO] • Successes: 12   Failures: 5   Skips: 0
+    [INFO] • Wall time: 2148.6 ms
+failed: searchHistoryNotRememberedInPrivateBrowsingTest(org.mozilla.fenix.ui.efficiency.tests.SearchTest)
+----- begin exception -----
+java.lang.AssertionError: Element not found for selector: New tab button (UIAUTOMATOR_WITH_DESCRIPTION_CONTAINS -> New tab)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozClick(BasePage.kt:494)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage(BasePage.kt:161)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage$default(BasePage.kt:134)
+	at org.mozilla.fenix.ui.efficiency.tests.SearchTest.searchHistoryNotRememberedInPrivateBrowsingTest(SearchTest.kt:104)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:148)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

@@ -1,0 +1,4 @@
+--------- beginning of main
+run started: 1 tests
+ignored: verifyTheMoreMainMenuSummarizePageButtonTest(org.mozilla.fenix.ui.MainMenuTest)
+run finished: 0 tests, 0 failed, 1 ignored

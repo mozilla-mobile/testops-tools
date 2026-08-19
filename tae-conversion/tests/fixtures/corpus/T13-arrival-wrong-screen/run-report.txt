@@ -1,0 +1,515 @@
+==============================================================================
+FAILURES (1 of 1)
+==============================================================================
+  ✖ verifyPageSummariesUITest
+      java.lang.AssertionError: Not all elements in group 'pageSummariesView' are present
+==============================================================================
+
+--------- beginning of main
+run started: 1 tests
+started: verifyPageSummariesUITest(org.mozilla.fenix.ui.efficiency.tests.SettingsPageSummariesTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SettingsPage
+    [CMD] ➤ Checking if 'SettingsPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [ERR] ✖ 'the Back Arrow button' not found (239.5 ms)
+    [ERR] ✖ 'SettingsPage' not visible yet (240.1 ms)
+Trying to find path from 'AppEntry' to 'SettingsPage'
+Navigation path found from 'AppEntry' to 'SettingsPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (66.3 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (137.7 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (325.9 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (326.8 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (32.5 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (33.6 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (34.2 ms)
+        [OK] ✔ 'Main menu Settings button' found (78.4 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (158.7 ms)
+    [CMD] ➤ Attempting to verify SettingsPage loads...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (135.9 ms)
+        [LOC] 🔎 Attempting to locate 'Settings screen title'...
+        [OK] ✔ 'Settings screen title' found (8.8 ms)
+    [OK] ✔ 'SettingsPage' loaded (147.2 ms)
+[OK] ✔ Navigation to 'SettingsPage' completed (1022.5 ms)
+    [CMD] ➤ Attempting to swipe to 'the Page summaries button'...
+        [LOC] 🔎 Attempting to locate 'the Page summaries button'...
+        [OK] ✔ 'the Page summaries button' found ⚠️ SLOW (889.9 ms)
+    [OK] ✔ Reached 'the Page summaries button' after 1 swipe(s) ⚠️ SLOW (890.7 ms)
+    [CMD] ➤ Verifying 'the Page summaries button' is present...
+        [LOC] 🔎 Attempting to locate 'the Page summaries button'...
+        [OK] ✔ 'the Page summaries button' found (4.0 ms)
+    [OK] ✔ 'the Page summaries button' verified (4.5 ms)
+[STEP] ★ Attempting to Navigate to SettingsPageSummariesPage
+    [CMD] ➤ Checking if 'SettingsPageSummariesPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Page summaries screen title'...
+        [OK] ✔ 'the Page summaries screen title' found (3.6 ms)
+        [LOC] 🔎 Attempting to locate 'the Navigate up button'...
+        [OK] ✔ 'the Navigate up button' found (2.2 ms)
+    [OK] ✔ 'SettingsPageSummariesPage' already visible (9.6 ms)
+[OK] ✔ 'SettingsPageSummariesPage' already loaded (11.0 ms)
+    [CMD] ➤ Attempting to verify group 'pageSummariesView' loads...
+        [LOC] 🔎 Attempting to locate 'the Page summaries screen title'...
+        [OK] ✔ 'the Page summaries screen title' found (3.2 ms)
+        [LOC] 🔎 Attempting to locate 'the Navigate up button'...
+        [OK] ✔ 'the Navigate up button' found (2.5 ms)
+        [LOC] 🔎 Attempting to locate 'the Summarize pages row'...
+        [ERR] ✖ 'the Summarize pages row' not found (14.6 ms)
+    [ERR] ✖ Group 'pageSummariesView' missing required elements (24.2 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+(0 nodes with a text/testTag/desc handle, of 1 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Settings" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id=null text="null" desc="null"
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="navigationToolbar"
+• desc="Navigate up" [clickable]
+• text="Settings"
+• desc="Settings search button" [clickable]
+• res-id="container"
+• res-id="container"
+• res-id="list_container"
+• res-id="recycler_view"
+• res-id="imageView"
+• res-id="title"  text="Sign in"
+• res-id="summary"  text="Sync tabs, bookmarks, passwords, and more."
+• res-id="title"  text="Sync Debug"
+• text="General"
+• res-id="title"  text="Search"
+• res-id="summary"  text="Google"
+• res-id="title"  text="Tabs"
+• res-id="summary"  text="Close manually"
+• res-id="title"  text="Homepage"
+• res-id="summary"  text="Open on homepage after four hours"
+• res-id="title"  text="Customize"
+• res-id="title"  text="Passwords"
+• res-id="title"  text="Autofill"
+• res-id="title"  text="Accessibility"
+• res-id="title"  text="Language"
+• res-id="title"  text="Page summaries"
+• res-id="title"  text="AI controls"
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="4:41"  desc="4:41 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, one bar."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(55 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Settings"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•                   class=ActionMenuItemView  desc="Settings search button"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                     id="list_container"  class=FrameLayout
+•                       id="recycler_view"  class=RecyclerView
+•                           id="imageView"  class=AppCompatImageView
+•                           id="title"  class=MaterialTextView  text="Sign in"
+•                           id="summary"  class=MaterialTextView  text="Sync tabs, bookmarks, passwords, and more."
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Sync Debug"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                         class=MaterialTextView  text="General"
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Search"
+•                             id="summary"  class=MaterialTextView  text="Google"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Tabs"
+•                             id="summary"  class=MaterialTextView  text="Close manually"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Homepage"
+•                             id="summary"  class=MaterialTextView  text="Open on homepage after four hours"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Customize"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Passwords"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Autofill"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Accessibility"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Language"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Page summaries"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="AI controls"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                     id="empty"  class=MaterialTextView  [gone]
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 1033.5 ms, avg 516.7 ms)
+    [INFO] • Commands: 11 (total 2007.3 ms, avg 182.5 ms)
+    [INFO] • Locators: 14 (total 1807.4 ms, avg 129.1 ms)
+    [INFO] • Successes: 23   Failures: 4   Skips: 0
+    [INFO] • Wall time: 2073.0 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SettingsPage
+    [CMD] ➤ Checking if 'SettingsPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [ERR] ✖ 'the Back Arrow button' not found (78.3 ms)
+    [ERR] ✖ 'SettingsPage' not visible yet (79.4 ms)
+Trying to find path from 'AppEntry' to 'SettingsPage'
+Navigation path found from 'AppEntry' to 'SettingsPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Swipe(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null), direction=UP)
+   Step 3: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (58.0 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (146.9 ms)
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (162.8 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (164.4 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (29.4 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (30.8 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (31.8 ms)
+        [OK] ✔ 'Main menu Settings button' found (79.0 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (137.0 ms)
+    [CMD] ➤ Attempting to verify SettingsPage loads...
+        [LOC] 🔎 Attempting to locate 'the Back Arrow button'...
+        [OK] ✔ 'the Back Arrow button' found (98.7 ms)
+        [LOC] 🔎 Attempting to locate 'Settings screen title'...
+        [OK] ✔ 'Settings screen title' found (2.1 ms)
+    [OK] ✔ 'SettingsPage' loaded (105.6 ms)
+[OK] ✔ Navigation to 'SettingsPage' completed (638.4 ms)
+    [CMD] ➤ Attempting to swipe to 'the Page summaries button'...
+        [LOC] 🔎 Attempting to locate 'the Page summaries button'...
+        [OK] ✔ 'the Page summaries button' found ⚠️ SLOW (893.3 ms)
+    [OK] ✔ Reached 'the Page summaries button' after 1 swipe(s) ⚠️ SLOW (896.7 ms)
+    [CMD] ➤ Verifying 'the Page summaries button' is present...
+        [LOC] 🔎 Attempting to locate 'the Page summaries button'...
+        [OK] ✔ 'the Page summaries button' found (4.5 ms)
+    [OK] ✔ 'the Page summaries button' verified (5.4 ms)
+[STEP] ★ Attempting to Navigate to SettingsPageSummariesPage
+    [CMD] ➤ Checking if 'SettingsPageSummariesPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Page summaries screen title'...
+        [OK] ✔ 'the Page summaries screen title' found (2.9 ms)
+        [LOC] 🔎 Attempting to locate 'the Navigate up button'...
+        [OK] ✔ 'the Navigate up button' found (1.3 ms)
+    [OK] ✔ 'SettingsPageSummariesPage' already visible (6.7 ms)
+[OK] ✔ 'SettingsPageSummariesPage' already loaded (7.7 ms)
+    [CMD] ➤ Attempting to verify group 'pageSummariesView' loads...
+        [LOC] 🔎 Attempting to locate 'the Page summaries screen title'...
+        [OK] ✔ 'the Page summaries screen title' found (2.7 ms)
+        [LOC] 🔎 Attempting to locate 'the Navigate up button'...
+        [OK] ✔ 'the Navigate up button' found (2.2 ms)
+        [LOC] 🔎 Attempting to locate 'the Summarize pages row'...
+        [ERR] ✖ 'the Summarize pages row' not found (9.6 ms)
+    [ERR] ✖ Group 'pageSummariesView' missing required elements (19.2 ms)
+EFF_SCREEN_DUMP:BEGIN mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+(0 nodes with a text/testTag/desc handle, of 1 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Settings" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: pkg=org.mozilla.fenix.debug id=null text="null" desc="null"
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="navigationToolbar"
+• desc="Navigate up" [clickable]
+• text="Settings"
+• desc="Settings search button" [clickable]
+• res-id="container"
+• res-id="container"
+• res-id="list_container"
+• res-id="recycler_view"
+• res-id="imageView"
+• res-id="title"  text="Sign in"
+• res-id="summary"  text="Sync tabs, bookmarks, passwords, and more."
+• res-id="title"  text="Sync Debug"
+• text="General"
+• res-id="title"  text="Search"
+• res-id="summary"  text="Google"
+• res-id="title"  text="Tabs"
+• res-id="summary"  text="Close manually"
+• res-id="title"  text="Homepage"
+• res-id="summary"  text="Open on homepage after four hours"
+• res-id="title"  text="Customize"
+• res-id="title"  text="Passwords"
+• res-id="title"  text="Autofill"
+• res-id="title"  text="Accessibility"
+• res-id="title"  text="Language"
+• res-id="title"  text="Page summaries"
+• res-id="title"  text="AI controls"
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="4:41"  desc="4:41 AM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Android System notification: "
+• desc="Security &amp; privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, one bar."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(56 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] mozVerifyElementsByGroup failed: SettingsPageSummariesPage group 'pageSummariesView'
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Settings"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•                   class=ActionMenuItemView  desc="Settings search button"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                     id="list_container"  class=FrameLayout
+•                       id="recycler_view"  class=RecyclerView
+•                           id="imageView"  class=AppCompatImageView
+•                           id="title"  class=MaterialTextView  text="Sign in"
+•                           id="summary"  class=MaterialTextView  text="Sync tabs, bookmarks, passwords, and more."
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Sync Debug"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                         class=MaterialTextView  text="General"
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Search"
+•                             id="summary"  class=MaterialTextView  text="Google"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Tabs"
+•                             id="summary"  class=MaterialTextView  text="Close manually"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Homepage"
+•                             id="summary"  class=MaterialTextView  text="Open on homepage after four hours"
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Customize"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Passwords"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Autofill"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Accessibility"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Language"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="Page summaries"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                           id="icon_frame"  class=LinearLayout  [gone]
+•                             id="icon"  class=PreferenceImageView  [gone]
+•                             id="title"  class=MaterialTextView  text="AI controls"
+•                             id="summary"  class=MaterialTextView  [gone]
+•                           id="widget_frame"  class=LinearLayout  [gone]
+•                     id="empty"  class=MaterialTextView  [gone]
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 646.1 ms, avg 323.1 ms)
+    [INFO] • Commands: 11 (total 1623.8 ms, avg 147.6 ms)
+    [INFO] • Locators: 14 (total 1424.7 ms, avg 101.8 ms)
+    [INFO] • Successes: 23   Failures: 4   Skips: 0
+    [INFO] • Wall time: 1639.7 ms
+failed: verifyPageSummariesUITest(org.mozilla.fenix.ui.efficiency.tests.SettingsPageSummariesTest)
+----- begin exception -----
+java.lang.AssertionError: Not all elements in group 'pageSummariesView' are present
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.mozVerifyElementsByGroup(BasePage.kt:284)
+	at org.mozilla.fenix.ui.efficiency.tests.SettingsPageSummariesTest.verifyPageSummariesUITest(SettingsPageSummariesTest.kt:32)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:418)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:438)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:682)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:679)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-4c2e30f171048d16a6f9df6e6a67df4ffab3c004:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:658)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:438)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:158)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored

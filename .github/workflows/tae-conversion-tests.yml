@@ -1,0 +1,45 @@
+name: tae-conversion-tests
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tae-conversion/**"
+      - ".github/workflows/tae-conversion-tests.yml"
+  pull_request:
+    paths:
+      - "tae-conversion/**"
+      - ".github/workflows/tae-conversion-tests.yml"
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # No dependency install step: the eff* tools are stdlib-only, and the tests
+      # need no device, no emulator, no Firefox checkout and no network. The rule
+      # tests run against real conversion runs checked in under
+      # tae-conversion/tests/fixtures/corpus; everything that shells out to ps,
+      # lsof, adb or git is stubbed.
+      - name: Run tests
+        run: python -m unittest discover -s tae-conversion/tests -p '*tests.py' -v
+
+      # ResourceWarnings are errors here: an unclosed file in a tool that is run
+      # hundreds of times a session is a real leak, and warning noise in the output
+      # is what makes people stop reading it.
+      - name: Run tests with warnings as errors
+        run: python -W error::ResourceWarning -m unittest discover -s tae-conversion/tests -p '*tests.py'

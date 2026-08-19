@@ -1,0 +1,9 @@
+{
+  "batch": "b25-pagesummaries",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SettingsPageSummariesTest#verifyPageSummariesUITest",
+  "compiled": false,
+  "ran": false,
+  "ts": "2026-08-13T09:38:47Z",
+  "outcome": "unknown",
+  "note": "no JUnit XML newer than this run in RESULTS_DIR"
+}

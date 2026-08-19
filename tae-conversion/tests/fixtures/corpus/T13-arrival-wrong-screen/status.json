@@ -1,0 +1,23 @@
+{
+  "batch": "b26-pagesummaries",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.SettingsPageSummariesTest#verifyPageSummariesUITest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-13T09:41:33Z",
+  "tests": 1,
+  "failures": 1,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyPageSummariesUITest",
+      "status": "fail"
+    }
+  ],
+  "failed": [
+    {
+      "name": "verifyPageSummariesUITest",
+      "message": "java.lang.AssertionError: Not all elements in group 'pageSummariesView' are present"
+    }
+  ],
+  "outcome": "fail"
+}

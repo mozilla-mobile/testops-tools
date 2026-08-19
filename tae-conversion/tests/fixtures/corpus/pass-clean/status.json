@@ -1,0 +1,22 @@
+{
+  "batch": "b19-fxsuggest-confirm",
+  "test": "org.mozilla.fenix.ui.efficiency.tests.FirefoxSuggestTest",
+  "compiled": true,
+  "ran": true,
+  "ts": "2026-08-12T21:57:52Z",
+  "tests": 2,
+  "failures": 0,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "verifyFirefoxSuggestSponsoredSearchResultsTest",
+      "status": "pass"
+    },
+    {
+      "name": "verifyFirefoxSuggestNonSponsoredSearchResultsTest",
+      "status": "pass"
+    }
+  ],
+  "failed": [],
+  "outcome": "pass"
+}

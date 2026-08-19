@@ -1,0 +1,499 @@
+==============================================================================
+FAILURES (1 of 2)
+==============================================================================
+  ✖ verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest
+      java.lang.AssertionError: No navigation path found from 'SettingsSiteSettingsAutoplayPage' to 'BrowserPage'
+==============================================================================
+
+--------- beginning of main
+run started: 2 tests
+started: verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest)
+started: verifyAutoplayBlockAudioOnlySettingOnMutedVideoTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest)
+run finished: 2 tests, 0 failed, 0 ignored
+run started: 1 tests
+started: verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to SettingsSiteSettingsAutoplayPage
+    [CMD] ➤ Checking if 'SettingsSiteSettingsAutoplayPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only label'...
+        [ERR] ✖ 'the Block audio and video on cellular data only label' not found ⚠️ SLOW (477.5 ms)
+    [ERR] ✖ 'SettingsSiteSettingsAutoplayPage' not visible yet (480.0 ms)
+Trying to find path from 'AppEntry' to 'SettingsSiteSettingsAutoplayPage'
+Navigation path found from 'AppEntry' to 'SettingsSiteSettingsAutoplayPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 3: Swipe(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Site settings, secondaryValue=null, description=the Site settings button, groups=[privacyAndSecuritySettingsSection], name=null), direction=UP)
+   Step 4: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Site settings, secondaryValue=null, description=the Site settings button, groups=[privacyAndSecuritySettingsSection], name=null))
+   Step 5: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Autoplay, secondaryValue=null, description=Site settings Autoplay button, groups=[autoplay], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (212.3 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (284.2 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (31.8 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (32.4 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (32.7 ms)
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (421.3 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (501.0 ms)
+    [CMD] ➤ Attempting to swipe to 'the Site settings button'...
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [ERR] ✖ 'the Site settings button' not found ⚠️ SLOW (1049.3 ms)
+        [CMD] ➤ Attempting to swipe up...
+        [OK] ✔ Swipe up completed (776.0 ms)
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [ERR] ✖ 'the Site settings button' not found (228.5 ms)
+        [CMD] ➤ Attempting to swipe up...
+        [OK] ✔ Swipe up completed ⚠️ SLOW (1018.8 ms)
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [OK] ✔ 'the Site settings button' found ⚠️ SLOW (534.5 ms)
+    [OK] ✔ Reached 'the Site settings button' after 3 swipe(s) ⚠️ SLOW (4612.9 ms)
+    [CMD] ➤ Attempting to click 'the Site settings button'...
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [OK] ✔ 'the Site settings button' found (73.8 ms)
+    [OK] ✔ Clicked 'the Site settings button' (301.8 ms)
+    [CMD] ➤ Attempting to click 'Site settings Autoplay button'...
+        [LOC] 🔎 Attempting to locate 'Site settings Autoplay button'...
+        [OK] ✔ 'Site settings Autoplay button' found ⚠️ SLOW (1307.3 ms)
+    [OK] ✔ Clicked 'Site settings Autoplay button' ⚠️ SLOW (1479.5 ms)
+    [CMD] ➤ Attempting to verify SettingsSiteSettingsAutoplayPage loads...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only label'...
+        [OK] ✔ 'the Block audio and video on cellular data only label' found ⚠️ SLOW (591.8 ms)
+    [OK] ✔ 'SettingsSiteSettingsAutoplayPage' loaded (593.4 ms)
+[OK] ✔ Navigation to 'SettingsSiteSettingsAutoplayPage' completed ⚠️ SLOW (8260.8 ms)
+    [CMD] ➤ Attempting to verify group 'autoplayOptions' loads...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only radio button'...
+        [OK] ✔ 'the Block audio and video on cellular data only radio button' found (2.5 ms)
+        [LOC] 🔎 Attempting to locate 'the Block audio only radio button'...
+        [OK] ✔ 'the Block audio only radio button' found (2.6 ms)
+        [LOC] 🔎 Attempting to locate 'the Block audio and video radio button'...
+        [OK] ✔ 'the Block audio and video radio button' found (2.7 ms)
+    [OK] ✔ Group 'autoplayOptions' verified (14.4 ms)
+    [CMD] ➤ Verifying 'the Allow audio and video radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Allow audio and video radio button'...
+        [OK] ✔ 'the Allow audio and video radio button' found (2.2 ms)
+    [OK] ✔ 'the Allow audio and video radio button' is not checked (4.4 ms)
+    [CMD] ➤ Verifying 'the Block audio and video on cellular data only radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only radio button'...
+        [OK] ✔ 'the Block audio and video on cellular data only radio button' found (1.8 ms)
+    [OK] ✔ 'the Block audio and video on cellular data only radio button' is not checked (3.1 ms)
+    [CMD] ➤ Verifying 'the Block audio only radio button' is checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio only radio button'...
+        [OK] ✔ 'the Block audio only radio button' found (1.8 ms)
+    [OK] ✔ 'the Block audio only radio button' is checked (3.2 ms)
+    [CMD] ➤ Verifying 'the Block audio and video radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video radio button'...
+        [OK] ✔ 'the Block audio and video radio button' found (1.5 ms)
+    [OK] ✔ 'the Block audio and video radio button' is not checked (3.5 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found (1.0 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (1.6 ms)
+Trying to find path from 'SettingsSiteSettingsAutoplayPage' to 'BrowserPage'
+[ERR] ✖ No navigation path found to 'BrowserPage' (3.8 ms)
+EFF_SCREEN_DUMP:BEGIN navigateToPage failed: BrowserPage
+(0 nodes with a text/testTag/desc handle, of 1 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] navigateToPage failed: BrowserPage
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Autoplay" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] navigateToPage failed: BrowserPage
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="navigationToolbar"
+• desc="Navigate up" [clickable]
+• text="Autoplay"
+• res-id="container"
+• res-id="container"
+• res-id="ask_to_allow_radio"  text="Allow audio and video" [clickable]
+• res-id="block_radio"  text="Block audio and video on cellular data only&#10;Audio and video will play on Wi-Fi" [clickable]
+• res-id="third_radio"  text="Block audio only&#10;Recommended" [clickable]
+• res-id="fourth_radio"  text="Block audio and video" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="12:45"  desc="12:45 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Ad Privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(38 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] navigateToPage failed: BrowserPage
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Autoplay"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                         id="ask_to_allow_radio"  class=MaterialRadioButton  text="Allow audio and video"  [clickable]
+•                         id="block_radio"  class=MaterialRadioButton  text="Block audio and video on cellular data only
+Audio and video will play on Wi-Fi"  [clickable]
+•                         id="third_radio"  class=MaterialRadioButton  text="Block audio only
+Recommended"  [clickable]
+•                         id="fourth_radio"  class=MaterialRadioButton  text="Block audio and video"  [clickable]
+•                       id="permissions_blocked_container"  class=LinearLayout  [gone]
+•                         class=MaterialTextView  text="Blocked by Android"
+•                         class=MaterialTextView  text="To allow it:"
+•                         class=MaterialTextView  text="1. Go to Android Settings"
+•                         id="blocked_by_android_permissions_label"  class=MaterialTextView
+•                         id="blocked_by_android_feature_label"  class=MaterialTextView
+•                         id="settings_button"  class=MaterialButton  text="Go to Settings"  [clickable]
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 8264.6 ms, avg 4132.3 ms)
+    [INFO] • Commands: 17 (total 10142.8 ms, avg 596.6 ms)
+    [INFO] • Locators: 18 (total 4944.4 ms, avg 274.7 ms)
+    [INFO] • Successes: 30   Failures: 7   Skips: 0
+    [INFO] • Wall time: 8390.9 ms
+RETRY (first attempt failed): RetryTestRule: AssertionError caught, retrying.
+RetryTestRule: Started try #2.
+[STEP] ★ Attempting to Navigate to SettingsSiteSettingsAutoplayPage
+    [CMD] ➤ Checking if 'SettingsSiteSettingsAutoplayPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only label'...
+        [ERR] ✖ 'the Block audio and video on cellular data only label' not found ⚠️ SLOW (530.4 ms)
+    [ERR] ✖ 'SettingsSiteSettingsAutoplayPage' not visible yet (531.0 ms)
+Trying to find path from 'AppEntry' to 'SettingsSiteSettingsAutoplayPage'
+Navigation path found from 'AppEntry' to 'SettingsSiteSettingsAutoplayPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_BY_CONTENT_DESCRIPTION, value=More options, secondaryValue=null, description=Three Dot Menu, groups=[requiredForPage], name=null))
+   Step 2: Click(selector=Selector(strategy=COMPOSE_BY_TEXT, value=Settings, secondaryValue=null, description=Main menu Settings button, groups=[requiredForPage, homePageMainMenuItems, browserViewMainMenuItems, requiresScroll], name=null))
+   Step 3: Swipe(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Site settings, secondaryValue=null, description=the Site settings button, groups=[privacyAndSecuritySettingsSection], name=null), direction=UP)
+   Step 4: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Site settings, secondaryValue=null, description=the Site settings button, groups=[privacyAndSecuritySettingsSection], name=null))
+   Step 5: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_TEXT, value=Autoplay, secondaryValue=null, description=Site settings Autoplay button, groups=[autoplay], name=null))
+    [CMD] ➤ Attempting to click 'Three Dot Menu'...
+        [LOC] 🔎 Attempting to locate 'Three Dot Menu'...
+        [OK] ✔ 'Three Dot Menu' found (233.9 ms)
+    [OK] ✔ Clicked 'Three Dot Menu' (281.4 ms)
+    [CMD] ➤ Attempting to click 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+    [CMD] ➤ Attempting to bring 'Main menu Settings button' into view (swipe up)...
+    [CMD] ➤ Attempting to swipe to 'Main menu Settings button'...
+        [LOC] 🔎 Attempting to locate 'Main menu Settings button'...
+        [OK] ✔ 'Main menu Settings button' found (22.0 ms)
+    [OK] ✔ Reached 'Main menu Settings button' after 1 swipe(s) (22.9 ms)
+    [OK] ✔ Precondition satisfied for 'Main menu Settings button' (23.7 ms)
+        [OK] ✔ 'Main menu Settings button' found ⚠️ SLOW (260.9 ms)
+    [OK] ✔ Clicked 'Main menu Settings button' (319.3 ms)
+    [CMD] ➤ Attempting to swipe to 'the Site settings button'...
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [ERR] ✖ 'the Site settings button' not found ⚠️ SLOW (996.8 ms)
+        [CMD] ➤ Attempting to swipe up...
+        [OK] ✔ Swipe up completed (782.5 ms)
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [ERR] ✖ 'the Site settings button' not found (113.3 ms)
+        [CMD] ➤ Attempting to swipe up...
+        [OK] ✔ Swipe up completed ⚠️ SLOW (882.3 ms)
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [OK] ✔ 'the Site settings button' found (129.5 ms)
+    [OK] ✔ Reached 'the Site settings button' after 3 swipe(s) ⚠️ SLOW (3915.1 ms)
+    [CMD] ➤ Attempting to click 'the Site settings button'...
+        [LOC] 🔎 Attempting to locate 'the Site settings button'...
+        [OK] ✔ 'the Site settings button' found (10.3 ms)
+    [OK] ✔ Clicked 'the Site settings button' (200.3 ms)
+    [CMD] ➤ Attempting to click 'Site settings Autoplay button'...
+        [LOC] 🔎 Attempting to locate 'Site settings Autoplay button'...
+        [OK] ✔ 'Site settings Autoplay button' found ⚠️ SLOW (762.1 ms)
+    [OK] ✔ Clicked 'Site settings Autoplay button' ⚠️ SLOW (919.2 ms)
+    [CMD] ➤ Attempting to verify SettingsSiteSettingsAutoplayPage loads...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only label'...
+        [OK] ✔ 'the Block audio and video on cellular data only label' found ⚠️ SLOW (606.6 ms)
+    [OK] ✔ 'SettingsSiteSettingsAutoplayPage' loaded (607.6 ms)
+[OK] ✔ Navigation to 'SettingsSiteSettingsAutoplayPage' completed ⚠️ SLOW (6779.9 ms)
+    [CMD] ➤ Attempting to verify group 'autoplayOptions' loads...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only radio button'...
+        [OK] ✔ 'the Block audio and video on cellular data only radio button' found (3.4 ms)
+        [LOC] 🔎 Attempting to locate 'the Block audio only radio button'...
+        [OK] ✔ 'the Block audio only radio button' found (2.7 ms)
+        [LOC] 🔎 Attempting to locate 'the Block audio and video radio button'...
+        [OK] ✔ 'the Block audio and video radio button' found (2.9 ms)
+    [OK] ✔ Group 'autoplayOptions' verified (11.5 ms)
+    [CMD] ➤ Verifying 'the Allow audio and video radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Allow audio and video radio button'...
+        [OK] ✔ 'the Allow audio and video radio button' found (2.3 ms)
+    [OK] ✔ 'the Allow audio and video radio button' is not checked (4.5 ms)
+    [CMD] ➤ Verifying 'the Block audio and video on cellular data only radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video on cellular data only radio button'...
+        [OK] ✔ 'the Block audio and video on cellular data only radio button' found (2.3 ms)
+    [OK] ✔ 'the Block audio and video on cellular data only radio button' is not checked (3.8 ms)
+    [CMD] ➤ Verifying 'the Block audio only radio button' is checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio only radio button'...
+        [OK] ✔ 'the Block audio only radio button' found (2.0 ms)
+    [OK] ✔ 'the Block audio only radio button' is checked (4.1 ms)
+    [CMD] ➤ Verifying 'the Block audio and video radio button' is not checked...
+        [LOC] 🔎 Attempting to locate 'the Block audio and video radio button'...
+        [OK] ✔ 'the Block audio and video radio button' found (2.6 ms)
+    [OK] ✔ 'the Block audio and video radio button' is not checked (8.3 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found (1.6 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (2.1 ms)
+Trying to find path from 'SettingsSiteSettingsAutoplayPage' to 'BrowserPage'
+[ERR] ✖ No navigation path found to 'BrowserPage' (3.6 ms)
+EFF_SCREEN_DUMP:BEGIN navigateToPage failed: BrowserPage
+(0 nodes with a text/testTag/desc handle, of 1 total)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [windows] navigateToPage failed: BrowserPage
+windows on screen: 2
+• window title="null" type=SYSTEM
+• window title="Autoplay" type=APPLICATION [active,focused]
+⚠ non-application window(s) present (possible overlay/popup/keyboard over the app): "null" (3)
+focused input: (none)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [uiautomator] navigateToPage failed: BrowserPage
+• res-id="action_bar_root"
+• res-id="content"
+• res-id="rootContainer"
+• res-id="navigationToolbar"
+• desc="Navigate up" [clickable]
+• text="Autoplay"
+• res-id="container"
+• res-id="container"
+• res-id="ask_to_allow_radio"  text="Allow audio and video" [clickable]
+• res-id="block_radio"  text="Block audio and video on cellular data only&#10;Audio and video will play on Wi-Fi" [clickable]
+• res-id="third_radio"  text="Block audio only&#10;Recommended" [clickable]
+• res-id="fourth_radio"  text="Block audio and video" [clickable]
+• res-id="status_bar_launch_animation_container"
+• res-id="container"
+• res-id="status_bar_container"
+• res-id="status_bar"
+• res-id="status_bar_contents"
+• res-id="status_bar_start_side_container"
+• res-id="status_bar_start_side_content"
+• res-id="status_bar_start_side_except_heads_up"
+• res-id="clock"  text="12:45"  desc="12:45 PM"
+• res-id="notification_icon_area"
+• res-id="notificationIcons"
+• desc="TestServices notification: "
+• desc="Ad Privacy notification: "
+• res-id="status_bar_end_side_container"
+• res-id="status_bar_end_side_content"
+• res-id="system_icons"
+• res-id="statusIcons"
+• res-id="mobile_combo"  desc="T-Mobile, three bars."
+• res-id="mobile_group"
+• res-id="mobile_signal"
+• res-id="wifi_combo"
+• res-id="wifi_group"
+• res-id="wifi_combo"
+• res-id="wifi_signal"  desc="Wifi signal full."
+• res-id="battery"
+• desc="Battery 100 percent."
+(38 native nodes with a res-id/text/desc handle)
+EFF_SCREEN_DUMP:END
+EFF_SCREEN_DUMP:BEGIN [espresso] navigateToPage failed: BrowserPage
+•     id="action_mode_bar_stub"  class=ViewStub  [gone]
+•       id="action_bar_root"  class=FitWindowsLinearLayout
+•         id="action_mode_bar_stub"  class=ViewStubCompat  [gone]
+•         id="content"  class=ContentFrameLayout
+•             id="rootContainer"  class=HomeActivityRootLinearLayout
+•               id="navigationToolbar"  class=Toolbar
+•                 id="toolbar_child_container"  class=FrameLayout  [gone]
+•                 class=AppCompatTextView  text="Autoplay"
+•                 class=AppCompatImageButton  desc="Navigate up"  [clickable]
+•               id="container"  class=FragmentContainerView
+•                 id="container"  class=FragmentContainerView
+•                         id="ask_to_allow_radio"  class=MaterialRadioButton  text="Allow audio and video"  [clickable]
+•                         id="block_radio"  class=MaterialRadioButton  text="Block audio and video on cellular data only
+Audio and video will play on Wi-Fi"  [clickable]
+•                         id="third_radio"  class=MaterialRadioButton  text="Block audio only
+Recommended"  [clickable]
+•                         id="fourth_radio"  class=MaterialRadioButton  text="Block audio and video"  [clickable]
+•                       id="permissions_blocked_container"  class=LinearLayout  [gone]
+•                         class=MaterialTextView  text="Blocked by Android"
+•                         class=MaterialTextView  text="To allow it:"
+•                         class=MaterialTextView  text="1. Go to Android Settings"
+•                         id="blocked_by_android_permissions_label"  class=MaterialTextView
+•                         id="blocked_by_android_feature_label"  class=MaterialTextView
+•                         id="settings_button"  class=MaterialButton  text="Go to Settings"  [clickable]
+•             id="debugOverlay"  class=ComposeView  [gone]
+EFF_SCREEN_DUMP:END
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 2 (total 6783.5 ms, avg 3391.7 ms)
+    [INFO] • Commands: 17 (total 8519.7 ms, avg 501.2 ms)
+    [INFO] • Locators: 18 (total 3685.6 ms, avg 204.8 ms)
+    [INFO] • Successes: 30   Failures: 7   Skips: 0
+    [INFO] • Wall time: 6881.3 ms
+failed: verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest)
+----- begin exception -----
+java.lang.AssertionError: No navigation path found from 'SettingsSiteSettingsAutoplayPage' to 'BrowserPage'
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage(BasePage.kt:154)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.BrowserPage.navigateToPage(BrowserPage.kt:124)
+	at org.mozilla.fenix.ui.efficiency.pageObjects.BrowserPage.navigateToPage(BrowserPage.kt:46)
+	at org.mozilla.fenix.ui.efficiency.helpers.BasePage.navigateToPage$default(BasePage.kt:135)
+	at org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest.verifyAutoplayBlockAudioOnlySettingOnNotMutedVideoTest(SettingsSitePermissionsTest.kt:43)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:426)
+	at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:522)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:448)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:8)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:4)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:689)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:2)
+	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:686)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:8)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:4)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+	at kotlinx.coroutines.BuildersKt.runBlockingImpl(dex-id-27f3230e6a990a2fd5d20fe245c1ff26b439babb:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+	at kotlinx.coroutines.BuildersKt.runBlockingK(dex-id-27f3230e6a990a2fd5d20fe245c1ff26b439babb:1)
+	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+	at kotlinx.coroutines.BuildersKt.runBlockingK$default(dex-id-27f3230e6a990a2fd5d20fe245c1ff26b439babb:1)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:665)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:447)
+	at org.mozilla.fenix.ui.efficiency.helpers.BaseTest$retryWithCompose$1$1.evaluate(BaseTest.kt:157)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.test.rule.GrantPermissionRule$RequestPermissionStatement.evaluate(GrantPermissionRule.java:150)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2655)
+----- end exception -----
+run finished: 1 tests, 1 failed, 0 ignored
+run started: 1 tests
+started: verifyAutoplayBlockAudioOnlySettingOnMutedVideoTest(org.mozilla.fenix.ui.efficiency.tests.SettingsSitePermissionsTest)
+RetryTestRule: Started try #1.
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [ERR] ✖ 'Engine view' not found ⚠️ SLOW (457.0 ms)
+    [ERR] ✖ 'BrowserPage' not visible yet (458.5 ms)
+Trying to find path from 'AppEntry' to 'BrowserPage'
+Navigation path found from 'AppEntry' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=COMPOSE_ON_ALL_NODES_BY_TAG_ON_FIRST, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[requiredForPage], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found (186.5 ms)
+    [OK] ✔ Clicked 'URL box' (275.2 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (305.2 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (243.5 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (850.8 ms)
+    [OK] ✔ 'BrowserPage' loaded ⚠️ SLOW (851.3 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (2138.2 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+    [CMD] ➤ Checking if 'BrowserPage' is already visible...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found (3.2 ms)
+    [OK] ✔ 'BrowserPage' already visible (4.0 ms)
+[OK] ✔ 'BrowserPage' already loaded (4.4 ms)
+[STEP] ★ Attempting to Navigate to BrowserPage
+Trying to find path from 'BrowserPage' to 'BrowserPage'
+Navigation path found from 'BrowserPage' to 'BrowserPage':
+   Step 1: Click(selector=Selector(strategy=UIAUTOMATOR_WITH_COMPOSE_TAG, value=ADDRESSBAR_URL_BOX, secondaryValue=null, description=URL box, groups=[], name=null))
+   Step 2: EnterText(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+   Step 3: PressEnter(selector=Selector(strategy=COMPOSE_BY_TAG, value=ADDRESSBAR_SEARCH_BOX, secondaryValue=null, description=Toolbar in edit mode, groups=[], name=null))
+    [CMD] ➤ Attempting to click 'URL box'...
+        [LOC] 🔎 Attempting to locate 'URL box'...
+        [OK] ✔ 'URL box' found ⚠️ SLOW (505.7 ms)
+    [OK] ✔ Clicked 'URL box' (679.0 ms)
+    [CMD] ➤ Attempting to enter text into 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.1 ms)
+    [OK] ✔ Entered text into 'Toolbar in edit mode' (778.7 ms)
+    [CMD] ➤ Attempting to press Enter on 'Toolbar in edit mode'...
+        [LOC] 🔎 Attempting to locate 'Toolbar in edit mode'...
+        [OK] ✔ 'Toolbar in edit mode' found (0.0 ms)
+    [OK] ✔ Pressed Enter on 'Toolbar in edit mode' (237.5 ms)
+    [CMD] ➤ Attempting to verify BrowserPage loads...
+        [LOC] 🔎 Attempting to locate 'Engine view'...
+        [OK] ✔ 'Engine view' found ⚠️ SLOW (707.2 ms)
+    [OK] ✔ 'BrowserPage' loaded (708.2 ms)
+[OK] ✔ Navigation to 'BrowserPage' completed ⚠️ SLOW (2407.9 ms)
+[INFO] • === TEST SUMMARY ===
+    [INFO] • Steps: 3 (total 4550.5 ms, avg 1516.8 ms)
+    [INFO] • Commands: 10 (total 4541.0 ms, avg 454.1 ms)
+    [INFO] • Locators: 10 (total 2710.5 ms, avg 271.1 ms)
+    [INFO] • Successes: 21   Failures: 2   Skips: 0
+    [INFO] • Wall time: 31405.7 ms
+run finished: 1 tests, 0 failed, 0 ignored
