@@ -782,3 +782,64 @@ converted tests assert on, so this is not a blanket statement about the awesomeb
   of the dump:** believing the compose block was the whole picture produced a confidently wrong diagnosis
   ("the search overlay was dismissed") that survived two cycles. `EFF_SCREEN_DUMP` emits compose, windows,
   uiautomator and espresso sections — a node missing from one may be present in another.
+
+### A54. A radio/option's text is the label AND its subtext, joined by a newline (2026-08-19)
+- **Symptom:** an exact-text selector built from the option's `strings.xml` label never resolves, even though the
+  label is plainly on screen. Surfaces as an arrival-anchor miss, which reads like a navigation problem.
+- **Cause:** the widget's text is label + `\n` + subtext. A live dump of the Autoplay screen shows
+  `res-id="block_radio" text="Block audio and video on cellular data only&#10;Audio and video will play on Wi-Fi"`
+  and `third_radio text="Block audio only&#10;Recommended"`. `ESPRESSO_BY_TEXT`/`UIAUTOMATOR_WITH_TEXT` are exact
+  matches, so they cannot hit either half.
+- **Check:** match a fragment (`UIAUTOMATOR_WITH_TEXT_CONTAINS`) or the res-id. The same shape appears on the
+  permission screens (`ask_to_allow_radio text="Ask to allow\nRecommended"`), so assume it for any
+  RadioButtonListItem with a "Recommended"/explanatory subtitle.
+
+### A55. Permission-screen res-ids are shared across every permission, and ESPRESSO_BY_ID ignores visibility (2026-08-19)
+- **Symptom:** an arrival anchor built from a radio id "resolves" on the wrong permission screen, so
+  `navigateToPage()` reports success somewhere it never reached (an A45 false arrival).
+- **Cause:** `ask_to_allow_radio`, `block_radio`, `third_radio` and `fourth_radio` all live in the one layout
+  shared by Autoplay, Camera, Location, Microphone and DRM; the 3rd and 4th are merely hidden on the screens that
+  do not use them. `ESPRESSO_BY_ID` resolves `onView(withId(...))` with **no** visibility constraint, so the
+  hidden ones still match.
+- **Check:** anchor on text that only that screen has (Autoplay: "cellular data only"). Keep res-ids for the
+  per-option assertions, and prefer `UIAUTOMATOR_WITH_RES_ID` when you want presence to imply visibility — the
+  accessibility tree contains only displayed nodes, which is also the honest replacement for legacy's
+  `withEffectiveVisibility(VISIBLE)`.
+
+### A56. BrowserPage has inbound edges only from HomePage and itself (2026-08-19)
+- **Symptom:** `AssertionError: No navigation path found from '<SomeSettingsPage>' to 'BrowserPage'`.
+- **Cause:** a graph gap, not a selector problem — nothing was searched for on screen. Leaving a settings screen
+  to load a URL needs **both** halves: a return edge on the settings page
+  (`NavigationStep.PressBackUntilGone(SettingsSelectors.NAVIGATION_TOOLBAR)`, which is depth-independent) **and**
+  an explicit `on.home.navigateToPage()` hop in the test — the harness equivalent of legacy's `exitMenu()`.
+- **Check:** the edge alone is not enough, because `findPath` only searches from the CURRENT tracked page. This is
+  **efftriage rule T19**, with `tests/fixtures/corpus/T19-no-nav-path` as its labelled example.
+
+### A57. A page-content text selector can resolve a non-clickable heading (2026-08-19)
+- **Symptom:** `Failed to click UiObject` while the log says the element was **found** — the locate succeeded and
+  the click did not.
+- **Cause:** `UIAUTOMATOR_WITH_TEXT_CONTAINS` matched a heading rather than the control. The permissions test page
+  prints "Test Camera & Microphone Dialogue" above the button labelled "Camera & Microphone", and the heading wins.
+- **Check:** match web content by its DOM id plus label (`UIAUTOMATOR_WITH_WEB_ID_AND_TEXT`); the ids are in the
+  dump (`location`, `notify`, `audioVideo`, `audio`, `video`). The harness auto-dumps on a failed `mozClick`, so
+  the handle you need is already in the report.
+
+### A58. A system app-permission row title is present whether the permission is allowed or denied (2026-08-19)
+- **Symptom:** nothing — which is the problem. The assertion cannot fail.
+- **Cause:** on the Android app-permissions screen the row text is the permission name in both the "Allowed" and
+  "Not allowed" sections; only the section differs. The "Only while app is in use" summary that would disambiguate
+  it is rendered only up to API 30, which is why the legacy robot branched on `Build.VERSION` — and above R it was
+  left asserting a row that always exists.
+- **Check:** assert the OS state, not the settings UI:
+  `appContext.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED` (see
+  `SystemSettingsPage.verifySystemPermissionGranted`). No version branch, and it cannot pass for a denied
+  permission. Generalises: prefer an OS/state oracle over any system-UI text.
+
+### A59. A page object that is not in PageContext never registers its navigation (2026-08-19)
+- **Symptom:** a page object exists, looks complete, and no test can navigate to it; or its edge is silently
+  absent from `NavigationRegistry.logGraph()`.
+- **Cause:** edges are registered in the page's `init`, which only runs when `PageContext` constructs it.
+  `SitePermissionsPage` and `SettingsSiteSettingsPermissionsPage` were both dead this way — and the latter's edge
+  also stopped one screen short of its own `requiredForPage` anchor, so it could not have worked if it had run.
+- **Check:** when adding a page, wire it into `PageContext` in the same change, and confirm the edge appears in the
+  graph log. Treat an unreferenced page object as untested scaffolding rather than as available API.

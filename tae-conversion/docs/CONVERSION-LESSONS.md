@@ -483,3 +483,33 @@ and which assertion to trust.
   saving an address Gecko won't match to the US form, vs. a genuine prompt trigger/timing issue. Next step:
   one instrumented run dumping Manage Addresses (now that all-layer dumps are in) to confirm the saved values
   before deciding between "fix the dropdown" and "fix the trigger". Test + harness are built and compile-clean.
+
+## Autoplay / site-permission screens (2026-08-19, sp01-sp03)
+
+**A radio's text is the label AND its subtext, joined by a newline.** The live dump of the Autoplay screen shows
+`res-id="block_radio" text="Block audio and video on cellular data only&#10;Audio and video will play on Wi-Fi"`
+and `third_radio text="Block audio only&#10;Recommended"`. So an exact-text selector built from the strings.xml
+label alone (`preference_option_autoplay_allowed_wifi_only2`) can never resolve, and the failure surfaces as an
+arrival-anchor miss — indistinguishable at first glance from a nav-path problem. Use TEXT_CONTAINS on a fragment,
+or the res-id.
+
+**The permission-screen res-ids cannot identify WHICH permission screen you are on.** `ask_to_allow_radio`,
+`block_radio`, `third_radio`, `fourth_radio` all live in the layout shared by Camera/Location/Microphone/Autoplay,
+where the 3rd and 4th are merely hidden. ESPRESSO_BY_ID resolves `onView(withId(...))` with no visibility
+constraint, so an id anchor also resolves on the other screens (gotcha A45, false arrival). Anchor on
+autoplay-only label text; keep the ids for the per-option assertions.
+
+**UIAUTOMATOR_WITH_RES_ID restores the legacy visibility semantics for free.** Legacy asserted the three options
+with Espresso `withEffectiveVisibility(VISIBLE)`. The UIAutomator tree contains only displayed nodes, so a
+res-id group check carries the same guarantee — a better parity match than Espresso ids.
+
+**Leaving a settings screen for a URL needs BOTH halves.** `BrowserPage` has inbound edges only from `HomePage`
+and itself, so `on.browserPage.navigateToPage(url)` from a settings page dies with "No navigation path found
+from X to BrowserPage". Register a return edge on the settings page —
+`NavigationStep.PressBackUntilGone(SettingsSelectors.NAVIGATION_TOOLBAR)`, depth-independent — AND put an
+explicit `on.home.navigateToPage()` in the test (the harness equivalent of legacy `exitMenu()`). The edge alone
+is not enough: `findPath` only searches from the currently tracked page. This is now **efftriage rule T19**,
+with `tests/fixtures/corpus/T19-no-nav-path` as its labelled example.
+
+**Toolchain note:** `effverify <batchdir> <ClassName>` reports `status: not-run` / `clean: false` even for a
+fully green run — it keys off METHOD names. Pass the method names, and cross-check `status.json`.

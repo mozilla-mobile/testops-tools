@@ -240,6 +240,20 @@ REPORT_RULES = [
         "and a destination row on the parent screen (same title text) is the classic case.",
         lambda m: re.search(r"Failed to navigate to \w+", m),
     ),
+    (
+        "T19", "A56",
+        "no registered navigation edge connects the page you are on to the destination",
+        "This is a navigation GRAPH gap, not a selector problem — nothing was looked for on screen, so the "
+        "dump advice above does not apply. The message names both ends: no edge exists from the page the "
+        "tracker thinks you are on to the one you asked for. BrowserPage in particular has inbound edges "
+        "only from HomePage and from itself, so any test that leaves a settings screen and then loads a URL "
+        "needs (a) a return edge on the settings page — the convention is "
+        "NavigationStep.PressBackUntilGone(SettingsSelectors.NAVIGATION_TOOLBAR), which is depth-independent "
+        "— and (b) an explicit on.home.navigateToPage() hop in the test, the harness equivalent of legacy's "
+        "exitMenu(). Registering the edge without the hop is not enough: findPath only searches from the "
+        "CURRENT tracked page.",
+        lambda m: re.search(r"No navigation path found from '[^']+' to '[^']+'", m),
+    ),
 ]
 
 

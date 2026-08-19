@@ -78,6 +78,15 @@
     "retried": true,
     "source_batch": "b72-shortcuts2"
   },
+  "T19-no-nav-path": {
+    "expected_rules": [
+      "T19"
+    ],
+    "known_gap": false,
+    "outcome": "fail",
+    "retried": true,
+    "source_batch": "sp02-autoplay"
+  },
   "T2-selector-surface": {
     "expected_rules": [
       "T2"
@@ -149,10 +158,10 @@
       "T16"
     ],
     "known_gap": false,
+    "note": "Instrumentation PROCESS crash: the report is ~11 lines with no [ERR] line at all, so no window rule can reach it. Covered by the report-level tier (T16) keyed on status.json's primary failure message.",
     "outcome": "fail",
     "retried": false,
-    "source_batch": "b17d-qrdialog",
-    "note": "Instrumentation PROCESS crash: the report is ~11 lines with no [ERR] line at all, so no window rule can reach it. Covered by the report-level tier (T16) keyed on status.json's primary failure message."
+    "source_batch": "b17d-qrdialog"
   },
   "gap-sponsored-b13d": {
     "expected_rules": [],
@@ -166,10 +175,10 @@
       "T17"
     ],
     "known_gap": false,
+    "note": "Ads-client fake built with NoHandle had an un-overridden method called; the exception lands 36 lines past the [ERR], outside failure_windows()'s after=25. Covered by the report-level tier (T17). Do NOT match this text report-wide: it also appears as a Suppressed exception in T0-absence-assert and T9-permission.",
     "outcome": "fail",
     "retried": false,
-    "source_batch": "b14e-sponsored",
-    "note": "Ads-client fake built with NoHandle had an un-overridden method called; the exception lands 36 lines past the [ERR], outside failure_windows()'s after=25. Covered by the report-level tier (T17). Do NOT match this text report-wide: it also appears as a Suppressed exception in T0-absence-assert and T9-permission."
+    "source_batch": "b14e-sponsored"
   },
   "pass-clean": {
     "expected_rules": [],

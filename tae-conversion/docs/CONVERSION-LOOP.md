@@ -32,8 +32,17 @@ that instead of stepping over it: `effnext --skip Class.method --reason "…"` w
 `conversion-runs/skiplist.tsv` and prints the new next pick. Skips are advisory and reversible
 (`--unskip`, `--skips`, `--include-skipped`); they never mark a test converted. Convert it onto
 ui/efficiency; `effcheck.py` (static pre-flight) then the build-run via `effwatch`, reading **only** the JSON
-verdicts (`effbuild --json`, `effverify --json`) — never the raw run report. Iterate until `clean`=true (or
+verdicts (`effbuild --json`, `effverify --json`) — never the raw run report. **Pass effverify the METHOD names,
+not the class:** `effverify <batch> SomeTest` reports `status: not-run` and `clean: false` even when every test in
+it passed, because it matches per-test names. Cross-check `status.json`'s `outcome` if a verdict looks wrong. Iterate until `clean`=true (or
 "good enough + notes"). Log lessons to CONVERSION-LESSONS.md.
+
+
+**Heed effnext's `⚠ already converted on <branch>` line.** Its in-tree filter only sees the checked-out branch, so
+a conversion you have already sent for review from another branch is still offered as the next pick. The warning is
+advisory on purpose (`backup/*` is excluded, and abandoned work lives on branches too), so confirm against
+`docs/SMOKE-CONVERSION-AUDIT.md` or Phabricator before redoing anything. If it prints `branches_unchecked`, the
+branch scan did not complete and that warning cannot be relied on.
 
 ### 1b. Close out the conversion before you leave it (Claude, sandbox)
 Annotate the legacy method `@Converted(replacedBy = [...], bug = NNNNN, since = "YYYY-MM")` **in the same
@@ -93,6 +102,14 @@ tooling/enablement it sometimes forces. Scheme (project MTE, epic MTE-5504):
   issue type = `Sub-task`; labels via `additional_fields: {"labels":[...]}`.
 - Because we often don't know upfront whether enablement is needed, create these **after** the work, when the
   split is clear. The label split is what makes the effort comparison possible later.
+
+
+**A cherry-picked base whose revision is CLOSED blocks the whole stack.** Borrowing an unlanded commit as a base
+is fine for building and running, but `moz-phab submit` fails outright if any commit in the range maps to a closed
+revision — and dropping it late means reworking the commit that depended on it. Before cherry-picking, diff what
+you actually need against `main`: on 2026-08-19 the only real gap turned out to be a one-line helper written in
+the same session, so the borrowed commit was dropped and the check inlined. Do not create a file that an unlanded
+commit also creates; that is an add/add conflict on every rebase until it lands.
 
 ### 5. Submit the finished stack (YOU, `effsubmit.py`)
 When a fully-qualified stack is complete, Claude gives you the command; or just run:

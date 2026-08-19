@@ -8,6 +8,43 @@ change". Every tool answers `--version`.
 This file is curated, not a commit log: entries are changes a *consumer* depends on — a new gate, changed
 verdict semantics, changed flags. `git log` has the rest.
 
+## 2026.08.19
+
+### Added
+- **efftriage rule T19** (gotcha **A56**) — `No navigation path found from 'X' to 'Y'`. Previously unmatched, and
+  worse, the generic "a selector did not resolve, author against a dump" hint fired instead, which is misleading:
+  this failure is a navigation GRAPH gap where nothing was searched for on screen. The rule names both halves of
+  the fix (a return edge on the settings page **and** an `on.home.navigateToPage()` hop, because `findPath` only
+  searches from the currently tracked page).
+- **Corpus fixture `T19-no-nav-path`** — a real labelled run (`sp02-autoplay`), so T19 is validated rather than
+  listed as unvalidated. Suite is 58 tests, green.
+- **HARNESS-GOTCHAS A54–A59**, all from device runs during the site-permissions conversions: option text is
+  label+`\n`+subtext (A54); permission-screen res-ids are shared and `ESPRESSO_BY_ID` ignores visibility (A55);
+  `BrowserPage` has inbound edges only from `HomePage`/itself (A56); a page-content text selector can resolve a
+  non-clickable heading, giving "found" then `Failed to click UiObject` (A57); a system app-permission row title
+  exists whether allowed or denied, so assert `checkSelfPermission` instead (A58); a page object missing from
+  `PageContext` never registers its navigation (A59).
+- **`docs/SMOKE-CONVERSION-AUDIT.md`** — the standing burndown: how many legacy `@SmokeTest` methods remain, which
+  ones, what blocks each, and the parser to reproduce the count. Includes the reconciliation that
+  `grep -c '@Converted'` is **not** a smoke ratio (three annotations sit on non-smoke tests).
+
+- **`effnext` warns when a pick is already converted on another local branch** (`also_on_branches` in JSON).
+  Its in-tree filter only sees the CHECKED-OUT branch, so it happily offered `CustomTabsTest.verifyLoginSaveInCustomTabTest`
+  — already converted and awaiting review on `efficiency-batch-2`. Advisory, not a filter, and `backup/*` is
+  excluded: branches also carry ABANDONED work (the two faker conversions), and filtering on any branch would
+  silently drop genuinely outstanding tests from the pool.
+- **`tests/effnext_tests.py`** — 7 tests, including the two silent-failure paths. The check shipped broken twice
+  in one sitting, both times reporting a clean "nothing on other branches" while checking nothing:
+  `git grep -E` cannot parse `\b`/`\s`, and `subprocess` was unimported so the NameError was eaten by a bare
+  `except`. A per-ref timeout or an unlistable ref set now reports `branches_unchecked` instead of a false clean.
+
+### Changed
+- `docs/CONVERSION-LOOP.md` — verify step now states that `effverify` keys off **method** names: passing a class
+  name reports `status: not-run` / `clean: false` for a fully green run. Also records that a cherry-picked base
+  whose Phabricator revision is **closed** makes `moz-phab submit` fail for the whole stack.
+- `docs/CONVERSION-LESSONS.md` — site-permission screens, the prompt/label selectors, and the TestRail-id
+  verification step (three of six ids were wrong when read from grep context instead of the line above the test).
+
 ## 2026.08.13
 
 ### Added
