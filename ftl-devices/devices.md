@@ -29,7 +29,7 @@
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
-| a03sutfn | Galaxy A03s | 33 | Low |
+| a03sutfn | Galaxy A03s | 33 | Medium |
 | a04s | Galaxy A04s | 34 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
