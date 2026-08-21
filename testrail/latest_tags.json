@@ -1,10 +1,10 @@
 {
   "firefox": {
-    "tag": "firefox-v154.1",
+    "tag": "firefox-v155.0",
     "rc_number": 1
   },
   "focus/klar": {
-    "tag": "focus/klar-v154.0",
+    "tag": "focus/klar-v155.0",
     "rc_number": 1
   }
 }
