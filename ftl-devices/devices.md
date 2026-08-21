@@ -11,7 +11,7 @@
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
-| OP5759L1 | A38 | 34 | Low |
+| OP5759L1 | A38 | 34 | Medium |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | None |
 | RMX3231 | RMX3231 | 30 | Low |
@@ -103,12 +103,13 @@
 | comet | Pixel 9 Pro Fold | 34 | Medium |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | comet | Pixel 9 Pro Fold | 36 | Medium |
+| cubs | Pixel 11 | 37 | High |
 | cuscoi | moto g96 5G | 35 | Low |
 | dm1q | Galaxy S23 | 35 | Low |
 | dm1q-SM-S911U | Galaxy S23 | 36 | Medium |
 | dm1qcsx | Galaxy S23 | 36 | Low |
 | dm2q | Galaxy S23+ | 34 | Low |
-| dm2qksx | Galaxy S23+ | 36 | Medium |
+| dm2qksx | Galaxy S23+ | 36 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | Medium |
 | dubai | motorola edge 30 | 34 | High |
@@ -136,6 +137,7 @@
 | g0q | Galaxy S22+ | 36 | Low |
 | g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
+| grizzly | Pixel 11 Pro | 37 | Low |
 | gta4lwifi | Galaxy Tab A7 | 31 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | None |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
@@ -225,5 +227,6 @@
 | xcover7 | Galaxy XCover7 | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | Galaxy S20+ 5G | 33 | Low |
+| yogi | Pixel 11 Pro Fold | 37 | Low |
 | z3q | Galaxy S20 Ultra 5G | 33 | Low |
 
