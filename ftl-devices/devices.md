@@ -180,7 +180,7 @@
 | pa1q | Galaxy S25 | 36 | Low |
 | pa1qksx | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
-| pa2qxxx | Galaxy S25+ | 36 | None |
+| pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | Medium |
 | panther | Pixel 7 | 33 | High |
 | penang | moto g53 5G | 34 | Low |
