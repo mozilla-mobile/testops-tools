@@ -139,7 +139,7 @@
 | gnevan | moto g stylus (2023) | 33 | Low |
 | grizzly | Pixel 11 Pro | 37 | Low |
 | gta4lwifi | Galaxy Tab A7 | 31 | Low |
-| gta7lite | Galaxy Tab A7 Lite | 34 | None |
+| gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
 | gts10pwifi | Galaxy Tab S10+ | 36 | Low |
@@ -181,7 +181,8 @@
 | pa1qksx | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
-| pa3q | Galaxy S25 Ultra | 35 | Medium |
+| pa3q | Galaxy S25 Ultra | 35 | High |
+| pa3q | Galaxy S25 Ultra | 36 | Low |
 | panther | Pixel 7 | 33 | High |
 | penang | moto g53 5G | 34 | Low |
 | psq | Galaxy S25 Edge | 35 | Low |
