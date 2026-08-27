@@ -125,7 +125,7 @@
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | Galaxy S24 Ultra | 36 | Low |
 | eos | Eos | 33 | Medium |
-| felix | Pixel Fold | 33 | Low |
+| felix | Pixel Fold | 33 | Medium |
 | felix | Pixel Fold | 34 | High |
 | felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
