@@ -315,6 +315,7 @@ sections:
     modules:
       - {path: firefox-ios/Client/Frontend/AuthenticationManager, confidence: medium}
       - {path: firefox-ios/CredentialProvider, confidence: medium}
+      - {path: BrowserKit/Sources/AppAttestKit, confidence: medium}
     notes: |
       Vague section. May need to look at individual cases to refine. 100% automated.
 
@@ -534,6 +535,17 @@ sections:
     modules:
       - {path: firefox-ios/Client/Frontend/Browser, confidence: high}
       - {path: firefox-ios/Client/TabManagement, confidence: medium}
+  - name: Homepage Structure  # added 2026-08-10 by align.py
+    test_count: 69
+    automated: 26
+    modules:
+      - {path: firefox-ios/Client/Frontend/Home, confidence: high}
+      - {path: firefox-ios/Client/Frontend/ShortcutsLibrary, confidence: medium}
+  - name: Wayback Machine  # added 2026-08-10 by align.py
+    test_count: 33
+    automated: 0
+    modules:
+      - {path: firefox-ios/Client/Frontend/Wayback, confidence: high}
 modules_without_clear_section:
   - BrowserKit/Sources/Redux                  # State management — affects everything indirectly
   - BrowserKit/Sources/Common                 # Shared utilities — affects everything indirectly

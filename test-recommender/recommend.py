@@ -39,6 +39,13 @@ from candidate_scorer import (
     build_scoring_context,
     pre_filter_candidates,
 )
+from nimbus_flag_analyzer import (
+    FeatureFlag,
+    attribute_files,
+    classify_gating_flags,
+    load_flag_catalogue,
+    parse_wrapper_mapping,
+)
 
 try:
     import anthropic
@@ -167,6 +174,12 @@ class Analysis:
     unclassified_files: list[FileChange]
     budget: BudgetDecision                       # test count budget (Phase 2)
     scoring_context: ScoringContext              # for pre-filter (Phase 3)
+    # Nimbus flag analysis. Empty catalogue = --repo-path not provided; the
+    # pipeline degrades gracefully to the pre-Nimbus behavior.
+    flag_catalogue: dict[str, FeatureFlag] = field(default_factory=dict)
+    module_flag_states: dict[str, dict] = field(default_factory=dict)
+    # section_top → classification ("unflagged" | "enabled" | "beta_only" | "fully_dark")
+    section_flag_state: dict[str, str] = field(default_factory=dict)
 
 
 # =============================================================================
@@ -220,12 +233,12 @@ def gh_json(args: list[str]) -> dict | list:
 
 
 def fetch_compare(from_tag: str, to_tag: str, max_files: int = 300) -> tuple[list[FileChange], list[dict]]:
-    """Return (file_changes, commits) between two tags.
+    """Return (file_changes, commits) between two tags via the GitHub compare API.
 
-    TODO(git-first): replace this GitHub compare API call with local git
-    diff parsing to eliminate the 300-file cap (see NEXT_STEPS.md Priority 1).
-    The current path aborts loudly rather than truncating, so it fails-loud
-    instead of silently omitting changes on large majors.
+    The compare endpoint caps its `files` array at 300 entries and does NOT
+    paginate them (page=2 comes back empty), so a bigger diff cannot be fetched
+    this way at all. We abort loudly rather than truncate, and point at the
+    git-first path (--repo-path), which has no cap.
     """
     data = gh_json([f"repos/{REPO}/compare/{from_tag}...{to_tag}?per_page=300"])
     files = []
@@ -240,9 +253,132 @@ def fetch_compare(from_tag: str, to_tag: str, max_files: int = 300) -> tuple[lis
         sys.stderr.write(
             f"ERROR: diff has >= {max_files} files (GitHub compare API cap; "
             f"the report would silently omit changes). Aborting.\n"
+            f"Re-run with --repo-path <local firefox-ios clone> to compute the "
+            f"diff from local git instead (no cap).\n"
         )
         sys.exit(2)
     return files, data.get("commits", [])
+
+
+# -----------------------------------------------------------------------------
+# Git-first diff (no 300-file cap) — used when --repo-path is provided
+# -----------------------------------------------------------------------------
+
+
+def git_out(repo_path: Path, args: list[str]) -> str:
+    """Run a git command in repo_path and return stdout. Exits on failure."""
+    cmd = ["git", "-C", str(repo_path), "-c", "core.quotepath=false"] + args
+    out = subprocess.run(cmd, capture_output=True, text=True)
+    if out.returncode != 0:
+        sys.stderr.write(f"git failed: {' '.join(cmd)}\n{out.stderr}\n")
+        sys.exit(1)
+    return out.stdout
+
+
+def resolve_ref(repo_path: Path, ref: str) -> str:
+    """Resolve a tag/branch/SHA to a commit, trying origin/<ref> as a fallback
+    so callers can pass `release/v154.0` without the remote prefix."""
+    for candidate in (ref, f"origin/{ref}"):
+        out = subprocess.run(
+            ["git", "-C", str(repo_path), "rev-parse", "--verify", "-q", f"{candidate}^{{commit}}"],
+            capture_output=True, text=True,
+        )
+        if out.returncode == 0:
+            return out.stdout.strip()
+    sys.stderr.write(
+        f"ERROR: ref '{ref}' not found in {repo_path}. "
+        f"Try: git -C {repo_path} fetch origin --tags --prune\n"
+    )
+    sys.exit(2)
+
+
+def parse_numstat_z(raw: str) -> dict[str, tuple[int, int]]:
+    """Parse `git diff -M --numstat -z` into {path: (additions, deletions)}.
+
+    In -z form a normal entry is "adds\\tdels\\tpath\\0"; a rename has an empty
+    path field followed by two extra NUL-terminated records (old, new). Binary
+    files report "-" for both counts.
+    """
+    parts = raw.split("\0")
+    stats: dict[str, tuple[int, int]] = {}
+    i = 0
+    while i < len(parts):
+        rec = parts[i]
+        i += 1
+        if not rec:
+            continue
+        fields = rec.split("\t")
+        if len(fields) < 3:
+            continue
+        adds, dels, path = fields[0], fields[1], fields[2]
+        if path == "":                      # rename/copy: old and new follow
+            if i + 1 >= len(parts):
+                break
+            path = parts[i + 1]             # keep the new path
+            i += 2
+        a = int(adds) if adds.isdigit() else 0
+        d = int(dels) if dels.isdigit() else 0
+        stats[path] = (a, d)
+    return stats
+
+
+def parse_unified_diff(raw: str) -> dict[str, str]:
+    """Split `git diff` output into {path: patch}, where patch starts at the
+    first @@ hunk header — same shape as the GitHub compare API's `patch`."""
+    patches: dict[str, str] = {}
+    path: Optional[str] = None
+    hunks: list[str] = []
+    in_header = False                       # between "diff --git" and the first @@
+
+    def flush() -> None:
+        if path and hunks:
+            patches[path] = "\n".join(hunks)
+
+    for line in raw.split("\n"):
+        if line.startswith("diff --git "):
+            flush()
+            path, hunks, in_header = None, [], True
+        elif in_header and line.startswith("+++ b/"):
+            # git appends a TAB after the name when the path contains spaces.
+            path = line[6:].split("\t")[0]
+        elif in_header and line.startswith("--- a/") and path is None:
+            path = line[6:].split("\t")[0]  # deletion: +++ is /dev/null
+        elif in_header and line.startswith("@@"):
+            # First hunk header. Everything from here is patch body — including
+            # lines that look like diff headers (diffs of diffs, .patch files).
+            in_header = False
+            hunks.append(line)
+        elif not in_header and path is not None:
+            hunks.append(line)
+    flush()
+    return patches
+
+
+def fetch_compare_git(repo_path: Path, from_ref: str, to_ref: str) -> tuple[list[FileChange], list[dict]]:
+    """Return (file_changes, commits) computed from a local clone.
+
+    Uses merge-base..to (three-dot semantics) to match what the GitHub compare
+    API reports, but without its 300-file cap.
+    """
+    base_commit = resolve_ref(repo_path, from_ref)
+    head_commit = resolve_ref(repo_path, to_ref)
+    merge_base = git_out(repo_path, ["merge-base", base_commit, head_commit]).strip()
+    rng = f"{merge_base}..{head_commit}"
+
+    stats = parse_numstat_z(git_out(repo_path, ["diff", "-M", "--numstat", "-z", rng]))
+    patches = parse_unified_diff(git_out(repo_path, ["diff", "-M", "-U3", rng]))
+
+    files = [
+        FileChange(
+            path=path,
+            additions=adds,
+            deletions=dels,
+            patch=patches.get(path, "")[:8000],   # truncate per-file patch
+        )
+        for path, (adds, dels) in stats.items()
+    ]
+    commits = [{"sha": sha} for sha in git_out(repo_path, ["log", "--format=%H", rng]).split()]
+    return files, commits
 
 
 def fetch_prs_for_commits(commits: list[dict], limit: int = 500) -> list[PR]:
@@ -636,6 +772,12 @@ P2 (run if time)
   - Tests marked `automation: Completed` are already covered by CI — DEPRIORITIZE these (P2 at best) unless the change directly modified the underlying tests too.
   - Smoke & Sanity tests are handled separately by the automated smoke suite and are NOT in the candidate list. Do not ask for them; focus on the release-specific regression the candidates represent.
   - Tests marked `automation: Unsuitable` are manual-only and must be run by humans — favor these for P0/P1 when relevant.
+  - Feature-flag rule (channel-aware):
+      · `flag_state: "fully_dark"` — the candidate exercises code gated by a Nimbus flag that is OFF in release, beta AND developer. Real users cannot reach this code. Force to P2 and the `reason` must acknowledge the flag state (e.g. "code shipped but flag OFF in all channels; verify only after manual flag toggle").
+      · `flag_state: "beta_only"` — OFF in release, ON in beta or developer. Dogfooding users see it but no release users. P1 at most; the `reason` should note "dogfooding-only for this release".
+      · `flag_state: "enabled"` — ON in release. Treat normally.
+      · No `flag_state` field — no flag detected. Treat normally.
+    This overrides the rest of the priority rubric — a fully_dark candidate never gets P0/P1 even if it would otherwise qualify.
   - Do not invent test IDs. Only return IDs present in the candidate list.
   - Hard cap: return at most {budget_hi} ranked tests.
   - Be honest about uncertainty in the `reason` field. A reason like "tests the touched module" is fine if you genuinely don't have more signal.
@@ -664,6 +806,7 @@ SYSTEM_PROMPT_SYNTHESIZE = """You are a release QA report writer for the Firefox
 
 ## Executive summary
 2-4 bullets. What is the headline of this release? Top 2-3 areas the QA team should focus on. Mention the largest single risk if one stands out.
+CRITICAL: when calling out "new features shipping", check `flag_state` on the corresponding modules FIRST. A module with `flag_state: "fully_dark"` is code that ships in the binary but is NOT reachable by any user (release / beta / developer) — do NOT frame it as "ships this release". Frame it as "landed behind an OFF Nimbus flag — no user exposure until rollout starts". A `flag_state: "beta_only"` module reaches dogfooding channels only — say "landed behind flag `<accessor>` — currently ON in beta/developer only, OFF in release".
 
 ## Suggested manual tests
 Three subsections: ### P0 (must run), ### P1 (should run), ### P2 (if time).
@@ -683,6 +826,25 @@ For critical flows touched in this release that lack automated regression:
   - Identify candidate flows (auth, sync, tabs, search, etc.) where the diff suggests new behavior or risk
   - Suggest where a new automated regression test would prevent future drift
   - Prefer suggestions where `automation: Unsuitable` is high — those are manual-only and the team is bottlenecked there
+
+## Feature flag status
+CRITICAL — how to reason about flag state:
+1. `flag_catalogue` (top-level) is the AUTHORITATIVE list of every Nimbus flag in the repo with its per-channel state. If you can plausibly identify a touched module with an accessor in this catalogue by name similarity (compare tokens in `module_changes[].module` and `module_changes[].files` against the `accessor` field in `flag_catalogue`), USE the catalogue's state — never guess from world knowledge or general feature descriptions.
+2. `module_changes[].flag_state` is a stronger signal: the pipeline detected a direct code reference to a flag in that module. When present, prefer it over any name-based inference.
+3. If neither per-module attribution nor a plausible catalogue name-match supports a flag-state claim, DO NOT invent one. Write "flag state not detected — verify manually before assuming release exposure" and move on. Never say "enabled in release" or "user-facing" as a default when you have no evidence.
+4. The text grep is imperfect and misses indirect gating (dependency injection, call chains). Absence of `flag_state` on a module is NOT evidence of "always on" — it just means our detector didn't find a reference. Rely on the catalogue name-match to fill this gap.
+
+List every module in `module_changes` where `flag_state` is present, grouped by classification. Format each line as:
+  - `<module_path>` — flag `<accessor>` (`<release_state>`) — <what this means for QA>
+
+Only include this section when there is at least one gated module in this release. If all touched modules are unflagged, write "No feature-gated changes in this release" as a one-liner and move on.
+
+The three classifications and their framing:
+  - **fully_dark**: OFF in release, beta, and developer. Not reachable by anyone. QA action: verify only after a manual flag toggle in a debug build; do NOT allocate release-regression time.
+  - **beta_only**: OFF in release, ON in beta/developer. Reachable by dogfooding users. QA action: exercise via the beta build; not a regression risk for release users.
+  - **enabled**: ON in release. Reachable by all users. QA action: standard release regression coverage applies.
+
+Cite the accessor name and the compact state summary from `gating_flags[].state` so the reader knows exactly which flag and its per-channel setting.
 
 ## Risks
 Translate the risk signals into prose, ranked high → low severity:
@@ -787,8 +949,9 @@ def _candidates_for_prompt(analysis: Analysis) -> tuple[list[TestCase], list[dic
     scored = pre_filter_candidates(deduped, analysis.scoring_context, top_k=top_k)
 
     out = [tc for tc, _ in scored]
-    compact = [
-        {
+    compact = []
+    for tc, score in scored:
+        row = {
             "id": tc.id,
             "title": tc.title,
             "section": tc.section_top,
@@ -796,20 +959,33 @@ def _candidates_for_prompt(analysis: Analysis) -> tuple[list[TestCase], list[dic
             "auto": tc.automation,
             "score": score,
         }
-        for tc, score in scored
-    ]
+        # Only surface flag_state when it's a NON-DEFAULT classification.
+        # Adding "unflagged" to every candidate would inflate the prompt
+        # with noise (most candidates aren't gated).
+        state = analysis.section_flag_state.get(tc.section_top)
+        if state and state != "unflagged":
+            row["flag_state"] = state
+        compact.append(row)
     return out, compact
 
 
 def _module_summary_for_prompt(analysis: Analysis) -> list[dict]:
-    return [
-        {
+    result: list[dict] = []
+    for mc in sorted(analysis.module_changes.values(), key=lambda m: m.total_loc, reverse=True):
+        row = {
             "module": mc.module,
             "loc": mc.total_loc,
             "files": [f.path for f in mc.files[:20]],   # cap to keep prompt reasonable
         }
-        for mc in sorted(analysis.module_changes.values(), key=lambda m: m.total_loc, reverse=True)
-    ]
+        # Attach Nimbus flag state when this module is gated. Same rationale
+        # as _candidates_for_prompt: only include when non-default, to avoid
+        # inflating the prompt with "unflagged" noise on every module.
+        flag_info = analysis.module_flag_states.get(mc.module)
+        if flag_info:
+            row["flag_state"] = flag_info["classification"]
+            row["gating_flags"] = flag_info["flags"]
+        result.append(row)
+    return result
 
 
 def _risks_for_prompt(analysis: Analysis) -> list[dict]:
@@ -821,6 +997,30 @@ def _risks_for_prompt(analysis: Analysis) -> list[dict]:
 
 def _drift_for_prompt(analysis: Analysis) -> list[dict]:
     return [{"kind": d.kind, "item": d.item, "detail": d.detail} for d in analysis.drift]
+
+
+def _flag_catalogue_for_prompt(analysis: Analysis) -> list[dict]:
+    """Compact summary of every Nimbus flag in the catalogue with its
+    classification. Gives the LLM a GLOBAL view of flag state so it can reason
+    about features whose code isn't directly attributed (attribution is
+    grep-based and misses indirect gating). Empty when Nimbus analysis was
+    skipped (--repo-path not provided).
+
+    Kept minimal — accessor + classification only. Detailed per-channel state
+    is available via `gating_flags` in module_changes when a module IS
+    attributed.
+    """
+    from nimbus_flag_analyzer import classify_gating_flags
+    if not analysis.flag_catalogue:
+        return []
+    return [
+        {
+            "accessor": accessor,
+            "classification": classify_gating_flags([accessor], analysis.flag_catalogue),
+            "state": flag.channel_state_summary(),
+        }
+        for accessor, flag in sorted(analysis.flag_catalogue.items())
+    ]
 
 
 def _deterministic_rerank(analysis: Analysis) -> list[RankedTest]:
@@ -860,6 +1060,7 @@ def llm_rerank(analysis: Analysis) -> tuple[list[RankedTest], str]:
         "module_changes": _module_summary_for_prompt(analysis),
         "risks": _risks_for_prompt(analysis),
         "drift": _drift_for_prompt(analysis),
+        "flag_catalogue": _flag_catalogue_for_prompt(analysis),
         "candidates": compact,
     }
     user_text = (
@@ -987,6 +1188,7 @@ def llm_synthesize(analysis: Analysis, ranked: list[RankedTest], notes: str, tes
         "module_changes": _module_summary_for_prompt(analysis),
         "risks": _risks_for_prompt(analysis),
         "drift": _drift_for_prompt(analysis),
+        "flag_catalogue": _flag_catalogue_for_prompt(analysis),
         "ranked_tests": ranked_payload,
         "rerank_notes": notes,
         "unclassified_files": [{"path": f.path, "additions": f.additions, "deletions": f.deletions}
@@ -1154,7 +1356,124 @@ def render_deterministic_report(analysis: Analysis, ranked_tests: list[TestCase]
 # =============================================================================
 
 
-def run_pipeline(from_tag: str, to_tag: str, testrail_path: Path, mapping_path: Path, output_path: Path, verbose: bool = False) -> None:
+def analyze_nimbus_flags(
+    file_changes: list[FileChange],
+    module_changes: dict[str, ModuleChange],
+    mapping: dict,
+    repo_path: Optional[Path],
+) -> tuple[dict[str, FeatureFlag], dict[str, dict], dict[str, str]]:
+    """Load the Nimbus flag catalogue and attribute the diff to gating flags.
+
+    Returns (catalogue, module_flag_states, section_flag_state).
+
+    - catalogue: {accessor: FeatureFlag}
+    - module_flag_states: {module_path: {"classification": str, "flags": [flag_summary_dict]}}
+    - section_flag_state: {section_top: classification}
+
+    When repo_path is None (or the directory is missing) everything returns
+    empty, and downstream code silently skips the flag-aware logic.
+    """
+    if repo_path is None:
+        return {}, {}, {}
+
+    nimbus_dir = repo_path / "firefox-ios" / "nimbus-features"
+    catalogue = load_flag_catalogue(nimbus_dir)
+    if not catalogue:
+        return {}, {}, {}
+
+    # Two-hop wrapper: most product code goes through NimbusFeatureFlagLayer
+    # (`.isEnabled(.foo)`) rather than referencing `features.fooFeature` directly.
+    # Parse the layer file once to build the {enum_case: accessor} map so
+    # wrapper-style references are attributed too. Missing file is fine —
+    # just means we fall back to direct attribution only.
+    wrapper_path = repo_path / "firefox-ios" / "Client" / "Nimbus" / "NimbusFeatureFlagLayer.swift"
+    case_to_accessor: dict[str, str] = {}
+    if wrapper_path.is_file():
+        try:
+            case_to_accessor = parse_wrapper_mapping(wrapper_path.read_text(errors="replace"))
+        except OSError:
+            pass
+
+    # Grep the current on-disk content of each changed .swift file. The
+    # local checkout may be at a different SHA than the release tags, but
+    # flag-reference patterns are slow-moving invariants — this is close
+    # enough for MVP. Falls back to the truncated patch when the file is
+    # not present locally (deleted, or checkout is behind).
+    #
+    # Test and noise paths are excluded: a test file may reference a flag
+    # (to exercise both branches) without the flag actually gating any
+    # product code. Attributing tests would mislabel test trees as gated
+    # by unrelated flags.
+    swift_pairs: list[tuple[str, str]] = []
+    swift_changes: list[FileChange] = []
+    for fc in file_changes:
+        if not fc.path.endswith(".swift"):
+            continue
+        if is_test_path(fc.path) or is_noise_path(fc.path):
+            continue
+        local = repo_path / fc.path
+        if local.is_file():
+            try:
+                content = local.read_text(errors="replace")
+            except OSError:
+                content = fc.patch
+        else:
+            content = fc.patch
+        swift_pairs.append((fc.path, content))
+        swift_changes.append(fc)
+
+    attributions = attribute_files(swift_pairs, catalogue, case_to_accessor)
+
+    # Aggregate file attributions up to the module level.
+    known = known_modules_from_mapping(mapping)
+    module_flag_accessors: dict[str, list[str]] = {}
+    for fc, attr in zip(swift_changes, attributions):
+        module = classify_file(fc.path, known)
+        if module and attr.gating_flags:
+            bucket = module_flag_accessors.setdefault(module, [])
+            for acc in attr.gating_flags:
+                if acc not in bucket:
+                    bucket.append(acc)
+
+    module_flag_states: dict[str, dict] = {}
+    for module, accessors in module_flag_accessors.items():
+        module_flag_states[module] = {
+            "classification": classify_gating_flags(accessors, catalogue),
+            "flags": [
+                {
+                    "accessor": acc,
+                    "state": catalogue[acc].channel_state_summary(),
+                }
+                for acc in accessors if acc in catalogue
+            ],
+        }
+
+    # Aggregate at the section level for candidate-side lookup.
+    # A section's classification is the most-permissive across its touched
+    # modules (matches classify_gating_flags's own aggregation rule).
+    section_priority = {"unflagged": 0, "fully_dark": 1, "beta_only": 2, "enabled": 3}
+    section_flag_state: dict[str, str] = {}
+    for section_def in mapping.get("sections", []):
+        section_name = section_def["name"]
+        touched_modules = [
+            m["path"] for m in section_def.get("modules", [])
+            if m["path"] in module_changes
+        ]
+        # Only sections whose touched modules ALL have a Nimbus classification
+        # get an aggregate state — otherwise we'd mislabel a section that has
+        # both unflagged and dark modules as "dark".
+        gated_states = [
+            module_flag_states[m]["classification"]
+            for m in touched_modules
+            if m in module_flag_states
+        ]
+        if gated_states and len(gated_states) == len(touched_modules):
+            section_flag_state[section_name] = max(gated_states, key=lambda s: section_priority[s])
+
+    return catalogue, module_flag_states, section_flag_state
+
+
+def run_pipeline(from_tag: str, to_tag: str, testrail_path: Path, mapping_path: Path, output_path: Path, verbose: bool = False, repo_path: Optional[Path] = None) -> None:
     def vlog(msg: str) -> None:
         if verbose:
             print(f"[recommend] {msg}", file=sys.stderr)
@@ -1165,7 +1484,11 @@ def run_pipeline(from_tag: str, to_tag: str, testrail_path: Path, mapping_path: 
     vlog(f"  {len(tests)} TestRail cases loaded, {len(mapping.get('sections', []))} sections in YAML")
 
     vlog(f"fetching diff {from_tag}...{to_tag} …")
-    file_changes, commits = fetch_compare(from_tag, to_tag)
+    if repo_path:
+        vlog(f"  using local git clone at {repo_path} (no 300-file cap)")
+        file_changes, commits = fetch_compare_git(repo_path, from_tag, to_tag)
+    else:
+        file_changes, commits = fetch_compare(from_tag, to_tag)
     vlog(f"  {len(file_changes)} files, {len(commits)} commits")
 
     vlog("resolving PRs from commits …")
@@ -1224,6 +1547,20 @@ def run_pipeline(from_tag: str, to_tag: str, testrail_path: Path, mapping_path: 
     vlog(f"  {len(scoring_context.high_loc_modules)} high-LOC modules, "
          f"{len(scoring_context.sections_with_risk)} sections with risk signal")
 
+    vlog("analyzing Nimbus feature flags …")
+    flag_catalogue, module_flag_states, section_flag_state = analyze_nimbus_flags(
+        file_changes, module_changes, mapping, repo_path,
+    )
+    if flag_catalogue:
+        counts = defaultdict(int)
+        for state in section_flag_state.values():
+            counts[state] += 1
+        vlog(f"  {len(flag_catalogue)} flags in catalogue, "
+             f"{len(module_flag_states)} modules gated, "
+             f"section states: {dict(counts) or 'none'}")
+    else:
+        vlog("  skipped (--repo-path not provided or nimbus-features missing)")
+
     analysis = Analysis(
         from_tag=from_tag, to_tag=to_tag,
         prs=kept_prs, skipped_prs=skipped,
@@ -1235,6 +1572,9 @@ def run_pipeline(from_tag: str, to_tag: str, testrail_path: Path, mapping_path: 
         unclassified_files=unclassified,
         budget=budget,
         scoring_context=scoring_context,
+        flag_catalogue=flag_catalogue,
+        module_flag_states=module_flag_states,
+        section_flag_state=section_flag_state,
     )
 
     # Preview the pre-filter effect for visibility in the log
@@ -1263,11 +1603,16 @@ def main() -> None:
     p.add_argument("--testrail", required=True, type=Path, help="Path to TestRail export .xlsx")
     p.add_argument("--mapping", required=True, type=Path, help="Path to section_to_module_mapping.yaml")
     p.add_argument("--output", type=Path, default=None, help="Output Markdown path (default: release_report_<to_tag>.md)")
+    p.add_argument("--repo-path", type=Path, default=None,
+                   help="Path to a local firefox-ios clone. When provided, the diff is computed from local git "
+                        "instead of the GitHub compare API (removes the 300-file cap) and Nimbus feature-flag "
+                        "analysis is enabled (fully_dark/beta_only/enabled per release channel).")
     p.add_argument("--verbose", "-v", action="store_true")
     args = p.parse_args()
 
     output = args.output or Path(f"release_report_{args.to_tag}.md")
-    run_pipeline(args.from_tag, args.to_tag, args.testrail, args.mapping, output, verbose=args.verbose)
+    run_pipeline(args.from_tag, args.to_tag, args.testrail, args.mapping, output,
+                 verbose=args.verbose, repo_path=args.repo_path)
 
 
 if __name__ == "__main__":
