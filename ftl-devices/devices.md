@@ -118,7 +118,7 @@
 | e1s | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24+ | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
-| e2sksx | Galaxy S24+ | 36 | Medium |
+| e2sksx | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Low |
 | e3q | Galaxy S24 Ultra | 36 | Low |
 | e3qcsx | Galaxy S24 Ultra | 36 | Low |
