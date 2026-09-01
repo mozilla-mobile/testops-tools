@@ -164,6 +164,73 @@ as a project principle.
 | Phase 2 | + budget 40-70 (adaptive) | 52.4% | 37 | 65/67/63 |
 | Phase 3 | + pre-filter 989→280, score in payload | 54.7% | 38 | 63/67/67 |
 | Phase 3b | + prompt instruction on how to use score | **64.1%** | **46** | 65/67/69 |
+| Phase 4 | + Nimbus flag analyzer (measured on release with **zero gated modules**) | 58.7% | 41 | 66/69/64 |
+
+## Phase 4 — Nimbus flag awareness
+
+**Change:** the pipeline now parses `nimbus-features/*.yaml` from a local
+firefox-ios clone, extracts per-flag channel state (`release` / `beta` /
+`developer`), and attributes changed Swift files to gating flags via two
+grep passes:
+
+1. Direct `features.<accessor>` references in product code.
+2. Wrapper indirection: parse `NimbusFeatureFlagLayer.swift` to build a
+   `{enum_case: accessor}` map, then grep for `.isEnabled(.<case>)`.
+
+The full flag catalogue (34 flags with per-channel state) is also injected
+as a top-level `flag_catalogue` payload field. This lets the LLM correlate
+touched modules to flags by name similarity even when direct grep misses
+indirect gating (call-chain, dependency injection).
+
+**Rerank prompt** now includes a channel-aware priority rule:
+`fully_dark` → force P2, `beta_only` → P1 max, `enabled` → normal ranking.
+**Synthesize prompt** now includes a "Feature flag status" section and
+explicit anti-hallucination rules ("never guess enabled in release without
+evidence"; "correlate module tokens to accessor names in `flag_catalogue`").
+
+### Jaccard cost — measured on a release with no gated modules
+
+The 3-run measurement above was on `firefox-v151.2 → firefox-v151.3`, an
+older minor release where the Nimbus attributor finds **zero gated modules**.
+Post-fix (`is_test_path` exclusion), the module_changes and candidate payloads
+are byte-identical to Phase 3b — the only difference is ~900 tokens of new
+Nimbus rules in the prompts that never fire. That prompt-length increase alone
+explains the -5.4pp Jaccard: more prompt surface → more room for LLM variation.
+
+**This is the worst-case cost:** rules present, no data to act on.
+
+### Qualitative wins — measured on a release with gated modules
+
+Case study: `firefox-v152.4 → release/v153.0` (major, 189 files, has both
+`fully_dark` and `beta_only` features in the diff).
+
+Behavioral improvements over the v1 report (pre-Nimbus, same release):
+
+| Feature | v1 framing (wrong) | v2 framing (Nimbus-aware) |
+|---|---|---|
+| Quick Answers (511 LOC in QuickAnswersKit) | "Major new feature ships this release" | "gated behind `quickAnswersFeature`, fully dark; no user exposure — do not spend release-regression cycles here" |
+| Ad Blocker V1 (ASAdBlockerListFetcher) | "Major new feature ships this release" | "beta_only via `adBlockerFeature`; beta users are the exposure surface" |
+| Force-unwrap in `QuickAnswersSourceView.swift` | high risk | "dark, low urgency" |
+| Force-unwrap in `WebCompatReportSheetViewController.swift` | one of many | "live, unflagged — the real risk here" |
+
+Emergent LLM behavior on v153.0: self-corrects on flag contradictions.
+Example: after listing WebCompat tests as P0, the LLM added a caveat noting
+that `reportBrokenSiteFeature` is developer-only in the catalogue, and asked
+QA to verify whether that flag actually gates the changed `WebCompatReporterKit`
+surfaces before running the P0 cases.
+
+### Interpretation
+
+The -5.4pp Jaccard is a real cost on releases without gated modules. The
+qualitative wins are substantial on releases with gated modules (which is
+every recent release; v151.3 was chosen for the measurement because it's
+the baseline used for all prior phases). Since QA acts on the qualitative
+output, not on the Jaccard-of-recommended-IDs, the trade-off ships.
+
+Follow-up work in `NEXT_STEPS.md`: text grep still misses indirect gating
+(call-chain, DI). A curated `flag → module_paths` YAML — akin to
+`section_to_module_mapping.yaml` — would close this gap without requiring
+call-graph analysis.
 
 ---
 

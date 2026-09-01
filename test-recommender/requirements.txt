@@ -14,4 +14,5 @@
 
 openpyxl>=3.1.5
 pyyaml>=6.0.3
+ruamel.yaml>=0.18.0
 anthropic>=0.109.1,<0.200
