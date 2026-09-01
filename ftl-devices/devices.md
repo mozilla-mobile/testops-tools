@@ -23,7 +23,7 @@
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
-| TECNO-BF7 | TECNO | 31 | Low |
+| TECNO-BF7 | TECNO | 31 | None |
 | TECNO-BG6 | SPARK Go 2024 | 33 | Low |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
