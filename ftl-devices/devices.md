@@ -135,7 +135,7 @@
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Low |
 | g0q | Galaxy S22+ | 36 | Low |
-| g0qksx | Galaxy S22+ | 36 | Medium |
+| g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
 | grizzly | Pixel 11 Pro | 37 | Low |
 | gta4lwifi | Galaxy Tab A7 | 31 | Low |
@@ -177,7 +177,7 @@
 | p3q | Galaxy S21 Ultra 5G | 34 | Medium |
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
-| pa1q | Galaxy S25 | 36 | Low |
+| pa1q | Galaxy S25 | 36 | Medium |
 | pa1qksx | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
