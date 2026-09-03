@@ -1,0 +1,63 @@
+# ── Secrets ────────────────────────────────────────────────────────────────────
+# NEVER commit API keys or local config
+.env
+.env.*
+# ...except the template. README's setup step 1 is `cp .env.example .env`, so
+# this file MUST ship or a fresh clone has no idea what to configure.
+!.env.example
+
+# ── Session artifacts — potential PII / undisclosed bug data ───────────────────
+# These files contain raw browser state, real URLs typed, autofill data
+# visible during recording, potentially undisclosed security bugs found by
+# the agent, and anything else that was on-screen during a test session.
+# NEVER commit.
+reports/screenshots/
+reports/session_*.json
+reports/session_*.mp4
+reports/session_*_inprogress.json
+reports/bugs_*.md
+reports/coverage_*.json
+reports/dashboard.html
+reports/dashboard.html.zip
+
+# agent_memory.json is NOT shipped either. It accumulates one operator's
+# session history (features tested, unverified bug titles) against specific
+# app builds — noise, not a useful seed, for anyone else. `memory.load()`
+# handles the missing file: a fresh clone reports "No previous sessions —
+# this is the first run." and `memory.save()` creates reports/ on demand.
+reports/agent_memory.json
+
+# reports/ is created at runtime by reporter.py, memory.py and perception.py.
+# Nothing inside it belongs in the repo.
+
+# ── Pending hardening — do not ship yet ────────────────────────────────────────
+# The Jenkins pipeline is kept local until it's reviewed. Known issues:
+#   - Job parameters (OBJECTIVE, APP_ID, DEVICE_UDID, MAX_STEPS) are
+#     interpolated by Groovy straight into `sh """..."""` → shell injection.
+#     Pass them through `environment` and use single-quoted `sh '...'`.
+#   - `agent any` — must be pinned to a macOS node with Xcode + simulator.
+#   - `pkill -f "node.*appium"` plus a fixed port 4723 clobbers concurrent
+#     builds; needs `disableConcurrentBuilds()`.
+#   - The Appium readiness loop falls through instead of failing the stage.
+#   - Must map exit 3 (agent crashed) to FAILURE — see CLAUDE.md.
+# Remove this rule in the PR that fixes the above.
+Jenkinsfile
+
+# ── Python ─────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── macOS ───────────────────────────────────────────────────────────────────────
+.DS_Store
