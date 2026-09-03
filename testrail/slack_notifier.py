@@ -177,7 +177,7 @@ SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS = Template(
             "type": "mrkdwn",
             "text": ":white_check_mark: Automated Full Functional Test - iPad mini (6th generation) (iOS 26.3.1)"
         }
-    },
+    }$EXTRA_TEST_SECTIONS,
     {
         "type": "divider"
     },
@@ -193,6 +193,19 @@ SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS = Template(
 ]
 """
 )
+
+
+# Extra "UI Automated Tests" section appended to SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS
+# via $EXTRA_TEST_SECTIONS. Only Firefox releases trigger the sync integration job,
+# so Focus/Klar releases pass an empty string instead.
+SLACK_SYNC_INTEGRATION_SECTION_IOS = """,
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": ":white_check_mark: Automated Sync Integration smoke test"
+        }
+    }"""
 
 
 SLACK_ERROR_MESSAGE_TEMPLATE = Template(
@@ -287,7 +300,10 @@ def send_success_notification(success_values, channel_id, options):
 
 def send_success_notification_ios(success_values, SLACK_WEBHOOK_URL):
     try:
-        blocks = json.loads(SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS.safe_substitute(**success_values))
+        # EXTRA_TEST_SECTIONS defaults to empty so callers that omit it still
+        # render valid JSON (safe_substitute would leave the placeholder as-is).
+        values = {"EXTRA_TEST_SECTIONS": "", **success_values}
+        blocks = json.loads(SLACK_SUCCESS_MESSAGE_TEMPLATE_IOS.safe_substitute(**values))
         payload = {
             "text": str(int(time.time())),  # para evitar duplicados en Slack
             "blocks": blocks

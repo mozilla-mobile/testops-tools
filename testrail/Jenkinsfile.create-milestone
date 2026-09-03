@@ -145,10 +145,10 @@ EOF
                                   params.RELEASE_TAG.toLowerCase().contains('klar')
 
                     if (isFirefox) {
-                        echo "Product: Firefox - Triggering 4 test jobs"
+                        echo "Product: Firefox - Triggering 5 test jobs"
                         echo "===================================="
 
-                        // Trigger all 4 Firefox jobs in parallel
+                        // Trigger all 5 Firefox jobs in parallel
                         parallel(
                             'Smoke Test iPad': {
                                 build job: 'firefox-ios-smoketest-ipad',
@@ -169,10 +169,15 @@ EOF
                                 build job: 'firefox-ios-full-functional-iphone',
                                       parameters: [string(name: 'BRANCH', value: branch)],
                                       wait: false
+                            },
+                            'Sync Integration Smoke Test': {
+                                build job: 'firefox-ios-sync-integration-tests-smoketest',
+                                      parameters: [string(name: 'BRANCH', value: branch)],
+                                      wait: false
                             }
                         )
 
-                        echo "✅ All 4 Firefox test jobs triggered"
+                        echo "✅ All 5 Firefox test jobs triggered"
                     } else if (isFocus) {
                         echo "Product: Focus - Triggering 1 test job"
                         echo "===================================="

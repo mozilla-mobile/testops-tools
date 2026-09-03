@@ -29,6 +29,7 @@ from testrail_utils import (
 )
 
 from slack_notifier import (
+    SLACK_SYNC_INTEGRATION_SECTION_IOS,
     send_error_notification_ios,
     send_success_notification_ios
 )
@@ -176,6 +177,10 @@ def main():
             "SHIPPING_PRODUCT": shipping_product,
             "TESTRAIL_PROJECT_ID": testrail_project_id,
             "TESTRAIL_PRODUCT_TYPE": testrail_product_type,
+            # Only Firefox triggers firefox-ios-sync-integration-tests-smoketest
+            "EXTRA_TEST_SECTIONS": (
+                SLACK_SYNC_INTEGRATION_SECTION_IOS if shipping_product == "firefox" else ""
+            ),
         }
         send_success_notification_ios(success_values, SLACK_MOBILE_TESTENG_RELEASE_CHANNEL)
     except Exception as error_message:
