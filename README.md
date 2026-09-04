@@ -28,8 +28,6 @@ The purpose of this repo is to house automation / notification tools for the Moz
 
 [![Create iOS Milestone in TestRail](https://github.com/mozilla-mobile/testops-tools/actions/workflows/create-milestone.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/create-milestone.yml)
 
-[![Check Bitrise Firefox iOS Tags](https://github.com/mozilla-mobile/testops-tools/actions/workflows/check-bitrise-ios-release-tags.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/check-bitrise-ios-release-tags.yml)
-
 [![Build and Run Autofill Automation](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-autofill-playwrite-tests.yml/badge.svg)](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-autofill-playwrite-tests.yml)
 
 [![Firefox Update Nimbus Experiments](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-update-nimbus-experiments.yml/badge.svg)](https://github.com/mozilla-mobile/firefox-ios/actions/workflows/firefox-ios-update-nimbus-experiments.yml)
