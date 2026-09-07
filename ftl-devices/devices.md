@@ -94,7 +94,7 @@
 | c2q | Galaxy Note20 Ultra 5G | 33 | Low |
 | c2qksw | Galaxy Note20 Ultra 5G | 33 | Low |
 | c2s | Galaxy Note20 Ultra 5G | 33 | Low |
-| caiman | Pixel 9 Pro | 34 | Medium |
+| caiman | Pixel 9 Pro | 34 | High |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancun | moto g14 | 34 | Low |
 | cancunf | moto g54 5G | 34 | Medium |
