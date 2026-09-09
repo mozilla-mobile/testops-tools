@@ -133,7 +133,7 @@
 | fogorow | moto g24 | 34 | None |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
-| g0q | Galaxy S22+ | 34 | Low |
+| g0q | Galaxy S22+ | 34 | Medium |
 | g0q | Galaxy S22+ | 36 | Low |
 | g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
@@ -198,7 +198,7 @@
 | r0q | Galaxy S22 | 34 | Medium |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
-| r0qksx | Galaxy S22 | 36 | Medium |
+| r0qksx | Galaxy S22 | 36 | Low |
 | r11 | Pixel Watch | 30 | Medium |
 | r11q | Galaxy S23 FE | 34 | Low |
 | r11qcs | Galaxy S23 FE | 36 | Low |
