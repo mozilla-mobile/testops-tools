@@ -77,7 +77,7 @@
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
 | b0qksx | Galaxy S22 Ultra | 36 | Medium |
-| b0qxxx | Galaxy S22 Ultra | 36 | Medium |
+| b0qxxx | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | Medium |
 | b4qsqw | Galaxy Z Flip4 | 36 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
@@ -195,7 +195,7 @@
 | q6qksx | Galaxy Z Fold6 | 36 | Low |
 | q6qsqw | Galaxy Z Fold6 | 36 | Medium |
 | q7mq | Galaxy Z TriFold | 36 | Medium |
-| r0q | Galaxy S22 | 34 | Medium |
+| r0q | Galaxy S22 | 34 | High |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
 | r0qksx | Galaxy S22 | 36 | Low |
