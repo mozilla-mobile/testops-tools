@@ -87,7 +87,7 @@
 | b6qksx | Galaxy Z Flip6 | 36 | Medium |
 | b6qsqw | Galaxy Z Flip6 | 36 | None |
 | blazer | Pixel 10 Pro | 36 | Low |
-| bluejay | Pixel 6a | 32 | Low |
+| bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
 | c1q | Galaxy Note20 5G | 33 | Low |
 | c1qksw | Galaxy Note20 5G | 33 | Low |
@@ -111,7 +111,7 @@
 | dm2q | Galaxy S23+ | 34 | Low |
 | dm2qksx | Galaxy S23+ | 36 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
-| dm3q | Galaxy S23 Ultra | 34 | Medium |
+| dm3q | Galaxy S23 Ultra | 34 | High |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
 | e1q | Galaxy S24 | 36 | Low |
