@@ -137,7 +137,7 @@
 | g0q | Galaxy S22+ | 36 | Low |
 | g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
-| grizzly | Pixel 11 Pro | 37 | Low |
+| grizzly | Pixel 11 Pro | 37 | Medium |
 | gta4lwifi | Galaxy Tab A7 | 31 | Low |
 | gta7lite | Galaxy Tab A7 Lite | 34 | Low |
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
