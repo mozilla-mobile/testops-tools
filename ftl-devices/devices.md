@@ -143,7 +143,7 @@
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
 | gts10pwifi | Galaxy Tab S10+ | 36 | Low |
-| gts7lwifi | Galaxy Tab S7 | 33 | Medium |
+| gts7lwifi | Galaxy Tab S7 | 33 | Low |
 | gts7xllite | Galaxy Tab S7 FE 5G | 34 | Medium |
 | gts7xlwifi | Galaxy Tab S7+ | 33 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
@@ -153,7 +153,7 @@
 | guamna | moto g play (2021) | 30 | Low |
 | guamp | moto g(9) play | 30 | Low |
 | husky | Pixel 8 Pro | 34 | High |
-| husky | Pixel 8 Pro | 35 | Low |
+| husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | High |
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
