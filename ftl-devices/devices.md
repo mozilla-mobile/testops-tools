@@ -97,7 +97,7 @@
 | caiman | Pixel 9 Pro | 34 | High |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancun | moto g14 | 34 | Low |
-| cancunf | moto g54 5G | 34 | Medium |
+| cancunf | moto g54 5G | 34 | Low |
 | caprip | moto g(30) | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | Medium |
