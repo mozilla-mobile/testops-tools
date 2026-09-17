@@ -13,7 +13,7 @@
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
-| RE58C2 | realme C53 | 35 | None |
+| RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-51C | Galaxy S22 | 36 | Low |
 | SC-51E | Galaxy S24 | 36 | Low |
@@ -84,7 +84,7 @@
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b5qxeea | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
-| b6qksx | Galaxy Z Flip6 | 36 | Medium |
+| b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | None |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
@@ -100,7 +100,7 @@
 | cancunf | moto g54 5G | 34 | Low |
 | caprip | moto g(30) | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
-| comet | Pixel 9 Pro Fold | 34 | Medium |
+| comet | Pixel 9 Pro Fold | 34 | High |
 | comet | Pixel 9 Pro Fold | 35 | Medium |
 | comet | Pixel 9 Pro Fold | 36 | Medium |
 | cubs | Pixel 11 | 37 | High |
