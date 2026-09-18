@@ -3,6 +3,7 @@
 | A402SO | Xperia 10 VI | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Low |
 | F01L | F-01L | 27 | High |
+| Frogger | Nothing Phone (4a) | 36 | Low |
 | Infinix-X6525 | Infinix SMART 8 | 33 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
@@ -64,7 +65,7 @@
 | a36xq | Galaxy A36 5G | 36 | Low |
 | a52sxq | Galaxy A52s 5G | 34 | Medium |
 | a52xq | Galaxy A52 5G | 34 | Low |
-| a54x | Galaxy A54 5G | 34 | High |
+| a54x | Galaxy A54 5G | 34 | Medium |
 | a54xue | Galaxy A54 5G | 36 | Low |
 | a55xzh | Galaxy A55 5G | 36 | Low |
 | a56x | Galaxy A56 5G | 35 | Low |
@@ -112,6 +113,7 @@
 | dm2qksx | Galaxy S23+ | 36 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
+| dm3qksx | Galaxy S23 Ultra | 36 | Low |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
 | e1q | Galaxy S24 | 36 | Low |
@@ -152,6 +154,7 @@
 | gts9wifi | Galaxy Tab S9 | 34 | Medium |
 | guamna | moto g play (2021) | 30 | Low |
 | guamp | moto g(9) play | 30 | Low |
+| houji | Xiaomi 14 | 35 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | High |
