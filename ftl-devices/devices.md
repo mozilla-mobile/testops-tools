@@ -86,7 +86,7 @@
 | b5qxeea | Galaxy Z Flip5 | 36 | Low |
 | b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
-| b6qsqw | Galaxy Z Flip6 | 36 | None |
+| b6qsqw | Galaxy Z Flip6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
