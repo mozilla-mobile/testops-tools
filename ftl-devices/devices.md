@@ -3,7 +3,7 @@
 | A402SO | Xperia 10 VI | 34 | Low |
 | CPH2449 | OnePlus 11 5G | 34 | Low |
 | F01L | F-01L | 27 | High |
-| Frogger | Nothing Phone (4a) | 36 | Low |
+| Frogger | Nothing Phone (4a) | 36 | Medium |
 | Infinix-X6525 | Infinix SMART 8 | 33 | Low |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 34 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
