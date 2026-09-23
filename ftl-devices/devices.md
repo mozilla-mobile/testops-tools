@@ -9,7 +9,7 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
 | OP4F39L1 | CPH2195 | 33 | Medium |
-| OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
+| OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | None |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Low |
