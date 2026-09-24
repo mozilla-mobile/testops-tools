@@ -101,7 +101,7 @@ The scanner searches upward from the test function declaration:
 The scanner automatically ignores:
 - **Directories**: `ExperimentIntegrationTests/`, `PerformanceTests/`
 - **File prefixes**: `A11y*`, `PerformanceTests*`, `ExperimentIntegrationTests*`
-- **Specific files**: `ScreenGraphTest.swift`, `SiteLoadTest.swift`
+- **Specific files**: `ScreenGraphTest.swift`, `SiteLoadTest.swift`, `PairingTests.swift` (owned by the FxA team)
 
 ### Android (Kotlin)
 
@@ -172,7 +172,7 @@ The scanner processes files line-by-line:
 
 #### Ignored Files (Android)
 
-Currently no specific files are ignored for Android. Directories can be added to `ANDROID_IGNORED_DIRS` if needed.
+Files listed in `ANDROID_IGNORED_FILES` are skipped. These are component, infra and framework self-tests (e.g. `DeepLinkTest.kt`, `UnsubmittedCrashDialogTest.kt`, `Nimbus*Test.kt`, `ModifierTest.kt`) that don't have TestRail cases. Directories can be added to `ANDROID_IGNORED_DIRS` if needed.
 
 ## GitHub Action Workflow
 
