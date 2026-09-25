@@ -32,10 +32,31 @@ IOS_IGNORED_DIRS = {
 IOS_IGNORED_FILES = {
     "ScreenGraphTest.swift",
     "SiteLoadTest.swift",
+    "PairingTests.swift",  # owned by the FxA team
 }
 
 # Directories to ignore entirely (Android)
 ANDROID_IGNORED_DIRS = set()
+
+# Specific files to ignore (Android): component, infra and framework
+# self-tests that don't have TestRail cases
+ANDROID_IGNORED_FILES = {
+    "DeepLinkTest.kt",
+    "DownloadsScreenDialogTest.kt",
+    "ExtensionOptionsFilePickerTest.kt",
+    "ExtensionPrivateBrowsingTest.kt",
+    "ModifierTest.kt",
+    "NimbusEventTest.kt",
+    "NimbusMessagingHomescreenTest.kt",
+    "NimbusMessagingMessageTest.kt",
+    "NimbusMessagingNotificationTest.kt",
+    "NimbusMessagingTriggerTest.kt",
+    "RetryRuleRetryableExceptionsTest.kt",
+    "UnsubmittedCrashDialogTest.kt",
+    "WaybackMachineErrorPageTest.kt",
+    "WebCompatReporterBrokenSiteReasonTest.kt",
+    "WebCompatReporterEditUrlDialogTest.kt",
+}
 
 
 @dataclass(frozen=True)
@@ -337,6 +358,9 @@ def should_ignore_file(path: Path, ignored_dirs: set, platform: str) -> bool:
         # Ignore experiment integration test files
         if path.name.startswith("ExperimentIntegrationTests"):
             return True
+
+    if platform == "android" and path.name in ANDROID_IGNORED_FILES:
+        return True
 
     # Ignore specific directories anywhere in the path
     for part in path.parts:
