@@ -25,7 +25,7 @@
 | TB370FU | Lenovo Tab P12 | 35 | Medium |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
 | TECNO-BF7 | TECNO | 31 | None |
-| TECNO-BG6 | SPARK Go 2024 | 33 | Low |
+| TECNO-BG6 | SPARK Go 2024 | 33 | None |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
@@ -98,7 +98,7 @@
 | caiman | Pixel 9 Pro | 34 | High |
 | caiman | Pixel 9 Pro | 35 | Medium |
 | cancun | moto g14 | 34 | Low |
-| cancunf | moto g54 5G | 34 | Low |
+| cancunf | moto g54 5G | 34 | Medium |
 | caprip | moto g(30) | 31 | Low |
 | cheetah | Pixel 7 Pro | 33 | Medium |
 | comet | Pixel 9 Pro Fold | 34 | High |
@@ -198,7 +198,7 @@
 | q6qksx | Galaxy Z Fold6 | 36 | Low |
 | q6qsqw | Galaxy Z Fold6 | 36 | Medium |
 | q7mq | Galaxy Z TriFold | 36 | Medium |
-| r0q | Galaxy S22 | 34 | High |
+| r0q | Galaxy S22 | 34 | Medium |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
 | r0qksx | Galaxy S22 | 36 | Low |
