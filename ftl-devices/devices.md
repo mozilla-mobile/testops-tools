@@ -30,7 +30,7 @@
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
 | a03su | Galaxy A03s | 33 | Low |
-| a03sutfn | Galaxy A03s | 33 | Medium |
+| a03sutfn | Galaxy A03s | 33 | Low |
 | a04s | Galaxy A04s | 34 | Low |
 | a05s | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
@@ -40,7 +40,7 @@
 | a13x | Galaxy A13 5G | 33 | Low |
 | a14m | Galaxy A14 | 34 | Low |
 | a14xm | Galaxy A14 5G | 34 | High |
-| a14xmsq | Galaxy A14 5G | 35 | None |
+| a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | None |
 | a15 | Galaxy A15 | 34 | Medium |
 | a15x | Galaxy A15 5G | 34 | Low |
@@ -67,7 +67,7 @@
 | a52xq | Galaxy A52 5G | 34 | Low |
 | a54x | Galaxy A54 5G | 34 | Medium |
 | a54xue | Galaxy A54 5G | 36 | Low |
-| a55xzh | Galaxy A55 5G | 36 | Low |
+| a55xzh | Galaxy A55 5G | 36 | Medium |
 | a56x | Galaxy A56 5G | 35 | Low |
 | a56xnaeea | SM-A566b | 36 | Low |
 | akita | Pixel 8a | 34 | High |
