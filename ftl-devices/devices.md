@@ -22,7 +22,7 @@
 | SCG13 | Galaxy S22 | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
-| TB370FU | Lenovo Tab P12 | 35 | Medium |
+| TB370FU | Lenovo Tab P12 | 35 | High |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
 | TECNO-BF7 | TECNO | 31 | None |
 | TECNO-BG6 | SPARK Go 2024 | 33 | None |
