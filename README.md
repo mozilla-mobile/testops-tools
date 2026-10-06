@@ -1,15 +1,18 @@
 # testops-tools
 
-The purpose of this repo is to house automation / notification tools for the Mozilla Mobile build and test infrastructure.
+A mono-repo of various in house automation and tooling used by the Mozilla Mobile Test Engineering team.
 
 ## Priority Task Monitoring
 
 ### General
+
 [![Monitor Google Play Store Ratings](https://github.com/mozilla-mobile/testops-tools/actions/workflows/monitor-ratings.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/monitor-ratings.yml)
 
 [![Monthly Monitoring Notification](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/testops-bot-notify.yml)
 
 [![Google Cloud Billing Slack Notifications](https://github.com/mozilla-mobile/testops-tools/actions/workflows/gcp-billing-slack.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/gcp-billing-slack.yml)
+
+[![tr-critical dashboard](https://github.com/mozilla-mobile/testops-tools/actions/workflows/tr-critical-dashboard.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/tr-critical-dashboard.yml)
 
 
 ### Android
