@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Critical Test Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  body { margin: 0; }
+  :root {
+    --page: #f4f5f7;
+    --surface: #fdfdfe;
+    --ink: #101217;
+    --ink-2: #4a4f58;
+    --muted: #666b75;
+    --grid: #e4e6ea;
+    --axis: #c5c9d0;
+    --border: rgba(16, 18, 23, 0.09);
+    --tae: #1c5cab;
+    --legacy: #86b6ef;
+    --todo: #eb6834;
+    --untriaged: #a3a8b1;
+    --unsuitable: #d9dce1;
+    --good-ink: #0a6b0a;
+    --good-dot: #0ca30c;
+    --warn-dot: #e09a00;
+    --warn-bg: #fdf3dc;
+    --good-bg: #e4f4e4;
+    --info-bg: #eceef2;
+    --chip: #eef1f5;
+    --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0e0f11;
+      --surface: #17191c;
+      --ink: #f3f4f6;
+      --ink-2: #c0c4cb;
+      --muted: #969ba4;
+      --grid: #262a30;
+      --axis: #3a3f47;
+      --border: rgba(255, 255, 255, 0.08);
+      --tae: #6da7ec;
+      --legacy: #1c5cab;
+      --todo: #d95926;
+      --untriaged: #636a75;
+      --unsuitable: #30343b;
+      --good-ink: #3fc03f;
+      --good-dot: #0ca30c;
+      --warn-dot: #fab219;
+      --warn-bg: #33290f;
+      --good-bg: #13291a;
+      --info-bg: #22252b;
+      --chip: #22262c;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0e0f11;
+    --surface: #17191c;
+    --ink: #f3f4f6;
+    --ink-2: #c0c4cb;
+    --muted: #969ba4;
+    --grid: #262a30;
+    --axis: #3a3f47;
+    --border: rgba(255, 255, 255, 0.08);
+    --tae: #6da7ec;
+    --legacy: #1c5cab;
+    --todo: #d95926;
+    --untriaged: #636a75;
+    --unsuitable: #30343b;
+    --good-ink: #3fc03f;
+    --good-dot: #0ca30c;
+    --warn-dot: #fab219;
+    --warn-bg: #33290f;
+    --good-bg: #13291a;
+    --info-bg: #22252b;
+    --chip: #22262c;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font: 400 14px/1.5 var(--sans);
+    padding-inline: 16px;
+    padding-block: 28px 48px;
+  }
+  .wrap { max-width: 1120px; margin-inline: auto; display: grid; gap: 20px; }
+
+  /* Header */
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; padding-bottom: 4px; }
+  .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+  h1 { font-size: 28px; line-height: 1.15; font-weight: 600; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-2); }
+  .chip { background: var(--chip); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
+  .chip.sample { background: var(--warn-bg); color: var(--ink); }
+
+  /* Panels */
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; min-width: 0; }
+  .panel h2 { font-size: 15px; font-weight: 600; margin: 0; }
+  .panel .sub { font-size: 13px; color: var(--muted); margin: 2px 0 0; }
+  .row { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); }
+
+  /* Platform card */
+  .plat-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .plat-name { font-size: 17px; font-weight: 600; margin: 0; }
+  .suite { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .hero { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 28px; margin: 14px 0 18px; }
+  .hero-num { font-size: 52px; line-height: 1; font-weight: 600; letter-spacing: -0.03em; }
+  .hero-num small { font-size: 26px; font-weight: 500; letter-spacing: -0.01em; }
+  .hero-cap { font-size: 13px; color: var(--ink-2); margin-top: 6px; max-width: 26ch; }
+  .minis { display: flex; gap: 24px; flex-wrap: wrap; }
+  .mini dt { font-size: 12px; color: var(--muted); }
+  .mini dd { margin: 2px 0 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .mini dd span { font-size: 13px; font-weight: 500; color: var(--ink-2); margin-left: 4px; }
+  .triage-track { width: 88px; height: 6px; border-radius: 3px; background: var(--grid); margin-top: 6px; overflow: hidden; }
+  .triage-fill { height: 100%; background: var(--ink-2); border-radius: 3px; }
+
+  /* Composition bar */
+  .compo { position: relative; }
+  .bracket { position: relative; height: 22px; margin-bottom: 6px; }
+  .bracket-line { position: absolute; left: 0; bottom: 0; height: 7px; border: 1.5px solid var(--axis); border-bottom: 0; border-radius: 3px 3px 0 0; }
+  .bracket-label { position: absolute; left: 0; top: 0; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .bracket-label b { color: var(--ink); font-weight: 600; }
+  .bar { display: flex; gap: 2px; height: 28px; }
+  .seg { height: 100%; border-radius: 2px; min-width: 2px; cursor: default; outline: none; transition: filter 0.12s; }
+  .seg:first-child { border-radius: 4px 2px 2px 4px; }
+  .seg.last { border-radius: 2px 4px 4px 2px; }
+  .seg.excluded { margin-left: 6px; }
+  .seg:hover, .seg:focus-visible { filter: brightness(1.12) saturate(1.05); }
+  .seg:focus-visible { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+  .seg-labels { display: flex; gap: 2px; margin-top: 6px; font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .seg-labels > div { min-width: 0; overflow: hidden; white-space: nowrap; }
+  .seg-labels .excluded { margin-left: 6px; }
+  .seg-labels b { color: var(--ink); font-weight: 600; display: block; font-size: 13px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12px; color: var(--ink-2); margin-top: 4px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .caveat { margin: 14px 0 0; padding: 10px 12px; background: var(--warn-bg); border-radius: 6px; font-size: 13px; color: var(--ink); }
+  .caveat b { font-weight: 600; }
+
+  /* Trend */
+  .charts { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); margin-top: 16px; }
+  .chart h3 { font-size: 13px; font-weight: 600; margin: 0 0 6px; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart text { font-family: var(--sans); fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .chart .gridline { stroke: var(--grid); stroke-width: 1; }
+  .chart .baseline { stroke: var(--axis); stroke-width: 1; }
+  .chart .target { stroke: var(--ink-2); stroke-width: 1; }
+  .chart .target-label { fill: var(--ink-2); font-weight: 500; }
+  .chart .total-label { fill: var(--ink); font-weight: 600; font-size: 12px; }
+  .chart .note-line { stroke: var(--ink-2); stroke-width: 1; }
+  .chart .note-text { fill: var(--ink-2); font-size: 11px; }
+  .chart .col { cursor: default; outline: none; }
+  .chart .col:hover rect.hit, .chart .col:focus-visible rect.hit { fill: var(--ink); fill-opacity: 0.05; }
+
+  /* Checks & log */
+  .checks, .log { list-style: none; margin: 14px 0 0; padding: 0; display: grid; }
+  .checks > li { display: grid; grid-template-columns: 1fr auto auto; gap: 4px 16px; align-items: center; padding: 11px 0; border-top: 1px solid var(--grid); }
+  .checks > li:first-child { border-top: 0; }
+  .check-name { font-weight: 500; }
+  .check-note { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+  .check-vals { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+  .check-vals b { color: var(--ink); font-weight: 600; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 2px 9px 2px 7px; border-radius: 999px; white-space: nowrap; }
+  .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; }
+  .pill.ok { background: var(--good-bg); color: var(--good-ink); }
+  .pill.ok::before { background: var(--good-dot); }
+  .pill.warn { background: var(--warn-bg); color: var(--ink); }
+  .pill.warn::before { background: var(--warn-dot); }
+  .pill.info { background: var(--info-bg); color: var(--ink-2); }
+  .pill.info::before { background: var(--muted); }
+
+  .log > li { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 11px 0; border-top: 1px solid var(--grid); }
+  .log > li:first-child { border-top: 0; }
+  .log time { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 1px; }
+  .log .plat { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-right: 6px; }
+  .log p { margin: 0; }
+  .log .kind { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .ids { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); word-break: break-word; }
+
+  /* Table view */
+  details { margin-top: 16px; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 500; color: var(--ink-2); width: fit-content; }
+  summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 3px; }
+  .table-wrap { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 7px 10px; border-top: 1px solid var(--grid); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { border-top: 0; font-weight: 500; color: var(--muted); font-size: 12px; }
+  tbody th { font-weight: 400; color: var(--ink-2); }
+  tr.strong th, tr.strong td { font-weight: 600; color: var(--ink); }
+
+  /* Definitions */
+  .defs { display: grid; gap: 14px 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); margin: 14px 0 0; }
+  .defs dt { font-weight: 600; font-size: 13px; }
+  .defs dd { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); }
+  .defs code { font-family: var(--mono); font-size: 11.5px; background: var(--chip); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+
+  /* Tooltip */
+  .tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.14); padding: 8px 10px; font-size: 12px; min-width: 150px; max-width: 260px; }
+  .tip .t-title { color: var(--muted); font-size: 11.5px; margin-bottom: 4px; }
+  .tip .t-row { display: flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
+  .tip .t-row + .t-row { margin-top: 3px; }
+  .tip .t-key { width: 10px; height: 3px; border-radius: 2px; flex: none; }
+  .tip .t-val { font-weight: 600; font-size: 13px; }
+  .tip .t-lab { color: var(--ink-2); }
+
+  @media (max-width: 520px) {
+    .seg-labels .name { display: none; }
+    h1 { font-size: 23px; }
+    .hero-num { font-size: 44px; }
+    .panel { padding: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .seg { transition: none; } }
+</style>
+</head>
+<body>
+
+<style>
+  .status-line { font-size: 13px; color: var(--ink-2); }
+  .load-error { background: var(--warn-bg); border-radius: 10px; padding: 16px 20px; }
+  .check-cases { grid-column: 1 / -1; margin: 2px 0 0; }
+  .check-cases summary { font-size: 12.5px; }
+  .case-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+  .case-list li { display: grid; grid-template-columns: 92px 1fr auto; gap: 4px 12px; font-size: 12.5px; align-items: baseline; }
+  .case-list .plat-tag { grid-column: 1 / -1; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+  .case-list .when { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .case-list .when.fresh { color: var(--ink); font-weight: 500; }
+  a.case { font-family: var(--mono); font-size: 12px; color: var(--tae); text-decoration: none; }
+  a.case:hover { text-decoration: underline; }
+  a.case:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+  .log .ids a.case { font-size: 11.5px; }
+  .empty { color: var(--muted); font-size: 13px; margin: 14px 0 0; }
+  @media (max-width: 520px) { .case-list li { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Mobile Test Engineering · Release Testing as a Service</p>
+      <h1>Critical Test Automation</h1>
+    </div>
+    <div class="meta"><span class="status-line" id="status">Loading TestRail data…</span></div>
+  </header>
+
+  <div id="app">
+    <section class="row" id="platforms" aria-label="Coverage by platform"></section>
+  </div>
+
+  <section class="panel" aria-labelledby="trend-h" id="trend-panel">
+    <h2 id="trend-h">Progress by run</h2>
+    <p class="sub">Automated share of automatable critical tests, one column per day, split by framework.</p>
+    <div class="charts" id="charts"></div>
+    <div class="legend" style="margin-top:14px">
+      <span><i style="background:var(--tae)"></i>In TAE</span>
+      <span><i style="background:var(--legacy)"></i>Legacy framework</span>
+    </div>
+  </section>
+
+  <div class="row">
+    <section class="panel" aria-labelledby="checks-h">
+      <h2 id="checks-h">Data checks</h2>
+      <p class="sub">Cases worth a look, run against TestRail on every pull. Counts are Android · iOS.</p>
+      <ul class="checks" id="checks"></ul>
+    </section>
+    <section class="panel" aria-labelledby="log-h">
+      <h2 id="log-h">What changed</h2>
+      <p class="sub" id="log-sub">Cases that moved since the previous run.</p>
+      <ul class="log" id="log"></ul>
+    </section>
+  </div>
+
+  <section class="panel" aria-labelledby="defs-h">
+    <h2 id="defs-h">How these numbers are counted</h2>
+    <dl class="defs">
+      <div><dt>Critical</dt><dd>In the Regression sub-suite, any type. Suites <code>S3192</code> Android, <code>S45443</code> iOS.</dd></div>
+      <div><dt>Automatable</dt><dd>Critical minus cases flagged Unsuitable. This is the denominator for 100%.</dd></div>
+      <div><dt>Automated</dt><dd>Automation field set to <code>Completed</code>, in any framework.</dd></div>
+      <div><dt>In TAE</dt><dd>Automated and carrying the <code>TAE</code> label. Automated without the label means legacy.</dd></div>
+    </dl>
+  </section>
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script>
+(function () {
+  var NAMES = { android: "Firefox for Android", ios: "Firefox for iOS" };
+  var ORDER = ["android", "ios"];
+  var MAX_DAYS = 30;
+
+  var tip = document.getElementById("tip");
+  var statusEl = document.getElementById("status");
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function pct(n, d) { return d ? Math.round(1000 * n / d) / 10 : 0; }
+  function num(v) { var n = Number(v); return isFinite(n) ? n : 0; }
+
+  // --- tooltip ------------------------------------------------------------
+  function showTip(evt, title, rows) {
+    tip.textContent = "";
+    tip.appendChild(el("div", "t-title", title));
+    rows.forEach(function (r) {
+      var row = el("div", "t-row");
+      var k = el("span", "t-key"); k.style.background = r.color || "transparent";
+      row.appendChild(k);
+      row.appendChild(el("span", "t-val", r.value));
+      row.appendChild(el("span", "t-lab", r.label));
+      tip.appendChild(row);
+    });
+    tip.hidden = false;
+    placeTip(evt);
+  }
+  function placeTip(evt) {
+    var x, y;
+    if (evt.clientX != null && evt.type.indexOf("pointer") === 0) { x = evt.clientX; y = evt.clientY; }
+    else { var r = evt.currentTarget.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(Math.max(8, x + 14), window.innerWidth - w - 8) + "px";
+    var top = y - h - 12; if (top < 8) top = y + 18;
+    tip.style.top = top + "px";
+  }
+  function hideTip() { tip.hidden = true; }
+  function bindTip(node, title, rows) {
+    node.addEventListener("pointerenter", function (e) { showTip(e, title, rows); });
+    node.addEventListener("pointermove", placeTip);
+    node.addEventListener("pointerleave", hideTip);
+    node.addEventListener("focus", function (e) { showTip(e, title, rows); });
+    node.addEventListener("blur", hideTip);
+  }
+
+  // --- data ---------------------------------------------------------------
+  function parseCsv(text) {
+    var lines = text.trim().split(/\r?\n/);
+    var head = lines.shift().split(",");
+    return lines.filter(Boolean).map(function (line) {
+      var cells = line.split(","), row = {};
+      head.forEach(function (h, i) { row[h] = cells[i]; });
+      return row;
+    });
+  }
+  function caseLink(id, base) {
+    var a = el("a", "case", "C" + id);
+    a.href = base + "/index.php?/cases/view/" + id;
+    a.target = "_blank";
+    a.rel = "noopener";
+    return a;
+  }
+  function when(ts) {
+    if (!ts) return { text: "unknown", fresh: false };
+    var d = new Date(ts * 1000);
+    var days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    return {
+      text: days <= 0 ? "updated today" : "updated " + days + "d ago",
+      fresh: days <= 0
+    };
+  }
+  function prettyDate(iso) {
+    var d = new Date(iso + (iso.length === 10 ? "T12:00:00" : ""));
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  // --- platform cards ------------------------------------------------------
+  function renderCards(latest) {
+    var host = document.getElementById("platforms");
+    ORDER.forEach(function (key) {
+      var p = latest.platforms[key];
+      if (!p) return;
+      var m = p.metrics, sb = p.status_breakdown || {};
+      var critical = num(m.critical), unsuitable = num(m.unsuitable);
+      var automatable = num(m.automatable), automated = num(m.automated);
+      var tae = num(m.in_tae), legacy = num(m.in_legacy);
+      var suitable = num(sb.Suitable), disabled = num(sb.Disabled);
+      var untriaged = num(sb.Untriaged) + num(sb["(none)"]);
+      // Any other status (a new option nobody expected) counts as to automate.
+      Object.keys(sb).forEach(function (k) {
+        if (["Suitable", "Disabled", "Untriaged", "(none)"].indexOf(k) < 0) suitable += num(sb[k]);
+      });
+      var todo = suitable + disabled;
+      var name = NAMES[key] || key;
+
+      var card = el("article", "panel");
+      var head = el("div", "plat-head");
+      head.appendChild(el("h2", "plat-name", name));
+      head.appendChild(el("span", "suite", "S" + p.suite_id + " · Regression"));
+      card.appendChild(head);
+
+      var hero = el("div", "hero");
+      var left = el("div");
+      var whole = Math.round(pct(automated, automatable));
+      var hn = el("div", "hero-num", String(whole));
+      hn.appendChild(el("small", null, "%"));
+      left.appendChild(hn);
+      left.appendChild(el("div", "hero-cap", automated + " of " + automatable +
+        " automatable critical tests automated. " + (automatable - automated) + " to go."));
+      hero.appendChild(left);
+
+      var minis = el("dl", "minis");
+      var m1 = el("div", "mini");
+      m1.appendChild(el("dt", null, "In TAE"));
+      var d1 = el("dd", null, String(tae)); d1.appendChild(el("span", null, pct(tae, automatable) + "%"));
+      m1.appendChild(d1);
+      var m2 = el("div", "mini");
+      m2.appendChild(el("dt", null, "Triaged"));
+      var tp = num(m.pct_triaged);
+      m2.appendChild(el("dd", null, (tp === 100 ? "100" : tp.toFixed(0)) + "%"));
+      var track = el("div", "triage-track"), fill = el("div", "triage-fill");
+      fill.style.width = tp + "%"; track.appendChild(fill); m2.appendChild(track);
+      minis.appendChild(m1); minis.appendChild(m2);
+      hero.appendChild(minis);
+      card.appendChild(hero);
+
+      var segs = [
+        { label: "In TAE", value: tae, color: "var(--tae)" },
+        { label: "Legacy", value: legacy, color: "var(--legacy)" },
+        { label: "To automate", value: todo, color: "var(--todo)",
+          detail: disabled ? suitable + " suitable, " + disabled + " disabled" : null },
+        { label: "Untriaged", value: untriaged, color: "var(--untriaged)" },
+        { label: "Unsuitable", value: unsuitable, color: "var(--unsuitable)", excluded: true }
+      ].filter(function (s) { return s.value > 0; });
+
+      var compo = el("div", "compo");
+      var bracket = el("div", "bracket");
+      var bLine = el("div", "bracket-line");
+      bLine.style.width = "calc(" + (100 * automatable / critical) + "% - 4px)";
+      var bLab = el("div", "bracket-label");
+      bLab.appendChild(document.createTextNode("Automatable "));
+      bLab.appendChild(el("b", null, String(automatable)));
+      bLab.appendChild(document.createTextNode(" of " + critical + " critical"));
+      bracket.appendChild(bLab); bracket.appendChild(bLine);
+      compo.appendChild(bracket);
+
+      var bar = el("div", "bar");
+      bar.setAttribute("role", "img");
+      bar.setAttribute("aria-label", name + ": " + segs.map(function (s) { return s.label + " " + s.value; }).join(", "));
+      var labels = el("div", "seg-labels");
+      segs.forEach(function (s, i) {
+        var seg = el("div", "seg" + (s.excluded ? " excluded" : "") + (i === segs.length - 1 ? " last" : ""));
+        seg.style.flex = s.value + " 1 0";
+        seg.style.background = s.color;
+        seg.tabIndex = 0;
+        var rows = [{ color: s.color, value: String(s.value), label: s.label },
+                    { value: pct(s.value, s.excluded ? critical : automatable) + "%",
+                      label: s.excluded ? "of all critical" : "of automatable" }];
+        if (s.detail) rows.push({ value: "", label: s.detail });
+        bindTip(seg, name, rows);
+        bar.appendChild(seg);
+        var lab = el("div", s.excluded ? "excluded" : "");
+        lab.style.flex = s.value + " 1 0";
+        if (s.value / critical >= 0.09) {
+          lab.appendChild(el("b", null, String(s.value)));
+          lab.appendChild(el("span", "name", s.label));
+        }
+        labels.appendChild(lab);
+      });
+      compo.appendChild(bar);
+      compo.appendChild(labels);
+      card.appendChild(compo);
+
+      var legend = el("div", "legend");
+      legend.style.marginTop = "14px";
+      [["In TAE", "var(--tae)"], ["Legacy", "var(--legacy)"], ["To automate", "var(--todo)"],
+       ["Untriaged", "var(--untriaged)"], ["Unsuitable", "var(--unsuitable)"]].forEach(function (l) {
+        var s = el("span"), i = el("i"); i.style.background = l[1];
+        s.appendChild(i); s.appendChild(document.createTextNode(l[0])); legend.appendChild(s);
+      });
+      card.appendChild(legend);
+
+      if (untriaged > 0) {
+        var cav = el("p", "caveat");
+        cav.appendChild(el("b", null, untriaged + " critical cases not yet triaged. "));
+        cav.appendChild(document.createTextNode("They sit inside the denominator for now, so " + whole + "% will move as triage finishes."));
+        card.appendChild(cav);
+      }
+
+      var det = el("details");
+      det.appendChild(el("summary", null, "View as table"));
+      var wrap = el("div", "table-wrap"), t = el("table");
+      var thead = el("thead"), hr = el("tr");
+      ["Status", "Cases", "Share"].forEach(function (h) { hr.appendChild(el("th", null, h)); });
+      thead.appendChild(hr); t.appendChild(thead);
+      var tb = el("tbody");
+      [["In TAE", tae, automatable], ["Legacy framework", legacy, automatable],
+       ["Suitable, not yet automated", suitable, automatable], ["Disabled", disabled, automatable],
+       ["Untriaged", untriaged, automatable], ["Automatable", automatable, automatable, true],
+       ["Unsuitable", unsuitable, critical], ["Critical", critical, critical, true]
+      ].forEach(function (r) {
+        var tr = el("tr", r[3] ? "strong" : "");
+        tr.appendChild(el("th", null, r[0]));
+        tr.appendChild(el("td", null, String(r[1])));
+        tr.appendChild(el("td", null, pct(r[1], r[2]) + "%"));
+        tb.appendChild(tr);
+      });
+      t.appendChild(tb); wrap.appendChild(t); det.appendChild(wrap);
+      card.appendChild(det);
+      host.appendChild(card);
+    });
+  }
+
+  // --- trend ---------------------------------------------------------------
+  var NS = "http://www.w3.org/2000/svg";
+  function s(tag, attrs, text) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function roundTop(x, y, w, h, r) {
+    r = Math.min(r, h, w / 2);
+    return "M" + x + "," + (y + h) + "V" + (y + r) + "Q" + x + "," + y + " " + (x + r) + "," + y +
+           "H" + (x + w - r) + "Q" + (x + w) + "," + y + " " + (x + w) + "," + (y + r) + "V" + (y + h) + "Z";
+  }
+  function renderTrend(rows) {
+    var charts = document.getElementById("charts");
+    ORDER.forEach(function (key) {
+      // Last run of each day, most recent MAX_DAYS days.
+      var byDate = {};
+      rows.forEach(function (r) { if (r.platform === key) byDate[r.date] = r; });
+      var runs = Object.keys(byDate).sort().slice(-MAX_DAYS).map(function (d) {
+        var r = byDate[d];
+        return { date: d, tae: num(r.in_tae), legacy: num(r.in_legacy), automatable: num(r.automatable) };
+      });
+      if (!runs.length) return;
+
+      var W = 480, H = 230, L = 40, R = 8, T = 18, B = 26;
+      var ih = H - T - B, iw = W - L - R;
+      var y = function (v) { return T + ih - ih * v / 100; };
+      var name = NAMES[key] || key;
+      var box = el("div", "chart");
+      box.appendChild(el("h3", null, name));
+      var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+        "aria-label": name + " automated share by day: " + runs.map(function (r) {
+          return r.date + " " + pct(r.tae + r.legacy, r.automatable) + "% automated, " + pct(r.tae, r.automatable) + "% in TAE";
+        }).join("; ") });
+      [0, 25, 50, 75].forEach(function (v) {
+        svg.appendChild(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), "class": v === 0 ? "baseline" : "gridline" }));
+        svg.appendChild(s("text", { x: L - 8, y: y(v) + 4, "text-anchor": "end" }, v + "%"));
+      });
+      svg.appendChild(s("line", { x1: L, x2: W - R, y1: y(100), y2: y(100), "class": "target" }));
+      svg.appendChild(s("text", { x: L - 8, y: y(100) + 4, "text-anchor": "end", "class": "target-label" }, "100%"));
+
+      var slot = iw / Math.max(runs.length, 3);
+      var cw = Math.min(46, slot * 0.6);
+      // Label every column when few; otherwise every few, plus the last.
+      var every = Math.ceil(runs.length / 7);
+      runs.forEach(function (r, i) {
+        var cx = L + slot * i + slot / 2, x = cx - cw / 2;
+        var pT = pct(r.tae, r.automatable), pL = pct(r.legacy, r.automatable), tot = pct(r.tae + r.legacy, r.automatable);
+        var g = s("g", { "class": "col", tabindex: 0 });
+        g.appendChild(s("rect", { "class": "hit", x: cx - slot / 2 + 1, y: T, width: slot - 2, height: ih, fill: "transparent" }));
+        var yT = y(pT), yTot = y(tot);
+        if (r.legacy > 0) g.appendChild(s("path", { d: roundTop(x, yTot, cw, Math.max(0, (yT - 2) - yTot), 4), fill: "var(--legacy)" }));
+        var taeRect = s("rect", { x: x, y: yT, width: cw, height: y(0) - yT, fill: "var(--tae)" });
+        if (r.legacy === 0) taeRect.setAttribute("rx", 4);
+        g.appendChild(taeRect);
+        var last = i === runs.length - 1;
+        if (last || runs.length <= 7) {
+          g.appendChild(s("text", { x: cx, y: yTot - 7, "text-anchor": "middle", "class": "total-label" }, Math.round(tot) + "%"));
+        }
+        if (last || i % every === 0) {
+          g.appendChild(s("text", { x: cx, y: H - 6, "text-anchor": "middle" }, prettyDate(r.date)));
+        }
+        bindTip(g, name + " · " + prettyDate(r.date), [
+          { color: "var(--tae)", value: r.tae + " · " + pT + "%", label: "In TAE" },
+          { color: "var(--legacy)", value: r.legacy + " · " + pL + "%", label: "Legacy" },
+          { value: String(r.automatable), label: "automatable" }
+        ]);
+        svg.appendChild(g);
+      });
+      box.appendChild(svg);
+      charts.appendChild(box);
+    });
+  }
+
+  // --- checks --------------------------------------------------------------
+  function renderChecks(latest) {
+    var list = document.getElementById("checks");
+    var base = latest.testrail_url;
+    function counts(fn) { return ORDER.map(function (k) { return latest.platforms[k] ? fn(latest.platforms[k]) : 0; }); }
+    function row(title, vals, pill, note, detailFn) {
+      var li = el("li");
+      li.appendChild(el("span", "check-name", title));
+      var v = el("span", "check-vals");
+      vals.forEach(function (n, i) {
+        if (i) v.appendChild(document.createTextNode(" · "));
+        v.appendChild(el("b", null, String(n)));
+      });
+      li.appendChild(v);
+      li.appendChild(el("span", "pill " + pill[0], pill[1]));
+      if (note) li.appendChild(el("span", "check-note", note));
+      if (detailFn) li.appendChild(detailFn());
+      list.appendChild(li);
+    }
+
+    latest.checks.forEach(function (c) {
+      var vals = counts(function (p) { return (p.anomalies[c.key] || []).length; });
+      var total = vals[0] + vals[1];
+      row(c.title, vals, total ? ["warn", total + " to review"] : ["ok", "Clear"], null,
+        total ? function () {
+          var det = el("details", "check-cases");
+          det.appendChild(el("summary", null, "Show cases"));
+          var ul = el("ul", "case-list");
+          ORDER.forEach(function (k) {
+            var items = latest.platforms[k] ? latest.platforms[k].anomalies[c.key] || [] : [];
+            if (!items.length) return;
+            ul.appendChild(el("li", "plat-tag", k === "ios" ? "iOS" : "Android"));
+            items.forEach(function (a) {
+              var li = el("li");
+              li.appendChild(caseLink(a.id, base));
+              li.appendChild(el("span", null, a.detail));
+              var w = when(a.updated);
+              li.appendChild(el("span", "when" + (w.fresh ? " fresh" : ""), w.text));
+              ul.appendChild(li);
+            });
+          });
+          det.appendChild(ul);
+          return det;
+        } : null);
+    });
+
+    var untri = counts(function (p) { var sb = p.status_breakdown || {}; return num(sb.Untriaged) + num(sb["(none)"]); });
+    row("Untriaged critical cases", untri,
+      untri[0] + untri[1] ? ["warn", "Open"] : ["ok", "Clear"],
+      "Until assessed, these sit inside the denominator and can move it either way.");
+    var dis = counts(function (p) { return num((p.status_breakdown || {}).Disabled); });
+    row("Cases marked Disabled", dis, ["info", "To confirm"],
+      "Counted as not yet automated until their meaning is confirmed.");
+    row("Completed tests running in CI", ["–", "–"], ["info", "Outside TestRail"],
+      "TestRail can't see this. It needs a check against the test code and CI.");
+  }
+
+  // --- what changed ---------------------------------------------------------
+  function renderLog(latest) {
+    var log = document.getElementById("log");
+    var base = latest.testrail_url;
+    var anyDelta = false;
+    ORDER.forEach(function (k) {
+      var p = latest.platforms[k];
+      if (!p || !p.delta) return;
+      anyDelta = true;
+      var d = p.delta;
+      var items = d.changes.map(function (c) { return { text: c.ids.length + " " + c.label, ids: c.ids }; })
+        .concat(d.anomaly_changes.map(function (a) {
+          return { text: a.ids.length + " " + a.kind + ": " + a.title, ids: a.ids };
+        }));
+      if (!items.length) items = [{ text: "No change", ids: [] }];
+      items.forEach(function (it) {
+        var li = el("li");
+        var body = el("div");
+        var p1 = el("p");
+        p1.appendChild(el("span", "plat", k === "ios" ? "iOS" : "Android"));
+        p1.appendChild(document.createTextNode(it.text));
+        body.appendChild(p1);
+        if (it.ids.length) {
+          var ids = el("p", "kind ids");
+          it.ids.slice(0, 20).forEach(function (id, i) {
+            if (i) ids.appendChild(document.createTextNode(", "));
+            ids.appendChild(caseLink(id, base));
+          });
+          if (it.ids.length > 20) ids.appendChild(document.createTextNode(", +" + (it.ids.length - 20) + " more"));
+          body.appendChild(ids);
+        }
+        li.appendChild(body);
+        log.appendChild(li);
+      });
+    });
+    var since = ORDER.map(function (k) { var p = latest.platforms[k]; return p && p.delta && p.delta.since; }).filter(Boolean)[0];
+    if (since) document.getElementById("log-sub").textContent = "Cases that moved since the previous run on " + prettyDate(since) + ".";
+    if (!anyDelta) {
+      log.replaceWith(el("p", "empty", "First run. Changes appear from the next run on."));
+    }
+  }
+
+  // --- boot -----------------------------------------------------------------
+  function get(url, as) {
+    return fetch(url, { cache: "no-store" }).then(function (r) {
+      if (!r.ok) throw new Error(url + " returned " + r.status);
+      return as === "json" ? r.json() : r.text();
+    });
+  }
+  Promise.all([get("latest.json", "json"), get("metrics.csv", "text")]).then(function (res) {
+    var latest = res[0], rows = parseCsv(res[1]);
+    var gen = new Date(latest.generated);
+    statusEl.textContent = "TestRail snapshot, " + gen.toLocaleString(undefined,
+      { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+    renderCards(latest);
+    renderTrend(rows);
+    renderChecks(latest);
+    renderLog(latest);
+  }).catch(function (err) {
+    statusEl.textContent = "Data unavailable";
+    var box = el("div", "load-error");
+    box.appendChild(el("b", null, "Couldn't load the dashboard data. "));
+    box.appendChild(document.createTextNode(err.message + ". The daily workflow may not have run yet."));
+    document.getElementById("app").prepend(box);
+    document.getElementById("trend-panel").hidden = true;
+  });
+})();
+</script>
+
+</body>
+</html>
