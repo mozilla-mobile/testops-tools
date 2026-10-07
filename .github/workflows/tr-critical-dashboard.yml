@@ -57,7 +57,7 @@ jobs:
       # Quick project: nonprod only when the QUICK_ENV variable is 'stage'; prod otherwise.
       QUICK_PROJECT: ${{ vars.QUICK_ENV == 'stage' && 'moz-fx-quick-nonprod' || 'moz-fx-quick-prod' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: google-github-actions/auth@v2
         with:
