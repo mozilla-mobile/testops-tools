@@ -24,7 +24,6 @@
 | SO-41A | Xperia 10 II | 31 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | High |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
-| TECNO-BF7 | TECNO | 31 | None |
 | TECNO-BG6 | SPARK Go 2024 | 33 | None |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
@@ -132,7 +131,7 @@
 | felix | Pixel Fold | 36 | Medium |
 | felix_camera | Pixel Fold (Camera-enabled) | 33 | Low |
 | fogona | moto g play - 2024 | 34 | Low |
-| fogorow | moto g24 | 34 | None |
+| fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
 | g0q | Galaxy S22+ | 34 | Low |
