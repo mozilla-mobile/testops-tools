@@ -64,7 +64,7 @@ jobs:
           workload_identity_provider: ${{ vars.GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: quick-gha-deploy@${{ env.QUICK_PROJECT }}.iam.gserviceaccount.com
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v3
 
       # --mirror deletes site files that are not in $DIR. If history could
       # not be read and the run carried on, the deploy would wipe it. So a
