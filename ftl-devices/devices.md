@@ -9,7 +9,7 @@
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 35 | High |
 | MediumPhone.arm | Medium Phone, 6.4in/16cm (Arm) | 36 | High |
 | OP4F39L1 | CPH2195 | 33 | Medium |
-| OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | None |
+| OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Medium |
@@ -83,10 +83,10 @@
 | b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b5qxeea | Galaxy Z Flip5 | 36 | Low |
-| b6q | Galaxy Z Flip6 | 34 | Medium |
+| b6q | Galaxy Z Flip6 | 34 | Low |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
-| blazer | Pixel 10 Pro | 36 | Low |
+| blazer | Pixel 10 Pro | 36 | Medium |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
 | c1q | Galaxy Note20 5G | 33 | Low |
