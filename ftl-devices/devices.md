@@ -12,7 +12,7 @@
 | OP535DL1 | OnePlus Nord CE 2 Lite 5G | 34 | Low |
 | OP5552L1 | OnePlus 10T 5G | 34 | Low |
 | OP573DL1 | A79 5G | 34 | High |
-| OP5759L1 | A38 | 34 | Medium |
+| OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
 | RE58C2 | realme C53 | 35 | Low |
 | RMX3231 | RMX3231 | 30 | Low |
@@ -190,7 +190,7 @@
 | psq | Galaxy S25 Edge | 35 | Low |
 | q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
-| q4qksx | Galaxy Z Fold4 | 36 | Low |
+| q4qksx | Galaxy Z Fold4 | 36 | Medium |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
@@ -230,6 +230,6 @@
 | xcover7 | Galaxy XCover7 | 34 | Low |
 | xcoverpro | Galaxy XCover Pro | 33 | Medium |
 | y2q | Galaxy S20+ 5G | 33 | Low |
-| yogi | Pixel 11 Pro Fold | 37 | Low |
+| yogi | Pixel 11 Pro Fold | 37 | Medium |
 | z3q | Galaxy S20 Ultra 5G | 33 | Low |
 
