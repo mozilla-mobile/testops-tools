@@ -86,7 +86,7 @@
 | b6q | Galaxy Z Flip6 | 34 | Low |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
-| blazer | Pixel 10 Pro | 36 | Medium |
+| blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
 | c1q | Galaxy Note20 5G | 33 | Low |
@@ -176,7 +176,7 @@
 | oriole | Pixel 6 | 32 | High |
 | oriole | Pixel 6 | 33 | Medium |
 | oriole | Pixel 6 | 31 | High |
-| p3q | Galaxy S21 Ultra 5G | 34 | Medium |
+| p3q | Galaxy S21 Ultra 5G | 34 | Low |
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Galaxy S25 | 36 | Medium |
