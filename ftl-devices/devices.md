@@ -40,7 +40,7 @@
 | a14m | Galaxy A14 | 34 | None |
 | a14xm | Galaxy A14 5G | 34 | High |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
-| a14xmtfn | Galaxy A14 5G | 35 | None |
+| a14xmtfn | Galaxy A14 5G | 35 | Low |
 | a15 | Galaxy A15 | 34 | Medium |
 | a15x | Galaxy A15 5G | 34 | Low |
 | a15x | Galaxy A15 5G | 36 | Low |
@@ -76,14 +76,14 @@
 | austin | moto g 5G (2022) | 33 | Low |
 | b0q | Galaxy S22 Ultra | 33 | High |
 | b0q | Galaxy S22 Ultra | 36 | Low |
-| b0qksx | Galaxy S22 Ultra | 36 | Medium |
+| b0qksx | Galaxy S22 Ultra | 36 | Low |
 | b0qxxx | Galaxy S22 Ultra | 36 | Low |
 | b4q | Galaxy Z Flip4 | 33 | Medium |
 | b4qsqw | Galaxy Z Flip4 | 36 | Medium |
 | b5q | Galaxy Z Flip5 | 34 | Medium |
 | b5qsqw | Galaxy Z Flip5 | 36 | Low |
 | b5qxeea | Galaxy Z Flip5 | 36 | Low |
-| b6q | Galaxy Z Flip6 | 34 | Low |
+| b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
