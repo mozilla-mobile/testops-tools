@@ -115,7 +115,7 @@
 | dm3qksx | Galaxy S23 Ultra | 36 | Low |
 | dubai | motorola edge 30 | 34 | High |
 | e1q | Galaxy S24 | 34 | High |
-| e1q | Galaxy S24 | 36 | Low |
+| e1q | Galaxy S24 | 36 | Medium |
 | e1s | Galaxy S24 | 36 | Low |
 | e2q | Galaxy S24+ | 36 | Low |
 | e2s | Galaxy S24+ | 36 | Low |
@@ -156,7 +156,7 @@
 | houji | Xiaomi 14 | 35 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
-| java | Motorola G20 | 30 | High |
+| java | Motorola G20 | 30 | Medium |
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | Medium |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
