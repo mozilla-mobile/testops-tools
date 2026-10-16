@@ -66,8 +66,9 @@ SUB_SUITE_CRITICAL = "Regression"
 AUTOMATION_COMPLETED = "Completed"
 AUTOMATION_UNSUITABLE = "Unsuitable"
 
-# TestRail's default value on a newly created case. A case with this, or
-# with the field left blank, has not been assessed yet.
+# Set on every new case, and - since October 2026 - reset on every case that
+# is edited, so the automation team can filter for what needs review. A case
+# with this, or with the field blank, is waiting for review.
 AUTOMATION_UNTRIAGED = "Untriaged"
 
 # Format version of the --json output.
@@ -84,6 +85,9 @@ TAE_LABEL = "TAE"
 # name; if it is wrong, that one check is skipped with a notice.
 COVERAGE_FIELD = "custom_automation_coverage"
 COVERAGE_FULL = "Full"
+COVERAGE_PARTIAL = "Partial"
+# Coverage values meaning an automated test exists for the case.
+COVERED = (COVERAGE_FULL, COVERAGE_PARTIAL)
 
 # Type every critical case should end up with once the cleanup is done.
 EXPECTED_TYPE = "Functional"
@@ -283,15 +287,34 @@ def measure(api, platform, suite_id):
                       or {"(none)"}):
             other_status[label] = other_status.get(label, 0) + 1
 
-    # Triage progress. Untriaged is TestRail's default on a new case and a
-    # blank means the field was never set, so both mean "nobody has assessed
-    # this yet". Until triage completes, the automatable denominator can
-    # still move in either direction.
+    # Cases with an Automation value other than Untriaged. Untriaged (or blank)
+    # now marks a rolling review queue: new cases land there, and so does any
+    # case that is edited. So this never settles at 100%; "awaiting review"
+    # is the number to read.
     triaged = [
         c for c in critical
         if values_of(c, AUTOMATION_FIELD, automation_opts)
         - {AUTOMATION_UNTRIAGED}
     ]
+    triaged_ids = {c["id"] for c in triaged}
+    awaiting_review = [c for c in critical if c["id"] not in triaged_ids]
+
+    # Automation Coverage (None / Partial / Full) is a separate field, and an
+    # edit does not reset it. That tells an automated case re-queued after an
+    # edit (Untriaged, coverage still Full or Partial) apart from a genuinely
+    # new one, and splits "automated" into fully and partly covered cases.
+    has_coverage = COVERAGE_FIELD in fields
+    coverage_opts = option_map(fields[COVERAGE_FIELD]) if has_coverage else {}
+
+    def coverage_of(case):
+        if not has_coverage:
+            return None
+        return next(iter(values_of(case, COVERAGE_FIELD, coverage_opts)), None)
+
+    requeued = [c for c in awaiting_review if coverage_of(c) in COVERED]
+    automated_full = [c for c in automated if coverage_of(c) == COVERAGE_FULL]
+    automated_partial = [c for c in automated
+                         if coverage_of(c) == COVERAGE_PARTIAL]
 
     # Non-critical TAE work - Richard's metric 2 numerator.
     tae_non_critical = [
@@ -335,18 +358,23 @@ def measure(api, platform, suite_id):
             "updated": case.get("updated_on"),
         })
 
+    # A TAE case re-queued after an edit also has the label without
+    # Completed, but that is routine now and is listed under the coverage
+    # check. Keep this one for label mistakes: TAE label, no coverage.
+    requeued_ids = {c["id"] for c in requeued}
     for case in tae_not_completed:
-        flag("tae_not_completed", case, f"Automation: {automation_label(case)}")
+        if case["id"] not in requeued_ids:
+            flag("tae_not_completed", case, f"Automation: {automation_label(case)}")
 
-    # Automation Coverage says Full but Automation was never set to
-    # Completed. This is how four iOS cases went uncounted.
-    if COVERAGE_FIELD in fields:
-        coverage_opts = option_map(fields[COVERAGE_FIELD])
+    # Coverage says an automated test exists, but Automation is not
+    # Completed. Usually an automated case re-queued after an edit; it was
+    # also how four iOS cases went uncounted in September.
+    if has_coverage:
         for case in critical:
-            if (COVERAGE_FULL in values_of(case, COVERAGE_FIELD, coverage_opts)
-                    and not automation_is(case, AUTOMATION_COMPLETED)):
+            cov = coverage_of(case)
+            if cov in COVERED and not automation_is(case, AUTOMATION_COMPLETED):
                 flag("coverage_mismatch", case,
-                     f"Coverage {COVERAGE_FULL}, Automation: {automation_label(case)}")
+                     f"Coverage {cov}, Automation: {automation_label(case)}")
     else:
         print(f"  note: field '{COVERAGE_FIELD}' not found, coverage check "
               f"skipped. Run --discover to find its system name.",
@@ -394,6 +422,12 @@ def measure(api, platform, suite_id):
         "triaged": len(triaged),
         "pct_triaged": round(100 * len(triaged) / len(critical), 1)
         if critical else 0.0,
+        "awaiting_review": len(awaiting_review),
+        # None when the coverage field is not found, so a missing field reads
+        # as "unknown" rather than as zero.
+        "requeued_after_edit": len(requeued) if has_coverage else None,
+        "automated_full": len(automated_full) if has_coverage else None,
+        "automated_partial": len(automated_partial) if has_coverage else None,
         "duplicate_titles": len(duplicates),
         "dupes_same_section": len(same_section),
         "_other_status": other_status,
@@ -410,6 +444,13 @@ def measure(api, platform, suite_id):
         **{f"anomaly_{k}": len(v) for k, v in anomalies.items()},
         # ID sets behind each headline number, saved to the state file so the
         # next run can say which cases moved.
+        # Current Automation and Coverage per critical case, so the change
+        # report can say why a case left the automated count.
+        "_case_status": {
+            c["id"]: (values_of(c, AUTOMATION_FIELD, automation_opts),
+                      coverage_of(c))
+            for c in critical
+        },
         "_ids": {
             "critical": sorted(c["id"] for c in critical),
             "unsuitable": sorted(c["id"] for c in unsuitable),
@@ -422,7 +463,7 @@ def measure(api, platform, suite_id):
 # Cases worth a human look. Order is the order they print.
 ANOMALY_CHECKS = [
     ("tae_not_completed", "TAE label, Automation not Completed"),
-    ("coverage_mismatch", "Coverage Full, Automation not Completed"),
+    ("coverage_mismatch", "Coverage set, Automation not Completed (often re-queued after an edit)"),
     ("split_framework", "Variant on legacy while its pair is on TAE"),
     ("type_not_functional", "Critical case not typed Functional"),
 ]
@@ -435,6 +476,8 @@ ROWS = [
     ("Automated (any framework)", "automated"),
     ("  in legacy", "in_legacy"),
     ("  in TAE", "in_tae"),
+    ("  fully covered", "automated_full"),
+    ("  partly covered", "automated_partial"),
     ("Not yet automated", "not_yet_automated"),
     ("Remaining to 100% TAE", "remaining_to_tae"),
     ("% automated", "pct_automated"),
@@ -442,11 +485,13 @@ ROWS = [
     ("TAE outside critical suite", "tae_non_critical"),
     ("Triaged", "triaged"),
     ("% triaged", "pct_triaged"),
+    ("Awaiting review", "awaiting_review"),
+    ("  re-queued after edit", "requeued_after_edit"),
     ("Repeated titles", "duplicate_titles"),
     ("  same section", "dupes_same_section"),
     ("Anomalies", None),
     ("  TAE label, not Completed", "anomaly_tae_not_completed"),
-    ("  Coverage Full, not Completed", "anomaly_coverage_mismatch"),
+    ("  Coverage set, not Completed", "anomaly_coverage_mismatch"),
     ("  Split framework in a pair", "anomaly_split_framework"),
     ("  Type not Functional", "anomaly_type_not_functional"),
 ]
@@ -470,7 +515,8 @@ def report(results, show_repeats=False):
     for label, key in ROWS:
         line = label.ljust(width)
         if key is not None:
-            line += "".join(str(r[key]).rjust(12) for r in results)
+            line += "".join(("-" if r[key] is None else str(r[key])).rjust(12)
+                            for r in results)
         print(line)
     print()
 
@@ -570,11 +616,34 @@ def compute_delta(state, r):
     if not prev:
         return None
 
+    status = r.get("_case_status", {})
+    still_critical = set(r["_ids"]["critical"])
+
+    def requeued_after_edit(case_id):
+        automation, coverage = status.get(case_id, (set(), None))
+        return AUTOMATION_UNTRIAGED in automation and coverage in COVERED
+
     changes = []
     for key, direction, label in MOVES:
         before = set(prev.get(key, []))
         now = set(r["_ids"][key])
         ids = sorted(now - before if direction == "added" else before - now)
+
+        if direction == "removed" and key in ("automated", "in_tae"):
+            # Cases that left the critical suite are already reported as
+            # removed from it; don't count them twice.
+            ids = [i for i in ids if i in still_critical]
+            # An edit resets Automation to Untriaged but leaves Coverage set.
+            # That is a review re-queue, not lost automation, so say so - once,
+            # on the automated line, not again under TAE.
+            requeued = [i for i in ids if requeued_after_edit(i)]
+            ids = [i for i in ids if i not in requeued]
+            if requeued and key == "automated":
+                changes.append({
+                    "label": "re-queued for review after an edit "
+                             "(automation coverage still set)",
+                    "ids": requeued,
+                })
         if ids:
             changes.append({"label": label, "ids": ids})
 
