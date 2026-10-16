@@ -118,8 +118,6 @@
   .mini dt { font-size: 12px; color: var(--muted); }
   .mini dd { margin: 2px 0 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
   .mini dd span { font-size: 13px; font-weight: 500; color: var(--ink-2); margin-left: 4px; }
-  .triage-track { width: 88px; height: 6px; border-radius: 3px; background: var(--grid); margin-top: 6px; overflow: hidden; }
-  .triage-fill { height: 100%; background: var(--ink-2); border-radius: 3px; }
 
   /* Composition bar */
   .compo { position: relative; }
@@ -403,8 +401,11 @@
       var hn = el("div", "hero-num", String(whole));
       hn.appendChild(el("small", null, "%"));
       left.appendChild(hn);
+      var partial = m.automated_partial;   // null or absent when unknown
       left.appendChild(el("div", "hero-cap", automated + " of " + automatable +
-        " automatable critical tests automated. " + (automatable - automated) + " to go."));
+        " automatable critical tests automated" +
+        (partial ? ", " + partial + " of them partly" : "") +
+        ". " + (automatable - automated) + " to go."));
       hero.appendChild(left);
 
       var minis = el("dl", "minis");
@@ -413,11 +414,10 @@
       var d1 = el("dd", null, String(tae)); d1.appendChild(el("span", null, pct(tae, automatable) + "%"));
       m1.appendChild(d1);
       var m2 = el("div", "mini");
-      m2.appendChild(el("dt", null, "Triaged"));
-      var tp = num(m.pct_triaged);
-      m2.appendChild(el("dd", null, (tp === 100 ? "100" : tp.toFixed(0)) + "%"));
-      var track = el("div", "triage-track"), fill = el("div", "triage-fill");
-      fill.style.width = tp + "%"; track.appendChild(fill); m2.appendChild(track);
+      // Untriaged is a rolling review queue (new and edited cases), so show
+      // its size rather than a triage percentage that never settles.
+      m2.appendChild(el("dt", null, "Awaiting review"));
+      m2.appendChild(el("dd", null, String(untriaged)));
       minis.appendChild(m1); minis.appendChild(m2);
       hero.appendChild(minis);
       card.appendChild(hero);
@@ -427,7 +427,8 @@
         { label: "Legacy", value: legacy, color: "var(--legacy)" },
         { label: "To automate", value: todo, color: "var(--todo)",
           detail: disabled ? suitable + " suitable, " + disabled + " disabled" : null },
-        { label: "Untriaged", value: untriaged, color: "var(--untriaged)" },
+        { label: "Awaiting review", value: untriaged, color: "var(--untriaged)",
+          detail: m.requeued_after_edit ? m.requeued_after_edit + " re-queued after an edit" : null },
         { label: "Unsuitable", value: unsuitable, color: "var(--unsuitable)", excluded: true }
       ].filter(function (s) { return s.value > 0; });
 
@@ -472,7 +473,7 @@
       var legend = el("div", "legend");
       legend.style.marginTop = "14px";
       [["In TAE", "var(--tae)"], ["Legacy", "var(--legacy)"], ["To automate", "var(--todo)"],
-       ["Untriaged", "var(--untriaged)"], ["Unsuitable", "var(--unsuitable)"]].forEach(function (l) {
+       ["Awaiting review", "var(--untriaged)"], ["Unsuitable", "var(--unsuitable)"]].forEach(function (l) {
         var s = el("span"), i = el("i"); i.style.background = l[1];
         s.appendChild(i); s.appendChild(document.createTextNode(l[0])); legend.appendChild(s);
       });
@@ -480,8 +481,8 @@
 
       if (untriaged > 0) {
         var cav = el("p", "caveat");
-        cav.appendChild(el("b", null, untriaged + " critical cases not yet triaged. "));
-        cav.appendChild(document.createTextNode("They sit inside the denominator for now, so " + whole + "% will move as triage finishes."));
+        cav.appendChild(el("b", null, untriaged + " critical cases awaiting review. "));
+        cav.appendChild(document.createTextNode("New and edited cases are set back to Untriaged until the automation team reviews them, so this number rises and falls. While they wait they count toward the 100%."));
         card.appendChild(cav);
       }
 
@@ -492,11 +493,13 @@
       ["Status", "Cases", "Share"].forEach(function (h) { hr.appendChild(el("th", null, h)); });
       thead.appendChild(hr); t.appendChild(thead);
       var tb = el("tbody");
-      [["In TAE", tae, automatable], ["Legacy framework", legacy, automatable],
+      var rows = [["In TAE", tae, automatable], ["Legacy framework", legacy, automatable]];
+      if (partial != null) rows.push(["Automated, partly covered (TAE or legacy)", partial, automatable]);
+      rows.concat([
        ["Suitable, not yet automated", suitable, automatable], ["Disabled", disabled, automatable],
-       ["Untriaged", untriaged, automatable], ["Automatable", automatable, automatable, true],
+       ["Awaiting review", untriaged, automatable], ["Automatable", automatable, automatable, true],
        ["Unsuitable", unsuitable, critical], ["Critical", critical, critical, true]
-      ].forEach(function (r) {
+      ]).forEach(function (r) {
         var tr = el("tr", r[3] ? "strong" : "");
         tr.appendChild(el("th", null, r[0]));
         tr.appendChild(el("td", null, String(r[1])));
@@ -631,9 +634,11 @@
     });
 
     var untri = counts(function (p) { var sb = p.status_breakdown || {}; return num(sb.Untriaged) + num(sb["(none)"]); });
-    row("Untriaged critical cases", untri,
-      untri[0] + untri[1] ? ["warn", "Open"] : ["ok", "Clear"],
-      "Until assessed, these sit inside the denominator and can move it either way.");
+    var requeued = counts(function (p) { return num(p.metrics.requeued_after_edit); });
+    row("Awaiting review", untri, ["info", "Rolling queue"],
+      "New and edited cases waiting for the automation team" +
+      (requeued[0] + requeued[1] ? ", including " + requeued[0] + " · " + requeued[1] +
+        " automated cases re-queued after an edit" : "") + ".");
     var dis = counts(function (p) { return num((p.status_breakdown || {}).Disabled); });
     row("Cases marked Disabled", dis, ["info", "To confirm"],
       "Counted as not yet automated until their meaning is confirmed.");
