@@ -86,6 +86,7 @@
 | b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
+| b8q | Galaxy Z Flip8 | 37 | Low |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
@@ -153,6 +154,7 @@
 | gts9wifi | Galaxy Tab S9 | 34 | Medium |
 | guamna | moto g play (2021) | 30 | Low |
 | guamp | moto g(9) play | 30 | Low |
+| h8q | Galaxy Z Fold8 | 37 | Medium |
 | houji | Xiaomi 14 | 35 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
