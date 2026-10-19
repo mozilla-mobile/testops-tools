@@ -38,7 +38,7 @@
 | a13 | Galaxy A13 | 34 | Low |
 | a13x | Galaxy A13 5G | 33 | Low |
 | a14m | Galaxy A14 | 34 | None |
-| a14xm | Galaxy A14 5G | 34 | High |
+| a14xm | Galaxy A14 5G | 34 | Medium |
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | Low |
 | a15 | Galaxy A15 | 34 | Medium |
@@ -86,7 +86,7 @@
 | b6q | Galaxy Z Flip6 | 34 | Medium |
 | b6qksx | Galaxy Z Flip6 | 36 | Low |
 | b6qsqw | Galaxy Z Flip6 | 36 | Low |
-| b8q | Galaxy Z Flip8 | 37 | Low |
+| b8q | Galaxy Z Flip8 | 37 | Medium |
 | blazer | Pixel 10 Pro | 36 | Low |
 | bluejay | Pixel 6a | 32 | Medium |
 | blueline | Pixel 3 | 28 | Low |
