@@ -181,7 +181,7 @@
 | p3q | Galaxy S21 Ultra 5G | 34 | Low |
 | p3q | Galaxy S21 Ultra 5G | 35 | Low |
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
-| pa1q | Galaxy S25 | 36 | Medium |
+| pa1q | Galaxy S25 | 36 | High |
 | pa1qksx | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
