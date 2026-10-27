@@ -22,6 +22,7 @@
 | SCG13 | Galaxy S22 | 36 | Low |
 | SH-01L | AQUOS sense2 SH-01L | 28 | Low |
 | SO-41A | Xperia 10 II | 31 | Low |
+| TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | High |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
 | TECNO-BG6 | SPARK Go 2024 | 33 | None |
@@ -197,7 +198,7 @@
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | q6qksx | Galaxy Z Fold6 | 36 | Low |
-| q6qsqw | Galaxy Z Fold6 | 36 | Medium |
+| q6qsqw | Galaxy Z Fold6 | 36 | Low |
 | q7mq | Galaxy Z TriFold | 36 | Medium |
 | r0q | Galaxy S22 | 34 | Medium |
 | r0q | Galaxy S22 | 36 | Low |
