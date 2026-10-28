@@ -7,7 +7,9 @@ TestRail as feature documentation.
 It targets **Firefox for Android and iOS**, but nothing in it is
 Firefox-specific beyond the defaults in `.env`.
 
-The toolkit is four agents wired into one pipeline:
+The toolkit is six agents: four wired into one pipeline, plus a triage agent
+that classifies existing TestRail cases for XCUITest automation and a writer
+agent that implements the ones it marks Suitable.
 
 ```
 work/inputs/<feature>/            work/outputs/<feature>/
@@ -21,24 +23,23 @@ work/inputs/<feature>/            work/outputs/<feature>/
                                                              testrail_import_report.md
 
 TestRail (read-only)       ──▶  4. feature-documenter  ──▶  feature_documentation.md
+
+TestRail section
+  (Untriaged cases)
+  + XCUITest checkout      ──▶  5. automation-triager  ──▶  Automation: Suitable / Unsuitable
+                                   (asks which project)       triage_report.md
+
+Suitable cases
+  + XCUITest checkout      ──▶  6. automation-script-writer ──▶  XCUITest code (in the app repo)
+                                   (asks which project;          test_scripts_creation_report.md
+                                    never writes TestRail)
 ```
 
 Steps 1–3 are a chain; step 4 is an independent read-only loop that feeds
-authoring lessons back into step 1.
-
----
-
-## Contents
-
-| Section | |
-|---|---|
-| [Setup](#setup) | Prerequisites, credentials, first run |
-| [Repository layout](#repository-layout) | Where everything lives |
-| [The agents](#the-agents) | Scope, usage and outputs for each |
-| [Shared contracts](#shared-contracts) | CSV format, priorities, tags, coverage caps |
-| [Environment variables](#environment-variables) | Full reference |
-| [Operating notes](#operating-notes) | Gotchas worth knowing before you run |
-| [Extending the toolkit](#extending-the-toolkit) | Agent vs. skill, adding your own |
+authoring lessons back into step 1. Step 5 is independent of all of them — it
+classifies cases that already live in TestRail, and step 6 implements the ones
+step 5 marked Suitable. Steps 5 and 6 both begin by asking which
+[TestRail project](#testrail-project-selection) to work in.
 
 ---
 
@@ -94,24 +95,73 @@ mobile-ai-toolkit/
 │   │   ├── testcase-generator.md
 │   │   ├── testcase-reviewer.md
 │   │   ├── testrail-importer.md
-│   │   └── feature-documenter.md
+│   │   ├── feature-documenter.md
+│   │   ├── automation-triager.md
+│   │   └── automation-script-writer.md
 │   ├── skills/                    # the playbooks the runners execute
 │   │   ├── testcase-generator/SKILL.md
 │   │   ├── testcase-reviewer/SKILL.md
 │   │   ├── testrail-importer/SKILL.md
-│   │   └── feature-documenter/SKILL.md
+│   │   ├── feature-documenter/SKILL.md
+│   │   ├── automation-triager/SKILL.md
+│   │   └── automation-script-writer/SKILL.md
 │   ├── assets/templates/
 │   │   ├── fifa.csv               # gold standard for structure, naming, detail
 │   │   └── layout.png             # reference for UI/Layout case formatting
 │   ├── standards.md               # hard rules that override everything
+│   ├── testrail-projects.md       # the project choice both automation agents must ask
 │   └── settings.json              # team permissions (settings.local.json is yours)
 ├── scripts/
-│   ├── testrail_import.py         # CSV → TestRail (creates only)
-│   └── testrail_fetch_section.py  # TestRail → stdout (read-only)
+│   ├── testrail_client.py               # shared TestRail integration layer
+│   ├── testrail_import.py               # CSV → TestRail (creates only)
+│   ├── testrail_fetch_section.py        # TestRail → stdout (read-only)
+│   └── testrail_triage_automation.py    # automation triage: projects + fetch + apply
 └── work/
     ├── inputs/<feature>/          # gitignored — unreleased product material
     └── outputs/<feature>/         # gitignored — regenerate, don't version
 ```
+
+### The TestRail integration layer
+
+`scripts/testrail_client.py` is the single place that talks to TestRail. Every
+workflow script goes through it; none of them implement authentication,
+configuration, HTTP, retries, pagination or field mapping themselves:
+
+```
+agent → testrail_import.py            ┐
+agent → testrail_fetch_section.py     ├→ testrail_client.py → TestRail API
+agent → testrail_triage_automation.py ┘
+```
+
+What it owns — each of these exists exactly once:
+
+| Area | Entry points |
+|---|---|
+| Credentials and settings | `Config`, `load_config`, `env_int` |
+| The selectable TestRail projects | `ProjectChoice`, `FIREFOX_IOS`, `TEMP_APPROVALS`, `project_menu`, `project_target`, `verify_project_target`, `project_banner` |
+| Authenticated HTTP, retries, rate limits, pagination | `TestRailClient` |
+| Project / suite / section / case reads, metadata cached per run | `TestRailClient`, `section_tree`, `section_subtree` |
+| Text normalisation and rich-text flattening | `norm`, `key`, `html_to_text` |
+| Numbered steps → (action, expected) pairs | `parse_numbered`, `pair_numbered` |
+| A case as plain text | `CaseView`, `case_view` |
+| Custom fields and option ids | `find_case_field`, `field_items`, `field_options`, `map_id` |
+| Automation status | `AutomationField`, `resolve_automation_field`, `build_automation_update` |
+| Markdown reports | `md_table`, `md_fields`, `md_cell`, `write_report` |
+| CLI error handling | `run_cli` |
+
+Each workflow script contains only its own logic — CSV parsing, section
+printing, triage decisions — and shares everything else. The project registry
+lives here rather than in the triage script, so the triager, the writer and the
+fetcher cannot disagree about which projects exist, which environment variables
+each one uses, or what the selection prompt says. The one project-specific
+piece outside it is the production write gate, which belongs to the only script
+that writes.
+
+Add a new TestRail script by importing from `testrail_client`, never by copying
+an existing script's client, config, parsing or report code. There is one error
+type (`TestRailError`), one integer-from-environment reader (`env_int`), one
+numbered-step parser and one markdown table builder; a second one is a bug, not
+a convenience.
 
 Both `work/` subtrees are gitignored on purpose: inputs hold unreleased product
 material that must never enter git history, and outputs are reproducible.
@@ -247,10 +297,10 @@ python3 scripts/testrail_import.py <feature>
 ```
 
 **Priority-based suite routing.** `Critical` / `High` / `Medium` cases go to
-`TESTRAIL_SUITE_ID`; `Low` cases go to `TESTRAIL_SUITE_ID_LOW`. Each suite that
+`TESTRAIL_TMP_SUITE_ID`; `Low` cases go to `TESTRAIL_TMP_SUITE_ID_LOW`. Each suite that
 receives cases gets its own root section named after the feature
 (`google-lens` → `Google Lens`). If the CSV contains Low-priority cases and
-`TESTRAIL_SUITE_ID_LOW` is unset, the import fails **before creating anything**.
+`TESTRAIL_TMP_SUITE_ID_LOW` is unset, the import fails **before creating anything**.
 
 **What it does, in order**
 
@@ -297,7 +347,7 @@ No "go" confirmation is required — it only reads TestRail and writes one file.
 If you don't name a section it asks; it never guesses.
 
 **Search target.** The section is looked up in `TESTRAIL_iOS_PROJECT_ID`
-(default `14`, Firefox for iOS) and `TESTRAIL_FULL_SUITE_ID` (default `45443`,
+(default `14`, Firefox for iOS) and `TESTRAIL_iOS_FULL_SUITE_ID` (default `45443`,
 Full Functional Tests Suite) — deliberately **separate** from the importer's
 project/suite, so documenting a shipped feature never depends on wherever the
 last import happened to run. Override per run with `--project-id` / `--suite-id`.
@@ -329,6 +379,208 @@ contradictions · 11. Open questions.
 - **Suggestions only.** Redundancy findings, gaps, and the inferred authoring
   rules live in the document and change nothing. Section 9 is explicitly written
   as **feedback for `testcase-generator`** — that's the loop back to step 1.
+
+---
+
+### 5. `automation-triager` — TestRail section → automation suitability verdicts
+
+**Scope.** A Senior QA Automation Engineer for iOS/XCUITest. Takes the cases in
+**one named section of one chosen project** whose Automation status is
+`Untriaged`, works out whether each can realistically be automated with **this
+project's** XCUITest framework, and writes the verdict back. It triages only —
+it never writes XCUITest tests.
+
+**Usage**
+
+```text
+/automation-triager Document Sharing for Auto
+/automation-triager 972653
+```
+
+**It asks which TestRail project to use first** — before it looks for the
+section or reads a single case. See
+[TestRail project selection](#testrail-project-selection). The section is
+required too — by name or id, sub-sections included. If you don't name one the
+agent asks; it never falls back to the whole suite. Under the hood:
+
+```text
+# 0. the prompt the agent shows you, verbatim
+python3 scripts/testrail_triage_automation.py projects
+
+# 1. read the work list (read-only, writes nothing)
+python3 scripts/testrail_triage_automation.py fetch "<section>" --project 2 [--limit N] [--json]
+
+# 2. apply the decisions — this performs the real TestRail updates
+python3 scripts/testrail_triage_automation.py apply "<section>" decisions.json --project 2
+
+# writing to Firefox for iOS additionally needs your explicit confirmation
+python3 scripts/testrail_triage_automation.py apply "<section>" decisions.json \
+    --project 1 --confirm-firefox-ios
+
+# optional: preview without writing (debugging / explicit preview only)
+python3 scripts/testrail_triage_automation.py apply "<section>" decisions.json --project 2 --dry-run
+```
+
+**The split.** The script does the deterministic TestRail work — resolving the
+section, resolving the custom field and its option ids, listing Untriaged
+cases, re-checking status before each write, applying minimal updates,
+reporting. The **agent** makes the suitability judgement, because that requires
+reading the app repository. The script never decides anything.
+
+**Decisions file** — a JSON list (or `{"decisions": [...]}`):
+
+```json
+[{"case_id": 4433303, "decision": "suitable", "reason": "ShareToolbarTests.testSharePdfFileSaveToFile() already automates this path..."}]
+```
+
+A decision is rejected unless it carries a real technical reason; "Looks
+automatable" will not pass.
+
+**What it analyses.** Before judging anything it builds one model of the
+XCUITest project at `XCUITEST_REPO_PATH`: test targets, the base test class,
+screen/page objects, selector sets, the app's accessibility identifier
+catalogue, launch arguments, fixtures and mocks, navigation helpers, and
+existing coverage (tests in Firefox iOS link their TestRail case ids, so prior
+coverage is findable by id). Reasons must cite this evidence by name.
+
+**The bar.** *Can this reasonably and reliably be automated with XCUITest in
+this project?* — **not** *is it already automated?* A missing helper, screen
+object, accessibility identifier or test file is ordinary work, not a barrier.
+The agent is instructed to be conservative about `Unsuitable` and, when torn,
+to choose `Suitable` and say what would need building.
+
+**Outputs**
+
+| Target | Change |
+|---|---|
+| Suitable case | Automation `Untriaged → Suitable`, no label change |
+| Unsuitable case | Automation `Untriaged → Unsuitable`, no label change |
+| `work/outputs/automation-triage/triage_report.md` | Counts, per-case results, reasons, run mode |
+
+**Safety.** The project is never chosen for you, and `--project` is required on
+every command, so a run cannot drift into the wrong project. Writing to Firefox
+for iOS also requires `--confirm-firefox-ios`, which the agent may only pass
+after you have confirmed that specific run. Updates are minimal by
+construction — the payload carries the automation status and nothing else. Title, steps, expected results,
+preconditions, section, priority, refs, labels and unrelated custom fields are
+never sent, so existing labels are left exactly as they are. Immediately
+before each write the case is
+re-read and skipped if somebody else moved it out of `Untriaged` mid-run. A
+decision naming a case outside the requested section is skipped, not applied.
+One failing case never aborts the batch.
+
+**It will not:** touch a case that is not `Untriaged` (including cases whose
+Automation field is unset — that is *not* the same as Untriaged); reach outside
+the requested section; set or modify a label on any case; modify any field other
+than the automation status; or create XCUITest tests.
+
+---
+
+### 6. `automation-script-writer` — Suitable cases → XCUITest code
+
+**Scope.** A Senior iOS Automation Engineer, and the follow-up to the triager:
+it implements the cases step 5 marked `Suitable`. It reads TestRail and
+**never writes to it** — code and a report are its only outputs.
+
+**Usage**
+
+```text
+/automation-script-writer Document Sharing for Auto MTE-1234 --affected-tests full
+```
+
+**It asks which TestRail project to use first**, exactly as the triager does —
+see [TestRail project selection](#testrail-project-selection) — and continues
+in the project the triager used when a triage report names one. The folder
+under test and the **ticket number** are required; the agent asks rather than
+guessing either. The **affected-tests mode** (`full` or `list`, see below) is
+asked for too when the trigger doesn't say. It takes the triager's analysis
+when that is still available, and rebuilds it from TestRail when it is not:
+
+```text
+python3 scripts/testrail_triage_automation.py fetch "<section>" --status Suitable --project <1|2>
+```
+
+Same read-only fetcher as the triager, filtered to `Suitable`. The output
+carries each case's **Sub Test Suite(s)** and **TestRail URL**, which the test
+declaration needs.
+
+**Branch.** The changes go on a branch in the XCUITest checkout, named
+`<mozilla_username>/<ticket_no>` — `dbigu/MTE-1234`. The username comes from
+`MOZILLA_USERNAME`, falling back to the local part of `git config user.email`
+and confirmed with the user. The agent creates the branch and leaves the
+changes on it: no commit, no push, no pull request unless asked.
+
+**Analyse-then-write, enforced.** No code is written until the agent has gone
+through the existing test classes, `PageScreens/`, `Selectors/`, the
+accessibility identifier catalogue, the base test class, launch arguments,
+fixtures and navigation helpers — and read `AIControlsTests`, the reference
+implementation for structure, naming, setup and assertion style. Writing the
+test first and hunting for reuse afterwards is explicitly forbidden.
+
+**Duplicate detection.** Before creating anything it checks whether the
+scenario is already automated, judged by steps and expected behaviour rather
+than method name. An already-covered case is left untouched and recorded as
+`Already Automated` with a pointer to the existing test.
+
+**Test declaration.** The TestRail link then the suite marker, in the repo's
+existing style:
+
+```swift
+// https://mozilla.testrail.io/index.php?/cases/view/4433307
+// Regression
+func testShareSheetShowsCurrentDocumentAfterNavigatingToASecondPDF() throws {
+```
+
+The marker comes from the case's Sub Test Suite field — `Regression` →
+`// Regression`, `Smoke & Sanity` → `// Smoketest`, anything else → none. It is
+never inferred from the scenario, and a URL is never invented.
+
+**Test plans.** Each new test lands in exactly one `.xctestplan`, chosen from
+its TestRail classification — `Smoke` and/or `Sanity` → `Smoketest.xctestplan`;
+`Regression` or none of the three → `FullFunctionalTestPlan.xctestplan`. Both
+plans work by exclusion (`skippedTests`, no `selectedTests`), so a new test runs
+in both until the agent adds it to the other plan's skip list.
+
+**Scoped refactoring.** When adding to an existing class it extracts
+duplication **within that class only**, updates the affected tests, and
+preserves their behaviour. No repository-wide cleanup.
+
+**It builds and runs what it writes.** After implementing, the agent builds the
+project with the CI invocation (scheme `Fennec`, configuration
+`Fennec_Testing`), fixes every compilation error, runs each new test by name
+with `-only-testing:`, and handles the existing tests its changes touched. A
+case is only reported `Created` once its test compiles and has been executed.
+
+**Affected test cases.** The author chooses at trigger time what happens to the
+existing tests the change reaches: `full` re-runs every one of them and reports
+the observed result; `list` only lists them, stated plainly as not executed.
+Under `list` the agent never calls them passing or validated.
+
+Compilation errors are fixed by reading the real API — never by deleting,
+skipping, commenting out or weakening a test, and never by editing unrelated
+code. Compile-and-run is retried at most **three** times; after three failed
+attempts it stops and reports the remaining errors or failing tests verbatim,
+marking the case `Unable to Automate`. If a test fails because the
+product genuinely misbehaves, the assertion stays and the agent reports a
+suspected product bug rather than turning the test green.
+
+This needs a full Xcode (`xcode-select -p` must point at an `Xcode.app`, not
+`CommandLineTools`). Where it doesn't, the agent says so and marks nothing
+validated — `swiftc -parse` is syntax-only and never counts as a build.
+
+**Output.** `work/outputs/automation_test_scripts/<folder>/test_scripts_creation_report.md`
+— one entry per case with the TestRail id, name and link, an automation status
+of `Created` / `Updated` / `Already Automated` / `Unable to Automate`, the test
+name, its file path, the suite classification, marker and test plan, and notes.
+The report also carries the branch name, a validation section, and a
+**PR Description** section — links to the relevant tests, a short description
+of the changes, and the list of affected files — ready for the author to paste
+into the pull request.
+
+**It will not:** automate a case that isn't `Suitable`; modify TestRail;
+duplicate an existing test; invent a selector, URL, marker or expected
+behaviour to force a case through; weaken or skip a test to get a clean build
+or a green run; or claim validation it did not perform.
 
 ---
 
@@ -408,6 +660,70 @@ stateless session. No requirements, URLs, variables or screens carry over from a
 previous run or an earlier chat. If something isn't in the current input, the
 agent asks rather than reusing what it saw last time.
 
+### TestRail project selection
+
+`automation-triager` and `automation-script-writer` work in **one explicitly
+chosen TestRail project**. Before either of them searches for a section or
+folder, or retrieves a single test case, it asks:
+
+```text
+Which TestRail project should I use?
+
+1. Firefox for iOS (*)
+https://mozilla.testrail.io/index.php?/projects/overview/14
+
+⚠️ IMPORTANT: This is the official TestRail project containing the production
+test cases used by the Firefox for iOS team. Exercise extra caution when working
+with this project. Any changes to test cases, automation statuses, labels, or
+other TestRail data must be intentional and explicitly confirmed by the user
+before execution.
+
+Configuration:
+  TESTRAIL_iOS_PROJECT_ID (expected value: 14)
+  TESTRAIL_iOS_FULL_SUITE_ID (expected value: 45443)
+
+2. [TEMP] iOS test project for TC approvals
+https://mozilla.testrail.io/index.php?/projects/overview/92
+
+This is the temporary project used for testing and approvals.
+
+Configuration:
+  TESTRAIL_TMP_PROJECT_ID (expected value: 92)
+  TESTRAIL_TMP_SUITE_ID (expected value: 107983)
+```
+
+**There is no default.** The agent never infers the project from the section
+name, the repository, or a previous run, and the `(*)` and its warning are
+shown every time the choice is presented. The canonical wording lives in
+[`.claude/testrail-projects.md`](.claude/testrail-projects.md) and is printed
+by `python3 scripts/testrail_triage_automation.py projects`.
+
+Your answer becomes `--project` on every subsequent command:
+
+| Answer | `--project` | Project id from | Suite id from |
+|---|---|---|---|
+| 1 — Firefox for iOS (*) | `1` or `firefox-ios` | `TESTRAIL_iOS_PROJECT_ID` | `TESTRAIL_iOS_FULL_SUITE_ID` |
+| 2 — [TEMP] TC approvals | `2` or `temp-approvals` | `TESTRAIL_TMP_PROJECT_ID` | `TESTRAIL_TMP_SUITE_ID` |
+
+`--project` is **required** — `fetch` and `apply` refuse to run without it, so
+the choice cannot be skipped by invoking the script directly.
+
+**How it is enforced**
+
+| Guarantee | Mechanism |
+|---|---|
+| No silent default | `--project` is a required argument on `fetch` and `apply` |
+| Ids never hardcoded | Only the selected project's env pair is read; the documented values are used solely to warn when `.env` disagrees |
+| Missing config stops the run | A missing or non-integer id raises, naming the variable and the project — it never falls back to the other project |
+| Project and suite must agree | The suite is fetched and rejected if it belongs to a different project |
+| No accidental production write | Writing with `--project 1` also requires `--confirm-firefox-ios`, which the agent may pass only after you confirm that specific run in words |
+| Nothing mixed between projects | Every run echoes the project, id, suite and source variables; the triage report and the creation report both record them |
+
+Reads from Firefox for iOS need no confirmation, and neither does a
+`--dry-run` — it writes nothing. `automation-script-writer` never writes to
+TestRail at all, so the choice matters there for a different reason: reading the
+wrong project would automate the wrong behaviour.
+
 ### `standards.md`
 
 Four rules that override everything else: write in English; use simple language
@@ -422,14 +738,22 @@ Copy `.env.example` to `.env`. Required and optional variables:
 
 | Variable | Used by | Default | Notes |
 |---|---|---|---|
-| `TESTRAIL_URL` | importer, documenter | — | `https://<instance>.testrail.io` |
-| `TESTRAIL_USER` | importer, documenter | — | Your TestRail account email |
-| `TESTRAIL_API_KEY` | importer, documenter | — | Never printed or logged |
-| `TESTRAIL_PROJECT_ID` | importer | — | Import target |
-| `TESTRAIL_SUITE_ID` | importer | — | Critical / High / Medium cases |
-| `TESTRAIL_SUITE_ID_LOW` | importer | — | Low-priority cases; required only if the CSV has any |
-| `TESTRAIL_iOS_PROJECT_ID` | documenter | `14` | Firefox for iOS — read source |
-| `TESTRAIL_FULL_SUITE_ID` | documenter | `45443` | Full Functional Tests Suite — read source |
+| `TESTRAIL_URL` | importer, documenter, triager | — | `https://<instance>.testrail.io` |
+| `TESTRAIL_USER` | importer, documenter, triager | — | Your TestRail account email |
+| `TESTRAIL_API_KEY` | importer, documenter, triager | — | Never printed or logged |
+| `TESTRAIL_TMP_PROJECT_ID` | importer, triager, writer | — | Import target; also **project 2** ([TEMP] TC approvals) for `--project 2` |
+| `TESTRAIL_TMP_SUITE_ID` | importer, triager, writer | — | Critical / High / Medium cases; also project 2's suite for `--project 2` |
+| `TESTRAIL_TMP_SUITE_ID_LOW` | importer | — | Low-priority cases; required only if the CSV has any |
+| `TESTRAIL_iOS_PROJECT_ID` | documenter, triager, writer | `14` (documenter only) | Firefox for iOS (*) — the documenter's read source, and **project 1** for `--project 1`, where it is required |
+| `TESTRAIL_iOS_FULL_SUITE_ID` | documenter, triager, writer | `45443` (documenter only) | Full Functional Tests Suite — same split as above |
+| `XCUITEST_REPO_PATH` | triager, writer | — | **Required.** Local XCUITest checkout to analyse; the run fails if unset or not a directory |
+| `TESTRAIL_AUTOMATION_STATUS_FIELD` | triager | `custom_automation_status` | Matched by system name, then by label. Option ids come from metadata |
+
+The triager and the writer read **only the selected project's pair** — see
+[TestRail project selection](#testrail-project-selection). Neither has a
+default there: a missing or non-integer id stops the run instead of falling
+back to the other project. The `14` / `45443` defaults apply to the documenter
+alone.
 | `TESTRAIL_TEMPLATE_ID` | importer | — | Use a steps-style template with separated steps |
 | `TESTRAIL_USE_SEPARATED_STEPS` | importer | `false` (`.env.example` ships `true`) | `true` pairs each step with its expected result |
 | `TESTRAIL_PRECONDITIONS_FIELD` | importer | `custom_preconds` | |
@@ -462,6 +786,14 @@ results are written to the plain-text fields, which requires a text template.
   (`Ad Blocker V1` → `work/outputs/Ad Blocker V1/`).
 - **The reviewer overwrites the CSV in place.** `review_report.md` is the only
   record of what changed — keep it.
+- **The triager's `apply` writes to TestRail.** It is the only agent that
+  modifies cases that already exist there. Each write is re-validated
+  immediately before (still `Untriaged`?) and verified immediately after (did
+  TestRail store it?), so re-running is safe and a silent no-op is reported as
+  a failure rather than a success. `--dry-run` previews without writing.
+- **An unset Automation field is not `Untriaged`.** In suite 107983 only 5 of
+  328 cases are actually `Untriaged`; the rest have the field empty. The
+  triager leaves those alone rather than assuming they need triaging.
 - **Never place fetch dumps in `work/outputs/`.** If a documenter fetch is too
   large to read inline, redirect it to `/tmp/`. The output folder holds exactly
   one file per agent run.

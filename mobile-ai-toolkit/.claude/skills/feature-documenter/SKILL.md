@@ -67,13 +67,35 @@ The folder name is **always** looked up in:
 
 ```text
 TESTRAIL_iOS_PROJECT_ID   default 14     — Firefox for iOS
-TESTRAIL_FULL_SUITE_ID    default 45443  — Full Functional Tests Suite
+TESTRAIL_iOS_FULL_SUITE_ID    default 45443  — Full Functional Tests Suite
 ```
 
-These are deliberately separate from the importer's `TESTRAIL_PROJECT_ID` /
-`TESTRAIL_SUITE_ID`, so documenting a shipped feature never depends on wherever
+These are deliberately separate from the importer's `TESTRAIL_TMP_PROJECT_ID` /
+`TESTRAIL_TMP_SUITE_ID`, so documenting a shipped feature never depends on wherever
 the last import happened to run. Override per run only if the user explicitly
 asks for a different project or suite (`--project-id`, `--suite-id`).
+
+### Output format
+
+A header block naming the section and the project it resolved, then each
+section's cases. Every case prints in the toolkit's shared format:
+
+```text
+### C654321 | Verify the share sheet opens
+Priority: Critical | Type: Functional | Labels: Regression
+Sub Test Suite(s): Regression
+TestRail: https://mozilla.testrail.io/index.php?/cases/view/654321
+Refs: MTE-1234
+Preconditions: The app is installed and onboarding is complete
+1. Open a page
+   -> The page loads
+2. Tap Share
+   -> The share sheet appears
+```
+
+Lines with nothing to show are omitted, and a case with no steps prints
+`(NO STEPS)`. The per-case `Section:` line is left out here because the
+`## <section>  (N cases)` heading above each group already states it.
 
 Key behaviours to know:
 
@@ -93,9 +115,10 @@ Key behaviours to know:
 If the script fails, stop and report the error verbatim.
 
 ### Sanity-check before analyzing
-Confirm the case count matches the header line, and note any case with zero
-steps, an empty priority, or expected results that look shifted relative to
-their actions. Data problems go in the "Data quality" section — never smooth
+Confirm the case count matches the header line, confirm the project in the
+header block is the one you expected, and note any case with zero steps, an
+empty priority, or expected results that look shifted relative to their
+actions. Data problems go in the "Data quality" section — never smooth
 them over.
 
 ---

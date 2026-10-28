@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m py_compile scripts/*.py)",
+      "Bash(python3 -c ' *)",
+      "Bash(awk 'length>100 {print \"  \"FILENAME\":\"FNR}' scripts/testrail_client.py scripts/testrail_triage_automation.py)",
+      "Bash(python3 scripts/testrail_triage_automation.py apply \"Document Sharing for Auto\" work/outputs/automation-triage/decisions-document-sharing.json --dry-run)",
+      "Bash(python3 scripts/testrail_fetch_section.py \"Pull to refresh\")",
+      "Read(//Users/apiclisan/Firefox/firefox-ios/**)",
+      "Bash(command -v swiftlint)",
+      "Bash(awk 'length>120 {print \"  \"FILENAME\":\"FNR\" \\(\"length\"\\)\"}' Selectors/ShareSheetSelectors.swift Selectors/FilesAppSelectors.swift PageScreens/ShareSheetScreen.swift PageScreens/FilesAppScreen.swift BrowsingPDFTests.swift)",
+      "Bash(cd /Users/apiclisan/Firefox/firefox-ios && echo \"=== repo root layout ===\" && ls .. | head -20 && echo && echo \"=== CI configs ===\" && find .. -maxdepth 3 \\\\\\( -path \"*/.github/workflows/*\" -o -name \"*.yml\" -o -name \"*.yaml\" \\\\\\) 2>/dev/null | grep -iE \"workflow|circle|taskcluster|bitrise\" | head -10)",
+      "Read(//Users/apiclisan/**)",
+      "Bash(export DEVELOPER_DIR=/Users/apiclisan/Downloads/Xcode.app/Contents/Developer)",
+      "Bash(xcodebuild -version)",
+      "Bash(xcrun simctl *)",
+      "Bash(while pgrep *)",
+      "Read(//private/tmp/**)",
+      "Bash(ps -Ao pcpu,args)",
+      "Bash(awk '{print \"cpu=\"$1}')"
+    ]
+  }
+}
