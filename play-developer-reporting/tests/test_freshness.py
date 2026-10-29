@@ -101,6 +101,10 @@ class QueryVitals(unittest.TestCase):
 
 class RunQueriesStale(unittest.TestCase):
     def _run(self, returncode):
+        exited, out = self._run_dir(returncode)
+        return exited, json.loads((out / "summary.json").read_text())
+
+    def _run_dir(self, returncode):
         manifest = Path(tempfile.mkdtemp()) / "q.toml"
         manifest.write_text('[[queries]]\nname = "q"\npackage = "p"\nmetric_set = "crashrate"\n')
         out = Path(tempfile.mkdtemp())
@@ -113,12 +117,16 @@ class RunQueriesStale(unittest.TestCase):
                 exited = None
             except SystemExit as e:
                 exited = e.code
-        return exited, json.loads((out / "summary.json").read_text())
+        return exited, out
 
     def test_stale_exit_code_does_not_fail_run(self):
         exited, summary = self._run(fetch_metrics.EXIT_DATA_STALE)
         self.assertIsNone(exited)
         self.assertEqual(summary["q"]["status"], "stale")
+
+    def test_all_stale_does_not_write_slack_payload(self):
+        _, out = self._run_dir(fetch_metrics.EXIT_DATA_STALE)
+        self.assertFalse((out / "slack_payload.json").exists())
 
     def test_other_failure_still_fails_run(self):
         exited, _ = self._run(1)

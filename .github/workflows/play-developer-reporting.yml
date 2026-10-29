@@ -32,7 +32,17 @@ jobs:
       - name: Summary
         run: cat /tmp/vitals-output/summary.md >> $GITHUB_STEP_SUMMARY
 
+      - name: Check Slack payload
+        id: payload
+        run: |
+          if [ -f /tmp/vitals-output/slack_payload.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No data returned; skipping Slack notification."
+          fi
+
       - name: Slack
+        if: steps.payload.outputs.exists == 'true'
         uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}

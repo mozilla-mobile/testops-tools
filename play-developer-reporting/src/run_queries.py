@@ -453,7 +453,12 @@ def main():
     # Write summary manifest, markdown, and Slack payload
     (output_dir / "summary.json").write_text(json.dumps(results, indent=2))
     (output_dir / "summary.md").write_text(generate_markdown(results))
-    (output_dir / "slack_payload.json").write_text(json.dumps(generate_slack_payload(results), indent=2))
+    # Skip Slack entirely (no payload file) when no query returned data,
+    # e.g. every metric set is stale.
+    if any(r.get("date") for r in results.values()):
+        (output_dir / "slack_payload.json").write_text(
+            json.dumps(generate_slack_payload(results), indent=2)
+        )
 
     print(json.dumps(results, indent=2))
     if any_failed:
