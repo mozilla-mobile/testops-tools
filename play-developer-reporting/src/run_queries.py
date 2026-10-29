@@ -39,6 +39,9 @@ PRODUCT_GROUPS = [
 ]
 
 
+EXIT_DATA_STALE = 3  # keep in sync with fetch_metrics.py
+
+
 def simplify_row(row: dict) -> dict:
     """Extract a compact representation of a row for the summary."""
     result = {}
@@ -399,6 +402,14 @@ def main():
 
         print(f"Running: {name}", file=sys.stderr)
         result = subprocess.run(cmd, capture_output=True, text=True)
+
+        if result.returncode == EXIT_DATA_STALE:
+            # 400 explained by FreshnessInfo: log it but don't fail the run
+            msg = result.stderr.strip()
+            print(f"::warning title=Stale data ({name})::{msg}", file=sys.stderr)
+            print(f"  SKIPPED (data not fresh): {msg}", file=sys.stderr)
+            results[name] = {"status": "stale", "warning": msg}
+            continue
 
         if result.returncode != 0:
             print(f"  FAILED: {result.stderr}", file=sys.stderr)
