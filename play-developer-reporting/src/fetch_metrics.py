@@ -43,6 +43,10 @@ MIN_VERSION_CODE = 2016123584
 
 PRODUCT_DETAILS_URL = "https://product-details.mozilla.org/1.0/mobile_android.json"
 MOBILE_DETAILS_URL = "https://product-details.mozilla.org/1.0/mobile_details.json"
+# Exit code signalling a 400 explained by the metric set's data freshness
+# (data not yet available) rather than a real failure.
+EXIT_DATA_STALE = 3
+
 REPORTING_SCOPE = "https://www.googleapis.com/auth/playdeveloperreporting"
 
 # Pre-computed UTC epoch for the V1 version code cutoff date.
@@ -600,6 +604,47 @@ def build_compare_query_body(
     }
 
 
+class DataNotFreshError(Exception):
+    """A 400 response that the metric set's freshnessInfo explains."""
+
+
+def _to_date(value: dict[str, Any]) -> date:
+    return date(value["year"], value["month"], value["day"])
+
+
+def explain_stale_request(
+    endpoint, metric_set_name: str, request_body: dict[str, Any]
+) -> str | None:
+    """Compare the requested timeline against the metric set's FreshnessInfo.
+
+    Returns a description when the requested range extends past the latest
+    available data for the aggregation period, otherwise None.
+    """
+    try:
+        info = endpoint.get(name=metric_set_name).execute(num_retries=3)
+    except Exception as e:
+        print(f"Could not fetch freshness info: {e}", file=sys.stderr)
+        return None
+
+    spec = request_body.get("timelineSpec", {})
+    period = spec.get("aggregationPeriod", "DAILY")
+    for fresh in info.get("freshnessInfo", {}).get("freshnesses", []):
+        if fresh.get("aggregationPeriod") != period or "latestEndTime" not in fresh:
+            continue
+        latest = _to_date(fresh["latestEndTime"])
+        requested_end = _to_date(spec["endTime"]) if "endTime" in spec else None
+        requested_start = _to_date(spec["startTime"]) if "startTime" in spec else None
+        if (requested_end and requested_end > latest) or (
+            requested_start and requested_start > latest
+        ):
+            return (
+                f"{metric_set_name} ({period}) data is available only up to "
+                f"{latest.isoformat()}; requested range "
+                f"{requested_start} to {requested_end}"
+            )
+    return None
+
+
 def query_vitals(
     service,
     package_name: str,
@@ -692,6 +737,13 @@ def query_vitals(
                             file=sys.stderr,
                         )
                         continue
+
+                if isinstance(e, HttpError) and e.resp.status == 400:
+                    reason = explain_stale_request(
+                        endpoint, metric_set_name, request_body
+                    )
+                    if reason:
+                        raise DataNotFreshError(reason) from e
 
                 raise
 
@@ -1417,6 +1469,9 @@ def main():
                 args.sort_by,
             )
 
+    except DataNotFreshError as e:
+        print(f"Warning: data not yet fresh, skipping: {e}", file=sys.stderr)
+        sys.exit(EXIT_DATA_STALE)
     except google.auth.exceptions.DefaultCredentialsError:
         print(
             "Error: Authentication failed. Please run:",
