@@ -79,6 +79,19 @@ class QueryVitals(unittest.TestCase):
         with self.assertRaises(fetch_metrics.DataNotFreshError):
             fetch_metrics.query_vitals(self._service(ep), "pkg", self.CONFIG, body())
 
+    def test_persistent_freshness_400_raises_not_fresh_after_retries(self):
+        ep = endpoint_with((2026, 10, 19))
+        err = HttpError(
+            mock.Mock(status=400, reason="start_date should be before the current freshness 2026-10-19"),
+            b"{}",
+        )
+        ep.query.return_value.execute.side_effect = err
+        with self.assertRaises(fetch_metrics.DataNotFreshError):
+            fetch_metrics.query_vitals(
+                self._service(ep), "pkg", self.CONFIG, body(end=(2026, 10, 28))
+            )
+        self.assertEqual(ep.query.call_count, 10)
+
     def test_400_with_fresh_data_reraises_http_error(self):
         ep = endpoint_with((2026, 10, 29))
         ep.query.return_value.execute.side_effect = http_error(400)

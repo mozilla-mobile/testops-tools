@@ -700,6 +700,17 @@ def query_vitals(
                     or "timeline_spec.end_date" in error_str
                     or "freshness" in error_str
                 ):
+                    # Out of retries: check before the dates are shifted again,
+                    # otherwise the freshness comparison sees an adjusted range.
+                    if retry >= max_retries - 1 and (
+                        isinstance(e, HttpError) and e.resp.status == 400
+                    ):
+                        reason = explain_stale_request(
+                            endpoint, metric_set_name, request_body
+                        )
+                        if reason or "freshness" in error_str:
+                            raise DataNotFreshError(reason or error_str) from e
+
                     if "startTime" in request_body["timelineSpec"]:
                         start = request_body["timelineSpec"]["startTime"]
                         start_date = date(
