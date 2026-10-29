@@ -635,7 +635,8 @@ def explain_stale_request(
         requested_end = _to_date(spec["endTime"]) if "endTime" in spec else None
         requested_start = _to_date(spec["startTime"]) if "startTime" in spec else None
         if (requested_end and requested_end > latest) or (
-            requested_start and requested_start > latest
+            # The API requires start_date strictly before the freshness date.
+            requested_start and requested_start >= latest
         ):
             return (
                 f"{metric_set_name} ({period}) data is available only up to "

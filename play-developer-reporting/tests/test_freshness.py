@@ -48,6 +48,12 @@ class ExplainStaleRequest(unittest.TestCase):
         msg = fetch_metrics.explain_stale_request(endpoint_with((2026, 10, 25)), "m", body())
         self.assertIn("2026-10-25", msg)
 
+    def test_start_equal_to_latest_is_stale(self):
+        b = body(end=(2026, 10, 19))
+        b["timelineSpec"]["startTime"] = {"year": 2026, "month": 10, "day": 19}
+        msg = fetch_metrics.explain_stale_request(endpoint_with((2026, 10, 19)), "m", b)
+        self.assertIsNotNone(msg)
+
     def test_range_within_latest_is_not_stale(self):
         self.assertIsNone(
             fetch_metrics.explain_stale_request(endpoint_with((2026, 10, 29)), "m", body())
