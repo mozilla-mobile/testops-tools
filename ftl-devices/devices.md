@@ -161,7 +161,7 @@
 | husky | Pixel 8 Pro | 35 | Medium |
 | java | Motorola G20 | 30 | Medium |
 | kansas | moto g - 2025 | 35 | Low |
-| komodo | Pixel 9 Pro XL | 34 | Medium |
+| komodo | Pixel 9 Pro XL | 34 | High |
 | komodo | Pixel 9 Pro XL | 35 | Medium |
 | lamul | moto g05 | 35 | Medium |
 | lion | moto g04 | 34 | Low |
