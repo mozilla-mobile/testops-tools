@@ -23,11 +23,12 @@ Steps:
 3. Run `python3 scripts/testrail_fetch_section.py "<folder name>"`. It **prints
    the cases to stdout and writes no files** — read them from the command
    output. The folder is always looked up in `TESTRAIL_iOS_PROJECT_ID` (default
-   `14`, Firefox for iOS) and `TESTRAIL_FULL_SUITE_ID` (default `45443`, Full
+   `14`, Firefox for iOS) and `TESTRAIL_iOS_FULL_SUITE_ID` (default `45443`, Full
    Functional Tests Suite). Override only if the user explicitly asks for a
    different project or suite.
-4. Sanity-check the output (case counts, cases with no steps, empty priorities,
-   `(NO EXPECTED RESULT)` markers) before analyzing.
+4. Sanity-check the output (the project named in the header block, case counts,
+   cases with no steps, empty priorities, `(NO EXPECTED RESULT)` and `(NO STEPS)`
+   markers) before analyzing.
 5. Analyze every case and write
    `work/outputs/<folder name>/feature_documentation.md` using the 11-section
    structure in the skill. The output folder is named after the input folder.

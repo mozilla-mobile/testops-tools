@@ -57,12 +57,12 @@ Required:
 TESTRAIL_URL
 TESTRAIL_USER
 TESTRAIL_API_KEY
-TESTRAIL_PROJECT_ID
-TESTRAIL_SUITE_ID            # target suite for Critical / High / Medium priority cases
-TESTRAIL_SUITE_ID_LOW       # target suite for Low priority cases (required only when the CSV contains any Low-priority case)
+TESTRAIL_TMP_PROJECT_ID
+TESTRAIL_TMP_SUITE_ID            # target suite for Critical / High / Medium priority cases
+TESTRAIL_TMP_SUITE_ID_LOW       # target suite for Low priority cases (required only when the CSV contains any Low-priority case)
 ```
 
-**Priority-based suite routing:** cases with `Critical`, `High`, or `Medium` priority are created in `TESTRAIL_SUITE_ID`; cases with `Low` priority are created in `TESTRAIL_SUITE_ID_LOW`. Each suite gets its own root section + section structure. If the CSV has Low-priority cases and `TESTRAIL_SUITE_ID_LOW` is not set, the import fails before creating anything.
+**Priority-based suite routing:** cases with `Critical`, `High`, or `Medium` priority are created in `TESTRAIL_TMP_SUITE_ID`; cases with `Low` priority are created in `TESTRAIL_TMP_SUITE_ID_LOW`. Each suite gets its own root section + section structure. If the CSV has Low-priority cases and `TESTRAIL_TMP_SUITE_ID_LOW` is not set, the import fails before creating anything.
 
 Optional (with defaults):
 
@@ -117,8 +117,8 @@ Section (Folder), Title, Preconditions, Steps, Expected Results, Priority, Type,
    and existing sections.
 3. Verify the configured content custom fields exist. The External ID and
    Sub Test Suite fields are optional — if they do not exist, they are skipped.
-4. Split cases by priority: `Critical`/`High`/`Medium` → `TESTRAIL_SUITE_ID`;
-   `Low` → `TESTRAIL_SUITE_ID_LOW`.
+4. Split cases by priority: `Critical`/`High`/`Medium` → `TESTRAIL_TMP_SUITE_ID`;
+   `Low` → `TESTRAIL_TMP_SUITE_ID_LOW`.
 5. In **each** target suite that has cases, **create a root section named after
    the feature** (e.g. `Google Lens`).
 6. Recreate the CSV's section structure **inside** that root section (per suite),

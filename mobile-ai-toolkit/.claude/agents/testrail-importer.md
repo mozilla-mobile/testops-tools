@@ -20,7 +20,7 @@ Steps:
    file-resolution rules).
 2. Confirm the required `TESTRAIL_*` environment variables are set (a local
    `.env` is loaded automatically). Never print or log the API key.
-   `TESTRAIL_SUITE_ID_LOW` is required only when the CSV contains Low-priority
+   `TESTRAIL_TMP_SUITE_ID_LOW` is required only when the CSV contains Low-priority
    cases.
 3. Run `python3 scripts/testrail_import.py <feature_name>`.
 4. Report the outcome from `work/outputs/<feature_name>/testrail_import_report.md`:
@@ -28,7 +28,7 @@ Steps:
    failures.
 
 Priority-based suite routing: `Critical`/`High`/`Medium` cases import into
-`TESTRAIL_SUITE_ID`; `Low` cases import into `TESTRAIL_SUITE_ID_LOW`. Each suite
+`TESTRAIL_TMP_SUITE_ID`; `Low` cases import into `TESTRAIL_TMP_SUITE_ID_LOW`. Each suite
 gets its own root section named after the feature.
 
 Key reminders:
