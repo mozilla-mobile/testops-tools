@@ -33,6 +33,7 @@
 | a03sutfn | Galaxy A03s | 33 | Low |
 | a04s | Galaxy A04s | 34 | Low |
 | a05s | Galaxy A05s | 35 | Low |
+| a05sub | Galaxy A05s | 35 | Low |
 | a06 | Galaxy A06 | 35 | Low |
 | a10 | Galaxy A10 | 29 | Low |
 | a12 | Galaxy A12 | 31 | Low |
@@ -184,6 +185,7 @@
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Galaxy S25 | 36 | High |
 | pa1qksx | Galaxy S25 | 36 | Low |
+| pa1qsqw | Galaxy S25 | 36 | Low |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
@@ -191,6 +193,7 @@
 | panther | Pixel 7 | 33 | High |
 | penang | moto g53 5G | 34 | Low |
 | psq | Galaxy S25 Edge | 35 | Low |
+| psqsqw | Galaxy S25 Edge | 36 | Medium |
 | q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
 | q4qksx | Galaxy Z Fold4 | 36 | Medium |
