@@ -135,7 +135,7 @@
     </div>
     <div class="card">
       <h3>TestRail automation status</h3>
-      <p class="desc">Full Functional Tests Suite, all cases.</p>
+      <p class="desc">Full Functional Tests Suite, all cases. "Not automated" groups To automate, Manual only and Untriaged, which today are run manually: the data table has that breakdown.</p>
       <div id="chart-status"></div>
       <details><summary>Data table</summary><div id="table-status"></div></details>
     </div>
@@ -145,7 +145,7 @@
     <h2>TestRail cases by feature</h2>
     <div class="card">
       <h3>Cases per feature: automated vs manual</h3>
-      <p class="desc">Features from a shared Android/iOS taxonomy, matched on section name and title. Sorted by combined size. "Not automated" groups To automate, Manual only and Untriaged: the Overview tab has that breakdown.</p>
+      <p class="desc">Features from a shared Android/iOS taxonomy, matched on section name and title. Sorted by combined size. "Not automated" groups To automate, Manual only and Untriaged: the Overview tab's status table has that breakdown.</p>
       <div id="chart-features"></div>
       <details><summary>Data table</summary><div id="table-features"></div></details>
     </div>
@@ -387,19 +387,26 @@ function render(code, tr) {
                      xaxis: xAxis(t, "Count"), yaxis: yCat(t) }), CONFIG);
   table("table-comparison", ["Layer", "iOS", "Android"], layers.map(l => [l[0], l[2], l[1]]));
 
-  // ---- TestRail status ----
+  // ---- TestRail status: automated vs everything else (run manually today) ----
   const statuses = tr.statuses;
   const plats = [["iOS", "ios"], ["Android", "android"]];
-  Plotly.react("chart-status", statuses.map(s => ({
-    type: "bar", orientation: "h", name: STATUS_LABELS[s],
-    y: plats.map(p => p[0]), x: plats.map(p => tr[p[1]].totals[s]),
-    customdata: plats.map(p => (100 * tr[p[1]].totals[s] / tr[p[1]].totals.total).toFixed(1)),
-    marker: marker(t.status[s]),
-    hovertemplate: `%{y} · ${STATUS_LABELS[s]}: %{x:,} (%{customdata}%)<extra></extra>`,
+  const statusGroups = [
+    ["Automated", p => tr[p].totals.automated, t.status.automated],
+    ["Not automated (manual)", notAutomated, t.status.to_automate],
+  ];
+  Plotly.react("chart-status", statusGroups.map(([name, value, color]) => ({
+    type: "bar", orientation: "h", name,
+    y: plats.map(p => p[0]), x: plats.map(p => value(p[1])),
+    customdata: plats.map(p => (100 * value(p[1]) / tr[p[1]].totals.total).toFixed(1)),
+    marker: marker(color),
+    hovertemplate: `%{y} · ${name}: %{x:,} (%{customdata}%)<extra></extra>`,
   })), baseLayout(t, { height: 200, barmode: "stack",
                        xaxis: xAxis(t, "TestRail cases"), yaxis: yCat(t) }), CONFIG);
-  table("table-status", ["Platform", ...statuses.map(s => STATUS_LABELS[s]), "Total"],
-        plats.map(p => [p[0], ...statuses.map(s => tr[p[1]].totals[s]), tr[p[1]].totals.total]));
+  const notAutoStatuses = statuses.filter(s => s !== "automated");
+  table("table-status", ["Platform", "Automated", "Not automated (manual)",
+                         ...notAutoStatuses.map(s => `· ${STATUS_LABELS[s]}`), "Total"],
+        plats.map(p => [p[0], tr[p[1]].totals.automated, notAutomated(p[1]),
+                        ...notAutoStatuses.map(s => tr[p[1]].totals[s]), tr[p[1]].totals.total]));
 
   // ---- TestRail by feature: iOS and Android side by side, shared feature axis ----
   const feats = [...new Set([...Object.keys(tr.ios.features), ...Object.keys(tr.android.features)])]
