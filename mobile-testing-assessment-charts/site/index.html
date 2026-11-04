@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Firefox Mobile — Testing Assessment charts</title>
+<!-- Pinned with SRI: the browser refuses the file if the CDN serves anything else. -->
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"
+        integrity="sha384-cCVCZkAjYNxaYKbM8lsArLznDF/SvMFr1jcZrvOpSTCa0W40ZAdLzHCEulnUa5i7"
+        crossorigin="anonymous"></script>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;  /* blue   - iOS / automated */
+    --series-2: #eb6834;  /* orange - Android / to automate */
+    --series-3: #1baf7a;  /* aqua   - manual only */
+    --series-4: #eda100;  /* yellow - untriaged */
+    --link: #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #f0efec;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --link: #6da7ec;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+  }
+  main { max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px; }
+  a { color: var(--link); }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 18px; margin: 40px 0 12px; }
+  .sub { color: var(--text-secondary); margin: 0 0 20px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center;
+          color: var(--text-secondary); font-size: 14px; }
+  .button {
+    display: inline-block; padding: 6px 12px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--surface-1);
+    color: var(--text-primary); text-decoration: none; font-size: 14px;
+  }
+  .button:hover { border-color: var(--axis); }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 0; }
+  nav a { font-size: 14px; padding: 4px 10px; border-radius: 999px;
+          border: 1px solid var(--border); text-decoration: none;
+          color: var(--text-secondary); background: var(--surface-1); }
+  nav a.active { color: var(--text-primary); border-color: var(--axis); font-weight: 600; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+           gap: 12px; margin: 24px 0 0; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border);
+          border-radius: 8px; padding: 14px 16px; }
+  .tile .label { color: var(--text-secondary); font-size: 13px; }
+  .tile .value { font-size: 28px; font-weight: 600; margin-top: 4px; }
+  .tile .note { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+  .card { background: var(--surface-1); border: 1px solid var(--border);
+          border-radius: 8px; padding: 16px; margin: 0 0 16px; }
+  .card h3 { font-size: 15px; margin: 0 0 2px; }
+  .card .desc { color: var(--text-secondary); font-size: 13px; margin: 0 0 8px; }
+  details { margin-top: 8px; font-size: 13px; color: var(--text-secondary); }
+  summary { cursor: pointer; }
+  table { border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 3px 12px 3px 0; text-align: right; border-bottom: 1px solid var(--grid); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--text-primary); font-weight: 600; }
+  .error { color: var(--text-primary); background: var(--surface-1);
+           border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  section[hidden] { display: none; }
+  .pyramid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+             gap: 24px; align-items: center; }
+  @media (max-width: 900px) { .pyramid { grid-template-columns: 1fr; } }
+  .notes { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
+  .notes h4 { margin: 0 0 8px; color: var(--text-primary); font-size: 14px; }
+  .notes ul { margin: 0; padding-left: 18px; }
+  .notes li { margin-bottom: 8px; }
+  .notes b { color: var(--text-primary); }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px;
+            color: var(--text-secondary); margin: 0 0 4px; }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px;
+                         border-radius: 2px; margin-right: 6px; vertical-align: -1px;
+                         background: var(--swatch); }
+</style>
+</head>
+<body class="viz-root">
+<main>
+  <h1>Firefox Mobile — Testing Assessment charts</h1>
+  <p class="sub">Test volume in the code and TestRail case automation, for Firefox for iOS and Android.
+    Counts are volume, not coverage.</p>
+  <div class="meta">
+    <span id="updated">Loading data…</span>
+    <a class="button" id="refresh" target="_blank" rel="noopener"
+       href="https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-testing-assessment-charts.yml">
+       Refresh data ↗</a>
+  </div>
+  <nav id="tabs">
+    <a href="#overview">Overview</a>
+    <a href="#testrail">TestRail by feature</a>
+    <a href="#ios">iOS</a>
+    <a href="#android">Android</a>
+    <a href="#about">How it's counted</a>
+  </nav>
+
+  <div id="load-error" class="error" hidden></div>
+
+  <section id="overview">
+    <div class="tiles" id="tiles"></div>
+    <h2>iOS vs Android</h2>
+    <div class="card">
+      <h3>Tests by layer, per platform</h3>
+      <p class="desc">Test methods in the code. "Manual" is TestRail cases in the Full Functional suite that are not automated, so it is a different unit.</p>
+      <div id="chart-comparison"></div>
+      <details><summary>Data table</summary><div id="table-comparison"></div></details>
+    </div>
+    <div class="card">
+      <h3>TestRail automation status</h3>
+      <p class="desc">Full Functional Tests Suite, all cases.</p>
+      <div id="chart-status"></div>
+      <details><summary>Data table</summary><div id="table-status"></div></details>
+    </div>
+  </section>
+
+  <section id="testrail">
+    <h2>TestRail cases by feature</h2>
+    <div class="card">
+      <h3>Cases per feature: automated vs manual</h3>
+      <p class="desc">Features from a shared Android/iOS taxonomy, matched on section name and title. Sorted by combined size. "Not automated" groups To automate, Manual only and Untriaged: the Overview tab has that breakdown.</p>
+      <div id="chart-features"></div>
+      <details><summary>Data table</summary><div id="table-features"></div></details>
+    </div>
+  </section>
+
+  <section id="ios">
+    <h2>Firefox for iOS</h2>
+    <div class="card">
+      <h3>Tests by layer</h3>
+      <p class="desc">Swift test methods, plus Python integration tests and L10n <code>snapshot()</code> calls.</p>
+      <div id="chart-ios-layers"></div>
+      <details><summary>Data table</summary><div id="table-ios-layers"></div></details>
+    </div>
+    <div class="card">
+      <h3>Test pyramid</h3>
+      <p class="desc">Rows ordered as the classical pyramid; widths reflect actual counts (square-root scaled so small layers stay visible).</p>
+      <div class="pyramid">
+        <div id="chart-ios-shape"></div>
+        <div id="pyramid-notes" class="notes"></div>
+      </div>
+      <details><summary>Data table</summary><div id="table-ios-shape"></div></details>
+    </div>
+    <div class="card">
+      <h3>ClientTests by module</h3>
+      <p class="desc">Test methods per top-level folder of ClientTests. Colour indicates coverage level.</p>
+      <div class="legend" id="legend-ios-modules"></div>
+      <div id="chart-ios-modules"></div>
+      <details><summary>Data table</summary><div id="table-ios-modules"></div></details>
+    </div>
+    <div class="card">
+      <h3>XCUITest coverage by feature</h3>
+      <p class="desc">XCUITest methods per feature, mapped from test file names. Colour indicates coverage level.</p>
+      <div class="legend" id="legend-ios-xcui"></div>
+      <div id="chart-ios-xcui"></div>
+      <details><summary>Data table</summary><div id="table-ios-xcui"></div></details>
+    </div>
+  </section>
+
+  <section id="android">
+    <h2>Firefox for Android (Fenix)</h2>
+    <div class="card">
+      <h3>Tests by layer</h3>
+      <p class="desc">Kotlin <code>@Test</code> methods in Fenix. android-components is not included.</p>
+      <div id="chart-android-layers"></div>
+      <details><summary>Data table</summary><div id="table-android-layers"></div></details>
+    </div>
+    <div class="card">
+      <h3>Test pyramid</h3>
+      <p class="desc">Rows ordered as the classical pyramid; widths reflect actual counts (square-root scaled so small layers stay visible).</p>
+      <div class="pyramid">
+        <div id="chart-android-shape"></div>
+        <div id="android-pyramid-notes" class="notes"></div>
+      </div>
+      <details><summary>Data table</summary><div id="table-android-shape"></div></details>
+    </div>
+    <div class="card">
+      <h3>Unit tests by module</h3>
+      <p class="desc">JUnit + Robolectric test methods per top-level package of <code>fenix/app/src/test</code>. Colour indicates coverage level.</p>
+      <div class="legend" id="legend-android-modules"></div>
+      <div id="chart-android-modules"></div>
+      <details><summary>Data table</summary><div id="table-android-modules"></div></details>
+    </div>
+    <div class="card">
+      <h3>E2E UI coverage by feature</h3>
+      <p class="desc">Espresso/UIAutomator and TAE test methods per feature, mapped from test file names. Colour indicates coverage level.</p>
+      <div class="legend" id="legend-android-e2e"></div>
+      <div id="chart-android-e2e"></div>
+      <details><summary>Data table</summary><div id="table-android-e2e"></div></details>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>How it's counted</h2>
+    <div class="card">
+      <ul>
+        <li><b>Code</b>: a test method is one count. Commented-out tests are skipped. The source checkout and commit are shown at the top of the page.</li>
+        <li><b>iOS</b>: <code>func test…</code> in <code>firefox-ios-tests/Tests</code> and <code>BrowserKit/Tests</code>. Smoketest = XCUITests annotated <code>// Smoketest</code>. Performance = <code>PerformanceTests</code> (XCUI) plus <code>StoragePerfTests</code>, kept out of the XCUI numbers so they are not counted twice.</li>
+        <li><b>Android</b>: <code>@Test</code> in <code>fenix/app/src/test</code> (Robolectric when the class runs with <code>AndroidJUnit4</code> or a Robolectric runner, JUnit otherwise) and <code>src/androidTest</code> (<code>ui/</code> = E2E, split into Espresso/UIAutomator and the TAE framework's <code>ui/efficiency/tests</code>; the rest of <code>ui/efficiency</code> tests the TAE framework itself and is not counted as E2E; a Compose test rule elsewhere = component).</li>
+        <li><b>TestRail</b>: Full Functional Tests Suite per platform. Automated = Completed, To automate = Suitable, Manual only = Unsuitable, Untriaged = anything else (Untriaged, Disabled, blank).</li>
+        <li>Scripts and workflow: <a href="https://github.com/mozilla-mobile/testops-tools/tree/main/mobile-testing-assessment-charts">testops-tools/mobile-testing-assessment-charts</a>.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script>
+const STATUS_LABELS = {
+  automated: "Automated", to_automate: "To automate",
+  manual_only: "Manual only", untriaged: "Untriaged",
+};
+
+const css = name => getComputedStyle(document.body).getPropertyValue(name).trim();
+const fmt = n => n.toLocaleString("en-US");
+const $ = id => document.getElementById(id);
+
+function theme() {
+  return {
+    ios: css("--series-1"), android: css("--series-2"),
+    status: {
+      automated: css("--series-1"), to_automate: css("--series-2"),
+      manual_only: css("--series-3"), untriaged: css("--series-4"),
+    },
+    surface: css("--surface-1"), text: css("--text-primary"),
+    muted: css("--text-muted"), grid: css("--grid"), axis: css("--axis"),
+  };
+}
+
+function baseLayout(t, extra = {}) {
+  return {
+    paper_bgcolor: t.surface, plot_bgcolor: t.surface,
+    font: { family: "system-ui, -apple-system, Segoe UI, sans-serif", size: 12, color: t.text },
+    margin: { l: 10, r: 30, t: 10, b: 40 },
+    hoverlabel: { font: { family: "system-ui, sans-serif" } },
+    legend: { orientation: "h", x: 0, y: 1.02, yanchor: "bottom", traceorder: "normal",
+              font: { color: t.text } },
+    bargap: 0.25,
+    ...extra,
+  };
+}
+
+const xAxis = (t, title) => ({
+  title: { text: title, font: { color: t.muted } }, gridcolor: t.grid, zeroline: true,
+  zerolinecolor: t.axis, tickfont: { color: t.muted }, automargin: true,
+});
+const yCat = t => ({
+  automargin: true, autorange: "reversed", tickfont: { color: t.text }, ticksuffix: "  ",
+});
+const marker = color => ({ color, line: { color: theme().surface, width: 1 } });
+const CONFIG = { displaylogo: false, responsive: true,
+                 modeBarButtonsToRemove: ["lasso2d", "select2d"] };
+
+function table(el, headers, rows) {
+  const h = headers.map(x => `<th>${x}</th>`).join("");
+  const b = rows.map(r => "<tr>" + r.map((c, i) =>
+    `<td>${typeof c === "number" ? fmt(c) : c}</td>`).join("") + "</tr>").join("");
+  $(el).innerHTML = `<table><thead><tr>${h}</tr></thead><tbody>${b}</tbody></table>`;
+}
+
+// Coverage-level colours from the assessment doc, darkest green = most tests.
+const LEVEL_COLORS = ["#2E7D32", "#66BB6A", "#FFA726", "#EF6C00", "#C62828"];
+
+// levels: lower bounds, highest first, e.g. [100, 50, 20, 10] -> 5 bands.
+function levels(bounds, gapLabel) {
+  const colorFor = v => LEVEL_COLORS[bounds.findIndex(b => v >= b) < 0
+    ? bounds.length : bounds.findIndex(b => v >= b)];
+  const labels = bounds.map((b, i) => i === 0 ? `≥${b} tests` : `${b}–${bounds[i - 1] - 1} tests`)
+    .concat(`<${bounds[bounds.length - 1]} tests (${gapLabel})`);
+  return { colorFor, labels };
+}
+
+function legend(el, lv) {
+  $(el).innerHTML = lv.labels.map((l, i) =>
+    `<span style="--swatch:${LEVEL_COLORS[i]}">${l}</span>`).join("");
+}
+
+function hbar(el, labels, values, color, { title, height } = {}) {
+  const t = theme();
+  Plotly.react(el, [{
+    type: "bar", orientation: "h", y: labels, x: values,
+    marker: marker(typeof color === "function" ? values.map(color) : color),
+    text: values.map(fmt), textposition: "outside", cliponaxis: false,
+    textfont: { color: t.text }, hovertemplate: "%{y}: %{x:,}<extra></extra>",
+  }], baseLayout(t, {
+    height: height || Math.max(240, labels.length * 24 + 80),
+    xaxis: xAxis(t, title), yaxis: yCat(t), showlegend: false,
+  }), CONFIG);
+}
+
+// Classical pyramid layout (E2E on top, unit at the bottom) with widths from
+// the real counts, square-root scaled so the small layers stay visible.
+function pyramid(el, rows) {
+  const t = theme();
+  const max = Math.max(...rows.map(r => r.value));
+  const width = v => Math.sqrt(v / max);
+  const total = rows.reduce((s, r) => s + r.value, 0);
+  const pct = v => (100 * v / total).toFixed(1);
+  const annotations = [];
+  rows.forEach((r, i) => {
+    const w = width(r.value), left = (1 - w) / 2;
+    // Inside the block only if the longest label line fits (~0.024 x-units per character).
+    const longest = Math.max(...r.label.split("<br>").map(l => l.length));
+    if (w >= longest * 0.024 + 0.02) {
+      annotations.push({ x: 0.5, y: i, text: `<b>${r.label}</b>`, showarrow: false,
+                         font: { color: "#ffffff", size: 13 } });
+    } else {
+      annotations.push({ x: left - 0.02, y: i, text: `<b>${r.label}</b>`, showarrow: false,
+                         xanchor: "right", font: { color: t.text, size: 13 } });
+    }
+    annotations.push({ x: left + w + 0.02, y: i, xanchor: "left", showarrow: false,
+                       text: `${fmt(r.value)} tests  (${pct(r.value)}%)`,
+                       font: { color: t.text, size: 13 } });
+  });
+  Plotly.react(el, [{
+    type: "bar", orientation: "h", y: rows.map((_, i) => i),
+    x: rows.map(r => width(r.value)), base: rows.map(r => (1 - width(r.value)) / 2),
+    width: 0.9, marker: { color: rows.map(r => r.color), line: { color: t.text, width: 0.6 } },
+    customdata: rows.map(r => [r.label.replace(/<br>/g, " "), r.value, pct(r.value)]),
+    hovertemplate: "%{customdata[0]}: %{customdata[1]:,} tests (%{customdata[2]}%)<extra></extra>",
+  }], baseLayout(t, {
+    height: 420, showlegend: false, annotations, margin: { l: 10, r: 10, t: 10, b: 10 },
+    xaxis: { visible: false, range: [-0.3, 1.55], fixedrange: true },
+    yaxis: { visible: false, autorange: "reversed", fixedrange: true },
+  }), CONFIG);
+}
+
+function render(code, tr) {
+  const t = theme();
+  const ios = code.ios.layers, and = code.android.layers;
+  const notAutomated = p => tr[p].totals.total - tr[p].totals.automated;
+
+  // ---- Tiles ----
+  const pct = p => (100 * tr[p].totals.automated / tr[p].totals.total).toFixed(1) + "%";
+  $("tiles").innerHTML = [
+    ["iOS TestRail cases automated", pct("ios"), `${fmt(tr.ios.totals.automated)} of ${fmt(tr.ios.totals.total)}`],
+    ["Android TestRail cases automated", pct("android"), `${fmt(tr.android.totals.automated)} of ${fmt(tr.android.totals.total)}`],
+    ["iOS test methods (code)", fmt(Object.entries(ios).filter(([k]) => k !== "l10n_snapshot_calls").reduce((s, [, v]) => s + v, 0)), "excludes L10n snapshot calls"],
+    ["Android test methods (code)", fmt(Object.entries(and).filter(([k]) => k !== "e2e_ui_smoke").reduce((s, [, v]) => s + v, 0)), "Fenix only"],
+  ].map(([l, v, n]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div><div class="note">${n}</div></div>`).join("");
+
+  // ---- Comparison by layer ----
+  const layers = [
+    ["Unit (business logic)", and.unit_junit, ios.unit_client + ios.unit_browserkit],
+    ["Android-aware (Robolectric)", and.unit_robolectric, 0],
+    ["Component (Compose UI)", and.component_compose, 0],
+    ["E2E UI", and.e2e_ui + and.e2e_ui_tae, ios.xcui_smoke + ios.xcui_other],
+    ["Integration", and.integration, ios.integration_py],
+    ["Performance", and.performance, ios.performance],
+    ["L10n snapshot calls", 0, ios.l10n_snapshot_calls],
+    ["Other (Storage/Sync/Account, legacy KIF, TAE framework, misc.)", and.other_instrumented + and.tae_framework, ios.storage_sync_account + ios.legacy_kif],
+    ["Manual (TestRail, not automated)", notAutomated("android"), notAutomated("ios")],
+  ];
+  const names = layers.map(l => l[0]);
+  Plotly.react("chart-comparison", [
+    { type: "bar", orientation: "h", name: "iOS", y: names, x: layers.map(l => l[2]),
+      marker: marker(t.ios), hovertemplate: "iOS · %{y}: %{x:,}<extra></extra>" },
+    { type: "bar", orientation: "h", name: "Android", y: names, x: layers.map(l => l[1]),
+      marker: marker(t.android), hovertemplate: "Android · %{y}: %{x:,}<extra></extra>" },
+  ], baseLayout(t, { height: 470, barmode: "group", bargroupgap: 0.08,
+                     xaxis: xAxis(t, "Count"), yaxis: yCat(t) }), CONFIG);
+  table("table-comparison", ["Layer", "iOS", "Android"], layers.map(l => [l[0], l[2], l[1]]));
+
+  // ---- TestRail status ----
+  const statuses = tr.statuses;
+  const plats = [["iOS", "ios"], ["Android", "android"]];
+  Plotly.react("chart-status", statuses.map(s => ({
+    type: "bar", orientation: "h", name: STATUS_LABELS[s],
+    y: plats.map(p => p[0]), x: plats.map(p => tr[p[1]].totals[s]),
+    customdata: plats.map(p => (100 * tr[p[1]].totals[s] / tr[p[1]].totals.total).toFixed(1)),
+    marker: marker(t.status[s]),
+    hovertemplate: `%{y} · ${STATUS_LABELS[s]}: %{x:,} (%{customdata}%)<extra></extra>`,
+  })), baseLayout(t, { height: 200, barmode: "stack",
+                       xaxis: xAxis(t, "TestRail cases"), yaxis: yCat(t) }), CONFIG);
+  table("table-status", ["Platform", ...statuses.map(s => STATUS_LABELS[s]), "Total"],
+        plats.map(p => [p[0], ...statuses.map(s => tr[p[1]].totals[s]), tr[p[1]].totals.total]));
+
+  // ---- TestRail by feature: iOS and Android side by side, shared feature axis ----
+  const feats = [...new Set([...Object.keys(tr.ios.features), ...Object.keys(tr.android.features)])]
+    .filter(f => f !== "Uncategorised");
+  const tot = (p, f) => tr[p].features[f]?.total || 0;
+  feats.sort((a, b) => (tot("ios", b) + tot("android", b)) - (tot("ios", a) + tot("android", a)));
+  feats.push("Uncategorised");
+  // Two groups only: automated, and everything else (to automate, manual
+  // only, untriaged), which today is run manually.
+  const auto = (p, f) => tr[p].features[f]?.automated || 0;
+  const groups = [
+    ["Automated", auto, t.status.automated],
+    ["Not automated (manual)", (p, f) => tot(p, f) - auto(p, f), t.status.to_automate],
+  ];
+  const featTraces = [];
+  plats.forEach(([label, p], i) => groups.forEach(([name, value, color]) => featTraces.push({
+    type: "bar", orientation: "h", name, legendgroup: name,
+    showlegend: i === 0, xaxis: i === 0 ? "x" : "x2",
+    y: feats, x: feats.map(f => value(p, f)),
+    customdata: feats.map(f => [tot(p, f),
+      tot(p, f) ? (100 * value(p, f) / tot(p, f)).toFixed(0) : 0]),
+    marker: marker(color),
+    hovertemplate: `${label} · %{y}<br>${name}: %{x:,} of %{customdata[0]:,} (%{customdata[1]}%)<extra></extra>`,
+  })));
+  Plotly.react("chart-features", featTraces, baseLayout(t, {
+    height: feats.length * 22 + 120, barmode: "stack",
+    xaxis: { ...xAxis(t, "iOS cases"), domain: [0, 0.48] },
+    xaxis2: { ...xAxis(t, "Android cases"), domain: [0.52, 1], anchor: "y", matches: "x" },
+    yaxis: yCat(t), bargap: 0.3,
+    annotations: [["iOS", 0], ["Android", 0.52]].map(([text, x]) => ({
+      text: `<b>${text}</b>`, x, xref: "paper", xanchor: "left", y: 1, yref: "paper",
+      yanchor: "bottom", showarrow: false, font: { size: 13, color: t.text },
+    })),
+  }), CONFIG);
+  table("table-features",
+        ["Feature", "iOS automated", "iOS manual", "iOS total",
+         "Android automated", "Android manual", "Android total"],
+        feats.map(f => [f, auto("ios", f), tot("ios", f) - auto("ios", f), tot("ios", f),
+                        auto("android", f), tot("android", f) - auto("android", f),
+                        tot("android", f)]));
+
+  // ---- iOS ----
+  const iosLayers = [
+    ["Unit — Client", ios.unit_client], ["Unit — BrowserKit", ios.unit_browserkit],
+    ["XCUI — Smoketest", ios.xcui_smoke], ["XCUI — Other (full)", ios.xcui_other],
+    ["Legacy KIF UITests (not in CI)", ios.legacy_kif],
+    ["Storage/Sync/Account", ios.storage_sync_account],
+    ["L10n snapshot() calls", ios.l10n_snapshot_calls],
+    ["Performance", ios.performance], ["Integration (Py/JS)", ios.integration_py],
+  ];
+  hbar("chart-ios-layers", iosLayers.map(l => l[0]), iosLayers.map(l => l[1]), t.ios,
+       { title: "Test methods" });
+  table("table-ios-layers", ["Layer", "Tests"], iosLayers);
+
+  const unit = ios.unit_client + ios.unit_browserkit + ios.storage_sync_account + ios.legacy_kif + ios.performance;
+  const e2e = ios.xcui_smoke + ios.xcui_other;
+  const shapeTotal = unit + e2e + ios.integration_py;
+  const shape = [
+    ["E2E UI (XCUITests)", e2e, "#F9A825"],
+    ["Integration (Python / JS)", ios.integration_py, "#FF7139"],
+    ["Unit (Client + BrowserKit + legacy)", unit, "#0060DF"],
+  ];
+  pyramid("chart-ios-shape", shape.map(([label, value, color]) =>
+    ({ label: label.replace(" (", "<br>("), value, color })));
+  const p = v => (100 * v / shapeTotal).toFixed(1);
+  const inverted = e2e > ios.integration_py;
+  $("pyramid-notes").innerHTML = `
+    <h4>Test shape observations</h4>
+    <ul>
+      <li><b>Unit tests dominate: ${fmt(unit)} tests (${p(unit)}%).</b> Healthy for the base of the pyramid.</li>
+      <li><b>E2E UI (XCUITest): ${fmt(e2e)} tests (${p(e2e)}%).</b> Sits at the top of the pyramid (expensive, slow, flakier)${inverted
+        ? " but has <b>more</b> tests than the Integration layer: that's the inversion." : "."}</li>
+      <li><b>Integration: ${fmt(ios.integration_py)} tests (${p(ios.integration_py)}%).</b> Python/JS suites (Sync + Experiments).</li>
+      <li>L10n snapshot (${fmt(ios.l10n_snapshot_calls)} calls) is a separate layer and not shown.</li>
+    </ul>
+    <h4>Interpretation</h4>
+    <ul>
+      ${inverted ? "<li>The pyramid is <b>inverted</b> between the top two layers. iOS has no dedicated middle layer (component tests with real objects and no UI), so anything that isn't a pure unit test jumps straight to an XCUITest.</li>" : ""}
+      <li>Android has a middle layer via Robolectric + Compose UI. Introducing an equivalent on iOS is a clear opportunity from this shape.</li>
+    </ul>`;
+  table("table-ios-shape", ["Layer", "Tests", "Share"],
+        shape.map(s => [s[0], s[1], p(s[1]) + "%"]));
+
+  const modLevels = levels([100, 50, 20, 10], "potential gap");
+  legend("legend-ios-modules", modLevels);
+  const mods = Object.entries(code.ios.client_modules).filter(([, n]) => n > 0)
+    .map(([m, n]) => [m === "(root)" ? "(files at ClientTests root)" : m, n]);
+  hbar("chart-ios-modules", mods.map(m => m[0]), mods.map(m => m[1]), modLevels.colorFor,
+       { title: "Test methods" });
+  table("table-ios-modules", ["Module", "Tests"], mods);
+
+  const xcuiLevels = levels([30, 15, 8, 4], "thin coverage");
+  legend("legend-ios-xcui", xcuiLevels);
+  const xcui = Object.entries(code.ios.xcui_features);
+  hbar("chart-ios-xcui", xcui.map(m => m[0]), xcui.map(m => m[1]), xcuiLevels.colorFor,
+       { title: "XCUITest methods" });
+  table("table-ios-xcui", ["Feature", "Tests"], xcui);
+
+  // ---- Android ----
+  const andLayers = [
+    ["Unit — JUnit", and.unit_junit], ["Unit — Robolectric", and.unit_robolectric],
+    ["Component — Compose UI", and.component_compose],
+    ["E2E UI — Espresso/UIAutomator", and.e2e_ui], ["E2E UI — TAE", and.e2e_ui_tae],
+    ["E2E UI — of which @SmokeTest", and.e2e_ui_smoke],
+    ["Integration", and.integration], ["Performance", and.performance],
+    ["TAE framework self-tests", and.tae_framework],
+    ["Other instrumented", and.other_instrumented],
+  ];
+  hbar("chart-android-layers", andLayers.map(l => l[0]), andLayers.map(l => l[1]), t.android,
+       { title: "Test methods" });
+  table("table-android-layers", ["Layer", "Tests"], andLayers);
+
+  const aE2e = and.e2e_ui + and.e2e_ui_tae;
+  const aMid = and.unit_robolectric + and.component_compose + and.integration;
+  const aUnit = and.unit_junit;
+  const aTotal = aE2e + aMid + aUnit;
+  const ap = v => (100 * v / aTotal).toFixed(1);
+  const aShape = [
+    ["E2E UI (Espresso + TAE)", aE2e, "#F9A825"],
+    ["Middle layer (Robolectric, Compose UI, integration)", aMid, "#FF7139"],
+    ["Unit (JUnit)", aUnit, "#0060DF"],
+  ];
+  pyramid("chart-android-shape", aShape.map(([label, value, color]) =>
+    ({ label: label.replace(" (", "<br>("), value, color })));
+  const diamond = aMid > aUnit;
+  $("android-pyramid-notes").innerHTML = `
+    <h4>Test shape observations</h4>
+    <ul>
+      <li><b>Middle layer: ${fmt(aMid)} tests (${ap(aMid)}%).</b> Robolectric (${fmt(and.unit_robolectric)}) runs Android framework code on the JVM, Compose UI tests (${fmt(and.component_compose)}) render components without the full app, plus ${fmt(and.integration)} integration tests.</li>
+      <li><b>Unit (JUnit): ${fmt(aUnit)} tests (${ap(aUnit)}%).</b> Plain JVM tests with no Android dependencies.</li>
+      <li><b>E2E UI: ${fmt(aE2e)} tests (${ap(aE2e)}%).</b> ${fmt(and.e2e_ui)} Espresso/UIAutomator and ${fmt(and.e2e_ui_tae)} TAE; ${fmt(and.e2e_ui_smoke)} are <code>@SmokeTest</code>.</li>
+    </ul>
+    <h4>Interpretation</h4>
+    <ul>
+      ${diamond ? "<li>The shape is a <b>diamond</b>, not a pyramid: the middle layer is larger than the pure unit base. Most logic is tested through Robolectric, which is slower than plain JUnit but much cheaper than E2E.</li>" : ""}
+      <li>Unlike iOS, Android has a real middle layer, so behaviour that needs the platform can be tested without going to a full E2E test.</li>
+    </ul>`;
+  table("table-android-shape", ["Layer", "Tests", "Share"],
+        aShape.map(s => [s[0], s[1], ap(s[1]) + "%"]));
+
+  legend("legend-android-modules", modLevels);
+  const aMods = Object.entries(code.android.unit_modules)
+    .map(([m, n]) => [m === "(root)" ? "(files at org.mozilla.fenix root)" : m, n]);
+  hbar("chart-android-modules", aMods.map(m => m[0]), aMods.map(m => m[1]), modLevels.colorFor,
+       { title: "Test methods" });
+  table("table-android-modules", ["Module", "Tests"], aMods);
+
+  legend("legend-android-e2e", xcuiLevels);
+  const aFeat = Object.entries(code.android.e2e_features);
+  hbar("chart-android-e2e", aFeat.map(m => m[0]), aFeat.map(m => m[1]), xcuiLevels.colorFor,
+       { title: "E2E test methods" });
+  table("table-android-e2e", ["Feature", "Tests"], aFeat);
+}
+
+function source(s) {
+  if (!s) return "local files";
+  return `<code>${s.commit.slice(0, 10)}</code> (${s.date.slice(0, 10)})`;
+}
+
+// ---- Tabs: one section at a time, driven by the URL hash ----
+const SECTIONS = ["overview", "testrail", "ios", "android", "about"];
+function showTab() {
+  const id = SECTIONS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "overview";
+  SECTIONS.forEach(s => { $(s).hidden = s !== id; });
+  document.querySelectorAll("#tabs a").forEach(a =>
+    a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+  // Plotly sizes hidden charts at zero width; resize the ones now visible.
+  $(id).querySelectorAll(".js-plotly-plot").forEach(el => Plotly.Plots.resize(el));
+}
+window.addEventListener("hashchange", showTab);
+
+let DATA = null;
+Promise.all(["data/code.json", "data/testrail.json"].map(u =>
+  fetch(u, { cache: "no-store" }).then(r => {
+    if (!r.ok) throw new Error(`${u}: HTTP ${r.status}`);
+    return r.json();
+  })))
+  .then(([code, tr]) => {
+    DATA = [code, tr];
+    $("updated").innerHTML =
+      `Data from ${code.generated_at.slice(0, 10)} · iOS ${source(code.ios.source)}` +
+      ` · Android ${source(code.android.source)} · TestRail ${tr.generated_at.slice(0, 10)}`;
+    showTab();
+    render(code, tr);
+    showTab();
+  })
+  .catch(e => {
+    $("updated").textContent = "";
+    const box = $("load-error");
+    box.hidden = false;
+    box.textContent = "Could not load the chart data (" + e.message + ").";
+  });
+
+// Re-render with the other palette when the OS switches light/dark.
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+  if (DATA) { render(...DATA); showTab(); }
+});
+</script>
+</body>
+</html>
