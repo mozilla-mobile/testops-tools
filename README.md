@@ -14,6 +14,8 @@ A mono-repo of various in house automation and tooling used by the Mozilla Mobil
 
 [![tr-critical dashboard](https://github.com/mozilla-mobile/testops-tools/actions/workflows/tr-critical-dashboard.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/tr-critical-dashboard.yml)
 
+[![Mobile feature taxonomy](https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-feature-taxonomy.yml/badge.svg)](https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-feature-taxonomy.yml)
+
 
 ### Android
 

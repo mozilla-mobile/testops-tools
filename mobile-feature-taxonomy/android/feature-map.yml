@@ -1,0 +1,380 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Attributes Firefox for Android source files (Fenix + android-components) to features in ../features.yml.
+# Same rules as the iOS map: the most specific matching rule wins; an exact file path beats a glob, and among
+# globs the one with more literal path segments wins. Rule order does not matter.
+# `by: ai` = generated, not yet reviewed by a person. Delete it once checked. See ../README.md.
+#
+# First pass generated 2026-10-27 against mozilla-firefox/firefox main (checked out 2026-10-20).
+
+platform: android
+repo: mozilla-firefox/firefox
+# Rule paths and roots are relative to this directory of the repo.
+base: mobile/android
+extensions: [".kt", ".java"]
+# Only production code: files must live under a src/main/ directory (skips src/test, src/androidTest…).
+require_path_segment: src/main
+skip_dirs: [build]
+# Layer column in files/lines/coverage output.
+layers:
+  fenix/: Fenix
+  android-components/: AC
+
+roots:
+  - fenix/app/src/main/java
+  - android-components/components
+
+rules:
+  # ---------------- Excluded ----------------
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/debugsettings/**", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/e2e/**", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/automation/**", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/SecretSettingsFragment.kt", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/SyncDebugFragment.kt", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/RemoteSettingsServerFragment.kt", feature: EXCLUDED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/LeakCanarySetupInterface.kt", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/tooling/**", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/support/test/**", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/support/test-*/**", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/support/android-test/**", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/feature/example/**", feature: EXCLUDED, by: ai}
+  - {path: "android-components/components/feature/containers/**", feature: EXCLUDED, by: ai}    # not shipped in Fenix
+  - {path: "android-components/components/feature/automotive/**", feature: EXCLUDED, by: ai}    # Android Automotive builds only
+
+  # ---------------- Fenix: shared buckets ----------------
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/*.kt", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/ReaderViewBinding.kt", feature: BRW.READ, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/OpenInFirefoxBinding.kt", feature: OS.CTAB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/FenixErrorStringsProvider.kt", feature: BRW.ERR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/AppRequestInterceptor.kt", feature: SHARED.WEB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/ServiceWorkerSupportFeature.kt", feature: SHARED.WEB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/FeatureFlags.kt", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/android/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/bindings/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/ext/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/utils/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/wifi/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/distributions/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/datastore/**", feature: SHARED.DATA, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/compose/**", feature: SHARED.UI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/gecko/**", feature: SHARED.WEB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/intent/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/lifecycle/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/navigation/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/session/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/experiments/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/nimbus/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/perf/**", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/telemetry/**", feature: SHARED.TELEMETRY, by: ai}
+
+  # components/: app-wide wiring, plus feature integrations
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/**", feature: SHARED.ARCH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/accounts/**", feature: ACCT.SIGN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/bookmarks/**", feature: LIB.BMK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/history/**", feature: LIB.HIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/ipprotection/**", feature: PROT.VPN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/lens/**", feature: SRCH.VIS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/listentopage/**", feature: BRW.READ, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/llm/**", feature: AI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/menu/**", feature: UI.MENU, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/metrics/**", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/search/**", feature: SRCH.ENG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/settings/**", feature: SET.FRAME, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/share/**", feature: OS.SHARE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/tabs/**", feature: TABS.TRAY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/**", feature: UI.TB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/AccountAbnormalities.kt", feature: ACCT.SIGN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FxaServer.kt", feature: ACCT.SIGN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/Analytics.kt", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/GleanHelper.kt", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/MetricsServiceHelper.kt", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/PerformanceComponent.kt", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/NimbusComponents.kt", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FenixAutocompletePrompt.kt", feature: CRED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FenixEmailMaskPrompt.kt", feature: CRED.MASK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FenixSuggestStrongPasswordPrompt.kt", feature: CRED.GEN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FindInPage*.kt", feature: BRW.FIND, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/FxSuggest.kt", feature: SRCH.SUG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/Lens*.kt", feature: SRCH.VIS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/QrScan*.kt", feature: SRCH.VIS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/VoiceSearchFeature.kt", feature: SRCH.VIS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/HomepageAsANewTabPreferencesRepository.kt", feature: HOME.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/HomepageThumbnailIntegration.kt", feature: HOME.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/NotificationManager.kt", feature: ENG.NOTIF, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/PermissionStorage.kt", feature: PROT.PERM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/PlayStoreReviewPromptController.kt", feature: ENG.SURV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/PrivateShortcutCreateManager.kt", feature: OS.ASSIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/ShortcutManagerCompatWrapper.kt", feature: OS.ASSIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/Push.kt", feature: APP.SVC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/TabCollectionStorage.kt", feature: TABS.GRP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/TrackingProtectionPolicyFactory.kt", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/SettingsSearchProviders.kt", feature: SET.FRAME, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/components/SnackbarBehavior.kt", feature: UI.TOAST, by: ai}
+
+  # ---------------- Fenix: features ----------------
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/addons/**", feature: EXT.ADDON, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/extension/**", feature: EXT.ADDON, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/autofill/**", feature: CRED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/autofill/address/**", feature: CRED.ADDR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/biometricauthentication/**", feature: PRIV.LOCK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/pbmlock/**", feature: PRIV.LOCK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/bookmarks/**", feature: LIB.BMK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/collections/**", feature: TABS.GRP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabgroups/**", feature: TABS.GRP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/crashes/**", feature: APP.CRASH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/startupCrash/**", feature: APP.CRASH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/customtabs/**", feature: OS.CTAB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/downloads/**", feature: LIB.DL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/exceptions/**", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/exceptions/login/**", feature: CRED.PW, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/historymetadata/**", feature: LIB.HIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/iconpicker/**", feature: SET.ICON, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/ipprotection/**", feature: PROT.VPN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/library/**", feature: LIB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/library/history/**", feature: LIB.HIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/library/historymetadata/**", feature: LIB.HIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/library/recentlyclosed/**", feature: TABS.CLOSED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/listentopage/**", feature: BRW.READ, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/media/**", feature: BRW.MEDIA, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/messaging/**", feature: ENG.CFR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/microsurvey/**", feature: ENG.SURV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/reviewprompt/**", feature: ENG.SURV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/onboarding/**", feature: ENG.ONB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/whatsnew/**", feature: ENG.ONB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/termsofuse/**", feature: ENG.TOU, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/pdf/**", feature: BRW.PDF, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/print/**", feature: BRW.PDF, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/privacyreport/**", feature: PROT.DASH, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/trackingprotection/**", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/push/**", feature: APP.SVC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/search/**", feature: SRCH.URL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/search/awesomebar/**", feature: SRCH.SUG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/selection/**", feature: BRW.CTX, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/share/**", feature: OS.SHARE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/shortcut/**", feature: OS.ASSIST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/snackbar/**", feature: UI.TOAST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/splashscreen/**", feature: APP.START, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/summarization/**", feature: AI.SUM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/sync/**", feature: ACCT.SYNC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabhistory/**", feature: BRW.NAV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/theme/**", feature: SET.THEME, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/translations/**", feature: TRANS.PAGE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/translations/preferences/**", feature: TRANS.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/translations/settings/**", feature: TRANS.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/wallpapers/**", feature: HOME.WALL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/webcompat/**", feature: BRW.WEBC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/widget/**", feature: OS.WID, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/gecko/search/SearchWidgetProvider.kt", feature: OS.WID, by: ai}   # legacy package name kept for the home-screen search widget
+
+  # browser/: browser screen shell, plus feature integrations
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/**", feature: BRW.LINKS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/browsingmode/**", feature: PRIV.MODE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/desktopmode/**", feature: BRW.ZOOM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/infobanner/**", feature: ENG.CFR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/menu/**", feature: UI.MENU, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/permissions/**", feature: PROT.PERM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/readermode/**", feature: BRW.READ, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/relay/**", feature: CRED.MASK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/reloadcover/**", feature: BRW.NAV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/tabstrip/**", feature: TABS.STRIP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/Translations*.kt", feature: TRANS.PAGE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/PageTranslationStatus.kt", feature: TRANS.PAGE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/ReaderModeStatus.kt", feature: BRW.READ, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/DesktopSiteMenuItemProvider.kt", feature: BRW.ZOOM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/ShareMenuItemProvider.kt", feature: OS.SHARE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/NativeShareSheetContextMenuCandidate.kt", feature: OS.SHARE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/OpenInAppOnboardingObserver.kt", feature: BRW.LINKS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/DownloadUtils.kt", feature: LIB.DL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/ContextMenuSnackbarDelegate.kt", feature: BRW.CTX, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/CustomTab*.kt", feature: OS.CTAB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/SwipeGestureLayout.kt", feature: UI.GEST, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/BackMenuItemProvider.kt", feature: BRW.NAV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/ForwardMenuItemProvider.kt", feature: BRW.NAV, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/browser/RefreshMenuItemProvider.kt", feature: BRW.NAV, by: ai}
+
+  # home/
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/**", feature: HOME.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/bookmarks/**", feature: HOME.JBI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/recentsyncedtabs/**", feature: HOME.JBI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/recenttabs/**", feature: HOME.JBI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/recentvisits/**", feature: HOME.JBI, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/collections/**", feature: TABS.GRP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/intent/**", feature: SHARED.SHELL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/mars/**", feature: HOME.SC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/topsites/**", feature: HOME.SC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/pocket/**", feature: HOME.STORY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/privatebrowsing/**", feature: PRIV.MODE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/search/**", feature: SRCH.URL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/termsofuse/**", feature: ENG.TOU, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/**", feature: UI.TB, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/PocketMiddleware.kt", feature: HOME.STORY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/TopSitesRefresher.kt", feature: HOME.SC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/SetToDefaultPromptRequest.kt", feature: OS.DEF, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/home/TabsCleanupFeature.kt", feature: TABS.TRAY, by: ai}
+
+  # tabstray/
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabstray/**", feature: TABS.TRAY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/**", feature: ACCT.SEND, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabstray/SyncedTabs*.kt", feature: ACCT.SEND, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabstray/InactiveTabsBinding.kt", feature: TABS.CLOSED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabstray/PbmLockStatusBinding.kt", feature: PRIV.LOCK, by: ai}
+
+  # settings/: a settings screen belongs to the feature it configures (same rule as iOS)
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/**", feature: SET.FRAME, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/account/**", feature: ACCT.SIGN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/address/**", feature: CRED.ADDR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/advanced/**", feature: SET.LANG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/ai/**", feature: AI.CTRL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/autofill/**", feature: CRED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/biometric/**", feature: CRED, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/creditcards/**", feature: CRED.CC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/datachoices/**", feature: PROT.DATA, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/studies/**", feature: PROT.DATA, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/deletebrowsingdata/**", feature: PROT.CLEAR, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/doh/**", feature: PROT.HTTPS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/downloads/**", feature: LIB.DL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/emailmasks/**", feature: CRED.MASK, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/ipprotection/**", feature: PROT.VPN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/labs/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/logins/**", feature: CRED.PW, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/pagesummaries/**", feature: AI.SUM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/quicksettings/**", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/**", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/search/**", feature: SRCH.ENG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/sitepermissions/**", feature: PROT.PERM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/wallpaper/**", feature: HOME.WALL, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/CustomizationFragment.kt", feature: SET.THEME, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/CustomEtpCookiesOptionsDropDownListPreference.kt", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/TrackingProtectionFragment.kt", feature: PROT.ETP, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/DefaultBrowserPreference.kt", feature: OS.DEF, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/HomeSettingsFragment.kt", feature: HOME.SET, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/HttpsOnlyFragment.kt", feature: PROT.HTTPS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/IPProtection*.kt", feature: PROT.VPN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/LinkSharingFragment.kt", feature: OS.SHARE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/OpenLinksInAppsFragment.kt", feature: BRW.LINKS, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/PairFragment.kt", feature: ACCT.SIGN, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/Sync*.kt", feature: ACCT.SYNC, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/PhoneFeature.kt", feature: PROT.PERM, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/PrivateBrowsingFragment.kt", feature: PRIV.MODE, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/RemoteImprovementsFragment.kt", feature: PROT.DATA, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/SearchOptimizationFragment.kt", feature: SRCH.SUG, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/TabsSettingsFragment.kt", feature: TABS.TRAY, by: ai}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/settings/Toolbar*.kt", feature: UI.TB, by: ai}
+
+  # ---------------- android-components ----------------
+  - {path: "android-components/components/concept/**", feature: SHARED.ARCH, by: ai}
+  - {path: "android-components/components/concept/engine/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/support/**", feature: SHARED.ARCH, by: ai}
+  - {path: "android-components/components/support/locale/**", feature: SET.LANG, by: ai}
+  - {path: "android-components/components/support/remotesettings/**", feature: APP.SVC, by: ai}
+  - {path: "android-components/components/support/images/**", feature: APP.SVC, by: ai}
+  - {path: "android-components/components/support/webextensions/**", feature: EXT.ADDON, by: ai}
+  - {path: "android-components/components/support/appservices/**", feature: SHARED.DATA, by: ai}
+  - {path: "android-components/components/ui/**", feature: SHARED.UI, by: ai}
+  - {path: "android-components/components/ui/tabcounter/**", feature: TABS.TRAY, by: ai}
+
+  - {path: "android-components/components/browser/domains/**", feature: SRCH.URL, by: ai}
+  - {path: "android-components/components/browser/engine-gecko/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/browser/engine-system/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/browser/errorpages/**", feature: BRW.ERR, by: ai}
+  - {path: "android-components/components/browser/icons/**", feature: APP.SVC, by: ai}
+  - {path: "android-components/components/browser/menu/**", feature: UI.MENU, by: ai}
+  - {path: "android-components/components/browser/menu2/**", feature: UI.MENU, by: ai}
+  - {path: "android-components/components/browser/session-storage/**", feature: APP.SESS, by: ai}
+  - {path: "android-components/components/browser/state/**", feature: SHARED.ARCH, by: ai}
+  - {path: "android-components/components/browser/storage-sync/**", feature: SHARED.DATA, by: ai}
+  - {path: "android-components/components/browser/tabstray/**", feature: TABS.TRAY, by: ai}
+  - {path: "android-components/components/browser/thumbnails/**", feature: TABS.TRAY, by: ai}
+  - {path: "android-components/components/browser/toolbar/**", feature: UI.TB, by: ai}
+
+  - {path: "android-components/components/compose/awesomebar/**", feature: SRCH.SUG, by: ai}
+  - {path: "android-components/components/compose/base/**", feature: SHARED.UI, by: ai}
+  - {path: "android-components/components/compose/browser-toolbar/**", feature: UI.TB, by: ai}
+  - {path: "android-components/components/compose/cfr/**", feature: ENG.CFR, by: ai}
+  - {path: "android-components/components/compose/engine/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/compose/menu/**", feature: UI.MENU, by: ai}
+  - {path: "android-components/components/compose/tabstray/**", feature: TABS.TRAY, by: ai}
+
+  - {path: "android-components/components/feature/accounts-push/**", feature: ACCT.SEND, by: ai}
+  - {path: "android-components/components/feature/accounts/**", feature: ACCT.SIGN, by: ai}
+  - {path: "android-components/components/feature/addons/**", feature: EXT.ADDON, by: ai}
+  - {path: "android-components/components/feature/app-links/**", feature: BRW.LINKS, by: ai}
+  - {path: "android-components/components/feature/autofill/**", feature: CRED, by: ai}
+  - {path: "android-components/components/feature/awesomebar/**", feature: SRCH.SUG, by: ai}
+  - {path: "android-components/components/feature/contextmenu/**", feature: BRW.CTX, by: ai}
+  - {path: "android-components/components/feature/customtabs/**", feature: OS.CTAB, by: ai}
+  - {path: "android-components/components/feature/downloads/**", feature: LIB.DL, by: ai}
+  - {path: "android-components/components/feature/findinpage/**", feature: BRW.FIND, by: ai}
+  - {path: "android-components/components/feature/fxsuggest/**", feature: SRCH.SUG, by: ai}
+  - {path: "android-components/components/feature/importer/**", feature: LIB.BMK, by: ai}
+  - {path: "android-components/components/feature/intent/**", feature: SHARED.SHELL, by: ai}
+  - {path: "android-components/components/feature/ipprotection/**", feature: PROT.VPN, by: ai}
+  - {path: "android-components/components/feature/listentopage/**", feature: BRW.READ, by: ai}
+  - {path: "android-components/components/feature/logins/**", feature: CRED.PW, by: ai}
+  - {path: "android-components/components/feature/password-importer/**", feature: CRED.PW, by: ai}
+  - {path: "android-components/components/feature/media/**", feature: BRW.MEDIA, by: ai}
+  - {path: "android-components/components/feature/privatemode/**", feature: PRIV.MODE, by: ai}
+  - {path: "android-components/components/feature/prompts/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/feature/protection-dashboard/**", feature: PROT.DASH, by: ai}
+  - {path: "android-components/components/feature/push/**", feature: APP.SVC, by: ai}
+  - {path: "android-components/components/feature/pwa/**", feature: OS.CTAB, by: ai}
+  - {path: "android-components/components/feature/qr/**", feature: SRCH.VIS, by: ai}
+  - {path: "android-components/components/feature/readerview/**", feature: BRW.READ, by: ai}
+  - {path: "android-components/components/feature/recentlyclosed/**", feature: TABS.CLOSED, by: ai}
+  - {path: "android-components/components/feature/screendetection/**", feature: SHARED.SHELL, by: ai}
+  - {path: "android-components/components/feature/search/**", feature: SRCH.ENG, by: ai}
+  - {path: "android-components/components/feature/serviceworker/**", feature: SHARED.WEB, by: ai}
+  - {path: "android-components/components/feature/session/**", feature: BRW.NAV, by: ai}
+  - {path: "android-components/components/feature/share/**", feature: OS.SHARE, by: ai}
+  - {path: "android-components/components/feature/sitepermissions/**", feature: PROT.PERM, by: ai}
+  - {path: "android-components/components/feature/summarize/**", feature: AI.SUM, by: ai}
+  - {path: "android-components/components/feature/syncedtabs/**", feature: ACCT.SEND, by: ai}
+  - {path: "android-components/components/feature/tab-collections/**", feature: TABS.GRP, by: ai}
+  - {path: "android-components/components/feature/tabgroups-storage/**", feature: TABS.GRP, by: ai}
+  - {path: "android-components/components/feature/tabdata-coordinator/**", feature: TABS.TRAY, by: ai}
+  - {path: "android-components/components/feature/tabs/**", feature: TABS.TRAY, by: ai}
+  - {path: "android-components/components/feature/toolbar/**", feature: UI.TB, by: ai}
+  - {path: "android-components/components/feature/top-sites/**", feature: HOME.SC, by: ai}
+  - {path: "android-components/components/feature/webauthn/**", feature: CRED.PASSKEY, by: ai}
+  - {path: "android-components/components/feature/webcompat-reporter/**", feature: BRW.WEBC, by: ai}
+  - {path: "android-components/components/feature/webcompat/**", feature: BRW.WEBC, by: ai}
+  - {path: "android-components/components/feature/webnotifications/**", feature: ENG.NOTIF, by: ai}
+
+  - {path: "android-components/components/lib/accelerometer-sensormanager/**", feature: AI.SUM, by: ai}   # shake-to-summarize
+  - {path: "android-components/components/lib/shake/**", feature: AI.SUM, by: ai}
+  - {path: "android-components/components/lib/ai-controls/**", feature: AI.CTRL, by: ai}
+  - {path: "android-components/components/lib/llm-*/**", feature: AI, by: ai}
+  - {path: "android-components/components/lib/auth/**", feature: CRED, by: ai}
+  - {path: "android-components/components/lib/bookmark-parser-jsoup/**", feature: LIB.BMK, by: ai}
+  - {path: "android-components/components/lib/bookmarks-file/**", feature: LIB.BMK, by: ai}
+  - {path: "android-components/components/lib/password-parser-csv/**", feature: CRED.PW, by: ai}
+  - {path: "android-components/components/lib/passwords-file/**", feature: CRED.PW, by: ai}
+  - {path: "android-components/components/lib/crash/**", feature: APP.CRASH, by: ai}
+  - {path: "android-components/components/lib/crash-sentry/**", feature: APP.CRASH, by: ai}
+  - {path: "android-components/components/lib/push-firebase/**", feature: APP.SVC, by: ai}
+  - {path: "android-components/components/lib/jexl/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "android-components/components/lib/state/**", feature: SHARED.ARCH, by: ai}
+  - {path: "android-components/components/lib/integrity-googleplay/**", feature: SHARED.ARCH, by: ai}
+  - {path: "android-components/components/lib/dataprotect/**", feature: SHARED.DATA, by: ai}
+  - {path: "android-components/components/lib/fetch-*/**", feature: SHARED.DATA, by: ai}
+  - {path: "android-components/components/lib/publicsuffixlist/**", feature: SHARED.DATA, by: ai}
+
+  - {path: "android-components/components/service/digitalassetlinks/**", feature: BRW.LINKS, by: ai}
+  - {path: "android-components/components/service/firefox-accounts/**", feature: ACCT.SIGN, by: ai}
+  - {path: "android-components/components/service/firefox-relay/**", feature: CRED.MASK, by: ai}
+  - {path: "android-components/components/service/glean/**", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "android-components/components/service/location/**", feature: SHARED.DATA, by: ai}
+  - {path: "android-components/components/service/mars/**", feature: HOME.SC, by: ai}
+  - {path: "android-components/components/service/merino-manifest/**", feature: SRCH.SUG, by: ai}
+  - {path: "android-components/components/service/merino-weather/**", feature: HOME.SET, by: ai}
+  - {path: "android-components/components/service/nimbus/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "android-components/components/service/pocket/**", feature: HOME.STORY, by: ai}
+  - {path: "android-components/components/service/sync-autofill/**", feature: ACCT.SYNC, by: ai}
+  - {path: "android-components/components/service/sync-logins/**", feature: ACCT.SYNC, by: ai}
+
+  # Added from the drift report on 2026-11-05 (mozilla-firefox/firefox cac25a6fa321). Review, then delete `by: drift`.
+  - {path: "android-components/components/compose/draggable/**", feature: TABS.TRAY, by: drift}    # only used by fenix/tabstray (drag to reorder)
+  - {path: "android-components/components/lib/installation-blockstore/**", feature: APP.UPD, by: drift}    # Block Store install history, used by metrics/InstallationWorker
