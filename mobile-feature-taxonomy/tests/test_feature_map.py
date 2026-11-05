@@ -17,6 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 
 import drift  # noqa: E402
+import taxonomy  # noqa: E402
 import feature_map  # noqa: E402
 from feature_map import FeatureMap, Rule  # noqa: E402
 
@@ -295,6 +296,29 @@ class DriftTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(feature_map.main(["ios", "--repo", self.r.repo, "--map", self.r.map_path,
                                                "drift", "--fail-on-drift", "--format", "json"]), 0)
+
+
+class TaxonomyListTests(unittest.TestCase):
+    def test_features_md_is_in_sync_with_features_yml(self):
+        with open(taxonomy.FEATURES_MD) as f:
+            current = f.read()
+        self.assertEqual(current, taxonomy.to_markdown(taxonomy.load()),
+                         "FEATURES.md is out of date. Run: uv run mobile-feature-taxonomy/taxonomy.py")
+
+    def test_csv_has_every_feature_once(self):
+        import csv
+        data = taxonomy.load()
+        rows = list(csv.DictReader(io.StringIO(taxonomy.to_csv(data))))
+        self.assertEqual([r["l2_id"] for r in rows], [f["id"] for f in data["features"]])
+        self.assertTrue(all(r["l2_id"].split(".")[0] == r["l1_id"] for r in rows))
+
+    def test_platform_flags_and_anchor(self):
+        data = {"features": [{"id": "A.X", "area": "Area & more", "name": "x", "ios": False},
+                             {"id": "A.Y", "area": "Area & more", "name": "y", "android": False}]}
+        rows = list(taxonomy.rows(data))
+        self.assertEqual([(r["ios"], r["android"]) for r in rows], [("no", "yes"), ("yes", "no")])
+        self.assertEqual(taxonomy.anchor("A", "Area & more"), "a-area--more")
+        self.assertEqual(taxonomy.anchor("LIB", "Library (saved content)"), "lib-library-saved-content")
 
 
 if __name__ == "__main__":

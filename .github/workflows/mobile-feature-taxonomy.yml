@@ -1,6 +1,7 @@
 # Mobile feature taxonomy: keeps the iOS and Android feature maps aligned with the code.
 #
-#   - On PRs and pushes touching mobile-feature-taxonomy/: unit tests only.
+#   - On PRs and pushes touching mobile-feature-taxonomy/: unit tests only, including a check that
+#     FEATURES.md was regenerated after any change to features.yml.
 #   - Weekly and on demand: unit tests, then a drift report for both platforms in the job summary and as an
 #     artifact. The job fails when the code has moved away from the maps, so drift is visible.
 #   - On demand with `open_pr`: also runs `drift --apply` and opens a PR with the confident
@@ -50,6 +51,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -r mobile-feature-taxonomy/requirements.txt
+      - name: FEATURES.md matches features.yml
+        run: python mobile-feature-taxonomy/taxonomy.py --check
       - run: python -m unittest discover -s mobile-feature-taxonomy/tests -p 'test_*.py' -v
 
   drift:

@@ -11,7 +11,8 @@ UI tests, TestRail manual and automated cases, and escaped bugs. That only works
 same list of features and the same rule for "which feature does this code belong to". This folder holds that:
 
 - **`features.yml`**: the list of features, with stable IDs grouped into areas (e.g. `TABS.TRAY` in "Tabs",
-  `CRED.ADDR` in "Passwords & autofill"), shared by both platforms.
+  `CRED.ADDR` in "Passwords & autofill"), shared by both platforms. **[FEATURES.md](FEATURES.md)** shows the same
+  list as readable L1/L2 tables.
 - **`ios/feature-map.yml`, `android/feature-map.yml`**: path rules that assign every source file in firefox-ios and
   in Fenix + android-components to exactly one of those features.
 - **Tooling** to check the maps, list each file's feature and lines of code per feature, and detect when the code
@@ -28,6 +29,8 @@ later the TestRail section → feature mapping.
 ```
 mobile-feature-taxonomy/
 ├── features.yml            # the taxonomy: feature IDs (BRW.NAV, TABS.TRAY…), SHARED.* buckets, EXCLUDED
+├── FEATURES.md             # generated from features.yml: readable L1/L2 list
+├── taxonomy.py             # generates FEATURES.md, checks it's in sync, exports CSV
 ├── ios/
 │   ├── feature-map.yml     # rules: firefox-ios source path → feature ID
 │   └── snapshot.csv        # every file and its feature at the last accepted update
@@ -134,6 +137,13 @@ Each map's header sets the platform details: `repo`, `base` (the directory rule 
 `features.yml` is shared by both platforms and by everything that reports per feature. IDs must stay stable: rename
 `name`, never `id`. Adding a feature is safe. Removing or splitting one means updating both maps in the same PR; the
 unit tests fail if a map uses an ID that no longer exists.
+
+After any change, regenerate the readable list in the same PR. CI fails if `FEATURES.md` doesn't match:
+
+```bash
+uv run taxonomy.py           # rewrites FEATURES.md
+uv run taxonomy.py --csv     # the L1/L2 list as CSV, e.g. to import into a spreadsheet
+```
 
 ## Review status
 
