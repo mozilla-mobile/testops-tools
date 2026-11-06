@@ -16,3 +16,5 @@ docker-compose.*
 backup-tools/*.csv
 backup-tools/backup*.json
 backup-tools/__pycache__/
+
+mobile-testing-assessment-charts/site/data/

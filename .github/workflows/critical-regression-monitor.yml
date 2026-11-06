@@ -1,0 +1,109 @@
+name: TestRail Critical Regression & Smoke suite changes
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+      timezone: 'Europe/Madrid'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: critical-regression-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_IOS_TESTS_INSIGHTS }}
+
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Compare, notify and process baselines
+        shell: bash
+        env:
+          TESTRAIL_HOST: ${{ vars.TESTRAIL_HOST || secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CRITICAL_REGRESSION }}
+        run: |
+          set -euo pipefail
+          GCS_PREFIX='gs://testrail-regression-baselines/critical-regression-monitor'
+          SCRIPT='testrail/critical-regression-monitor/monitor.py'
+
+          python3 "$SCRIPT" --mode notify --gcs-prefix "$GCS_PREFIX"
+
+  notify-failure:
+    needs: monitor
+    if: ${{ always() && needs.monitor.result == 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Notify workflow failure
+        shell: bash
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CRITICAL_REGRESSION }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          from urllib.error import HTTPError, URLError
+          from urllib.parse import urlsplit
+          from urllib.request import Request, HTTPRedirectHandler, build_opener
+
+          class NoRedirect(HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  return None
+
+          webhook = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
+          try:
+              parsed = urlsplit(webhook)
+              valid = (parsed.scheme == "https" and parsed.netloc == "hooks.slack.com"
+                       and parsed.path.startswith("/services/")
+                       and not parsed.query and not parsed.fragment)
+          except ValueError:
+              valid = False
+          if not valid:
+              sys.exit("::error::Failure alert unavailable: Slack webhook missing or invalid.")
+
+          text = (
+              "*Critical Regression — workflow failed*\n"
+              "The check, report delivery or baseline update did not complete successfully.\n"
+              "Some baselines may already have been updated. Review the processing result "
+              "and workflow logs before retrying.\n"
+              f"Attempt: {os.environ['RUN_ATTEMPT']}\n"
+              f"<{os.environ['RUN_URL']}|Open GitHub Actions run>"
+          )
+          request = Request(
+              webhook,
+              data=json.dumps({"text": text, "unfurl_links": False, "unfurl_media": False}).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          try:
+              with build_opener(NoRedirect()).open(request, timeout=30) as response:
+                  if response.read().strip() != b"ok":
+                      sys.exit("::error::Slack did not confirm the failure alert.")
+          except HTTPError as exc:
+              sys.exit(f"::error::Slack failure alert returned HTTP {exc.code}.")
+          except (URLError, TimeoutError, OSError):
+              sys.exit("::error::Slack failure alert delivery could not be confirmed.")
+          print("Workflow failure alert delivered.")
+          PY

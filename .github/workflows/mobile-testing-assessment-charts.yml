@@ -1,0 +1,98 @@
+# Testing Assessment charts: count tests in the iOS and Android code, pull
+# TestRail automation status, deploy the charts to Quick.
+#
+# Based on tr-critical-dashboard.yml (itself based on 'quick gha'):
+#   - Runs weekly and manually, NOT on every push to main.
+#   - Deploys only mobile-testing-assessment-charts/site, under a fixed site name.
+#   - Every run rebuilds all the data, so there is no history to restore and
+#     --mirror is safe.
+#
+# The data files are only written to the site (staff-only behind IAP), never
+# committed to this repo, which is public. The scripts log totals only.
+#
+# Requires: the org-level Actions variable GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER
+# and this repo's entry in noninternal_gha_repos in Quick's tf/<env>/main.tf
+# (already there for tr-critical).
+#
+# Set a repository Actions variable QUICK_ENV=stage to deploy to nonprod.
+name: Testing Assessment charts
+
+on:
+  schedule:
+    # Mondays 12:00 UTC. Cron is always UTC.
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Overwrite even if the site was last deployed by someone else
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: mobile-testing-assessment-charts
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DIR: mobile-testing-assessment-charts/site
+      SITE: mte-mobile-testing-assessment-charts
+      QUICK_DEPLOYED_BY: github:${{ github.repository }}
+      # Quick project: nonprod only when the QUICK_ENV variable is 'stage'; prod otherwise.
+      QUICK_PROJECT: ${{ vars.QUICK_ENV == 'stage' && 'moz-fx-quick-nonprod' || 'moz-fx-quick-prod' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # Only the test folders are needed, so both clones are shallow and sparse.
+      - name: Clone firefox-ios tests
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/mozilla-mobile/firefox-ios "$RUNNER_TEMP/firefox-ios"
+          git -C "$RUNNER_TEMP/firefox-ios" sparse-checkout set \
+            firefox-ios/firefox-ios-tests/Tests BrowserKit/Tests
+
+      - name: Clone Fenix tests
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/mozilla-firefox/firefox "$RUNNER_TEMP/firefox"
+          git -C "$RUNNER_TEMP/firefox" sparse-checkout set \
+            mobile/android/fenix/app/src/test mobile/android/fenix/app/src/androidTest
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Count tests in the code
+        working-directory: mobile-testing-assessment-charts
+        run: |
+          python collect_code_tests.py --ios "$RUNNER_TEMP/firefox-ios" \
+            --android "$RUNNER_TEMP/firefox" --out site/data/code.json
+
+      - name: Pull TestRail automation status
+        working-directory: mobile-testing-assessment-charts
+        env:
+          TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+        run: |
+          pip install requests
+          python collect_testrail.py --out site/data/testrail.json
+
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: quick-gha-deploy@${{ env.QUICK_PROJECT }}.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - name: Deploy to Quick
+        run: |
+          gcloud storage cp "gs://${QUICK_PROJECT}-cli/quick-linux-amd64" "$RUNNER_TEMP/quick"
+          chmod +x "$RUNNER_TEMP/quick"
+          "$RUNNER_TEMP/quick" deploy "$DIR" "$SITE" --mirror ${{ inputs.force && '--yes' || '' }}
+          echo "Deployed: https://${SITE}.quick.mozilla.cloud/" >> "$GITHUB_STEP_SUMMARY"
