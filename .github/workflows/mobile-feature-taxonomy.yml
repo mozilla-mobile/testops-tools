@@ -1,0 +1,137 @@
+# Mobile feature taxonomy: keeps the iOS and Android feature maps aligned with the code.
+#
+#   - On PRs and pushes touching mobile-feature-taxonomy/: unit tests only, including a check that
+#     FEATURES.md was regenerated after any change to features.yml.
+#   - Weekly and on demand: unit tests, then a drift report for both platforms in the job summary and as an
+#     artifact. The job fails only when something needs a decision (`check` fails: unmapped code, rules that
+#     match nothing...). New or moved files that existing rules already cover are listed for review, not failed:
+#     that happens almost every week.
+#   - On demand with `open_pr`: also runs `drift --apply` and opens a PR with the confident
+#     suggestions (marked `by: drift`) and refreshed snapshots, for a person to review.
+#     Needs "Allow GitHub Actions to create and approve pull requests" in the repo settings.
+#
+# Only public source paths are read and written. Nothing from TestRail is involved.
+name: Mobile feature taxonomy
+
+on:
+  pull_request:
+    paths:
+      - "mobile-feature-taxonomy/**"
+      - ".github/workflows/mobile-feature-taxonomy.yml"
+  push:
+    branches: [main]
+    paths:
+      - "mobile-feature-taxonomy/**"
+  schedule:
+    # Mondays 06:00 UTC, ahead of the Testing Assessment charts run (12:00 UTC).
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      open_pr:
+        description: Apply confident suggestions and open a PR
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-feature-taxonomy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -r mobile-feature-taxonomy/requirements.txt
+      - name: FEATURES.md matches features.yml
+        run: python mobile-feature-taxonomy/taxonomy.py --check
+      - run: python -m unittest discover -s mobile-feature-taxonomy/tests -p 'test_*.py' -v
+
+  drift:
+    name: Drift against firefox-ios and firefox main
+    needs: test
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      DIR: mobile-feature-taxonomy
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r "$DIR/requirements.txt"
+
+      # Only source folders are needed, so both clones are shallow and sparse.
+      - name: Clone firefox-ios sources
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/mozilla-mobile/firefox-ios "$RUNNER_TEMP/firefox-ios"
+          git -C "$RUNNER_TEMP/firefox-ios" sparse-checkout set firefox-ios BrowserKit/Sources
+
+      - name: Clone Firefox for Android sources
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/mozilla-firefox/firefox "$RUNNER_TEMP/firefox"
+          git -C "$RUNNER_TEMP/firefox" sparse-checkout set \
+            mobile/android/fenix/app/src/main mobile/android/android-components/components
+
+      - name: Drift report
+        id: drift
+        run: |
+          status=0
+          apply=""
+          if [ "${{ inputs.open_pr }}" = "true" ]; then apply="--apply"; fi
+          for p in ios android; do
+            repo="$RUNNER_TEMP/firefox-ios"; [ "$p" = android ] && repo="$RUNNER_TEMP/firefox"
+            python "$DIR/feature_map.py" "$p" --repo "$repo" drift $apply -o "drift-$p.md"
+            cat "drift-$p.md" >> "$GITHUB_STEP_SUMMARY"
+            echo >> "$GITHUB_STEP_SUMMARY"
+            # After --apply, only what is still undecided should fail the run.
+            python "$DIR/feature_map.py" "$p" --repo "$repo" check > /dev/null || status=1
+          done
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: feature-map-drift
+          path: drift-*.md
+
+      - name: Open PR with suggestions
+        if: inputs.open_pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- "$DIR"; then
+            echo "No changes to propose; see the report." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="feature-map-drift/$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add "$DIR"
+          git commit -m "Update mobile feature maps from drift report"
+          git push --force origin "$branch"
+          { echo "Automated drift update. Review each \`by: drift\` rule and the snapshot changes, then delete the marker."
+            echo; cat drift-ios.md; echo; cat drift-android.md; } > body.md
+          gh pr create --head "$branch" --title "Update mobile feature maps ($(date -u +%Y-%m-%d))" --body-file body.md
+
+      - name: Fail when something needs a decision
+        if: steps.drift.outputs.status == '1'
+        run: |
+          echo "::error::Code that no rule covers, or rules that match nothing. See the job summary."
+          exit 1

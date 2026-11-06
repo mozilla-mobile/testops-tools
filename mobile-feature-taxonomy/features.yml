@@ -1,0 +1,274 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Feature IDs used by ios/feature-map.yml and android/feature-map.yml, and by every report
+# that groups by feature. IDs form the Firefox Mobile feature taxonomy (iOS and Android)
+# and must stay stable; rename `name`, never `id`. Whether a feature exists on a platform
+# isn't recorded here: it's derived from whether that platform's feature map assigns code to it.
+#
+# Imported from firefox-ios branch feature-coverage-map, commit a0be3389bf.
+
+features:
+  - id: BRW.NAV
+    area: "Browsing & page content"
+    name: "Navigation & page loading"
+  - id: BRW.FIND
+    area: "Browsing & page content"
+    name: "Find in page"
+  - id: BRW.ZOOM
+    area: "Browsing & page content"
+    name: "Zoom, panning & desktop site"
+  - id: BRW.READ
+    area: "Browsing & page content"
+    name: "Reader mode"
+  - id: BRW.PDF
+    area: "Browsing & page content"
+    name: "PDFs, documents & printing"
+  - id: BRW.CTX
+    area: "Browsing & page content"
+    name: "Context menus, text selection & input"
+  - id: BRW.MEDIA
+    area: "Browsing & page content"
+    name: "Media playback"
+  - id: BRW.ERR
+    area: "Browsing & page content"
+    name: "Error pages & offline"
+  - id: BRW.LINKS
+    area: "Browsing & page content"
+    name: "External links & app links"
+  - id: BRW.WEBC
+    area: "Browsing & page content"
+    name: "Web compatibility & broken-site reporting"
+  - id: SRCH.URL
+    area: "Address bar & search"
+    name: "URL entry, focus & autocomplete"
+  - id: SRCH.ENG
+    area: "Address bar & search"
+    name: "Search engines & search settings"
+  - id: SRCH.SUG
+    area: "Address bar & search"
+    name: "Search suggestions & Firefox Suggest"
+  - id: SRCH.REC
+    area: "Address bar & search"
+    name: "Recent & trending searches"
+  - id: SRCH.VIS
+    area: "Address bar & search"
+    name: "Visual & voice search"
+  - id: TABS.TRAY
+    area: "Tabs & windows"
+    name: "Tab tray & tab management"
+  - id: TABS.STRIP
+    area: "Tabs & windows"
+    name: "Tab strip (tablet / top tabs)"
+  - id: TABS.GRP
+    area: "Tabs & windows"
+    name: "Tab groups & collections"
+  - id: TABS.CLOSED
+    area: "Tabs & windows"
+    name: "Recently closed & inactive tabs"
+  - id: TABS.WIN
+    area: "Tabs & windows"
+    name: "Multi-window & split view"
+  - id: HOME.SET
+    area: "Homepage & new tab"
+    name: "Homepage layout & settings"
+  - id: HOME.SC
+    area: "Homepage & new tab"
+    name: "Shortcuts & top sites"
+  - id: HOME.STORY
+    area: "Homepage & new tab"
+    name: "Stories & content recommendations"
+  - id: HOME.JBI
+    area: "Homepage & new tab"
+    name: "Jump back in & recent content"
+  - id: HOME.WALL
+    area: "Homepage & new tab"
+    name: "Wallpapers"
+  - id: LIB.BMK
+    area: "Library (saved content)"
+    name: "Bookmarks"
+  - id: LIB.HIST
+    area: "Library (saved content)"
+    name: "History"
+  - id: LIB.RL
+    area: "Library (saved content)"
+    name: "Reading list"
+  - id: LIB.DL
+    area: "Library (saved content)"
+    name: "Downloads"
+  - id: PRIV.MODE
+    area: "Private browsing"
+    name: "Private tabs & mode"
+  - id: PRIV.LOCK
+    area: "Private browsing"
+    name: "Private mode lock"
+  - id: PROT.ETP
+    area: "Privacy & security protections"
+    name: "Tracking protection & site trust panel"
+  - id: PROT.DASH
+    area: "Privacy & security protections"
+    name: "Privacy dashboard & tracker stats"
+  - id: PROT.ADB
+    area: "Privacy & security protections"
+    name: "Ad & cookie-banner blocking"
+  - id: PROT.HTTPS
+    area: "Privacy & security protections"
+    name: "HTTPS & connection security"
+  - id: PROT.PERM
+    area: "Privacy & security protections"
+    name: "Site permissions"
+  - id: PROT.CLEAR
+    area: "Privacy & security protections"
+    name: "Clear browsing data"
+  - id: PROT.VPN
+    area: "Privacy & security protections"
+    name: "VPN & IP protection"
+  - id: PROT.DATA
+    area: "Privacy & security protections"
+    name: "Data collection preferences"
+  - id: CRED.PW
+    area: "Passwords & autofill"
+    name: "Saved passwords"
+  - id: CRED.GEN
+    area: "Passwords & autofill"
+    name: "Password generator"
+  - id: CRED.PASSKEY
+    area: "Passwords & autofill"
+    name: "Passkeys & WebAuthn"
+  - id: CRED.ADDR
+    area: "Passwords & autofill"
+    name: "Address autofill"
+  - id: CRED.CC
+    area: "Passwords & autofill"
+    name: "Payment method autofill"
+  - id: CRED.MASK
+    area: "Passwords & autofill"
+    name: "Email masks (Relay)"
+  - id: ACCT.SIGN
+    area: "Accounts & sync"
+    name: "Sign-in & account management"
+  - id: ACCT.SYNC
+    area: "Accounts & sync"
+    name: "Data sync"
+  - id: ACCT.SEND
+    area: "Accounts & sync"
+    name: "Send tab & synced tabs"
+  - id: UI.TB
+    area: "App chrome: toolbar & menu"
+    name: "Toolbar & address bar layout"
+  - id: UI.MENU
+    area: "App chrome: toolbar & menu"
+    name: "Main menu"
+  - id: UI.GEST
+    area: "App chrome: toolbar & menu"
+    name: "Gestures & keyboard shortcuts"
+  - id: UI.TOAST
+    area: "App chrome: toolbar & menu"
+    name: "Toasts & snackbars"
+  - id: SET.FRAME
+    area: "Settings & personalization"
+    name: "Settings framework & search"
+  - id: SET.THEME
+    area: "Settings & personalization"
+    name: "Theme & appearance"
+  - id: SET.ICON
+    area: "Settings & personalization"
+    name: "App icon"
+  - id: SET.LANG
+    area: "Settings & personalization"
+    name: "Language & locale"
+  - id: ENG.ONB
+    area: "Onboarding, messaging & engagement"
+    name: "Onboarding & tours"
+  - id: ENG.TOU
+    area: "Onboarding, messaging & engagement"
+    name: "Terms of use consent"
+  - id: ENG.CFR
+    area: "Onboarding, messaging & engagement"
+    name: "Contextual hints & in-app messages"
+  - id: ENG.SURV
+    area: "Onboarding, messaging & engagement"
+    name: "Surveys & rating prompts"
+  - id: ENG.NOTIF
+    area: "Onboarding, messaging & engagement"
+    name: "Notifications"
+  - id: OS.SHARE
+    area: "OS integration"
+    name: "Share out (share sheet)"
+  - id: OS.EXT
+    area: "OS integration"
+    name: "Share into Firefox & extensions"
+  - id: OS.WID
+    area: "OS integration"
+    name: "Widgets & live activities"
+  - id: OS.DEEP
+    area: "OS integration"
+    name: "Deep links & URL schemes"
+  - id: OS.DEF
+    area: "OS integration"
+    name: "Default browser"
+  - id: OS.ASSIST
+    area: "OS integration"
+    name: "Assistants & launcher shortcuts"
+  - id: OS.CTAB
+    area: "OS integration"
+    name: "Custom tabs & web apps"
+  - id: TRANS.PAGE
+    area: "Translations"
+    name: "Page translation"
+  - id: TRANS.SET
+    area: "Translations"
+    name: "Translation settings & language models"
+  - id: AI.SUM
+    area: "AI features"
+    name: "Summarizer"
+  - id: AI.QA
+    area: "AI features"
+    name: "Quick answers & assistant"
+  - id: AI.CHAT
+    area: "AI features"
+    name: "Chatbot & smart window"
+  - id: AI.CTRL
+    area: "AI features"
+    name: "AI controls"
+  - id: EXT.ADDON
+    area: "Add-ons & extensions"
+    name: "Add-ons"
+  - id: APP.START
+    area: "App lifecycle & data"
+    name: "Launch & startup"
+  - id: APP.UPD
+    area: "App lifecycle & data"
+    name: "Install, update & migration"
+  - id: APP.SESS
+    area: "App lifecycle & data"
+    name: "Session restore & data loss"
+  - id: APP.CRASH
+    area: "App lifecycle & data"
+    name: "Crash reporting"
+  - id: APP.SVC
+    area: "App lifecycle & data"
+    name: "Background services & storage"
+
+# Code that serves many features. Attribute here rather than forcing it into one feature.
+shared:
+  - id: SHARED.SHELL
+    name: "Browser shell: app/scene lifecycle, browser view controller, coordinators, routing"
+  - id: SHARED.ARCH
+    name: "Architecture and utilities: Redux, dependency injection, extensions, helpers"
+  - id: SHARED.UI
+    name: "Shared UI: component library, theming infrastructure, generic views"
+  - id: SHARED.DATA
+    name: "Shared data layer: profile, storage infrastructure, networking"
+  - id: SHARED.WEB
+    name: "Web engine integration: web views, user scripts, internal schemes"
+  - id: SHARED.TELEMETRY
+    name: "Telemetry infrastructure"
+  - id: SHARED.EXPERIMENTS
+    name: "Nimbus, feature flags and remote configuration infrastructure"
+
+# Code that is not counted toward any feature or shared bucket.
+excluded:
+  - id: EXCLUDED
+    name: "Generated code, strings, third-party code and test support"
