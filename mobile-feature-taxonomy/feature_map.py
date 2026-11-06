@@ -204,14 +204,12 @@ class FeatureMap:
         return rule.feature if rule else "UNMAPPED"
 
     def problems(self):
-        """Returns a dict of problem lists: unknown_ids, disabled_ids, unmapped, ambiguous, dead_rules."""
-        out = {k: [] for k in ("unknown_ids", "disabled_ids", "unmapped", "ambiguous", "dead_rules")}
+        """Returns a dict of problem lists: unknown_ids, unmapped, ambiguous, dead_rules."""
+        out = {k: [] for k in ("unknown_ids", "unmapped", "ambiguous", "dead_rules")}
         for r in self.rules:
             for feature in [r.feature] + [f for _, f in r.symbols]:
                 if feature not in self.ids:
                     out["unknown_ids"].append((r, feature))
-                elif self.ids[feature].get(self.platform) is False:
-                    out["disabled_ids"].append((r, feature))
         used = set()
         for path in self.source_files():
             rule, error = self.resolve(path)
@@ -236,7 +234,6 @@ def cmd_check(fm, args):
     p = fm.problems()
     lines = []
     lines += [f"unknown feature {f} in rule {r.path}" for r, f in p["unknown_ids"]]
-    lines += [f"feature {f} is marked {fm.platform}: false but rule {r.path} uses it" for r, f in p["disabled_ids"]]
     lines += [f"unmapped: {path}" for path in p["unmapped"]]
     lines += [f"{err}: {path}" for path, err in p["ambiguous"]]
     lines += [f"rule matches no files: {r.path}" for r in p["dead_rules"]]
@@ -287,13 +284,16 @@ def cmd_drift(fm, args):
     if args.apply:
         changed = drift.apply(fm, report)
         print(f"{fm.map_path}: {changed} rule change(s) written, marked `by: drift`", file=sys.stderr)
+        if fm.map_path == os.path.join(HERE, fm.platform, "feature-map.yml"):
+            import taxonomy   # which features each platform has comes from the maps, so keep FEATURES.md current
+            taxonomy.main([])
     out = drift.to_json(report) if args.format == "json" else drift.to_markdown(fm, report)
     if args.output:
         with open(args.output, "w") as f:
             f.write(out)
     else:
         sys.stdout.write(out)
-    return 1 if (args.fail_on_drift and report["has_drift"]) else 0
+    return 1 if (args.fail_on_action and report["needs_action"]) else 0
 
 
 COMMANDS = {"check": cmd_check, "files": cmd_files, "lines": cmd_lines, "drift": cmd_drift}
@@ -314,7 +314,8 @@ def main(argv=None):
     d.add_argument("--output", "-o", help="write the report here instead of stdout")
     d.add_argument("--apply", action="store_true",
                    help="write confident suggestions into the map, marked `by: drift`, for review in a PR")
-    d.add_argument("--fail-on-drift", action="store_true", help="exit 1 if the map and the code disagree")
+    d.add_argument("--fail-on-action", action="store_true",
+                   help="exit 1 if something needs a decision (check fails); changes that only need review don't fail")
     args = parser.parse_args(argv)
     fm = FeatureMap(args.platform, args.repo, map_path=args.map)
     return COMMANDS[args.command](fm, args)

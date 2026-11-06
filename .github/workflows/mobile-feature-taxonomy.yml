@@ -3,7 +3,9 @@
 #   - On PRs and pushes touching mobile-feature-taxonomy/: unit tests only, including a check that
 #     FEATURES.md was regenerated after any change to features.yml.
 #   - Weekly and on demand: unit tests, then a drift report for both platforms in the job summary and as an
-#     artifact. The job fails when the code has moved away from the maps, so drift is visible.
+#     artifact. The job fails only when something needs a decision (`check` fails: unmapped code, rules that
+#     match nothing...). New or moved files that existing rules already cover are listed for review, not failed:
+#     that happens almost every week.
 #   - On demand with `open_pr`: also runs `drift --apply` and opens a PR with the confident
 #     suggestions (marked `by: drift`) and refreshed snapshots, for a person to review.
 #     Needs "Allow GitHub Actions to create and approve pull requests" in the repo settings.
@@ -95,9 +97,11 @@ jobs:
           if [ "${{ inputs.open_pr }}" = "true" ]; then apply="--apply"; fi
           for p in ios android; do
             repo="$RUNNER_TEMP/firefox-ios"; [ "$p" = android ] && repo="$RUNNER_TEMP/firefox"
-            python "$DIR/feature_map.py" "$p" --repo "$repo" drift $apply --fail-on-drift -o "drift-$p.md" || status=1
+            python "$DIR/feature_map.py" "$p" --repo "$repo" drift $apply -o "drift-$p.md"
             cat "drift-$p.md" >> "$GITHUB_STEP_SUMMARY"
             echo >> "$GITHUB_STEP_SUMMARY"
+            # After --apply, only what is still undecided should fail the run.
+            python "$DIR/feature_map.py" "$p" --repo "$repo" check > /dev/null || status=1
           done
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
@@ -107,12 +111,12 @@ jobs:
           path: drift-*.md
 
       - name: Open PR with suggestions
-        if: inputs.open_pr && steps.drift.outputs.status == '1'
+        if: inputs.open_pr
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if git diff --quiet -- "$DIR"; then
-            echo "Nothing confident enough to apply; see the report." >> "$GITHUB_STEP_SUMMARY"
+            echo "No changes to propose; see the report." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           branch="feature-map-drift/$(date -u +%Y-%m-%d)"
@@ -126,8 +130,8 @@ jobs:
             echo; cat drift-ios.md; echo; cat drift-android.md; } > body.md
           gh pr create --head "$branch" --title "Update mobile feature maps ($(date -u +%Y-%m-%d))" --body-file body.md
 
-      - name: Fail when the maps have drifted
+      - name: Fail when something needs a decision
         if: steps.drift.outputs.status == '1'
         run: |
-          echo "::error::The code has moved away from the feature maps. See the job summary."
+          echo "::error::Code that no rule covers, or rules that match nothing. See the job summary."
           exit 1

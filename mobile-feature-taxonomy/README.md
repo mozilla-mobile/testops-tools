@@ -66,7 +66,8 @@ uv run feature_map.py ios --repo ~/git/firefox-ios drift    # Markdown report: w
 
 The code changes every day; the maps only stay useful if drift is caught and fixed. The
 [workflow](../.github/workflows/mobile-feature-taxonomy.yml) runs `drift` for both platforms against today's `main`
-every Monday (and on demand), puts the report in the job summary, and fails when the code has moved away from a map.
+every Monday (and on demand) and puts the report in the job summary. It only fails when something needs a decision;
+changes that existing rules already cover are listed for review.
 PRs in this repo only run the unit tests. Drift only reads file paths, so it needs no build and no test run.
 
 `drift` reports two kinds of difference:
@@ -80,7 +81,7 @@ PRs in this repo only run the unit tests. Drift only reads file paths, so it nee
        feature's name and the paths already mapped to it.
    - *Rules that match nothing*: the code moved or was deleted. For exact paths it looks for the same file name
      elsewhere ("probably moved to…").
-   - *Ambiguous files*, and *unknown feature IDs* or IDs marked `ios: false` / `android: false` in `features.yml`.
+   - *Ambiguous files*, and *unknown feature IDs*.
 2. **Review** (`check` passes, but compared to `snapshot.csv`):
    - new files that an existing glob picked up silently (is that glob still right for them?)
    - moved files, and especially moved files whose feature changed
@@ -138,7 +139,9 @@ Each map's header sets the platform details: `repo`, `base` (the directory rule 
 `name`, never `id`. Adding a feature is safe. Removing or splitting one means updating both maps in the same PR; the
 unit tests fail if a map uses an ID that no longer exists.
 
-After any change, regenerate the readable list in the same PR. CI fails if `FEATURES.md` doesn't match:
+Whether a feature exists on iOS or Android isn't set by hand: `FEATURES.md` shows a check mark when that platform's map
+assigns code to the feature. After changing `features.yml` or a map by hand, regenerate the list in the same PR
+(`drift --apply` does it for you). CI fails if `FEATURES.md` doesn't match:
 
 ```bash
 uv run taxonomy.py           # rewrites FEATURES.md

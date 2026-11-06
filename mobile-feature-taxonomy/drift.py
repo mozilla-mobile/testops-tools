@@ -127,7 +127,7 @@ class Suggester:
         scores = collections.Counter()
         for feature, toks in self.feature_tokens.items():
             # Names only hint at product features; shared buckets come from the neighbour signal.
-            if feature.startswith(("SHARED", "EXCLUDED")) or self.fm.ids.get(feature, {}).get(self.fm.platform) is False:
+            if feature.startswith(("SHARED", "EXCLUDED")):
                 continue
             hit = mine & toks
             if hit:
@@ -184,23 +184,8 @@ def group_unmapped(fm, unmapped, resolved):
 # ---- report --------------------------------------------------------------------
 
 
-def build_report(fm):
-    problems = fm.problems()
-    files = fm.source_files()
-    ambiguous_paths = {p for p, _ in problems["ambiguous"]}
-    resolved = {p: ("AMBIGUOUS" if p in ambiguous_paths else fm.feature_of(p)) for p in files}
-    suggester = Suggester(fm, resolved)
-
-    unmapped = []
-    for rule_path, group in group_unmapped(fm, problems["unmapped"], resolved).items():
-        directory = rule_path[:-3] if rule_path.endswith("/**") else os.path.dirname(rule_path)
-        # Match on what is new (the directory's own name and its file names), not on the parent path,
-        # which the neighbour signal already covers.
-        own_name = os.path.basename(directory) if rule_path.endswith("/**") else ""
-        name_text = " ".join([own_name] + [os.path.splitext(os.path.basename(p))[0] for p in group])
-        s = suggester.suggest(directory, name_text)
-        unmapped.append(dict(rule=rule_path, files=group, lines=sum(fm.count_lines(p) for p in group), **s))
-
+def dead_rules(fm, problems, files):
+    """Rules that match nothing, with a guess at where an exact path moved."""
     by_basename = collections.defaultdict(list)
     for p in files:
         by_basename[os.path.basename(p)].append(p)
@@ -218,6 +203,30 @@ def build_report(fm):
             last = next((s for s in reversed(r.path.split("/")) if s and not any(c in s for c in "*?[")), "")
             entry["candidates"] = sorted({d for p in files for d in ancestors(p) if d.endswith("/" + last)})[:5]
         dead.append(entry)
+    return dead
+
+
+def build_report(fm):
+    problems = fm.problems()
+    files = fm.source_files()
+    ambiguous_paths = {p for p, _ in problems["ambiguous"]}
+    resolved = {p: ("AMBIGUOUS" if p in ambiguous_paths else fm.feature_of(p)) for p in files}
+    suggester = Suggester(fm, resolved)
+
+    dead = dead_rules(fm, problems, files)
+    # A file that is the target of a moved exact rule is handled by updating that rule. Proposing a
+    # new rule for it too would give two equally specific rules for the same file (ambiguous).
+    moved_targets = {d["moved_to"] for d in dead if d["moved_to"]}
+    unmapped = []
+    still_unmapped = [p for p in problems["unmapped"] if p not in moved_targets]
+    for rule_path, group in group_unmapped(fm, still_unmapped, resolved).items():
+        directory = rule_path[:-3] if rule_path.endswith("/**") else os.path.dirname(rule_path)
+        # Match on what is new (the directory's own name and its file names), not on the parent path,
+        # which the neighbour signal already covers.
+        own_name = os.path.basename(directory) if rule_path.endswith("/**") else ""
+        name_text = " ".join([own_name] + [os.path.splitext(os.path.basename(p))[0] for p in group])
+        s = suggester.suggest(directory, name_text)
+        unmapped.append(dict(rule=rule_path, files=group, lines=sum(fm.count_lines(p) for p in group), **s))
 
     snapshot = read_snapshot(fm)
     review = None
@@ -255,13 +264,15 @@ def build_report(fm):
         "dead_rules": dead,
         "ambiguous": [{"path": p, "error": e} for p, e in problems["ambiguous"]],
         "unknown_ids": [{"rule": r.path, "feature": f} for r, f in problems["unknown_ids"]],
-        "disabled_ids": [{"rule": r.path, "feature": f} for r, f in problems["disabled_ids"]],
         "snapshot": "missing" if snapshot is None else "present",
         "review": review,
         "_resolved": resolved,
     }
-    action = unmapped or dead or report["ambiguous"] or report["unknown_ids"] or report["disabled_ids"]
-    report["has_drift"] = bool(action or (review and any(review.values())))
+    # needs_action: `check` fails until someone decides. needs_review: files changed since the snapshot;
+    # that happens almost every week and is not a failure, just something to confirm.
+    report["needs_action"] = bool(unmapped or dead or report["ambiguous"] or report["unknown_ids"])
+    report["needs_review"] = bool(review and any(review.values()))
+    report["has_drift"] = report["needs_action"] or report["needs_review"]
     return report
 
 
@@ -290,10 +301,10 @@ def to_markdown(fm, report):
            f"{report['unreviewed_rules']} not yet reviewed by a person.", ""]
 
     actions = (len(report["unmapped"]), len(report["dead_rules"]), len(report["ambiguous"]),
-               len(report["unknown_ids"]) + len(report["disabled_ids"]))
+               len(report["unknown_ids"]))
     out += ["| Needs a decision | Count |", "|---|---|",
             f"| Unmapped code (groups) | {actions[0]} |", f"| Rules that match nothing | {actions[1]} |",
-            f"| Ambiguous files | {actions[2]} |", f"| Unknown or disabled feature IDs | {actions[3]} |", ""]
+            f"| Ambiguous files | {actions[2]} |", f"| Unknown feature IDs | {actions[3]} |", ""]
     if not any(actions):
         out += ["`check` passes: every file maps to exactly one feature.", ""]
 
@@ -336,11 +347,9 @@ def to_markdown(fm, report):
         out += _capped(report["ambiguous"], lambda a: f"- `{a['path']}`: {a['error']}")
         out.append("")
 
-    if report["unknown_ids"] or report["disabled_ids"]:
-        out += ["## Unknown or disabled feature IDs", ""]
+    if report["unknown_ids"]:
+        out += ["## Unknown feature IDs", ""]
         out += [f"- `{u['rule']}` uses unknown `{u['feature']}`" for u in report["unknown_ids"]]
-        out += [f"- `{u['rule']}` uses `{u['feature']}`, marked `{fm.platform}: false` in features.yml"
-                for u in report["disabled_ids"]]
         out.append("")
 
     review = report["review"]

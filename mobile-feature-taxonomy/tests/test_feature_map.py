@@ -160,20 +160,17 @@ class CheckTests(unittest.TestCase):
         self.assertEqual(fm.feature_of("App/Library/Bookmarks/BookmarkCell.swift"), "LIB.BMK")
         self.assertEqual(fm.feature_of("App/Find/FindInPage.swift"), "BRW.FIND")
 
-    def test_ambiguous_dead_unknown_and_disabled(self):
+    def test_ambiguous_dead_and_unknown(self):
         with open(self.r.map_path, "a") as f:
             f.write('  - {path: "App/Library/*/BookmarksPanel.swift", feature: LIB.BMK}\n'
                     '  - {path: "App/Library/Bookmarks/*Panel.swift", feature: LIB.HIST}\n'
                     '  - {path: "App/Gone.swift", feature: BRW.NAV}\n'
-                    '  - {path: "App/Find/FindBar.swift", feature: NOPE.X}\n'
-                    '  - {path: "App/Find/Addon.swift", feature: EXT.ADDON}\n')
+                    '  - {path: "App/Find/FindBar.swift", feature: NOPE.X}\n')
         self.r.add("App/Find/FindBar.swift")
-        self.r.add("App/Find/Addon.swift")
         p = self.r.fm().problems()
         self.assertEqual([a[0] for a in p["ambiguous"]], ["App/Library/Bookmarks/BookmarksPanel.swift"])
         self.assertEqual([r.path for r in p["dead_rules"]], ["App/Gone.swift"])
         self.assertEqual([f for _, f in p["unknown_ids"]], ["NOPE.X"])
-        self.assertEqual([f for _, f in p["disabled_ids"]], ["EXT.ADDON"])   # ios: false in features.yml
 
     def test_cli_check_exit_code(self):
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
@@ -287,6 +284,42 @@ class DriftTests(unittest.TestCase):
         md = drift.to_markdown(self.r.fm(), report)
         self.assertIn("feature changed `LIB.BMK` → `LIB.HIST`", md)
 
+    def test_moved_into_directory_without_glob_is_not_proposed_twice(self):
+        # App/Find has only exact rules, so the moved file matches nothing there.
+        self.r.move("App/Library/History/HistoryPanel.swift", "App/Find/HistoryPanel.swift")
+        report = drift.build_report(self.r.fm())
+        (dead,) = report["dead_rules"]
+        self.assertEqual(dead["rule"], "App/Library/History/**")   # glob dead: nothing left in History/
+        # Now an exact rule whose file moves into App/Find:
+        self.r.move("App/Find/HistoryPanel.swift", "App/Library/History/HistoryPanel.swift")
+        with open(self.r.map_path, "a") as f:
+            f.write('  - {path: "App/Library/History/HistoryPanel.swift", feature: LIB.HIST}\n')
+        self.r.move("App/Library/History/HistoryPanel.swift", "App/Find/HistoryPanel.swift")
+        self.r.add("App/Library/History/Keep.swift")   # keep the History/** glob alive
+        report = drift.build_report(self.r.fm())
+        moved = [d for d in report["dead_rules"] if d["moved_to"]]
+        self.assertEqual([d["moved_to"] for d in moved], ["App/Find/HistoryPanel.swift"])
+        self.assertNotIn("App/Find/HistoryPanel.swift", [u["rule"] for u in report["unmapped"]])
+        drift.apply(self.r.fm(), report)
+        fm = self.r.fm()
+        self.assertEqual(sum(len(v) for v in fm.problems().values()), 0, fm.problems())
+        self.assertEqual(fm.feature_of("App/Find/HistoryPanel.swift"), "LIB.HIST")
+
+    def test_review_only_changes_do_not_need_action(self):
+        fm = self.r.fm()
+        drift.apply(fm, drift.build_report(fm))
+        self.r.add("App/Library/History/HistorySearch.swift")       # picked up by a glob: review only
+        report = drift.build_report(self.r.fm())
+        self.assertTrue(report["needs_review"])
+        self.assertFalse(report["needs_action"])
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(feature_map.main(["ios", "--repo", self.r.repo, "--map", self.r.map_path,
+                                               "drift", "--fail-on-action"]), 0)
+        self.r.add("App/Zzqx/New.swift")                             # unmapped: needs action
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(feature_map.main(["ios", "--repo", self.r.repo, "--map", self.r.map_path,
+                                               "drift", "--fail-on-action"]), 1)
+
     def test_no_drift_when_clean(self):
         fm = self.r.fm()
         drift.apply(fm, drift.build_report(fm))
@@ -295,7 +328,7 @@ class DriftTests(unittest.TestCase):
         self.assertIn("`check` passes", drift.to_markdown(self.r.fm(), report))
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(feature_map.main(["ios", "--repo", self.r.repo, "--map", self.r.map_path,
-                                               "drift", "--fail-on-drift", "--format", "json"]), 0)
+                                               "drift", "--fail-on-action", "--format", "json"]), 0)
 
 
 class TaxonomyListTests(unittest.TestCase):
@@ -312,11 +345,16 @@ class TaxonomyListTests(unittest.TestCase):
         self.assertEqual([r["l2_id"] for r in rows], [f["id"] for f in data["features"]])
         self.assertTrue(all(r["l2_id"].split(".")[0] == r["l1_id"] for r in rows))
 
-    def test_platform_flags_and_anchor(self):
-        data = {"features": [{"id": "A.X", "area": "Area & more", "name": "x", "ios": False},
-                             {"id": "A.Y", "area": "Area & more", "name": "y", "android": False}]}
-        rows = list(taxonomy.rows(data))
-        self.assertEqual([(r["ios"], r["android"]) for r in rows], [("no", "yes"), ("yes", "no")])
+    def test_platform_columns_come_from_the_maps(self):
+        data = {"features": [{"id": "A.X", "area": "Area & more", "name": "x"},
+                             {"id": "A.Y", "area": "Area & more", "name": "y"}]}
+        rows = list(taxonomy.rows(data, mapped={"ios": {"A.Y"}, "android": {"A.X", "A.Y"}}))
+        self.assertEqual([(r["ios"], r["android"]) for r in rows], [("no", "yes"), ("yes", "yes")])
+        self.assertIn("BRW.NAV", taxonomy.mapped_features("ios"))
+        self.assertIn("EXT.ADDON", taxonomy.mapped_features("android"))
+        self.assertNotIn("EXT.ADDON", taxonomy.mapped_features("ios"))
+
+    def test_anchor(self):
         self.assertEqual(taxonomy.anchor("A", "Area & more"), "a-area--more")
         self.assertEqual(taxonomy.anchor("LIB", "Library (saved content)"), "lib-library-saved-content")
 
