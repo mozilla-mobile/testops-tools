@@ -25,7 +25,7 @@
 | TB330FU | Lenovo Tab M11 | 35 | Low |
 | TB370FU | Lenovo Tab P12 | 35 | High |
 | TECNO-BF6 | TECNO POP 7 | 31 | Low |
-| TECNO-BG6 | SPARK Go 2024 | 33 | None |
+| TECNO-BG6 | SPARK Go 2024 | 33 | Low |
 | TECNO-KI5k | TECNO SPARK 10C | 31 | Low |
 | XQ-DC54 | Xperia 10 V | 34 | High |
 | XQ-DQ72 | Xperia 1 V | 34 | High |
@@ -196,7 +196,7 @@
 | psqsqw | Galaxy S25 Edge | 36 | Medium |
 | q2qsqw | Galaxy Z Fold3 5G | 35 | Low |
 | q4q | Galaxy Z Fold4 | 33 | Medium |
-| q4qksx | Galaxy Z Fold4 | 36 | Medium |
+| q4qksx | Galaxy Z Fold4 | 36 | Low |
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
