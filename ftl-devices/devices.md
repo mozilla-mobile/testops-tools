@@ -160,7 +160,7 @@
 | houji | Xiaomi 14 | 35 | High |
 | husky | Pixel 8 Pro | 34 | High |
 | husky | Pixel 8 Pro | 35 | Medium |
-| java | Motorola G20 | 30 | Medium |
+| java | Motorola G20 | 30 | High |
 | kansas | moto g - 2025 | 35 | Low |
 | komodo | Pixel 9 Pro XL | 34 | High |
 | komodo | Pixel 9 Pro XL | 35 | High |
