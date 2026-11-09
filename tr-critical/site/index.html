@@ -20,6 +20,7 @@
     --border: rgba(16, 18, 23, 0.09);
     --tae: #1c5cab;
     --legacy: #86b6ef;
+    --tae-out: #7a5bd6;
     --todo: #eb6834;
     --untriaged: #a3a8b1;
     --unsuitable: #d9dce1;
@@ -46,6 +47,7 @@
       --border: rgba(255, 255, 255, 0.08);
       --tae: #6da7ec;
       --legacy: #1c5cab;
+      --tae-out: #a58cf0;
       --todo: #d95926;
       --untriaged: #636a75;
       --unsuitable: #30343b;
@@ -70,6 +72,7 @@
     --border: rgba(255, 255, 255, 0.08);
     --tae: #6da7ec;
     --legacy: #1c5cab;
+    --tae-out: #a58cf0;
     --todo: #d95926;
     --untriaged: #636a75;
     --unsuitable: #30343b;
@@ -236,6 +239,11 @@
   a.case:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
   .log .ids a.case { font-size: 11.5px; }
   .empty { color: var(--muted); font-size: 13px; margin: 14px 0 0; }
+  .tae-stat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 2px 0 10px; }
+  .tae-stat .big { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+  .tae-stat .delta { font-size: 13px; font-weight: 600; color: var(--good-ink); }
+  .tae-stat .split { font-size: 12.5px; color: var(--ink-2); flex-basis: 100%; }
+  .footnote { font-size: 12px; color: var(--muted); margin: 12px 0 0; }
   @media (max-width: 520px) { .case-list li { grid-template-columns: 1fr; } }
 </style>
 
@@ -262,6 +270,17 @@
     </div>
   </section>
 
+  <section class="panel" aria-labelledby="all-tae-h" id="all-tae-panel">
+    <h2 id="all-tae-h">All TAE tests</h2>
+    <p class="sub">Completed TAE tests across the whole suite, critical and outside critical. Shown as counts: outside critical has no agreed 100%.</p>
+    <div class="charts" id="all-tae-charts"></div>
+    <div class="legend" style="margin-top:14px">
+      <span><i style="background:var(--tae)"></i>Critical</span>
+      <span><i style="background:var(--tae-out)"></i>Outside critical</span>
+    </div>
+    <p class="footnote" id="all-tae-note" hidden></p>
+  </section>
+
   <div class="row">
     <section class="panel" aria-labelledby="checks-h">
       <h2 id="checks-h">Data checks</h2>
@@ -282,6 +301,7 @@
       <div><dt>Automatable</dt><dd>Critical minus cases flagged Unsuitable. This is the denominator for 100%.</dd></div>
       <div><dt>Automated</dt><dd>Automation field set to <code>Completed</code>, in any framework.</dd></div>
       <div><dt>In TAE</dt><dd>Automated and carrying the <code>TAE</code> label. Automated without the label means legacy.</dd></div>
+      <div><dt>Outside critical</dt><dd>Same rule as In TAE (<code>Completed</code> and <code>TAE</code>), for cases not in the Regression sub-suite. A case tagged Regression later moves to critical.</dd></div>
     </dl>
   </section>
 </div>
@@ -587,6 +607,97 @@
     });
   }
 
+  // --- all TAE tests (critical + outside critical) ---------------------------
+  function niceMax(v) {
+    var step = Math.pow(10, Math.floor(Math.log10(Math.max(v, 10))));
+    var m = Math.ceil(v / step) * step;
+    return m / step <= 2 ? Math.ceil(v / (step / 4)) * (step / 4) : m;
+  }
+  function renderAllTae(rows) {
+    var charts = document.getElementById("all-tae-charts");
+    var approxUntil = null;   // last day that only had the label-only count
+    ORDER.forEach(function (key) {
+      var byDate = {};
+      rows.forEach(function (r) { if (r.platform === key) byDate[r.date] = r; });
+      var all = Object.keys(byDate).sort().map(function (d) {
+        var r = byDate[d];
+        // Rows from before tae_non_critical_completed existed only have the
+        // label-only count. Use it, and say so under the chart.
+        var exact = r.tae_non_critical_completed != null && r.tae_non_critical_completed !== "";
+        if (!exact && (!approxUntil || d > approxUntil)) approxUntil = d;
+        return { date: d, crit: num(r.in_tae),
+                 out: num(exact ? r.tae_non_critical_completed : r.tae_non_critical),
+                 exact: exact };
+      });
+      if (!all.length) return;
+      var first = all[0], cur = all[all.length - 1];
+      var runs = all.slice(-MAX_DAYS);
+      var name = NAMES[key] || key;
+
+      var box = el("div", "chart");
+      box.appendChild(el("h3", null, name));
+      var stat = el("div", "tae-stat");
+      var total = cur.crit + cur.out, change = total - (first.crit + first.out);
+      stat.appendChild(el("span", "big", String(total)));
+      if (all.length > 1) {
+        var dEl = el("span", "delta", (change >= 0 ? "+" : "") + change + " since " + prettyDate(first.date));
+        if (change <= 0) dEl.style.color = "var(--ink-2)";
+        stat.appendChild(dEl);
+      }
+      stat.appendChild(el("span", "split", cur.crit + " critical · " + cur.out + " outside critical"));
+      box.appendChild(stat);
+
+      var W = 480, H = 210, L = 40, R = 8, T = 14, B = 26;
+      var ih = H - T - B, iw = W - L - R;
+      var top = niceMax(Math.max.apply(null, runs.map(function (r) { return r.crit + r.out; })) * 1.08);
+      var y = function (v) { return T + ih - ih * v / top; };
+      var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+        "aria-label": name + " completed TAE tests by day: " + runs.map(function (r) {
+          return r.date + " " + (r.crit + r.out) + " (" + r.crit + " critical, " + r.out + " outside critical)";
+        }).join("; ") });
+      [0, 0.25, 0.5, 0.75, 1].forEach(function (f) {
+        var v = Math.round(top * f);
+        svg.appendChild(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), "class": f === 0 ? "baseline" : "gridline" }));
+        svg.appendChild(s("text", { x: L - 8, y: y(v) + 4, "text-anchor": "end" }, String(v)));
+      });
+      var slot = iw / Math.max(runs.length, 3);
+      var cw = Math.min(46, slot * 0.6);
+      var every = Math.ceil(runs.length / 7);
+      runs.forEach(function (r, i) {
+        var cx = L + slot * i + slot / 2, x = cx - cw / 2, tot = r.crit + r.out;
+        var g = s("g", { "class": "col", tabindex: 0 });
+        g.appendChild(s("rect", { "class": "hit", x: cx - slot / 2 + 1, y: T, width: slot - 2, height: ih, fill: "transparent" }));
+        var yC = y(r.crit), yTot = y(tot);
+        if (r.out > 0) g.appendChild(s("path", { d: roundTop(x, yTot, cw, Math.max(0, (yC - 2) - yTot), 4), fill: "var(--tae-out)" }));
+        var cRect = s("rect", { x: x, y: yC, width: cw, height: y(0) - yC, fill: "var(--tae)" });
+        if (r.out === 0) cRect.setAttribute("rx", 4);
+        g.appendChild(cRect);
+        var last = i === runs.length - 1;
+        if (last || runs.length <= 7) {
+          g.appendChild(s("text", { x: cx, y: yTot - 7, "text-anchor": "middle", "class": "total-label" }, String(tot)));
+        }
+        if (last || i % every === 0) {
+          g.appendChild(s("text", { x: cx, y: H - 6, "text-anchor": "middle" }, prettyDate(r.date)));
+        }
+        var tipRows = [
+          { color: "var(--tae)", value: String(r.crit), label: "Critical" },
+          { color: "var(--tae-out)", value: String(r.out), label: "Outside critical" },
+          { value: String(tot), label: "total" }
+        ];
+        if (!r.exact) tipRows.push({ value: "", label: "Outside critical counts the label only" });
+        bindTip(g, name + " · " + prettyDate(r.date), tipRows);
+        svg.appendChild(g);
+      });
+      box.appendChild(svg);
+      charts.appendChild(box);
+    });
+    if (approxUntil) {
+      var note = document.getElementById("all-tae-note");
+      note.textContent = "Up to " + prettyDate(approxUntil) + ", the outside-critical count includes every TAE-labelled case, Completed or not. From the next run on, it counts Completed only.";
+      note.hidden = false;
+    }
+  }
+
   // --- checks --------------------------------------------------------------
   function renderChecks(latest) {
     var list = document.getElementById("checks");
@@ -702,6 +813,7 @@
       { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
     renderCards(latest);
     renderTrend(rows);
+    renderAllTae(rows);
     renderChecks(latest);
     renderLog(latest);
   }).catch(function (err) {
@@ -711,6 +823,7 @@
     box.appendChild(document.createTextNode(err.message + ". The daily workflow may not have run yet."));
     document.getElementById("app").prepend(box);
     document.getElementById("trend-panel").hidden = true;
+    document.getElementById("all-tae-panel").hidden = true;
   });
 })();
 </script>

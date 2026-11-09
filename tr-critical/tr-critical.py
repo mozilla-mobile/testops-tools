@@ -317,9 +317,17 @@ def measure(api, platform, suite_id):
                          if coverage_of(c) == COVERAGE_PARTIAL]
 
     # Non-critical TAE work - Richard's metric 2 numerator.
+    # tae_non_critical counts the label alone and is kept as-is so its trend
+    # from September stays comparable. tae_non_critical_completed applies the
+    # same rule as in_tae (label AND Completed), so the two add up to every
+    # finished TAE test across the whole suite.
+    critical_ids = {c["id"] for c in critical}
     tae_non_critical = [
         c for c in cases
-        if TAE_LABEL in label_names(c) and c not in critical
+        if TAE_LABEL in label_names(c) and c["id"] not in critical_ids
+    ]
+    tae_non_critical_completed = [
+        c for c in tae_non_critical if automation_is(c, AUTOMATION_COMPLETED)
     ]
 
     # Duplicate titles inside the critical suite. A repeated title is only
@@ -419,6 +427,8 @@ def measure(api, platform, suite_id):
         "pct_in_tae": round(100 * len(in_tae) / n_automatable, 1)
         if n_automatable else 0.0,
         "tae_non_critical": len(tae_non_critical),
+        "tae_non_critical_completed": len(tae_non_critical_completed),
+        "tae_all_completed": len(in_tae) + len(tae_non_critical_completed),
         "triaged": len(triaged),
         "pct_triaged": round(100 * len(triaged) / len(critical), 1)
         if critical else 0.0,
@@ -456,6 +466,8 @@ def measure(api, platform, suite_id):
             "unsuitable": sorted(c["id"] for c in unsuitable),
             "automated": sorted(c["id"] for c in automated),
             "in_tae": sorted(c["id"] for c in in_tae),
+            "tae_non_critical_completed": sorted(
+                c["id"] for c in tae_non_critical_completed),
         },
     }
 
@@ -482,7 +494,9 @@ ROWS = [
     ("Remaining to 100% TAE", "remaining_to_tae"),
     ("% automated", "pct_automated"),
     ("% in TAE", "pct_in_tae"),
-    ("TAE outside critical suite", "tae_non_critical"),
+    ("TAE label outside critical", "tae_non_critical"),
+    ("  of which Completed", "tae_non_critical_completed"),
+    ("TAE Completed, all suites", "tae_all_completed"),
     ("Triaged", "triaged"),
     ("% triaged", "pct_triaged"),
     ("Awaiting review", "awaiting_review"),
@@ -603,6 +617,8 @@ MOVES = [
     ("in_tae", "removed", "no longer in TAE"),
     ("unsuitable", "added", "newly flagged unsuitable"),
     ("unsuitable", "removed", "reassessed out of unsuitable"),
+    ("tae_non_critical_completed", "added", "newly in TAE outside critical"),
+    ("tae_non_critical_completed", "removed", "no longer in TAE outside critical"),
 ]
 
 
@@ -625,9 +641,18 @@ def compute_delta(state, r):
 
     changes = []
     for key, direction, label in MOVES:
-        before = set(prev.get(key, []))
+        # A list added since the last snapshot has no "before" yet. Skip it
+        # rather than report every case in it as new.
+        if key not in prev:
+            continue
+        before = set(prev[key])
         now = set(r["_ids"][key])
         ids = sorted(now - before if direction == "added" else before - now)
+
+        # A non-critical TAE test tagged Regression moves into critical and
+        # is reported there ("added to the critical suite"); it wasn't lost.
+        if key == "tae_non_critical_completed":
+            ids = [i for i in ids if i not in still_critical]
 
         if direction == "removed" and key in ("automated", "in_tae"):
             # Cases that left the critical suite are already reported as
