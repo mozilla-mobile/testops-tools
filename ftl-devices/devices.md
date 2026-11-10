@@ -44,7 +44,7 @@
 | a14xmsq | Galaxy A14 5G | 35 | Low |
 | a14xmtfn | Galaxy A14 5G | 35 | Low |
 | a15 | Galaxy A15 | 34 | Low |
-| a15x | Galaxy A15 5G | 34 | None |
+| a15x | Galaxy A15 5G | 34 | Low |
 | a15x | Galaxy A15 5G | 36 | Low |
 | a15xtfn | Galaxy A15 5G | 36 | Low |
 | a16 | Galaxy A16 | 35 | Low |
