@@ -124,7 +124,7 @@
 | e2s | Galaxy S24+ | 36 | Low |
 | e2sksx | Galaxy S24+ | 36 | Low |
 | e3q | Galaxy S24 Ultra | 34 | Low |
-| e3q | Galaxy S24 Ultra | 36 | Low |
+| e3q | Galaxy S24 Ultra | 36 | Medium |
 | e3qcsx | Galaxy S24 Ultra | 36 | Low |
 | e3qksx | Galaxy S24 Ultra | 36 | Low |
 | e3qzhx | Galaxy S24 Ultra | 36 | Low |
@@ -202,7 +202,7 @@
 | q6q | Galaxy Z Fold6 | 34 | Medium |
 | q6qksx | Galaxy Z Fold6 | 36 | Low |
 | q6qsqw | Galaxy Z Fold6 | 36 | Low |
-| q7mq | Galaxy Z TriFold | 36 | Medium |
+| q7mq | Galaxy Z TriFold | 36 | High |
 | r0q | Galaxy S22 | 34 | Medium |
 | r0q | Galaxy S22 | 36 | Low |
 | r0qcsx | Galaxy S22 | 36 | Low |
