@@ -314,7 +314,6 @@ rules:
   - {path: "android-components/components/feature/ipprotection/**", feature: PROT.VPN, by: ai}
   - {path: "android-components/components/feature/listentopage/**", feature: BRW.READ, by: ai}
   - {path: "android-components/components/feature/logins/**", feature: CRED.PW, by: ai}
-  - {path: "android-components/components/feature/password-importer/**", feature: CRED.PW, by: ai}
   - {path: "android-components/components/feature/media/**", feature: BRW.MEDIA, by: ai}
   - {path: "android-components/components/feature/privatemode/**", feature: PRIV.MODE, by: ai}
   - {path: "android-components/components/feature/prompts/**", feature: SHARED.WEB, by: ai}
@@ -378,3 +377,6 @@ rules:
   # Added from the drift report on 2026-11-05 (mozilla-firefox/firefox cac25a6fa321). Review, then delete `by: drift`.
   - {path: "android-components/components/compose/draggable/**", feature: TABS.TRAY, by: drift}    # only used by fenix/tabstray (drag to reorder)
   - {path: "android-components/components/lib/installation-blockstore/**", feature: APP.UPD, by: drift}    # Block Store install history, used by metrics/InstallationWorker
+
+  # Merino sports matches (content recommendations service), added 2026-11-12. Not used by Fenix yet.
+  - {path: "android-components/components/service/merino-sports/**", feature: HOME.STORY}

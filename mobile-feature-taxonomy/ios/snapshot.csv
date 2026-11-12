@@ -469,7 +469,7 @@ BrowserKit/Sources/WebCompatReporterKit/WebCompatReporterUX.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatScreenshotRailView.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewController.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewModel.swift,BRW.WEBC
-BrowserKit/Sources/WebDataTransfer/WebDataTransfer.swift,UNMAPPED
+BrowserKit/Sources/WebDataTransfer/WebDataTransfer.swift,APP.UPD
 BrowserKit/Sources/WebEngine/BrowserURL.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/Engine.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/EngineConstants.swift,SHARED.WEB
@@ -952,8 +952,8 @@ firefox-ios/Client/Frontend/Browser/Zoom/ZoomLevel.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomPageBar.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomPageManager.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomTelemetry.swift,BRW.ZOOM
-firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferActivityHandler.swift,UNMAPPED
-firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferAvailability.swift,UNMAPPED
+firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferActivityHandler.swift,APP.UPD
+firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferAvailability.swift,APP.UPD
 firefox-ios/Client/Frontend/Components/BaseAlphaStackView.swift,SHARED.UI
 firefox-ios/Client/Frontend/Components/ContentContainer.swift,SHARED.UI
 firefox-ios/Client/Frontend/Components/ExpandButtonState.swift,SHARED.UI

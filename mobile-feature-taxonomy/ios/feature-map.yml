@@ -487,3 +487,8 @@ rules:
   # Added from the drift report on 2026-11-05 (mozilla-mobile/firefox-ios d6345d871a0e). Review, then delete `by: drift`.
   - {path: "firefox-ios/Client/VPN/**", feature: PROT.VPN, by: drift}
   - {path: "firefox-ios/Client/Redownloads/**", feature: APP.UPD, by: drift}    # StoreKit original purchase date / install history: detects reinstalls, not Library downloads
+
+  # Browser data import/export between browsers (iOS 26.4 BrowserEngineKit data exchange), added 2026-11-12.
+  # Treated as migration for now; revisit (own L2?) if the feature grows.
+  - {path: "firefox-ios/Client/Frontend/BrowserDataTransfer/**", feature: APP.UPD}
+  - {path: "BrowserKit/Sources/WebDataTransfer/**", feature: APP.UPD}
