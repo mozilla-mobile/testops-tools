@@ -694,6 +694,7 @@ firefox-ios/Client/FeatureFlags/CoreBuildFlags.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/FeatureFlags/FeatureFlagID.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/FeatureFlags/FeatureFlagsProvider.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/FeatureFlags/FlaggableFeatureOptions.swift,SHARED.EXPERIMENTS
+firefox-ios/Client/FeatureFlags/TabGroupsFeatureFlag.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/FeatureFlags/UserFeaturePreferenceManager.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/Frontend/Accessors/HomePageAccessors.swift,HOME.SET
 firefox-ios/Client/Frontend/Accessors/NewTabAccessors.swift,HOME.SET
@@ -1589,6 +1590,7 @@ firefox-ios/Client/Redux/GlobalState/PresentedComponentsState.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/ScreenState.swift,SHARED.ARCH
 firefox-ios/Client/TabManagement/BackForwardList.swift,BRW.NAV
 firefox-ios/Client/TabManagement/BlankPageNavigationDelegate.swift,SHARED.WEB
+firefox-ios/Client/TabManagement/CodableColor.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/Document/DocumentLogger.swift,BRW.PDF
 firefox-ios/Client/TabManagement/Document/TemporaryDocument.swift,BRW.PDF
 firefox-ios/Client/TabManagement/Document/TemporaryDocumentBackForwardListItem.swift,BRW.PDF
@@ -1600,6 +1602,8 @@ firefox-ios/Client/TabManagement/Tab.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/TabConfigurationProvider.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/TabContentScriptManager.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/TabEventHandler.swift,SHARED.WEB
+firefox-ios/Client/TabManagement/TabGroup.swift,SHARED.WEB
+firefox-ios/Client/TabManagement/TabGroupStorage.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/TabManager.swift,TABS.TRAY
 firefox-ios/Client/TabManagement/TabManagerDelegate.swift,TABS.TRAY
 firefox-ios/Client/TabManagement/TabManagerImplementation.swift,TABS.TRAY
@@ -1633,6 +1637,7 @@ firefox-ios/Client/Telemetry/SponsoredTileTelemetry.swift,HOME.SC
 firefox-ios/Client/Telemetry/SystemCameraTelemetry.swift,SRCH.VIS
 firefox-ios/Client/Telemetry/SystemPhotoPickerTelemetry.swift,SRCH.VIS
 firefox-ios/Client/Telemetry/TabErrorTelemetryHelper.swift,SHARED.TELEMETRY
+firefox-ios/Client/Telemetry/TabLossTelemetry.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/TabsPanelTelemetry.swift,TABS.TRAY
 firefox-ios/Client/Telemetry/TabsTelemetry.swift,TABS.TRAY
 firefox-ios/Client/Telemetry/TelemetryContextualIdentifier.swift,SHARED.TELEMETRY

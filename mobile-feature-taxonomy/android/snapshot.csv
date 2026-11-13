@@ -1798,9 +1798,9 @@ fenix/app/src/main/java/org/mozilla/fenix/automation/AutomatedLaunch.kt,EXCLUDED
 fenix/app/src/main/java/org/mozilla/fenix/bindings/ExternalAppLinkStatusBinding.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/bindings/FindInPageBinding.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/bindings/HomepageTabBinding.kt,SHARED.ARCH
+fenix/app/src/main/java/org/mozilla/fenix/bindings/NormalTabToolbarMenuHighlightBinding.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/bindings/PendingExtensionUpdateBinding.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/bindings/SummarizeToolbarCFRBinding.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/bindings/SummarizeToolbarHighlightBinding.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/biometricauthentication/BiometricAuthenticationManager.kt,PRIV.LOCK
 fenix/app/src/main/java/org/mozilla/fenix/bookmarks/BookmarkFragment.kt,LIB.BMK
 fenix/app/src/main/java/org/mozilla/fenix/bookmarks/BookmarkItem.kt,LIB.BMK
@@ -1946,6 +1946,7 @@ fenix/app/src/main/java/org/mozilla/fenix/components/TabCollectionStorage.kt,TAB
 fenix/app/src/main/java/org/mozilla/fenix/components/TrackingProtectionPolicyFactory.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/components/UseCases.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/components/VoiceSearchFeature.kt,SRCH.VIS
+fenix/app/src/main/java/org/mozilla/fenix/components/accounts/EntrypointTrackingAuthFeature.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/FenixFxAEntryPoint.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/FxaWebChannelIntegration.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/MozillaAccountMenuItemProvider.kt,ACCT.SIGN
@@ -2059,6 +2060,7 @@ fenix/app/src/main/java/org/mozilla/fenix/components/menu/middleware/MenuMiddlew
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/middleware/MenuNavigationMiddleware.kt,UI.MENU
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/middleware/MenuTelemetryMiddleware.kt,UI.MENU
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/middleware/SessionStateExt.kt,UI.MENU
+fenix/app/src/main/java/org/mozilla/fenix/components/menu/middleware/ToolbarMenuHighlightMiddleware.kt,UI.MENU
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/share/QRCodeDialogFragment.kt,UI.MENU
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/share/QRCodeDownloader.kt,UI.MENU
 fenix/app/src/main/java/org/mozilla/fenix/components/menu/share/QRCodeGenerator.kt,UI.MENU
@@ -2619,6 +2621,7 @@ fenix/app/src/main/java/org/mozilla/fenix/onboarding/store/PrivacyPreferencesTel
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/HapticOnClick.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/ManagePrivacyPreferencesDialogFragment.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/MarketingDataOnboardingPage.kt,ENG.ONB
+fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/OnboardingLayout.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/OnboardingMapper.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/OnboardingPage.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/view/OnboardingPageState.kt,ENG.ONB
@@ -3055,12 +3058,16 @@ fenix/app/src/main/java/org/mozilla/fenix/tabgroups/AddToTabGroup.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/CloseLastTabAndDeleteTabGroupConfirmationDialog.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/DeleteTabGroupConfirmationDialog.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/EditTabGroup.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/EnrichedTabGroupBinding.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/ExpandedTabGroup.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/ExpandedTabGroupActionsBuilder.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/FenixTabGroupsFeatureDiscoveryConfiguration.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupCard.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupMenuItemProvider.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupRow.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupTelemetry.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupThemeDot.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsFeatureDiscoveryConfiguration.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsStrip.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsTestTag.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/UngroupTabGroupConfirmationDialog.kt,TABS.GRP
@@ -3068,10 +3075,13 @@ fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowDestination
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowEntryPoint.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowFragment.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowReducer.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowSnackBarMiddleware.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowState.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowStorageMiddleware.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowStore.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowTelemetryMiddleware.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/middleware/TabGroupMiddleware.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/storage/TabGroupStorage.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/strip/SelectedTabNavigation.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/strip/TabGroupsStripContent.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/strip/TabGroupsStripScrollViewModel.kt,TABS.GRP
