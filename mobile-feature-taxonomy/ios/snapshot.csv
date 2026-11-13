@@ -101,10 +101,13 @@ BrowserKit/Sources/Common/Utilities/NotificationProtocol.swift,SHARED.ARCH
 BrowserKit/Sources/Common/Utilities/TextStyling.swift,SHARED.UI
 BrowserKit/Sources/Common/Utilities/UserDefaultsInterface.swift,SHARED.ARCH
 BrowserKit/Sources/Common/WindowUUID+Extensions.swift,SHARED.ARCH
+BrowserKit/Sources/ComponentLibrary/AIAnswerCardView.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/AIBackgroundEffectView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/ActionButton.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/ActionButtonViewModel.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/BottomSheet/BottomSheetViewController.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/BottomSheet/BottomSheetViewModel.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/BottomSheet/NativeBottomSheetViewController.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/Buttons/ArcActivityIndicatorView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/Buttons/ChipButton.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/Buttons/ChipButtonViewModel.swift,SHARED.UI
@@ -207,7 +210,6 @@ BrowserKit/Sources/OnboardingKit/Preview/PreviewModel.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/LaunchScreen/LaunchScreenView.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/LaunchScreen/OnboardingVideoIntroViewController.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/OnboardingFlow/OnboardingBasicCardView.swift,ENG.ONB
-BrowserKit/Sources/OnboardingKit/Views/OnboardingFlow/OnboardingBottomSheetViewController.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/OnboardingFlow/OnboardingButton.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/OnboardingFlow/OnboardingCardLayout.swift,ENG.ONB
 BrowserKit/Sources/OnboardingKit/Views/OnboardingFlow/OnboardingCardView.swift,ENG.ONB
@@ -242,12 +244,10 @@ BrowserKit/Sources/QuickAnswersKit/Backend/SpeechService/SpeechAnalyzerEngine.sw
 BrowserKit/Sources/QuickAnswersKit/Backend/SpeechService/SpeechError.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/Backend/SpeechService/TranscriptionEngine.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/AudioWaveformView.swift,AI.QA
-BrowserKit/Sources/QuickAnswersKit/UI/BackgroundEffectView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/ErrorHandler.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/OptInTransitionAnimator.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/OptInView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/OptInViewController.swift,AI.QA
-BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersAnswerCardView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersContentView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersEntryPointButton.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersNavigationHandler.swift,AI.QA
@@ -380,9 +380,7 @@ BrowserKit/Sources/SummarizeKit/UI/SummarizeController.swift,AI.SUM
 BrowserKit/Sources/SummarizeKit/UI/SummarizeViewConfiguration.swift,AI.SUM
 BrowserKit/Sources/SummarizeKit/UI/SummarizeViewModel.swift,AI.SUM
 BrowserKit/Sources/SummarizeKit/UI/SummaryFormatter.swift,AI.SUM
-BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryBrandCell.swift,AI.SUM
-BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryCellUX.swift,AI.SUM
-BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryTextCell.swift,AI.SUM
+BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryAnswerCell.swift,AI.SUM
 BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryTitleCell.swift,AI.SUM
 BrowserKit/Sources/SummarizeKit/UI/SummaryView/SummaryView.swift,AI.SUM
 BrowserKit/Sources/TabDataStore/TabData.swift,APP.SESS
@@ -442,6 +440,7 @@ BrowserKit/Sources/VPNKit/VPNDeviceSession.swift,PROT.VPN
 BrowserKit/Sources/VPNKit/VPNProxyPass.swift,PROT.VPN
 BrowserKit/Sources/VPNKit/VPNProxyTokenService.swift,PROT.VPN
 BrowserKit/Sources/VPNKit/VPNSessionRequestAuth.swift,PROT.VPN
+BrowserKit/Sources/VPNKit/VPNTelemetry.swift,PROT.VPN
 BrowserKit/Sources/VPNKit/VPNTokenProvider.swift,PROT.VPN
 BrowserKit/Sources/VPNKit/VPNTokenStore.swift,PROT.VPN
 BrowserKit/Sources/WebCompatReporterKit/Cells/WebCompatCategoryMenuCell.swift,BRW.WEBC
@@ -470,6 +469,7 @@ BrowserKit/Sources/WebCompatReporterKit/WebCompatReporterUX.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatScreenshotRailView.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewController.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewModel.swift,BRW.WEBC
+BrowserKit/Sources/WebDataTransfer/WebDataTransfer.swift,APP.UPD
 BrowserKit/Sources/WebEngine/BrowserURL.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/Engine.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/EngineConstants.swift,SHARED.WEB
@@ -952,6 +952,8 @@ firefox-ios/Client/Frontend/Browser/Zoom/ZoomLevel.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomPageBar.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomPageManager.swift,BRW.ZOOM
 firefox-ios/Client/Frontend/Browser/Zoom/ZoomTelemetry.swift,BRW.ZOOM
+firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferActivityHandler.swift,APP.UPD
+firefox-ios/Client/Frontend/BrowserDataTransfer/BrowserDataTransferAvailability.swift,APP.UPD
 firefox-ios/Client/Frontend/Components/BaseAlphaStackView.swift,SHARED.UI
 firefox-ios/Client/Frontend/Components/ContentContainer.swift,SHARED.UI
 firefox-ios/Client/Frontend/Components/ExpandButtonState.swift,SHARED.UI
@@ -1061,6 +1063,7 @@ firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/Redux/WallpaperAction.swift
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/Redux/WallpaperMiddleware.swift,HOME.WALL
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/Redux/WallpaperState.swift,HOME.WALL
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/WallpaperBackgroundView.swift,HOME.WALL
+firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/WallpaperEngagement/WallpaperEngagementCoordinator.swift,HOME.WALL
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/v1/Interface/WallpaperManager.swift,HOME.WALL
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/v1/Models/Wallpaper.swift,HOME.WALL
 firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/v1/Models/WallpaperCollection.swift,HOME.WALL
@@ -1308,6 +1311,7 @@ firefox-ios/Client/Frontend/Settings/Main/Debug/FirefoxSuggestSettings.swift,EXC
 firefox-ios/Client/Frontend/Settings/Main/Debug/ForceCrashSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/ForceRSSyncSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/HiddenSettings.swift,EXCLUDED
+firefox-ios/Client/Frontend/Settings/Main/Debug/InstallationDetailsSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/LaunchPairingFromURLSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/MerinoTestDataSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/MockBreachAlertsSetting.swift,EXCLUDED
@@ -1318,6 +1322,7 @@ firefox-ios/Client/Frontend/Settings/Main/Debug/PopupHTMLSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/PrivacyNoticeUpdate.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/QuickAnswersModelSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/ResetContextualHints.swift,EXCLUDED
+firefox-ios/Client/Frontend/Settings/Main/Debug/ResetInstallationHistorySetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/ResetSearchEnginePrefsSetting.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/ResetTermsOfServiceAcceptancePage.swift,EXCLUDED
 firefox-ios/Client/Frontend/Settings/Main/Debug/ResetTipsSetting.swift,EXCLUDED
@@ -1395,7 +1400,17 @@ firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsMiddleware.s
 firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsState.swift,TRANS.SET
 firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsViewController.swift,TRANS.SET
 firefox-ios/Client/Frontend/Settings/Translation/TranslationToggleCell.swift,TRANS.SET
+firefox-ios/Client/Frontend/Settings/VPN/VPNDataUsage.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNGlobeView.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNHelpers.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNLocationsRow.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNLocationsView.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNSettingsContentView.swift,SET.FRAME
 firefox-ios/Client/Frontend/Settings/VPN/VPNSettingsViewController.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNSettingsViewModel.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNSettingsViews.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNToggleRow.swift,SET.FRAME
+firefox-ios/Client/Frontend/Settings/VPN/VPNUsageBar.swift,SET.FRAME
 firefox-ios/Client/Frontend/Settings/WebsiteDataManagement/WebsiteDataManagementViewController.swift,PROT.CLEAR
 firefox-ios/Client/Frontend/Settings/WebsiteDataManagement/WebsiteDataManagementViewModel.swift,PROT.CLEAR
 firefox-ios/Client/Frontend/Settings/WebsiteDataManagement/WebsiteDataSearchResultsViewController.swift,PROT.CLEAR
@@ -1566,6 +1581,7 @@ firefox-ios/Client/Protocols/UIDeviceInterface.swift,SHARED.SHELL
 firefox-ios/Client/RatingPromptManager.swift,ENG.SURV
 firefox-ios/Client/Redownloads/AppAcquisitionProvider.swift,APP.UPD
 firefox-ios/Client/Redownloads/InstallationHistoryStore.swift,APP.UPD
+firefox-ios/Client/Redownloads/InstallationTelemetryService.swift,APP.UPD
 firefox-ios/Client/Redux/GlobalState/AppComponent.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/AppState.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/ComponentAction.swift,SHARED.ARCH
@@ -1599,12 +1615,14 @@ firefox-ios/Client/Telemetry/AppStartupTelemetry.swift,APP.START
 firefox-ios/Client/Telemetry/AutoplaySettingTelemetry.swift,BRW.MEDIA
 firefox-ios/Client/Telemetry/ContextMenuTelemetry.swift,BRW.CTX
 firefox-ios/Client/Telemetry/DefaultBrowserUtilityTelemetry.swift,OS.DEF
+firefox-ios/Client/Telemetry/DefaultVPNTelemetry.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/FxSuggestTelemetry.swift,SRCH.SUG
 firefox-ios/Client/Telemetry/GleanUsageReporting.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/GleanWrapper.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/GoogleLensTelemetry.swift,SRCH.VIS
 firefox-ios/Client/Telemetry/HistoryDeletionUtilityTelemetry.swift,LIB.HIST
 firefox-ios/Client/Telemetry/HomepageTelemetry.swift,HOME.SET
+firefox-ios/Client/Telemetry/InstallationTelemetry.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/MetricKit/MetricKitWrapper.swift,SHARED.TELEMETRY
 firefox-ios/Client/Telemetry/NotificationManagerTelemetry.swift,ENG.NOTIF
 firefox-ios/Client/Telemetry/ReferringPage.swift,SHARED.TELEMETRY
@@ -1645,8 +1663,10 @@ firefox-ios/Client/Utils/SceneSessionInterface.swift,SHARED.ARCH
 firefox-ios/Client/Utils/SecurityContextManager.swift,SHARED.ARCH
 firefox-ios/Client/Utils/SponsoredContentFilterUtility.swift,HOME.SC
 firefox-ios/Client/Utils/UIApplicationInterface.swift,SHARED.ARCH
+firefox-ios/Client/VPN/VPNAction.swift,PROT.VPN
 firefox-ios/Client/VPN/VPNGuardian.swift,PROT.VPN
 firefox-ios/Client/VPN/VPNManager.swift,PROT.VPN
+firefox-ios/Client/VPN/VPNMiddleware.swift,PROT.VPN
 firefox-ios/Client/VPN/VPNServerManager.swift,PROT.VPN
 firefox-ios/CredentialProvider/Cells/EmptyPlaceholderCell.swift,CRED.PW
 firefox-ios/CredentialProvider/Cells/ItemListCell.swift,CRED.PW
