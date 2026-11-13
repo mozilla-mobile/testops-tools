@@ -286,7 +286,8 @@ def suggest_ids(sections, cases, sheet):
 
     Top-down: a section takes the most common feature of its own cases and gets a suggestion only when that
     differs from what it would inherit. A section with no cases of its own (a container such as "Browsing")
-    gets no ID, so new subsections don't silently inherit one feature: each subsection gets its own. Cases
+    gets an ID only when its whole subtree is one feature; otherwise each subsection gets its own, so new
+    subsections of a mixed container don't silently inherit one feature. Cases
     the sheet doesn't know (added later) don't vote. Returns {section_id: feature_id}.
     """
     by_id = {s["id"]: s for s in sections}
@@ -298,6 +299,16 @@ def suggest_ids(sections, cases, sheet):
         if c["id"] in sheet:
             direct[c["section_id"]][sheet[c["id"]][0]] += 1
 
+    cache = {}
+
+    def subtree_votes(sid):
+        if sid not in cache:
+            votes = Counter(direct[sid])
+            for k in children[sid]:
+                votes.update(subtree_votes(k))
+            cache[sid] = votes
+        return cache[sid]
+
     suggestions = {}
 
     def walk(sid, inherited):
@@ -306,7 +317,8 @@ def suggest_ids(sections, cases, sheet):
             top = direct[sid].most_common(1)[0][0]
             label = top or NO_FEATURE
         elif children[sid]:
-            label = NO_FEATURE
+            whole = set(subtree_votes(sid))
+            label = whole.pop() if len(whole) == 1 else NO_FEATURE
         if label != inherited and label:
             suggestions[sid] = label
         for k in children[sid]:

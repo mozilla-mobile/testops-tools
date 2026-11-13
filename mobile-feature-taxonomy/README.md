@@ -151,7 +151,8 @@ uv run testrail_map.py android suggest --sheet firefox_android_feature_mapping_w
 
 `suggest` lists, feature by feature, which ID to write in which section so TestRail reproduces a per-case
 mapping workbook, as a checklist to apply by hand (it never writes to TestRail). Container sections with no cases
-of their own get no ID, so a new subsection is reported by `check` instead of silently inheriting a feature.
+of their own get an ID only when everything under them is one feature, so a new subsection of a mixed container
+is reported by `check` instead of silently inheriting a feature.
 
 These are the "TestRail cases" and "UI automation · % of TestRail cases" columns of the coverage page, which
 were first built from a per-case mapping workbook. `compare` shows, per feature and per section, where TestRail

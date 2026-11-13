@@ -102,8 +102,15 @@ class SuggestTest(unittest.TestCase):
         self.assertEqual(testrail_map.suggest_ids(self.SECTIONS, self.CASES, self.SHEET),
                          {11: "TABS.GRP", 12: "TABS.TRAY", 13: "TABS.GRP", 14: "LIB.BMK"})
 
-    def test_containers_get_no_id(self):
+    def test_mixed_containers_get_no_id(self):
         self.assertNotIn(10, testrail_map.suggest_ids(self.SECTIONS, self.CASES, self.SHEET))
+
+    def test_single_feature_container_gets_one_id(self):
+        sections = [{"id": 1, "name": "AI controls", "parent_id": None},
+                    {"id": 2, "name": "UI", "parent_id": 1}, {"id": 3, "name": "Voice", "parent_id": 1}]
+        cases = [{"id": "C1", "section_id": 2}, {"id": "C2", "section_id": 3}]
+        sheet = {"C1": ("AI.CTRL", False), "C2": ("AI.CTRL", True)}
+        self.assertEqual(testrail_map.suggest_ids(sections, cases, sheet), {1: "AI.CTRL"})
 
 
 class CommandTest(unittest.TestCase):
