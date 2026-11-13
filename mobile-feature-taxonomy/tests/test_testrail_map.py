@@ -84,6 +84,28 @@ class AttributeTest(unittest.TestCase):
         self.assertEqual(counts[""]["total"], 2)
 
 
+class SuggestTest(unittest.TestCase):
+    SECTIONS = [
+        {"id": 10, "name": "Browsing", "parent_id": None},          # container, no cases of its own
+        {"id": 11, "name": "Collections", "parent_id": 10},
+        {"id": 12, "name": "Tabs tray", "parent_id": 10},
+        {"id": 13, "name": "Tab groups", "parent_id": 12},
+        {"id": 14, "name": "Bookmarks", "parent_id": None},
+        {"id": 15, "name": "Import", "parent_id": 14},
+    ]
+    CASES = [{"id": f"C{i}", "section_id": s} for i, s in enumerate([11, 11, 12, 12, 13, 13, 13, 14, 15, 15])]
+    SHEET = {f"C{i}": (f, False) for i, f in enumerate(
+        ["TABS.GRP", "TABS.GRP", "TABS.TRAY", "TABS.TRAY", "TABS.GRP", "TABS.GRP", "TABS.GRP",
+         "LIB.BMK", "LIB.BMK", "LIB.BMK"])}
+
+    def test_ids_only_where_the_feature_changes(self):
+        self.assertEqual(testrail_map.suggest_ids(self.SECTIONS, self.CASES, self.SHEET),
+                         {11: "TABS.GRP", 12: "TABS.TRAY", 13: "TABS.GRP", 14: "LIB.BMK"})
+
+    def test_containers_get_no_id(self):
+        self.assertNotIn(10, testrail_map.suggest_ids(self.SECTIONS, self.CASES, self.SHEET))
+
+
 class CommandTest(unittest.TestCase):
     def run_cli(self, *args):
         with tempfile.TemporaryDirectory() as tmp:

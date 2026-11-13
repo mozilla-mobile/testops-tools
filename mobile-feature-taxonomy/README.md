@@ -146,7 +146,12 @@ notes) is ignored.
 uv run testrail_map.py ios check            # unknown IDs (typos), sections whose cases reach no ID, L1-only cases
 uv run testrail_map.py ios counts           # cases and % Automation = Completed per L1/L2 (--csv for a CSV)
 uv run testrail_map.py ios compare --sheet firefox_ios_feature_mapping_with_L1.xlsx   # diff vs a mapping workbook
+uv run testrail_map.py android suggest --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
 ```
+
+`suggest` lists, feature by feature, which ID to write in which section so TestRail reproduces a per-case
+mapping workbook, as a checklist to apply by hand (it never writes to TestRail). Container sections with no cases
+of their own get no ID, so a new subsection is reported by `check` instead of silently inheriting a feature.
 
 These are the "TestRail cases" and "UI automation · % of TestRail cases" columns of the coverage page, which
 were first built from a per-case mapping workbook. `compare` shows, per feature and per section, where TestRail

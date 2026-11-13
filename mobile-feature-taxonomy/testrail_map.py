@@ -20,6 +20,8 @@ Commands:
     counts    cases per L1/L2: total, Automation = Completed, % automated (CSV with --csv).
     compare   counts and per-case differences against a feature-mapping workbook (Orla's
               firefox_ios_feature_mapping_with_L1.xlsx: Case ID, Automation, Proposed Feature ID, L1 ID).
+    suggest   which ID to write in which section description so TestRail matches such a workbook, grouped by
+              feature, for a person to copy in by hand. It never writes to TestRail.
 
 Credentials come from TESTRAIL_HOST/TESTRAIL_URL, TESTRAIL_USERNAME/TESTRAIL_USER and
 TESTRAIL_PASSWORD/TESTRAIL_KEY.
@@ -32,6 +34,7 @@ Usage:
     uv run testrail_map.py ios check
     uv run testrail_map.py ios counts --csv > ios_testrail_by_feature.csv
     uv run testrail_map.py ios --cache /tmp/ios.json compare --sheet firefox_ios_feature_mapping_with_L1.xlsx
+    uv run testrail_map.py android suggest --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
 """
 
 import argparse
@@ -276,6 +279,44 @@ def read_sheet(path):
     return out
 
 
+# ---- suggestions from a workbook -----------------------------------------------------------------------------
+
+def suggest_ids(sections, cases, sheet):
+    """Section IDs that reproduce a per-case mapping, writing an ID only where it changes.
+
+    Top-down: a section takes the most common feature of its own cases and gets a suggestion only when that
+    differs from what it would inherit. A section with no cases of its own (a container such as "Browsing")
+    gets no ID, so new subsections don't silently inherit one feature: each subsection gets its own. Cases
+    the sheet doesn't know (added later) don't vote. Returns {section_id: feature_id}.
+    """
+    by_id = {s["id"]: s for s in sections}
+    children = defaultdict(list)
+    for s in sections:
+        children[s.get("parent_id") if s.get("parent_id") in by_id else None].append(s["id"])
+    direct = defaultdict(Counter)
+    for c in cases:
+        if c["id"] in sheet:
+            direct[c["section_id"]][sheet[c["id"]][0]] += 1
+
+    suggestions = {}
+
+    def walk(sid, inherited):
+        label = inherited
+        if direct[sid]:
+            top = direct[sid].most_common(1)[0][0]
+            label = top or NO_FEATURE
+        elif children[sid]:
+            label = NO_FEATURE
+        if label != inherited and label:
+            suggestions[sid] = label
+        for k in children[sid]:
+            walk(k, label)
+
+    for root in children[None]:
+        walk(root, NO_FEATURE)
+    return suggestions
+
+
 # ---- commands ------------------------------------------------------------------------------------------------
 
 def pct(c):
@@ -393,6 +434,56 @@ def cmd_compare(attributed, tree, data, taxonomy, sheet_path):
     return 0
 
 
+def cmd_suggest(tree, data, taxonomy, ids, sheet_path):
+    sheet = read_sheet(sheet_path)
+    suggestions = suggest_ids(data["sections"], data["cases"], sheet)
+    existing = {sid: fid for sid, fid in tree.own.items()}
+
+    # Simulate: the suggested IDs on top of whatever the sections already carry.
+    proposed = SectionTree(data["sections"], ids)
+    proposed.own.update(suggestions)
+    proposed._resolved.clear()
+    source = {}
+    for c in data["cases"]:
+        sid = c["section_id"]
+        while sid in proposed.sections and sid not in proposed.own:
+            sid = proposed.sections[sid].get("parent_id")
+        source[c["id"]] = sid if sid in proposed.own else None
+    reach = Counter(source.values())
+
+    by_feature = defaultdict(list)
+    for sid, fid in suggestions.items():
+        by_feature[fid].append(sid)
+    print(f"# Suggested section IDs ({len(suggestions)} sections)\n")
+    print("Write the ID as the first word of the section description. A subsection inherits it unless it has "
+          "its own ID; `cases` counts the cases that get the ID through that section.\n")
+    for fid in [k for k in feature_order(taxonomy) if k in by_feature]:
+        name = taxonomy[fid]["name"] if "." in fid else taxonomy[fid]["area"] + " (whole area)"
+        rows = sorted(by_feature[fid], key=tree.path)
+        print(f"## `{fid}` {name}: {sum(reach[s] for s in rows)} cases\n")
+        for sid in rows:
+            note = f" (now `{existing[sid]}`)" if sid in existing and existing[sid] != fid else ""
+            if sid in existing and existing[sid] == fid:
+                note = " (already set)"
+            print(f"- [ ] {tree.path(sid)}: {reach[sid]} cases{note}")
+        print()
+
+    disagree = Counter()
+    for c in data["cases"]:
+        if c["id"] in sheet and proposed.feature(c["section_id"]) != sheet[c["id"]][0]:
+            disagree[(c["section_id"], sheet[c["id"]][0], proposed.feature(c["section_id"]))] += 1
+    unknown = sum(1 for c in data["cases"] if c["id"] not in sheet)
+    print(f"With these IDs, {sum(1 for c in data['cases'] if c['id'] in sheet) - sum(disagree.values())} of "
+          f"{sum(1 for c in data['cases'] if c['id'] in sheet)} cases in the sheet get the sheet's feature; "
+          f"{unknown} cases aren't in the sheet (added since) and take their section's ID.\n")
+    if disagree:
+        print("## Cases the sheet maps per case, not per section (decide by hand)\n")
+        print("| Cases | Sheet | With the IDs | Section |\n|--:|---|---|---|")
+        for (sid, a, b), n in sorted(disagree.items(), key=lambda kv: (tree.path(kv[0][0]), -kv[1])):
+            print(f"| {n} | {a or 'OUT / none'} | {b or '—'} | {tree.path(sid)} |")
+    return 0
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("platform", choices=sorted(SUITES))
@@ -404,6 +495,8 @@ def main(argv=None):
     p_counts.add_argument("--csv", action="store_true")
     p_compare = sub.add_parser("compare")
     p_compare.add_argument("--sheet", required=True, help="feature-mapping workbook (.xlsx)")
+    p_suggest = sub.add_parser("suggest")
+    p_suggest.add_argument("--sheet", required=True, help="feature-mapping workbook (.xlsx)")
     args = parser.parse_args(argv)
 
     taxonomy = load_taxonomy(args.taxonomy)
@@ -415,6 +508,8 @@ def main(argv=None):
         return cmd_check(attributed, tree, data, ids)
     if args.command == "counts":
         return cmd_counts(attributed, taxonomy, args.csv)
+    if args.command == "suggest":
+        return cmd_suggest(tree, data, taxonomy, ids, args.sheet)
     return cmd_compare(attributed, tree, data, taxonomy, args.sheet)
 
 
