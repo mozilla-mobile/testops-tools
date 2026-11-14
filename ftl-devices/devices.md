@@ -14,7 +14,7 @@
 | OP573DL1 | A79 5G | 34 | High |
 | OP5759L1 | A38 | 34 | Low |
 | OP5958L1 | OnePlus Nord CE 3 Lite 5G | 34 | High |
-| RE58C2 | realme C53 | 35 | Low |
+| RE58C2 | realme C53 | 35 | Medium |
 | RMX3231 | RMX3231 | 30 | Low |
 | SC-51C | Galaxy S22 | 36 | Low |
 | SC-51E | Galaxy S24 | 36 | Low |
@@ -137,7 +137,7 @@
 | fogorow | moto g24 | 34 | Low |
 | fogos | moto g34 5G | 34 | Low |
 | frankel | Pixel 10 | 36 | High |
-| g0q | Galaxy S22+ | 34 | Low |
+| g0q | Galaxy S22+ | 34 | Medium |
 | g0q | Galaxy S22+ | 36 | Low |
 | g0qksx | Galaxy S22+ | 36 | Low |
 | gnevan | moto g stylus (2023) | 33 | Low |
