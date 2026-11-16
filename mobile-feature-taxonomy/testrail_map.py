@@ -339,15 +339,9 @@ def fmt_pct(value):
     return "—" if value is None else f"{value:.0f}%"
 
 
-def cmd_check(attributed, tree, data, ids):
-    problems = 0
-    if tree.unknown:
-        problems += len(tree.unknown)
-        print(f"## Sections with an ID that isn't in features.yml ({len(tree.unknown)})\n")
-        for sid, word in sorted(tree.unknown.items(), key=lambda kv: tree.path(kv[0])):
-            print(f"- `{word}` in {tree.path(sid)}")
-        print()
-
+def find_problems(attributed, tree, data):
+    """What `check` reports: {"unknown": {section_id: word}, "unmapped": Counter(section_id -> cases),
+    "l1_only": Counter(section_id -> cases)}. Unknown IDs and unmapped cases are errors; L1-only is advice."""
     unmapped, l1_only = Counter(), Counter()
     for c in data["cases"]:
         fid = attributed[c["id"]][0]
@@ -355,6 +349,19 @@ def cmd_check(attributed, tree, data, ids):
             unmapped[c["section_id"]] += 1
         elif "." not in fid:
             l1_only[c["section_id"]] += 1
+    return {"unknown": dict(tree.unknown), "unmapped": unmapped, "l1_only": l1_only}
+
+
+def cmd_check(attributed, tree, data, ids):
+    found = find_problems(attributed, tree, data)
+    unmapped, l1_only = found["unmapped"], found["l1_only"]
+    problems = 0
+    if tree.unknown:
+        problems += len(tree.unknown)
+        print(f"## Sections with an ID that isn't in features.yml ({len(tree.unknown)})\n")
+        for sid, word in sorted(tree.unknown.items(), key=lambda kv: tree.path(kv[0])):
+            print(f"- `{word}` in {tree.path(sid)}")
+        print()
 
     if unmapped:
         problems += sum(unmapped.values())

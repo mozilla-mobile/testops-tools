@@ -1,0 +1,38 @@
+# TestRail section feature IDs: every case in the iOS and Android Full Functional suites must reach a feature ID
+# from mobile-feature-taxonomy/features.yml, written as the first word of its section's (or a parent's)
+# description. Runs daily; when a section has an unknown ID or its cases reach none (usually a new section),
+# posts the list with links to Slack and fails the run.
+#
+# Section names only go to Slack. The log and the job summary show counts only: this repo is public.
+name: Mobile feature taxonomy - TestRail sections
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-feature-taxonomy-testrail-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Every TestRail section has a feature ID
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r mobile-feature-taxonomy/requirements.txt
+      - name: Check sections and alert on Slack
+        env:
+          TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
+        run: python mobile-feature-taxonomy/testrail_section_check.py

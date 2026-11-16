@@ -40,6 +40,7 @@ mobile-feature-taxonomy/
 ├── feature_map.py          # CLI: check / files / lines / drift
 ├── drift.py                # map-vs-code comparison and suggested fixes
 ├── testrail_map.py         # CLI: TestRail cases per feature, from the IDs in section descriptions
+├── testrail_section_check.py  # daily: Slack alert when a TestRail section has no / an unknown feature ID
 └── tests/
 ```
 
@@ -161,6 +162,18 @@ and that workbook disagree, so the section descriptions can be fixed until they 
 Needs TestRail credentials in `TESTRAIL_HOST`, `TESTRAIL_USERNAME`, `TESTRAIL_PASSWORD`. `--cache FILE` saves the
 fetched sections and cases (no titles or steps) for faster reruns. `check` and `compare` print section names,
 so run them locally, not in a public CI log, and don't commit the cache. `counts` prints aggregates only.
+
+### Daily check
+
+[`mobile-feature-taxonomy-testrail-check.yml`](../.github/workflows/mobile-feature-taxonomy-testrail-check.yml)
+runs `testrail_section_check.py` every day for both platforms. When a section's description starts with an ID
+that isn't in `features.yml`, or a section's cases reach no ID (typically a newly created section under a parent
+with no ID), it posts the sections, with links, to Slack and the run fails. Cases that only reach an L1 are
+accepted. Section names go to Slack only; the public log shows counts.
+
+```bash
+uv run testrail_section_check.py --dry-run     # locally: print the Slack message instead of sending it
+```
 
 ## Changing the taxonomy
 
