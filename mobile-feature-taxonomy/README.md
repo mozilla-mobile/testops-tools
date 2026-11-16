@@ -36,11 +36,13 @@ mobile-feature-taxonomy/
 │   └── snapshot.csv        # every file and its feature at the last accepted update
 ├── android/
 │   ├── feature-map.yml     # rules: mozilla-firefox/firefox mobile/android path → feature ID
+│   ├── bugs-map.yml        # rules: Bugzilla component (+ title) → feature ID, and who counts as external
 │   └── snapshot.csv
 ├── feature_map.py          # CLI: check / files / lines / drift
 ├── drift.py                # map-vs-code comparison and suggested fixes
 ├── testrail_map.py         # CLI: TestRail cases per feature, from the IDs in section descriptions
 ├── testrail_section_check.py  # daily: Slack alert when a TestRail section has no / an unknown feature ID
+├── bugs_map.py             # CLI: escaped bugs per feature (check / counts / compare)
 └── tests/
 ```
 
@@ -179,6 +181,28 @@ accepted. Section names go to Slack only; the public log shows counts.
 ```bash
 uv run testrail_section_check.py --dry-run     # locally: print the Slack message instead of sending it
 ```
+=======
+## Escaped bugs per feature
+
+`<platform>/bugs-map.yml` attributes bugs to features. On Android a bug takes its Bugzilla component's feature;
+components that mix features (Privacy, Tabs, Browser Engine…) list title rules, and the first one that matches the
+bug summary wins. Each component maps to a feature ID (an L2, an L1 area or a cross-cutting axis `X.*`), or is
+`untriaged` (General: counted without a feature) or `excluded` (UI Tests, Tooling: not product defects). The same
+file says who counts as external: "escaped" bugs are the ones not reported by a team email domain or a bot.
+Duplicates and invalid bugs aren't counted.
+
+```bash
+uv run bugs_map.py android check                   # map is valid and every component in the window has a decision
+uv run bugs_map.py android counts --csv            # escaped bugs per L1/L2 and axis, Jan 1 → today
+uv run bugs_map.py android --since 2026-01-01 --until 2026-10-27 compare --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
+```
+
+Bugs come from the public Bugzilla REST API, so security bugs aren't visible. When a new Bugzilla component
+appears, `check` fails until it gets a line in the map. iOS (GitHub issues) is next.
+
+**Cross-cutting axes** (`X.A11Y`, `X.L10N`, `X.PERF`, `X.TELEM`, `X.EXP` in `features.yml`) hold bugs and tests that
+concern the whole app along one axis and can't be attributed to a feature, e.g. the Performance component. They
+are reported in their own rows, like `SHARED.*` for code. A bug that does hit a feature goes to that feature.
 
 ## Changing the taxonomy
 

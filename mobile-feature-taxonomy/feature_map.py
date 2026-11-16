@@ -40,7 +40,7 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PLATFORMS = ("ios", "android")
-NON_FEATURE_PREFIXES = ("SHARED", "EXCLUDED", "UNMAPPED", "GENERATED")
+NON_FEATURE_PREFIXES = ("SHARED", "EXCLUDED", "UNMAPPED", "GENERATED", "X.")
 CLOSURE_PREFIX = re.compile(r"^(?:(?:implicit )?closure #\d+ (?:\(\) )?in )+")
 
 
@@ -98,7 +98,7 @@ class Rule:
 
 
 def load_taxonomy(path=None):
-    """Returns {id: entry} for every feature, shared bucket, excluded bucket and L1 area.
+    """Returns {id: entry} for every feature, shared bucket, cross-cutting axis, excluded bucket and L1 area.
 
     L1 area IDs (e.g. "CRED") are valid targets for code that serves the whole area.
     This is the entry point other tools (charts, scorecards) should use to read the taxonomy.
@@ -106,7 +106,7 @@ def load_taxonomy(path=None):
     with open(path or os.path.join(HERE, "features.yml")) as f:
         data = yaml.safe_load(f)
     ids = {}
-    for group in ("features", "shared", "excluded"):
+    for group in ("features", "shared", "crosscutting", "excluded"):
         for item in data.get(group, []):
             ids[item["id"]] = dict(item, group=group)
     for item in data["features"]:

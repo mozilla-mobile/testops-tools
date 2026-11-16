@@ -209,3 +209,15 @@ Code that serves many features goes to a shared bucket, reported separately so i
 | `SHARED.TELEMETRY` | Telemetry infrastructure |
 | `SHARED.EXPERIMENTS` | Nimbus, feature flags and remote configuration infrastructure |
 | `EXCLUDED` | Generated code, strings, third-party code and test support |
+
+## Cross-cutting axes
+
+Bugs and tests that concern the whole app along one axis and can't be attributed to a feature. Anything that hits a feature goes to that feature instead. Not used for code.
+
+| ID | Axis |
+|---|---|
+| `X.A11Y` | Accessibility |
+| `X.L10N` | Localization |
+| `X.PERF` | Performance: speed, memory, battery |
+| `X.TELEM` | Telemetry and data pipelines |
+| `X.EXP` | Experiments and remote configuration |

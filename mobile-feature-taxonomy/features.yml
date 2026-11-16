@@ -268,6 +268,21 @@ shared:
   - id: SHARED.EXPERIMENTS
     name: "Nimbus, feature flags and remote configuration infrastructure"
 
+# Cross-cutting axes: concerns of the whole app rather than one feature. A bug or test that hits a feature goes to
+# that feature (and can be tagged with the axis); these buckets hold what can't be attributed to one, e.g. a
+# performance regression with no feature in sight. Used for bugs and tests, not for code (code uses SHARED.*).
+crosscutting:
+  - id: X.A11Y
+    name: "Accessibility"
+  - id: X.L10N
+    name: "Localization"
+  - id: X.PERF
+    name: "Performance: speed, memory, battery"
+  - id: X.TELEM
+    name: "Telemetry and data pipelines"
+  - id: X.EXP
+    name: "Experiments and remote configuration"
+
 # Code that is not counted toward any feature or shared bucket.
 excluded:
   - id: EXCLUDED
