@@ -380,3 +380,7 @@ rules:
 
   # Merino sports matches (content recommendations service), added 2026-11-12. Not used by Fenix yet.
   - {path: "android-components/components/service/merino-sports/**", feature: HOME.STORY}
+
+  # Picture-in-picture (new AC module + Fenix activity), added 2026-11-16.
+  - {path: "android-components/components/feature/pictureinpicture/**", feature: BRW.MEDIA}
+  - {path: "fenix/app/src/main/java/org/mozilla/fenix/pictureinpicture/**", feature: BRW.MEDIA}

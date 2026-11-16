@@ -389,7 +389,6 @@ BrowserKit/Sources/TabDataStore/TabFileManager.swift,APP.SESS
 BrowserKit/Sources/TabDataStore/TabSessionStore.swift,APP.SESS
 BrowserKit/Sources/TabDataStore/WindowData.swift,APP.SESS
 BrowserKit/Sources/TestKit/AppAttestTestData.swift,EXCLUDED
-BrowserKit/Sources/TestKit/EmptyMiddlewareProviderFactory.swift,EXCLUDED
 BrowserKit/Sources/TestKit/MockAppAttestKeyIDStore.swift,EXCLUDED
 BrowserKit/Sources/TestKit/MockAppAttestRemoteServer.swift,EXCLUDED
 BrowserKit/Sources/TestKit/MockAppAttestService.swift,EXCLUDED
