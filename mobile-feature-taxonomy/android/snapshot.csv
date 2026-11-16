@@ -217,6 +217,7 @@ android-components/components/browser/state/src/main/java/mozilla/components/bro
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/ListenToPageReducer.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/LocaleStateReducer.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/MediaSessionReducer.kt,SHARED.ARCH
+android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/PictureInPictureStateReducer.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/ReaderStateReducer.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/RecentlyClosedReducer.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/SearchReducer.kt,SHARED.ARCH
@@ -243,6 +244,7 @@ android-components/components/browser/state/src/main/java/mozilla/components/bro
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/LastMediaAccessState.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/LoadRequestState.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/MediaSessionState.kt,SHARED.ARCH
+android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/PictureInPictureWindowState.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/ReaderState.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/SearchState.kt,SHARED.ARCH
 android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/SecurityInfo.kt,SHARED.ARCH
@@ -908,6 +910,11 @@ android-components/components/feature/media/src/main/java/mozilla/components/fea
 android-components/components/feature/media/src/main/java/mozilla/components/feature/media/service/AbstractMediaSessionService.kt,BRW.MEDIA
 android-components/components/feature/media/src/main/java/mozilla/components/feature/media/service/MediaSessionDelegate.kt,BRW.MEDIA
 android-components/components/feature/media/src/main/java/mozilla/components/feature/media/service/MediaSessionServiceDelegate.kt,BRW.MEDIA
+android-components/components/feature/pictureinpicture/src/main/java/mozilla/components/feature/pictureinpicture/AbstractPictureInPictureActivity.kt,BRW.MEDIA
+android-components/components/feature/pictureinpicture/src/main/java/mozilla/components/feature/pictureinpicture/PictureInPictureMiddleware.kt,BRW.MEDIA
+android-components/components/feature/pictureinpicture/src/main/java/mozilla/components/feature/pictureinpicture/PictureInPictureSessionFeature.kt,BRW.MEDIA
+android-components/components/feature/pictureinpicture/src/main/java/mozilla/components/feature/pictureinpicture/PictureInPictureUseCases.kt,BRW.MEDIA
+android-components/components/feature/pictureinpicture/src/main/java/mozilla/components/feature/pictureinpicture/PictureInPictureWindowFeature.kt,BRW.MEDIA
 android-components/components/feature/privatemode/src/main/java/mozilla/components/feature/privatemode/feature/SecureWindowFeature.kt,PRIV.MODE
 android-components/components/feature/privatemode/src/main/java/mozilla/components/feature/privatemode/notification/AbstractPrivateNotificationService.kt,PRIV.MODE
 android-components/components/feature/privatemode/src/main/java/mozilla/components/feature/privatemode/notification/PrivateNotificationFeature.kt,PRIV.MODE
@@ -1649,6 +1656,7 @@ android-components/components/support/utils/src/main/java/mozilla/components/sup
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/SafeUrl.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/StatusBarUtils.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/StorageUtils.kt,SHARED.ARCH
+android-components/components/support/utils/src/main/java/mozilla/components/support/utils/SwitchTabIntent.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/ThreadUtils.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/TimePicker.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/WebURLFinder.kt,SHARED.ARCH
@@ -1676,6 +1684,7 @@ android-components/components/support/webextensions/src/main/java/mozilla/compon
 android-components/components/support/webextensions/src/main/java/mozilla/components/support/webextensions/facts/WebExtensionFacts.kt,EXT.ADDON
 android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/MozillaRuleSetProvider.kt,EXCLUDED
 android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/ProjectLicenseRule.kt,EXCLUDED
+android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/acorn/AcornDisplayedTextCasingRule.kt,EXCLUDED
 android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/acorn/AcornPaddingRule.kt,EXCLUDED
 android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/acorn/AcornRuleSetProvider.kt,EXCLUDED
 android-components/components/tooling/detekt/src/main/kotlin/mozilla/components/tooling/detekt/acorn/AcornThemeUsageRule.kt,EXCLUDED
@@ -1853,6 +1862,7 @@ fenix/app/src/main/java/org/mozilla/fenix/browser/TranslationsBannerIntegration.
 fenix/app/src/main/java/org/mozilla/fenix/browser/TranslationsBinding.kt,TRANS.PAGE
 fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/AppLinksPromptFragment.kt,BRW.LINKS
 fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/BrowserFirstFeatureHelper.kt,BRW.LINKS
+fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/BrowserFirstHosts.kt,BRW.LINKS
 fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/OpenInAppMenuItemProvider.kt,BRW.LINKS
 fenix/app/src/main/java/org/mozilla/fenix/browser/applinks/OpenInFirefoxMenuItemProvider.kt,BRW.LINKS
 fenix/app/src/main/java/org/mozilla/fenix/browser/browsingmode/BrowsingModeManager.kt,PRIV.MODE
@@ -2677,6 +2687,7 @@ fenix/app/src/main/java/org/mozilla/fenix/perf/StopProfilerActivity.kt,SHARED.TE
 fenix/app/src/main/java/org/mozilla/fenix/perf/StorageStatsMetrics.kt,SHARED.TELEMETRY
 fenix/app/src/main/java/org/mozilla/fenix/perf/StrictModeManager.kt,SHARED.TELEMETRY
 fenix/app/src/main/java/org/mozilla/fenix/perf/ThreadPenaltyDeathWithIgnoresListener.kt,SHARED.TELEMETRY
+fenix/app/src/main/java/org/mozilla/fenix/pictureinpicture/PictureInPictureActivity.kt,BRW.MEDIA
 fenix/app/src/main/java/org/mozilla/fenix/print/PrintMenuItemProvider.kt,BRW.PDF
 fenix/app/src/main/java/org/mozilla/fenix/privacyreport/PrivacyReportNotificationContent.kt,PROT.DASH
 fenix/app/src/main/java/org/mozilla/fenix/privacyreport/PrivacyReportNotificationHelper.kt,PROT.DASH
