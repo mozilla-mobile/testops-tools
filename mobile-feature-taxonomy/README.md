@@ -21,6 +21,7 @@ same list of features and the same rule for "which feature does this code belong
 
 It lives here, not in the product repos, so it's one copy, maintained by Mobile Test Engineering, and kept current
 by a weekly CI job instead of scripts on someone's machine. Consumers: the
+feature coverage dashboard (`mobile-feature-coverage/`, TestRail cases per feature), the
 Testing Assessment charts (`mobile-testing-assessment-charts/`, feature grouping), the coverage scorecards, and
 later the TestRail section → feature mapping.
 

@@ -1,0 +1,93 @@
+# Mobile feature coverage dashboard: TestRail cases and UI automation per L1/L2 feature of the Firefox Mobile
+# feature taxonomy, iOS next to Android, deployed to Quick.
+#
+# Same deploy as mobile-testing-assessment-charts.yml (itself based on tr-critical-dashboard.yml / 'quick gha'):
+#   - Runs weekly and manually, not on every push to main. Every run rebuilds all the data, so --mirror is safe.
+#   - On pull requests touching the dashboard: unit tests only, no TestRail access, no deploy.
+#   - The data file is only written to the site (staff-only behind IAP), never committed: this repo is public.
+#     collect_testrail.py logs totals only.
+#
+# Requires: the org-level Actions variable GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER and this repo's entry in
+# noninternal_gha_repos in Quick's tf/<env>/main.tf (already there for tr-critical). The site is created on the
+# first run. Set a repository Actions variable QUICK_ENV=stage to deploy to nonprod.
+name: Mobile feature coverage dashboard
+
+on:
+  schedule:
+    # Mondays 13:00 UTC, after the taxonomy drift report (06:00) and the assessment charts (12:00).
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Overwrite even if the site was last deployed by someone else
+        type: boolean
+        default: false
+  pull_request:
+    paths:
+      - "mobile-feature-coverage/**"
+      - "mobile-feature-taxonomy/testrail_map.py"
+      - "mobile-feature-taxonomy/features.yml"
+      - ".github/workflows/mobile-feature-coverage.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-feature-coverage-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Unit tests
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r mobile-feature-taxonomy/requirements.txt
+      - run: python -m unittest discover -s mobile-feature-coverage/tests -p 'test_*.py' -v
+
+  deploy:
+    name: Build and deploy
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DIR: mobile-feature-coverage/site
+      SITE: mte-mobile-feature-coverage
+      QUICK_DEPLOYED_BY: github:${{ github.repository }}
+      QUICK_PROJECT: ${{ vars.QUICK_ENV == 'stage' && 'moz-fx-quick-nonprod' || 'moz-fx-quick-prod' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r mobile-feature-taxonomy/requirements.txt
+
+      - name: Pull TestRail cases per feature
+        env:
+          TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
+          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+        run: python mobile-feature-coverage/collect_testrail.py --out "$DIR/data/testrail.json"
+
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: quick-gha-deploy@${{ env.QUICK_PROJECT }}.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - name: Deploy to Quick
+        run: |
+          gcloud storage cp "gs://${QUICK_PROJECT}-cli/quick-linux-amd64" "$RUNNER_TEMP/quick"
+          chmod +x "$RUNNER_TEMP/quick"
+          "$RUNNER_TEMP/quick" deploy "$DIR" "$SITE" --mirror ${{ inputs.force && '--yes' || '' }}
+          echo "Deployed: https://${SITE}.quick.mozilla.cloud/" >> "$GITHUB_STEP_SUMMARY"
