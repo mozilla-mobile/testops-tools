@@ -39,6 +39,8 @@ mobile-feature-taxonomy/
 │   └── snapshot.csv
 ├── feature_map.py          # CLI: check / files / lines / drift
 ├── drift.py                # map-vs-code comparison and suggested fixes
+├── testrail_map.py         # CLI: TestRail cases per feature, from the IDs in section descriptions
+├── testrail_section_check.py  # daily: Slack alert when a TestRail section has no / an unknown feature ID
 └── tests/
 ```
 
@@ -132,6 +134,46 @@ Each map's header sets the platform details: `repo`, `base` (the directory rule 
 - **Use a `SHARED.*` bucket only when the code genuinely serves many features.** They are reported separately, so
   the amount of shared code stays visible.
 - An L1 area alone (e.g. `CRED`) is allowed for code that serves the whole area.
+
+## TestRail cases per feature
+
+TestRail cases are attributed through the Full Functional suite's sections (iOS 45443, Android 3192): each
+section's **description starts with its feature ID**, an L2 (`LIB.BMK`) or an L1 (`CRED`). A case gets the ID of
+its own section, or of the nearest parent section that has one, so a whole subtree only needs the ID once at the
+top; give a subsection its own ID when it belongs to a different feature. Anything after the ID (design links,
+notes) is ignored.
+
+```bash
+uv run testrail_map.py ios check            # unknown IDs (typos), sections whose cases reach no ID, L1-only cases
+uv run testrail_map.py ios counts           # cases and % Automation = Completed per L1/L2 (--csv for a CSV)
+uv run testrail_map.py ios compare --sheet firefox_ios_feature_mapping_with_L1.xlsx   # diff vs a mapping workbook
+uv run testrail_map.py android suggest --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
+```
+
+`suggest` lists, feature by feature, which ID to write in which section so TestRail reproduces a per-case
+mapping workbook, as a checklist to apply by hand (it never writes to TestRail). Container sections with no cases
+of their own get an ID only when everything under them is one feature, so a new subsection of a mixed container
+is reported by `check` instead of silently inheriting a feature.
+
+These are the "TestRail cases" and "UI automation · % of TestRail cases" columns of the coverage page, which
+were first built from a per-case mapping workbook. `compare` shows, per feature and per section, where TestRail
+and that workbook disagree, so the section descriptions can be fixed until they match.
+
+Needs TestRail credentials in `TESTRAIL_HOST`, `TESTRAIL_USERNAME`, `TESTRAIL_PASSWORD`. `--cache FILE` saves the
+fetched sections and cases (no titles or steps) for faster reruns. `check` and `compare` print section names,
+so run them locally, not in a public CI log, and don't commit the cache. `counts` prints aggregates only.
+
+### Daily check
+
+[`mobile-feature-taxonomy-testrail-check.yml`](../.github/workflows/mobile-feature-taxonomy-testrail-check.yml)
+runs `testrail_section_check.py` every day for both platforms. When a section's description starts with an ID
+that isn't in `features.yml`, or a section's cases reach no ID (typically a newly created section under a parent
+with no ID), it posts the sections, with links, to Slack and the run fails. Cases that only reach an L1 are
+accepted. Section names go to Slack only; the public log shows counts.
+
+```bash
+uv run testrail_section_check.py --dry-run     # locally: print the Slack message instead of sending it
+```
 
 ## Changing the taxonomy
 
