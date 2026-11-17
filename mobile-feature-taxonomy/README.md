@@ -33,6 +33,7 @@ mobile-feature-taxonomy/
 ├── taxonomy.py             # generates FEATURES.md, checks it's in sync, exports CSV
 ├── ios/
 │   ├── feature-map.yml     # rules: firefox-ios source path → feature ID
+│   ├── bugs-map.yml        # each escaped GitHub issue → feature ID (decided by hand), plus who counts as external
 │   └── snapshot.csv        # every file and its feature at the last accepted update
 ├── android/
 │   ├── feature-map.yml     # rules: mozilla-firefox/firefox mobile/android path → feature ID
@@ -184,21 +185,35 @@ uv run testrail_section_check.py --dry-run     # locally: print the Slack messag
 =======
 ## Escaped bugs per feature
 
-`<platform>/bugs-map.yml` attributes bugs to features. On Android a bug takes its Bugzilla component's feature;
+`<platform>/bugs-map.yml` attributes bugs to features. Every run covers the current year so far (bugs created from
+January 1 to today) unless `--since` / `--until` say otherwise, and prints the window it used.
+
+**Android** (Bugzilla): a bug takes its component's feature;
 components that mix features (Privacy, Tabs, Browser Engine…) list title rules, and the first one that matches the
 bug summary wins. Each component maps to a feature ID (an L2, an L1 area or a cross-cutting axis `X.*`), or is
 `untriaged` (General: counted without a feature) or `excluded` (UI Tests, Tooling: not product defects). The same
 file says who counts as external: "escaped" bugs are the ones not reported by a team email domain or a bot.
 Duplicates and invalid bugs aren't counted.
 
+Bugs come from the public Bugzilla REST API, so security bugs aren't visible. When a new Bugzilla component
+appears, `check` fails until it gets a line in the map.
+
+**iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't a
+member or collaborator of the org; test and spam issues are dropped. Issues carry no feature labels, and title
+keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand** in
+`ios/bugs-map.yml` (`issue number: FEATURE.ID`, or `{excluded: reason}` for macOS / Focus / memory-leak reports).
+`check` fails while a bug has no decision and prints the lines to paste, with a suggestion from `title_hints`;
+until then the bug counts as untriaged, never with a guessed feature. Needs a GitHub token (`GITHUB_TOKEN`,
+`GH_TOKEN` or the `gh` CLI's).
+
 ```bash
 uv run bugs_map.py android check                   # map is valid and every component in the window has a decision
-uv run bugs_map.py android counts --csv            # escaped bugs per L1/L2 and axis, Jan 1 → today
+uv run bugs_map.py ios check                       # every escaped issue this year has a decision
+uv run bugs_map.py ios counts --csv                # escaped bugs per L1/L2 and axis, Jan 1 → today
 uv run bugs_map.py android --since 2026-01-01 --until 2026-10-27 compare --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
 ```
 
-Bugs come from the public Bugzilla REST API, so security bugs aren't visible. When a new Bugzilla component
-appears, `check` fails until it gets a line in the map. iOS (GitHub issues) is next.
+`--cache FILE` reuses fetched bugs only while they cover the requested window; a later run refetches.
 
 **Cross-cutting axes** (`X.A11Y`, `X.L10N`, `X.PERF`, `X.TELEM`, `X.EXP` in `features.yml`) hold bugs and tests that
 concern the whole app along one axis and can't be attributed to a feature, e.g. the Performance component. They

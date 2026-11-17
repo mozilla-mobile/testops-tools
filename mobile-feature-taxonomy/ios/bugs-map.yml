@@ -1,0 +1,292 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Firefox for iOS bugs → feature IDs (features.yml), read by bugs_map.py.
+#
+# firefox-ios issues carry no feature labels, and title rules alone get the feature right for only ~40% of bugs, so
+# every escaped bug gets a decision by hand in `issues:` (issue number → feature ID, or `{excluded: reason}`).
+# `bugs_map.py ios check` fails while an escaped bug has no decision and prints a suggested line, from
+# `title_hints`, to review and paste here. Undecided bugs are counted as untriaged, never with a guessed feature.
+#
+# Seeded from the Testing Assessment's manual classification of 2026-01-01 → 2026-10-27 (classify.py + orla_map.py).
+
+platform: ios
+source: github
+repo: mozilla-mobile/firefox-ios
+
+# Issues (not PRs) with any of these labels are bugs.
+bug_labels: ["Bug 🐞", "Bug", "bug-🐞", "Crash", "Regression"]
+# Escaped = the author isn't part of the org on GitHub.
+escaped:
+  team_associations: [MEMBER, COLLABORATOR, OWNER]
+# Test and spam issues, dropped before anything else: a title containing one of these phrases, a single short
+# word, or only an email address or URL.
+spam_phrases: ["please ignore", "testing unito", "integration test"]
+
+# Suggestions only (first match wins), used to propose a decision for a new bug.
+title_hints:
+  - {match: "fill link from clipboard|clipboard suggestion", feature: SRCH.URL}
+  - {match: "\\bpdfs?\\b|print", feature: BRW.PDF}
+  - {match: "reader (mode|view)", feature: BRW.READ}
+  - {match: "find in page|find bar", feature: BRW.FIND}
+  - {match: "\\bzoom|desktop (site|mode)|request desktop", feature: BRW.ZOOM}
+  - {match: "picture.in.picture|\\bpip\\b|video|audio|media|autoplay|fullscreen", feature: BRW.MEDIA}
+  - {match: "error page|offline|no (internet|network)|wayback", feature: BRW.ERR}
+  - {match: "open(ing)? (link|links) in (app|apps)|app links?|intent", feature: BRW.LINKS}
+  - {match: "report broken site|webcompat|web compat", feature: BRW.WEBC}
+  - {match: "text selection|select(ed|ing)? text|copy|paste|clipboard|context menu|long.press|\\bime\\b|keyboard", feature: BRW.CTX}
+  - {match: "password generator|generate(d)? password", feature: CRED.GEN}
+  - {match: "passkey|webauthn", feature: CRED.PASSKEY}
+  - {match: "password|\\blogins?\\b", feature: CRED.PW}
+  - {match: "credit card|payment method", feature: CRED.CC}
+  - {match: "address(es)? (autofill|form|bar autofill)|autofill.*address|saved address", feature: CRED.ADDR}
+  - {match: "relay|email mask", feature: CRED.MASK}
+  - {match: "send tab|synced tab", feature: ACCT.SEND}
+  - {match: "\\bsync", feature: ACCT.SYNC}
+  - {match: "sign.?in|sign.?out|log.?in to|mozilla account|firefox account|\\bfxa\\b|pairing", feature: ACCT.SIGN}
+  - {match: "summar", feature: AI.SUM}
+  - {match: "ai control|block ai", feature: AI.CTRL}
+  - {match: "translat", feature: TRANS.PAGE}
+  - {match: "tab strip|tabstrip", feature: TABS.STRIP}
+  - {match: "inactive tab|recently closed", feature: TABS.CLOSED}
+  - {match: "tab group|collection", feature: TABS.GRP}
+  - {match: "biometric|fingerprint|private (mode|browsing)? ?lock|lock private", feature: PRIV.LOCK}
+  - {match: "private (tab|mode|browsing)|\\bpbm\\b|incognito", feature: PRIV.MODE}
+  - {match: "tracking protection|\\betp\\b|trust panel|unified trust|tracker", feature: PROT.ETP}
+  - {match: "cookie banner|ad ?block", feature: PROT.ADB}
+  - {match: "https|certificate|\\bssl\\b|\\btls\\b|site identity|\\bdoh\\b", feature: PROT.HTTPS}
+  - {match: "permission|location|camera|microphone|notification prompt", feature: PROT.PERM}
+  - {match: "delete browsing data|clear (data|history|cache)|delete.*on quit", feature: PROT.CLEAR}
+  - {match: "ip protection|\\bvpn\\b", feature: PROT.VPN}
+  - {match: "wallpaper", feature: HOME.WALL}
+  - {match: "\\bstor(y|ies)\\b|pocket|discover", feature: HOME.STORY}
+  - {match: "shortcut|top site", feature: HOME.SC}
+  - {match: "jump back|recent(ly)? (visited|tabs|saved|bookmarks)|task continuity", feature: HOME.JBI}
+  - {match: "homepage|home ?screen|new tab page", feature: HOME.SET}
+  - {match: "bookmark", feature: LIB.BMK}
+  - {match: "history", feature: LIB.HIST}
+  - {match: "download", feature: LIB.DL}
+  - {match: "search suggest|firefox suggest|suggestion", feature: SRCH.SUG}
+  - {match: "trending|recent search", feature: SRCH.REC}
+  - {match: "qr code|\\bqr\\b|voice search|google lens", feature: SRCH.VIS}
+  - {match: "search engine|default search|search shortcut|search provider", feature: SRCH.ENG}
+  - {match: "address bar|url ?bar|autocomplete|awesomebar|\\burl\\b", feature: SRCH.URL}
+  - {match: "toolbar|navigation bar|nav bar", feature: UI.TB}
+  - {match: "\\bmenu\\b|three.dot|app menu", feature: UI.MENU}
+  - {match: "snackbar|toast", feature: UI.TOAST}
+  - {match: "swipe|gesture", feature: UI.GEST}
+  - {match: "onboarding|first run|welcome", feature: ENG.ONB}
+  - {match: "terms of use|\\btou\\b", feature: ENG.TOU}
+  - {match: "microsurvey|survey|rating prompt", feature: ENG.SURV}
+  - {match: "notification", feature: ENG.NOTIF}
+  - {match: "\\bcfr\\b|message|banner", feature: ENG.CFR}
+  - {match: "share sheet|\\bshare\\b", feature: OS.SHARE}
+  - {match: "widget", feature: OS.WID}
+  - {match: "default browser", feature: OS.DEF}
+  - {match: "custom tab|\\bpwa\\b|web app", feature: OS.CTAB}
+  - {match: "add-?on|extension", feature: EXT.ADDON}
+  - {match: "dark (mode|theme)|light theme|\\btheme|color|colour|icon", feature: SET.THEME}
+  - {match: "language|locale", feature: SET.LANG}
+  - {match: "setting", feature: SET.FRAME}
+  - {match: "crash report", feature: APP.CRASH}
+  - {match: "session restore|restore tabs|data loss", feature: APP.SESS}
+  - {match: "\\btabs?\\b", feature: TABS.TRAY}
+
+issues:
+  31497: LIB.DL
+  31500: UI.GEST
+  31538: CRED.CC
+  31588: CRED.CC
+  31702: TABS.STRIP
+  31737: SRCH.URL
+  31746: BRW.NAV
+  31789: BRW.NAV
+  31808: PROT.HTTPS
+  31811: {excluded: "macOS, not iOS"}
+  31835: CRED.CC
+  31838: CRED.CC
+  31886: BRW.NAV
+  31899: SRCH.URL
+  31909: BRW.READ
+  31950: SRCH.ENG
+  31992: BRW.PDF
+  32016: PROT.ETP
+  32026: SRCH.URL
+  32110: SET.ICON
+  32170: BRW.WEBC
+  32219: {excluded: "memory leak found by profiling"}
+  32310: BRW.LINKS
+  32326: APP.SVC
+  32334: TABS.TRAY
+  32340: HOME.SC
+  32351: PROT.HTTPS
+  32382: BRW.LINKS
+  32405: BRW.PDF
+  32406: APP.SESS
+  32424: BRW.LINKS
+  32428: HOME.WALL
+  32430: SRCH.ENG
+  32454: TABS.TRAY
+  32463: BRW.NAV
+  32464: BRW.MEDIA
+  32503: BRW.WEBC
+  32505: PROT.HTTPS
+  32535: PROT.PERM
+  32557: BRW.PDF
+  32637: BRW.PDF
+  32644: BRW.WEBC
+  32722: SRCH.URL
+  32741: UI.TB
+  32781: PROT.HTTPS
+  32794: HOME.WALL
+  32820: BRW.CTX
+  32830: APP
+  32863: SRCH.ENG
+  32873: UI.TB
+  32880: CRED.PW
+  32895: SRCH.URL
+  32906: BRW.WEBC
+  32920: TABS.TRAY
+  32930: BRW.NAV
+  32968: BRW.MEDIA
+  33033: BRW.MEDIA
+  33064: HOME.SC
+  33102: BRW.NAV
+  33119: PROT.HTTPS
+  33180: BRW.NAV
+  33188: PROT.HTTPS
+  33195: BRW.NAV
+  33202: UI.TB
+  33229: BRW.WEBC
+  33318: ACCT.SYNC
+  33391: BRW.READ
+  33442: LIB.HIST
+  33448: SRCH.URL
+  33464: BRW.WEBC
+  33466: SRCH.ENG
+  33467: BRW.NAV
+  33482: PROT.CLEAR
+  33491: BRW.NAV
+  33496: TABS.CLOSED
+  33499: CRED.PW
+  33519: ENG.ONB
+  33520: TABS.TRAY
+  33528: UI.TB
+  33545: {excluded: "Focus, not Firefox"}
+  33583: SRCH.URL
+  33584: CRED.PW
+  33653: APP
+  33663: OS.ASSIST
+  33720: ACCT.SYNC
+  33721: UI.TB
+  33742: SRCH.URL
+  33850: PRIV.MODE
+  33866: SET.THEME
+  33952: APP.SVC
+  33962: BRW.CTX
+  33975: BRW.MEDIA
+  33977: AI.CTRL
+  33988: {excluded: "spam the title filter missed"}
+  34023: TABS.STRIP
+  34027: SRCH.ENG
+  34080: BRW.WEBC
+  34081: ACCT.SYNC
+  34085: BRW.MEDIA
+  34164: PRIV.MODE
+  34218: BRW.MEDIA
+  34314: SRCH.URL
+  34335: SRCH.URL
+  34360: BRW.CTX
+  34386: LIB.HIST
+  34444: TABS.TRAY
+  34479: TABS.TRAY
+  34512: PROT.HTTPS
+  34514: {excluded: "'Mozilla Firefox', no content"}
+  34518: LIB.BMK
+  34554: {excluded: "memory leak found by profiling"}
+  34581: HOME.SC
+  34586: SRCH.SUG
+  34589: BRW.MEDIA
+  34606: CRED.PW
+  34615: APP
+  34620: UI.TB
+  34638: {excluded: "memory leak found by profiling"}
+  34646: BRW.NAV
+  34656: SRCH.URL
+  34663: PRIV.MODE
+  34685: LIB.DL
+  34726: ENG.SURV
+  34739: PROT.PERM
+  34748: UI.TB
+  34763: BRW.LINKS
+  34764: BRW.WEBC
+  34883: HOME.WALL
+  35043: LIB.DL
+  35044: LIB.BMK
+  35085: BRW.MEDIA
+  35111: SRCH.URL
+  35150: BRW.NAV
+  35225: BRW.ERR
+  35268: BRW.ERR
+  35275: SRCH.URL
+  35342: TABS.TRAY
+  35371: TRANS.PAGE
+  35457: {excluded: "memory leak found by profiling"}
+  35459: {excluded: "memory leak found by profiling"}
+  35463: LIB.DL
+  35464: {excluded: "unit test failure, not a product bug"}
+  35479: {excluded: "unit test infrastructure, not a product bug"}
+  35546: BRW.NAV
+  35573: SET.THEME
+  35594: {excluded: "memory leak found by profiling"}
+  35595: {excluded: "memory leak found by profiling"}
+  35596: {excluded: "memory leak found by profiling"}
+  35613: {excluded: "memory leak found by profiling"}
+  35614: {excluded: "memory leak found by profiling"}
+  35638: SRCH.URL
+  35639: LIB.HIST
+  35652: TABS.STRIP
+  35681: SET.THEME
+  35683: {excluded: "macOS helper prompt, not iOS"}
+  35720: TABS.CLOSED
+  35726: {excluded: "memory leak found by profiling"}
+  35727: {excluded: "memory leak found by profiling"}
+  35728: {excluded: "memory leak found by profiling"}
+  35729: {excluded: "memory leak found by profiling"}
+  35823: {excluded: "memory leak found by profiling"}
+  35824: {excluded: "memory leak found by profiling"}
+  35828: {excluded: "memory leak found by profiling"}
+  35829: {excluded: "memory leak found by profiling"}
+  35831: TABS.STRIP
+  35865: TABS.CLOSED
+  35886: LIB.BMK
+  35962: {excluded: "memory leak found by profiling"}
+  35964: BRW.READ
+  35971: SRCH.URL
+  35986: CRED.PW
+  36003: CRED.PW
+  36008: CRED.PW
+  36012: BRW.NAV
+  36026: SET.THEME
+  36041: SET.FRAME
+  36042: APP
+  36043: APP
+  36045: BRW.ZOOM
+  36075: SET.FRAME
+  36206: LIB.BMK
+  36215: APP
+  36226: {excluded: "memory leak found by profiling"}
+  36256: UI.GEST
+  36259: CRED.PW
+  36263: BRW.MEDIA
+  36265: {excluded: "memory leak found by profiling"}
+  36268: {excluded: "memory leak found by profiling"}
+  36270: {excluded: "memory leak found by profiling"}
+  36271: {excluded: "memory leak found by profiling"}
+  36272: {excluded: "memory leak found by profiling"}
+  36273: APP
+  36278: SRCH.SUG
+  36296: SRCH.ENG
+  36306: SRCH.SUG
+  36330: SET.ICON
