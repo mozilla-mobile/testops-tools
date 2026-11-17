@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Firefox mobile — test coverage by feature (iOS vs Android)</title>
+<title>Firefox mobile — feature health (iOS vs Android)</title>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
@@ -13,7 +13,7 @@
   --surface-0: #f4f3f0; --surface-1: #fcfcfb; --surface-2: #f0efec;
   --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #77756f;
   --rule: #e2e0da; --head: #17365d; --head-text: #ffffff;
-  --bar: #a9a79f;
+  --bar: #cfcdc6; --bar-open: #52514e;
   --h0: #cde2fb; --h1: #9ec5f4; --h2: #6da7ec; --h3: #256abf; --h4: #104281;
   --t0: #0b0b0b; --t1: #0b0b0b; --t2: #0b0b0b; --t3: #ffffff; --t4: #ffffff;
   --focus: #2a78d6;
@@ -23,7 +23,7 @@
     color-scheme: dark;
     --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422;
     --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
-    --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #6b6a63;
+    --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #4a4a44; --bar-open: #c3c2b7;
     --h0: #0d366b; --h1: #184f95; --h2: #2a78d6; --h3: #6da7ec; --h4: #b7d3f6;
     --t0: #f0efec; --t1: #f0efec; --t2: #ffffff; --t3: #0b0b0b; --t4: #0b0b0b; --focus: #6da7ec;
   }
@@ -32,7 +32,7 @@
   color-scheme: dark;
   --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422;
   --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
-  --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #6b6a63;
+  --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #4a4a44; --bar-open: #c3c2b7;
   --h0: #0d366b; --h1: #184f95; --h2: #2a78d6; --h3: #6da7ec; --h4: #b7d3f6;
   --t0: #f0efec; --t1: #f0efec; --t2: #ffffff; --t3: #0b0b0b; --t4: #0b0b0b; --focus: #6da7ec;
 }
@@ -82,6 +82,29 @@ td.cnt.zero { color: var(--text-muted); }
   border: 1px solid var(--rule); border-radius: 6px; padding: 7px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); display: none; }
 .tip b { display: block; margin-bottom: 2px; }
 .error { border-left: 4px solid var(--h3); background: var(--surface-1); padding: 8px 12px; border-radius: 4px; max-width: 1100px; }
+td.cnt.click { cursor: pointer; }
+td.cnt .open { color: var(--text-muted); font-weight: 400; font-size: 12px; margin-right: 6px; }
+td.cnt .bar.o { background: var(--bar-open); }
+.legend .bk { display: inline-block; width: 16px; height: 4px; border-radius: 2px; vertical-align: middle; }
+dialog.bugs .seg { margin-left: 4px; }
+dialog.bugs .seg button { padding: 3px 10px; }
+td.cnt.click:hover { text-decoration: underline; }
+dialog.bugs { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-1); color: var(--text-primary);
+  width: min(860px, 92vw); max-height: 80vh; padding: 0; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+dialog.bugs::backdrop { background: rgba(0,0,0,.35); }
+dialog.bugs header { position: sticky; top: 0; background: var(--surface-1); padding: 14px 18px 10px; border-bottom: 1px solid var(--rule);
+  display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+dialog.bugs h3 { margin: 0; font-size: 15px; }
+dialog.bugs header a, dialog.bugs li a { color: var(--focus); text-decoration: none; }
+dialog.bugs header a:hover, dialog.bugs li a:hover { text-decoration: underline; }
+dialog.bugs .close { margin-left: auto; border: 1px solid var(--rule); background: var(--surface-2); color: var(--text-primary);
+  border-radius: 6px; padding: 3px 10px; cursor: pointer; font: inherit; }
+dialog.bugs .hint { color: var(--text-muted); font-size: 12px; width: 100%; }
+dialog.bugs ul { list-style: none; margin: 0; padding: 6px 18px 16px; }
+dialog.bugs li { display: grid; grid-template-columns: 86px minmax(0, 1fr) 200px; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+dialog.bugs li .num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+dialog.bugs li .st { color: var(--text-muted); font-size: 12px; text-align: right; }
+dialog.bugs li span:nth-child(2) { overflow-wrap: anywhere; }
 .notes { max-width: 1100px; color: var(--text-secondary); font-size: 13px; margin-top: 22px; }
 .notes h2 { font-size: 15px; color: var(--text-primary); margin: 18px 0 6px; }
 .notes li { margin: 3px 0; }
@@ -89,9 +112,11 @@ td.cnt.zero { color: var(--text-muted); }
 </head>
 <body>
 <div class="viz-root">
-  <h1>Firefox mobile — test coverage by feature</h1>
-  <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android.
-    Hover any cell for details.</p>
+  <h1>Firefox mobile — feature health</h1>
+  <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
+    TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
+    Hover any cell for details; click a bug count to see the bugs.</p>
+  <p class="error" id="notice" hidden></p>
   <p class="meta" id="meta">Loading…</p>
 
   <div class="toolbar">
@@ -110,6 +135,10 @@ td.cnt.zero { color: var(--text-muted); }
       <span class="sw" style="background:var(--h2);color:var(--t2)">40–60</span>
       <span class="sw" style="background:var(--h3);color:var(--t3)">60–80</span>
       <span class="sw" style="background:var(--h4);color:var(--t4)">80–100</span>
+    </div>
+    <div class="legend" aria-label="Bug bars">Bug bars:
+      <span class="bk" style="background:var(--bar-open)"></span> open
+      <span class="bk" style="background:var(--bar)"></span> closed
     </div>
     <div class="seg" role="group" aria-label="Theme">
       <button data-theme="light" aria-pressed="false">Light</button>
@@ -132,6 +161,10 @@ td.cnt.zero { color: var(--text-muted); }
         <i>Automation</i> field is <i>Completed</i> (XCUITest / Espresso). It's the TestRail status, not a verified run.</li>
       <li><b>Manual · TestRail cases</b> — number of Full Functional cases attributed to the feature, automated ones included.
         <span id="tr-totals"></span></li>
+      <li><b>Escaped bugs</b> — bugs reported by people outside the team, created this year so far. Click a number to see the bugs.
+        iOS: firefox-ios GitHub issues with a bug label, author not an org member or collaborator, feature decided by hand.
+        Android: Bugzilla <i>Firefox for Android</i> defects, reporter not @mozilla.com and not a bot, duplicates / invalid excluded,
+        feature from the component (refined by title inside mixed components). <span id="bug-totals"></span></li>
     </ul>
     <h2>How cases are attributed</h2>
     <ul>
@@ -146,51 +179,89 @@ td.cnt.zero { color: var(--text-muted); }
   </div>
 
   <div class="tip" id="tip" role="tooltip"></div>
+  <dialog class="bugs" id="bugs" aria-labelledby="bugs-title">
+    <header><h3 id="bugs-title"></h3>
+      <div class="seg" role="group" aria-label="Show"><button data-st="open">Open</button><button data-st="closed">Closed</button><button data-st="all">All</button></div>
+      <a id="bugs-open" target="_blank" rel="noopener"></a>
+      <button class="close" id="bugs-close">Close</button><div class="hint" id="bugs-hint"></div></header>
+    <ul id="bugs-list"></ul>
+  </dialog>
 </div>
 
 <script>
 const PLATFORMS = [["ios", "iOS"], ["android", "Android"]];
 // One entry per column group; each group has an iOS and an Android column. New data sources add a group here.
 const GROUPS = [
-  {title: "UI automation · % of TestRail cases", short: "UI automation", cell: (c, p) => automationCell(c, p)},
-  {title: "Manual · TestRail cases", short: "TestRail cases", cell: (c, p) => casesCell(c, p)},
+  {title: "UI automation · % of TestRail cases", short: "UI automation", cell: (key, p, name) => automationCell(key, p, name)},
+  {title: "Manual · TestRail cases", short: "TestRail cases", cell: (key, p, name) => casesCell(key, p, name)},
+  {title: "Escaped bugs · this year", short: "Escaped bugs", cell: (key, p, name) => bugsCell(key, p, name)},
 ];
 const COLS = GROUPS.flatMap(g => PLATFORMS.map(([, name]) => `${g.short} ${name}`));
-const WORKFLOW = "https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-feature-coverage.yml";
+const WORKFLOW = "https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-feature-health.yml";
 
 const tbody = document.querySelector("#t tbody");
 const tip = document.getElementById("tip");
-let ROWS = [], view = "group", sortKey = null, sortDir = -1, query = "";
+let ROWS = [], FEATURES = null, TR = null, BUGS = null, view = "group", sortKey = null, sortDir = -1, query = "";
 const collapsed = new Set();
 
 const bin = v => v < 20 ? 0 : v < 40 ? 1 : v < 60 ? 2 : v < 80 ? 3 : 4;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const plural = (n, w) => `${n.toLocaleString()} ${w}${n === 1 ? "" : "s"}`;
 
-function automationCell(c, platform) {
+const ZERO = {total: 0, automated: 0};
+const trOf = (key, p) => key === "TOTAL" ? TR.totals[p] : (TR.platforms[p].features[key] || ZERO);
+const bugsOnly = key => key.startsWith("X.") || key === "UNTRIAGED" || key === "L1:X";
+function automationCell(key, p, platform) {
+  if (bugsOnly(key)) return {na: "Bugs only"};
+  if (!TR) return {na: "No TestRail data this run"};
+  const c = trOf(key, p);
   if (!c.total) return {na: `No ${platform} TestRail cases`};
   return {v: 100 * c.automated / c.total, tip: `${c.automated} of ${plural(c.total, "TestRail case")} marked Automation = Completed`};
 }
-function casesCell(c) {
+function casesCell(key, p) {
+  if (bugsOnly(key)) return {na: "Bugs only"};
+  if (!TR) return {na: "No TestRail data this run"};
+  const c = trOf(key, p);
   return {n: c.total, tip: `${plural(c.total, "TestRail case")} (${c.automated} automated, ${c.total - c.automated} not)`};
 }
 
-function buildRows(data) {
-  const zero = {total: 0, automated: 0};
-  const get = (p, key) => data.platforms[p].features[key] || zero;
-  const cells = key => GROUPS.flatMap(g => PLATFORMS.map(([p, name]) => g.cell(get(p, key), name)));
-  const rows = data.features.map(f => f.type === "l1"
+function bugsCell(key, p, platform) {
+  if (!BUGS) return {na: "No bug data this run"};
+  const d = BUGS.platforms[p];
+  if (key === "L1:X") {
+    const ids = FEATURES.crosscutting.flatMap(x => d.features[x.id] || []);
+    const nOpen = ids.filter(id => d.bugs[id].open).length;
+    return {n: ids.length, open: nOpen, bugs: ids.length ? {p, key, ids} : null,
+            tip: `${plural(ids.length, "escaped bug")} on a cross-cutting axis: ${nOpen} open, ${ids.length - nOpen} closed`};
+  }
+  const ids = key === "TOTAL" ? Object.keys(d.bugs) : (d.features[key] || []);
+  const nOpen = ids.filter(id => d.bugs[id].open).length;
+  const what = key === "UNTRIAGED"
+    ? (p === "ios" ? "waiting for a feature decision" : "in Bugzilla's General component, not triaged yet") : "";
+  return {n: ids.length, open: nOpen, bugs: ids.length ? {p, key, ids} : null,
+          tip: `${plural(ids.length, "escaped " + platform + " bug")}${what ? " " + what : ""}` +
+               (ids.length ? `: ${nOpen} open, ${ids.length - nOpen} closed · click to list` : "")};
+}
+
+function buildRows() {
+  const cells = key => GROUPS.flatMap(g => PLATFORMS.map(([p, name]) => g.cell(key, p, name)));
+  const rows = FEATURES.features.map(f => f.type === "l1"
     ? {type: "l1", id: f.id, name: f.name, cells: cells("L1:" + f.id)}
     : {type: "l2", id: f.id, l1: f.l1, name: f.name, cells: cells(f.id)});
-  const total = {};
+  if (BUGS) {
+    rows.push({type: "l1", id: "X", name: "Cross-cutting axes (bugs only)", cells: cells("L1:X")});
+    FEATURES.crosscutting.forEach(x => rows.push({type: "l2", id: x.id, l1: "X", name: x.name, cells: cells(x.id)}));
+    rows.push({type: "l1", id: "—", name: "Escaped bugs without a feature yet", cells: cells("UNTRIAGED")});
+  }
+  if (TR) TR.totals = {};
   for (const [p] of PLATFORMS) {
-    total[p] = {total: 0, automated: 0};
-    data.features.filter(f => f.type === "l1").forEach(f => {
-      const c = get(p, "L1:" + f.id); total[p].total += c.total; total[p].automated += c.automated;
+    if (!TR) break;
+    TR.totals[p] = {total: 0, automated: 0};
+    FEATURES.features.filter(f => f.type === "l1").forEach(f => {
+      const c = trOf("L1:" + f.id, p); TR.totals[p].total += c.total; TR.totals[p].automated += c.automated;
     });
   }
-  rows.push({type: "total", id: "TOTAL", name: "All features",
-             cells: GROUPS.flatMap(g => PLATFORMS.map(([p, name]) => g.cell(total[p], name)))});
+  rows.push({type: "total", id: "TOTAL", name: "All", cells: cells("TOTAL")});
   return rows;
 }
 
@@ -217,9 +288,20 @@ function cellHTML(r, c, i, m) {
     const b = bin(c.v);
     return `<td class="heat${cls}"${tipAttr}><span style="background:var(--h${b});color:var(--t${b})">${c.v.toFixed(1)}%</span></td>`;
   }
-  const max = m[r.type + i] || 1, w = Math.round(100 * c.n / max);
-  const bar = r.type === "total" ? "" : `<span class="bar" style="width:calc((100% - 16px) * ${w / 100})"></span>`;
-  return `<td class="cnt${cls}${c.n === 0 ? " zero" : ""}"${tipAttr}>${c.n.toLocaleString()}${bar}</td>`;
+  const max = m[r.type + i] || 1, w = c.n / max;
+  let bar = r.type === "total" ? "" : `<span class="bar" style="width:calc((100% - 16px) * ${w})"></span>`;
+  let openTxt = "";
+  if (c.open !== undefined && c.n) {
+    openTxt = `<span class="open">${c.open.toLocaleString()} open ·</span>`;
+    if (r.type !== "total") {   // open segment, then a 2px gap, then closed
+      const wo = w * c.open / c.n, wc = w - wo;
+      bar = (c.open ? `<span class="bar o" style="width:calc((100% - 16px) * ${wo})"></span>` : "") +
+        (c.n - c.open ? `<span class="bar" style="left:calc(8px + (100% - 16px) * ${wo} + ${c.open ? 2 : 0}px);` +
+          `width:max(0px, calc((100% - 16px) * ${wc} - ${c.open ? 2 : 0}px))"></span>` : "");
+    }
+  }
+  const click = c.bugs ? ` click" data-bugs="${i}` : "";
+  return `<td class="cnt${cls}${c.n === 0 ? " zero" : ""}${click}"${tipAttr}>${openTxt}${c.n.toLocaleString()}${bar}</td>`;
 }
 
 function rowHTML(r, m) {
@@ -275,7 +357,10 @@ function wire() {
   document.getElementById("expand").onclick = () => { collapsed.clear(); setView("group"); };
   document.getElementById("collapse").onclick = () => { ROWS.filter(r => r.type === "l1").forEach(r => collapsed.add(r.id)); setView("group"); };
   const toggle = id => { collapsed.has(id) ? collapsed.delete(id) : collapsed.add(id); render(); };
-  tbody.addEventListener("click", e => { const t = e.target.closest("[data-toggle]"); if (t) toggle(t.dataset.toggle); });
+  tbody.addEventListener("click", e => {
+    const b = e.target.closest("[data-bugs]");
+    if (b) { const row = ROWS.find(r => r.id === b.dataset.row); showBugs(row, row.cells[+b.dataset.bugs].bugs); return; }
+    const t = e.target.closest("[data-toggle]"); if (t) toggle(t.dataset.toggle); });
   tbody.addEventListener("keydown", e => { const t = e.target.closest("[data-toggle]");
     if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggle(t.dataset.toggle); } });
   const sortBy = th => {
@@ -306,13 +391,75 @@ function wire() {
   });
 }
 
-function describe(data) {
+let bugSel = null, bugRow = null, bugState = "open";
+document.querySelectorAll("dialog.bugs [data-st]").forEach(b => b.onclick = () => { bugState = b.dataset.st; drawBugs(); });
+function showBugs(row, sel) {
+  bugRow = row; bugSel = sel;
+  const d = BUGS.platforms[sel.p];
+  bugState = sel.ids.some(id => d.bugs[id].open) ? "open" : "all";
+  drawBugs();
+  document.getElementById("bugs").showModal();
+}
+function drawBugs() {
+  const row = bugRow, d = BUGS.platforms[bugSel.p];
+  const all = bugSel.ids, open = all.filter(id => d.bugs[id].open);
+  const shown = bugState === "open" ? open : bugState === "closed" ? all.filter(id => !d.bugs[id].open) : all;
+  document.querySelectorAll("dialog.bugs [data-st]").forEach(b => {
+    b.setAttribute("aria-pressed", b.dataset.st === bugState);
+    b.textContent = {open: `Open (${open.length})`, closed: `Closed (${all.length - open.length})`, all: `All (${all.length})`}[b.dataset.st];
+  });
+  const sel = {p: bugSel.p, ids: shown};
+  const name = PLATFORMS.find(([p]) => p === sel.p)[1];
+  const label = row.id === "TOTAL" ? "All escaped bugs" : row.id === "—" ? "Without a feature yet" : `${row.id} ${row.name}`;
+  document.getElementById("bugs-title").textContent = `${label} · ${name}`;
+  const link = document.getElementById("bugs-open");
+  const listUrl = d.list_url ? d.list_url + sel.ids.join(",") : null;
+  if (listUrl) { link.href = listUrl; link.textContent = `Open these ${sel.ids.length} in Bugzilla ›`; }
+  link.hidden = !listUrl || !sel.ids.length;
+  document.getElementById("bugs-hint").textContent = d.source === "github"
+    ? "GitHub search can't list a set of issues, so each one links to GitHub." : "";
+  const ids = [...sel.ids].sort((a, b) => +b - +a);
+  document.getElementById("bugs-list").innerHTML = ids.map(id => {
+    const b = d.bugs[id];
+    const st = [b.state, b.resolution].filter(Boolean).join(" · ");
+    return `<li><a class="num" href="${esc(b.url)}" target="_blank" rel="noopener">${d.source === "github" ? "#" : ""}${esc(id)}</a>` +
+      `<span>${esc(b.title)}</span><span class="st">${esc(b.created)}${st ? " · " + esc(st) : ""}</span></li>`;
+  }).join("") || `<li><span></span><span>No ${bugState} bugs.</span><span></span></li>`;
+}
+// Deep link to a bug list: #bugs=<platform>:<row id>, e.g. #bugs=android:BRW.NAV
+function openFromHash() {
+  const m = decodeURIComponent(location.hash).match(/^#bugs=(ios|android):(.+)$/);
+  if (!m || !BUGS) return;
+  const row = ROWS.find(r => r.id === m[2]);
+  const i = GROUPS.length - 1, col = i * PLATFORMS.length + PLATFORMS.findIndex(([p]) => p === m[1]);
+  if (row && row.cells[col].bugs) showBugs(row, row.cells[col].bugs);
+}
+window.addEventListener("hashchange", openFromHash);
+document.getElementById("bugs-close").onclick = () => document.getElementById("bugs").close();
+document.getElementById("bugs").addEventListener("click", e => { if (e.target.id === "bugs") e.target.close(); });
+
+function describe(status) {
+  const data = TR || BUGS || status;
   const when = new Date(data.generated_at);
   const date = when.toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"});
   document.getElementById("meta").innerHTML =
-    `TestRail data from <time datetime="${esc(data.generated_at)}">${esc(date)}</time> · updated every Monday · ` +
-    `<a href="${WORKFLOW}">Refresh data</a> (Run workflow)`;
-  document.getElementById("tr-totals").textContent = PLATFORMS.map(([p, name]) => {
+    `Data from <time datetime="${esc(data.generated_at)}">${esc(date)}</time> · updated every Monday · ` +
+    `<a href="${WORKFLOW}">Refresh data</a> (Run workflow)` +
+    (BUGS ? `<br>Escaped bugs created ${esc(BUGS.since)} → ${esc(BUGS.until)} · ` +
+      `<a href="${esc(BUGS.platforms.android.query_url)}">Android query in Bugzilla ›</a> · ` +
+      `<a href="${esc(BUGS.platforms.ios.query_url)}">iOS search on GitHub ›</a> (includes team-filed issues: GitHub can't filter by org)` : "");
+  if (BUGS) document.getElementById("bug-totals").textContent = PLATFORMS.map(([p, name]) => {
+    const c = BUGS.platforms[p];
+    return `${name}: ${plural(c.escaped, "bug")}` + (c.undecided ? ` (${c.undecided} waiting for a feature decision)` : "");
+  }).join("; ") + ".";
+  const failed = Object.entries((status && status.sources) || {}).filter(([, v]) => !v.ok).map(([k]) => k);
+  const notice = document.getElementById("notice");
+  if (failed.length) {
+    notice.hidden = false;
+    notice.textContent = `This run couldn't refresh: ${failed.join(", ")}. Those columns show no data; ` +
+      "re-run the workflow, or see its log.";
+  }
+  if (TR) document.getElementById("tr-totals").textContent = PLATFORMS.map(([p, name]) => {
     const c = data.platforms[p];
     return `${name}: ${plural(c.cases, "case")}` + (c.no_feature ? `, ${c.no_feature} not attributed to any feature` : "");
   }).join("; ") + ".";
@@ -320,12 +467,18 @@ function describe(data) {
 
 header();
 wire();
-fetch("data/testrail.json", {cache: "no-cache"})
+const load = (f, optional) => fetch(f, {cache: "no-cache"})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(data => { ROWS = buildRows(data); describe(data); render(); })
+  .catch(e => { if (optional) return null; throw e; });
+Promise.all([load("data/features.json"), load("data/testrail.json", true), load("data/bugs.json", true),
+             load("data/status.json", true)])
+  .then(([features, tr, bugs, status]) => {
+    FEATURES = features; TR = tr; BUGS = bugs;
+    ROWS = buildRows(); describe(status); render(); openFromHash();
+  })
   .catch(() => {
     document.getElementById("meta").innerHTML =
-      `<span class="error">Couldn't load <code>data/testrail.json</code>. Run the <a href="${WORKFLOW}">workflow</a> to build it.</span>`;
+      `<span class="error">Couldn't load the dashboard data. Run the <a href="${WORKFLOW}">workflow</a> to build it.</span>`;
   });
 </script>
 </body>

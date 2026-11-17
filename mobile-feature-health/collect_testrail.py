@@ -8,13 +8,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-"""TestRail cases and UI automation per L1/L2 feature, iOS and Android, for the feature coverage dashboard.
+"""TestRail cases and UI automation per L1/L2 feature, iOS and Android, for the feature health dashboard.
 
 Cases are attributed with ../mobile-feature-taxonomy/testrail_map.py: the feature ID at the start of each Full
 Functional section's description (or of its nearest parent). Only aggregate counts are written: no section names,
 titles or case IDs reach the output file or the log, because this repo and its Actions logs are public.
 
-Usage:
+Normally run through collect.py, which builds every data file of the dashboard. On its own:
     python collect_testrail.py --out site/data/testrail.json
     python collect_testrail.py --cache-dir /tmp/tr --out site/data/testrail.json   # reuse fetched data locally
 """
@@ -29,21 +29,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_DIR = os.path.join(os.path.dirname(HERE), "mobile-feature-taxonomy")
 sys.path.insert(0, TAXONOMY_DIR)
 
-import taxonomy  # noqa: E402
 import testrail_map  # noqa: E402
 from feature_map import load_taxonomy  # noqa: E402
 
 JSON_SCHEMA_VERSION = 1
 PLATFORMS = ("ios", "android")
-
-
-def feature_list():
-    """[{"type": "l1", "id", "name"}, {"type": "l2", "id", "l1", "name"}, ...] in features.yml order."""
-    out = []
-    for l1, area, features in taxonomy.areas(taxonomy.load()):
-        out.append({"type": "l1", "id": l1, "name": area})
-        out += [{"type": "l2", "id": f["id"], "l1": l1, "name": f["name"]} for f in features]
-    return out
 
 
 def platform_counts(data, ids):
@@ -67,9 +57,26 @@ def collect(data_by_platform):
     return {
         "schema_version": JSON_SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "features": feature_list(),
         "platforms": {p: platform_counts(d, ids) for p, d in data_by_platform.items()},
     }
+
+
+def build(cache_dir=None):
+    """Fetch both suites (or read them from cache_dir/<platform>.json) and return the data file's content."""
+    data_by_platform = {}
+    for p in PLATFORMS:
+        cache = os.path.join(cache_dir, f"{p}.json") if cache_dir else None
+        data_by_platform[p] = testrail_map.load_data(p, cache)
+    return collect(data_by_platform)
+
+
+def summary(out):
+    """One line per platform, totals only."""
+    lines = []
+    for p, c in out["platforms"].items():
+        automated = sum(v["automated"] for k, v in c["features"].items() if k.startswith("L1:"))
+        lines.append(f"{p}: {c['cases']} cases, {automated} automated, {c['no_feature']} with no feature")
+    return lines
 
 
 def main(argv=None):
@@ -78,15 +85,8 @@ def main(argv=None):
     parser.add_argument("--cache-dir", help="read/write <platform>.json here instead of always fetching")
     args = parser.parse_args(argv)
 
-    data_by_platform = {}
-    for p in PLATFORMS:
-        cache = os.path.join(args.cache_dir, f"{p}.json") if args.cache_dir else None
-        data_by_platform[p] = testrail_map.load_data(p, cache)
-    out = collect(data_by_platform)
-
-    for p, c in out["platforms"].items():
-        automated = sum(v["automated"] for k, v in c["features"].items() if k.startswith("L1:"))
-        print(f"{p}: {c['cases']} cases, {automated} automated, {c['no_feature']} with no feature")
+    out = build(args.cache_dir)
+    print("\n".join(summary(out)))
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)

@@ -41,13 +41,6 @@ class CollectTest(unittest.TestCase):
         self.assertEqual(ios["no_feature"], 1)
         self.assertNotIn("", ios["features"])
 
-    def test_feature_list_follows_features_yml(self):
-        features = self.out["features"]
-        self.assertEqual(features[0], {"type": "l1", "id": "BRW", "name": "Browsing & page content"})
-        self.assertEqual(features[1]["type"], "l2")
-        self.assertEqual(features[1]["l1"], "BRW")
-        self.assertIn({"type": "l2", "id": "LIB.BMK", "l1": "LIB", "name": "Bookmarks"}, features)
-
     def test_only_aggregates_leave(self):
         text = json.dumps(self.out)
         for secret in (SECRET_SECTION, SECRET_TITLE, "Unmapped", "C1"):

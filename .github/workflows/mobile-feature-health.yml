@@ -1,16 +1,18 @@
-# Mobile feature coverage dashboard: TestRail cases and UI automation per L1/L2 feature of the Firefox Mobile
-# feature taxonomy, iOS next to Android, deployed to Quick.
+# Mobile feature health dashboard: per L1/L2 feature of the Firefox Mobile feature taxonomy, iOS next to Android,
+# TestRail cases and UI automation next to this year's escaped bugs. Rebuilt from live data and deployed to Quick.
 #
 # Same deploy as mobile-testing-assessment-charts.yml (itself based on tr-critical-dashboard.yml / 'quick gha'):
 #   - Runs weekly and manually, not on every push to main. Every run rebuilds all the data, so --mirror is safe.
-#   - On pull requests touching the dashboard: unit tests only, no TestRail access, no deploy.
-#   - The data file is only written to the site (staff-only behind IAP), never committed: this repo is public.
-#     collect_testrail.py logs totals only.
+#   - One collect step builds every data file (mobile-feature-health/collect.py). If a source fails, the others are
+#     still deployed and the page says which columns have no data; the run then fails so someone notices.
+#   - On pull requests touching the dashboard or the maps it reads: unit tests only, no network, no deploy.
+#   - Data files are only written to the site (staff-only behind IAP), never committed: this repo is public. TestRail
+#     data is aggregate counts only; bugs are public on Bugzilla / GitHub, so their IDs and titles are listed.
 #
 # Requires: the org-level Actions variable GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER and this repo's entry in
 # noninternal_gha_repos in Quick's tf/<env>/main.tf (already there for tr-critical). The site is created on the
 # first run. Set a repository Actions variable QUICK_ENV=stage to deploy to nonprod.
-name: Mobile feature coverage dashboard
+name: Mobile feature health dashboard
 
 on:
   schedule:
@@ -24,16 +26,18 @@ on:
         default: false
   pull_request:
     paths:
-      - "mobile-feature-coverage/**"
+      - "mobile-feature-health/**"
       - "mobile-feature-taxonomy/testrail_map.py"
+      - "mobile-feature-taxonomy/bugs_map.py"
+      - "mobile-feature-taxonomy/*/bugs-map.yml"
       - "mobile-feature-taxonomy/features.yml"
-      - ".github/workflows/mobile-feature-coverage.yml"
+      - ".github/workflows/mobile-feature-health.yml"
 
 permissions:
   contents: read
 
 concurrency:
-  group: mobile-feature-coverage-${{ github.event_name }}
+  group: mobile-feature-health-${{ github.event_name }}
   cancel-in-progress: false
 
 jobs:
@@ -47,19 +51,19 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r mobile-feature-taxonomy/requirements.txt
-      - run: python -m unittest discover -s mobile-feature-coverage/tests -p 'test_*.py' -v
+      - run: python -m unittest discover -s mobile-feature-health/tests -p 'test_*.py' -v
 
   deploy:
     name: Build and deploy
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
       contents: read
       id-token: write
     env:
-      DIR: mobile-feature-coverage/site
-      SITE: mte-mobile-feature-coverage
+      DIR: mobile-feature-health/site
+      SITE: mte-mobile-feature-health
       QUICK_DEPLOYED_BY: github:${{ github.repository }}
       QUICK_PROJECT: ${{ vars.QUICK_ENV == 'stage' && 'moz-fx-quick-nonprod' || 'moz-fx-quick-prod' }}
     steps:
@@ -71,12 +75,15 @@ jobs:
 
       - run: pip install -r mobile-feature-taxonomy/requirements.txt
 
-      - name: Pull TestRail cases per feature
+      # TestRail: cases and automation per feature. Bugzilla (Android): public API. GitHub (iOS issues): this
+      # workflow's token, read-only on public repos.
+      - name: Collect TestRail cases and escaped bugs
         env:
           TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
           TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
           TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
-        run: python mobile-feature-coverage/collect_testrail.py --out "$DIR/data/testrail.json"
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python mobile-feature-health/collect.py --out-dir "$DIR/data" --allow-partial
 
       - uses: google-github-actions/auth@v3
         with:
@@ -91,3 +98,13 @@ jobs:
           chmod +x "$RUNNER_TEMP/quick"
           "$RUNNER_TEMP/quick" deploy "$DIR" "$SITE" --mirror ${{ inputs.force && '--yes' || '' }}
           echo "Deployed: https://${SITE}.quick.mozilla.cloud/" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if a data source couldn't be refreshed
+        run: |
+          python - <<'EOF'
+          import json, sys
+          status = json.load(open("mobile-feature-health/site/data/status.json"))
+          failed = [k for k, v in status["sources"].items() if not v["ok"]]
+          if failed:
+              sys.exit(f"Deployed without fresh data for: {', '.join(failed)} (see the collect step)")
+          EOF
