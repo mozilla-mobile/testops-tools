@@ -81,6 +81,9 @@ td.cnt.zero { color: var(--text-muted); }
 .tip { position: fixed; pointer-events: none; z-index: 10; max-width: 320px; background: var(--surface-1); color: var(--text-primary);
   border: 1px solid var(--rule); border-radius: 6px; padding: 7px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); display: none; }
 .tip b { display: block; margin-bottom: 2px; }
+.wip { border-left: 4px solid var(--h2); background: var(--surface-1); padding: 8px 12px; border-radius: 4px;
+  max-width: 1100px; margin: 0 0 12px; color: var(--text-secondary); }
+.wip b { color: var(--text-primary); }
 .error { border-left: 4px solid var(--h3); background: var(--surface-1); padding: 8px 12px; border-radius: 4px; max-width: 1100px; }
 td.cnt.click { cursor: pointer; }
 td.cnt .open { color: var(--text-muted); font-weight: 400; font-size: 12px; margin-right: 6px; }
@@ -116,6 +119,8 @@ dialog.bugs li span:nth-child(2) { overflow-wrap: anywhere; }
   <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
     TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
     Hover any cell for details; click a bug count to see the bugs.</p>
+  <p class="wip"><b>Work in progress.</b> TestRail cases, UI automation and escaped bugs are real data, refreshed from
+    TestRail, Bugzilla and GitHub. Unit-test coverage per feature is still to come.</p>
   <p class="error" id="notice" hidden></p>
   <p class="meta" id="meta">Loading…</p>
 
