@@ -995,6 +995,7 @@ firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuAction.swift,BR
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuConfiguration.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuCoordinator.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuState.swift,BRW.CTX
+firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/NativeMenuHelper.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/Header/HeaderState.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/Header/HomepageHeaderCell.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/HomepageDiffableDataSource.swift,HOME.SET
@@ -1031,6 +1032,7 @@ firefox-ios/Client/Frontend/Home/Homepage/Redux/HomepageAction.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/Redux/HomepageMiddleware.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/Redux/HomepageState.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/Redux/HomepageTelemetryState.swift,HOME.SET
+firefox-ios/Client/Frontend/Home/Homepage/SearchBar/EmbeddedAddressBarView.swift,SRCH.URL
 firefox-ios/Client/Frontend/Home/Homepage/SearchBar/SearchBarCell.swift,SRCH.URL
 firefox-ios/Client/Frontend/Home/Homepage/SearchBar/SearchBarState.swift,SRCH.URL
 firefox-ios/Client/Frontend/Home/Homepage/SectionHeader/LabelButtonHeaderCell.swift,HOME.SET

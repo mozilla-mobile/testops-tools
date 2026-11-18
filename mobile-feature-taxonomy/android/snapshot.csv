@@ -936,8 +936,10 @@ android-components/components/feature/prompts/src/main/java/mozilla/components/f
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/concept/SelectablePromptView.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/concept/ToggleablePrompt.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardDelegate.kt,SHARED.WEB
+android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardEditContent.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardItemViewHolder.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardPicker.kt,SHARED.WEB
+android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardSaveDialogContent.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardSaveDialogFragment.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardSelectBar.kt,SHARED.WEB
 android-components/components/feature/prompts/src/main/java/mozilla/components/feature/prompts/creditcard/CreditCardsAdapter.kt,SHARED.WEB
