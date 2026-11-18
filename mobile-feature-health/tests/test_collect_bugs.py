@@ -61,6 +61,18 @@ class AndroidTest(unittest.TestCase):
         self.assertEqual(self.out["bugs"]["1"]["url"], "https://bugzilla.mozilla.org/show_bug.cgi?id=1")
         self.assertEqual(self.out["list_url"], "https://bugzilla.mozilla.org/buglist.cgi?bug_id=")
 
+    def test_feature_and_how_per_bug(self):
+        self.assertEqual((self.out["bugs"]["1"]["feature"], self.out["bugs"]["1"]["how"]), ("TABS.TRAY", "component"))
+        self.assertEqual((self.out["bugs"]["4"]["feature"], self.out["bugs"]["4"]["how"]), ("", "untriaged"))
+
+    def test_title_rule_is_reported(self):
+        m = bugs_map.BugsMap(dict(ANDROID.data, components={
+            "Tabs": {"feature": "TABS.TRAY", "titles": [{"match": "group", "feature": "TABS.GRP"}]}}), TAXONOMY)
+        b = bz(9, "Tabs")
+        b["summary"] = "Tab group lost"
+        out = collect_bugs.platform_bugs(m, [b], "2026-01-01")
+        self.assertEqual((out["bugs"]["9"]["feature"], out["bugs"]["9"]["how"]), ("TABS.GRP", "title rule"))
+
     def test_query_url_mirrors_the_filters(self):
         q = urllib.parse.parse_qs(urllib.parse.urlparse(self.out["query_url"]).query)
         self.assertEqual(q["product"], ["Firefox for Android"])
@@ -76,6 +88,8 @@ class IosTest(unittest.TestCase):
         self.assertEqual(out["features"]["UNTRIAGED"], ["11"])
         self.assertEqual(out["undecided"], 1)
         self.assertFalse(out["bugs"]["10"]["open"])
+        self.assertEqual(out["bugs"]["10"]["how"], "decision")
+        self.assertEqual(out["bugs"]["11"]["how"], "waiting for a decision")
         self.assertEqual(out["bugs"]["10"]["url"], "https://github.com/mozilla-mobile/firefox-ios/issues/10")
         self.assertIsNone(out["list_url"])
         self.assertIn("created%3A%3E%3D2026-01-01", out["query_url"])

@@ -10,8 +10,14 @@ Columns:
   *Completed*. It's the TestRail status, not a verified run.
 - **Manual · TestRail cases**: number of Full Functional cases attributed to the feature, automated ones included.
 - **Escaped bugs · this year**: bugs reported by people outside the team, created from January 1 to the day of the
-  run, shown as "N open · total". Click a number to list the bugs (Open / Closed / All); on Android the list opens in
-  Bugzilla in one click. The header links to each tracker's search for the year.
+  run, shown as "N open · total". The header links to each tracker's search for the year.
+
+The **Escaped bugs** tab lists every bug: platform, number, title, feature, how it got its feature (*component* or
+*title rule* on Android, *decision* or *waiting for a decision* on iOS), component, created date and state. It filters
+by platform, open/closed, area or feature, assignment, date range and text, sorts by any column, opens the Android
+bugs in Bugzilla in one click and downloads the list as CSV. Clicking a count in the overview opens the tab filtered
+to those bugs. Filters are kept in the URL, so a view can be shared, e.g. `…/#bugs?p=android&h=title+rule&s=all`
+lists the Android bugs whose feature came from a title rule, to review the rules.
 
 Extra rows hold the escaped bugs that don't belong to one feature: cross-cutting axes (`X.PERF`, `X.L10N`…) and bugs
 without a feature yet (Android's General component, iOS issues waiting for a decision). Unit-test coverage per
@@ -61,7 +67,7 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
 `--cache-dir` keeps fetched data between runs: bugs are refetched when the day changes; delete the TestRail cache
-to see TestRail edits. A bug list can be linked directly: `…/#bugs=android:BRW.NAV`.
+to see TestRail edits.
 
 ## Adding a column
 

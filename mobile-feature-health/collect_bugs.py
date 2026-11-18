@@ -68,6 +68,16 @@ def query_url(m, since):
     return f"{BUGZILLA}/buglist.cgi?" + urllib.parse.urlencode(params)
 
 
+def assigned_by(m, bug, kind, fid):
+    """How the bug got its feature, to make reviewing easier."""
+    if m.source == "github":
+        return "decision" if kind == bugs_map.FEATURE else "waiting for a decision"
+    if kind != bugs_map.FEATURE:
+        return "untriaged"
+    default = m.components.get(bug.get("component"), (None, "", []))[1]
+    return "component" if fid == default else "title rule"
+
+
 def keys_for(kind, fid):
     """Rows a bug counts in: its L2 and its area, an axis, or "untriaged"."""
     if kind != bugs_map.FEATURE:
@@ -87,7 +97,9 @@ def platform_bugs(m, bugs, since):
     listed = {}
     for bid in sorted(attributed, key=int):
         b = by_id[bid]
+        kind, fid = attributed[bid]
         listed[bid] = {"title": b.get("summary") or "", "url": bug_url(m, b), "created": b["creation_time"][:10],
+                       "feature": fid if kind == bugs_map.FEATURE else "", "how": assigned_by(m, b, kind, fid),
                        "open": is_open(m, b), "state": (b.get("state") or b.get("status") or "").lower(),
                        "resolution": b.get("resolution") or "", "component": b.get("component") or ""}
     return {
