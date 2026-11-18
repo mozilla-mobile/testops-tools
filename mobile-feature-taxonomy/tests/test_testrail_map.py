@@ -84,6 +84,31 @@ class AttributeTest(unittest.TestCase):
         self.assertEqual(counts[""]["total"], 2)
 
 
+class CaseReferencesTest(unittest.TestCase):
+    def test_ref_tokens(self):
+        refs = "BRW.FIND, https://mozilla-hub.atlassian.net/browse/FXIOS-123 testRecentlySaved(), CRED"
+        self.assertEqual(testrail_map.ref_tokens(refs), ["BRW.FIND", "CRED"])
+        self.assertEqual(testrail_map.ref_tokens(None), [])
+
+    def test_reference_beats_the_section(self):
+        cases = [dict(CASES[1], refs=["BRW.FIND"]), dict(CASES[4], refs=["LIB.HIST"]), CASES[0]]
+        attributed, _ = testrail_map.attribute(SECTIONS, cases, IDS)
+        self.assertEqual(attributed["C2"], ("BRW.FIND", False))
+        self.assertEqual(attributed["C5"], ("LIB.HIST", False))   # also rescues a case whose section has no ID
+        self.assertEqual(attributed["C1"], ("LIB.BMK", True))
+
+    def test_bad_references_keep_the_section_and_are_reported(self):
+        cases = [dict(CASES[1], refs=["BRW.FND"]), dict(CASES[0], refs=["BRW.FIND", "LIB.HIST"]),
+                 dict(CASES[2], refs=["FXIOS"])]
+        attributed, tree = testrail_map.attribute(SECTIONS, cases, IDS)
+        self.assertEqual(attributed["C2"][0], "LIB.BMK")
+        self.assertEqual(attributed["C1"][0], "LIB.BMK")
+        found = testrail_map.find_problems(attributed, tree, {"cases": cases}, IDS)
+        self.assertEqual(sorted(found["bad_refs"]), ["C1", "C2"])   # a Jira-like word alone is not a typo
+        self.assertIn("BRW.FND", found["bad_refs"]["C2"])
+        self.assertEqual(found["case_refs"], 0)
+
+
 class SuggestTest(unittest.TestCase):
     SECTIONS = [
         {"id": 10, "name": "Browsing", "parent_id": None},          # container, no cases of its own

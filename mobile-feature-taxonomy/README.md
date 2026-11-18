@@ -143,8 +143,13 @@ its own section, or of the nearest parent section that has one, so a whole subtr
 top; give a subsection its own ID when it belongs to a different feature. Anything after the ID (design links,
 notes) is ignored.
 
+A case that tests another feature than its section's, e.g. a "Find in page" case inside the menu section, can carry
+that feature ID in its **References** field: `BRW.FIND`, alongside any other references (Jira links, test names),
+comma-separated. It wins over the section for that case only, so nothing has to move in TestRail. Only an entry that
+is exactly a feature ID counts; `check` reports unknown ones (typos such as `BRW.FND`) and cases with two IDs.
+
 ```bash
-uv run testrail_map.py ios check            # unknown IDs (typos), sections whose cases reach no ID, L1-only cases
+uv run testrail_map.py ios check            # unknown IDs (typos), sections whose cases reach no ID, bad References, L1-only cases
 uv run testrail_map.py ios counts           # cases and % Automation = Completed per L1/L2 (--csv for a CSV)
 uv run testrail_map.py ios compare --sheet firefox_ios_feature_mapping_with_L1.xlsx   # diff vs a mapping workbook
 uv run testrail_map.py android suggest --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx

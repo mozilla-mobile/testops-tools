@@ -13,6 +13,7 @@
 Runs `testrail_map.py check` for iOS and Android and reports, per platform:
   - sections whose description starts with an ID that isn't in features.yml (typos such as `APP.UDP`)
   - sections whose cases reach no ID: neither the section nor any parent carries one (usually a new section)
+  - cases whose References field holds an unknown feature ID, or several
 
 Cases attributed to an L1 area only are accepted (e.g. iOS "Library"): they don't trigger an alert.
 
@@ -57,7 +58,7 @@ def slack_escape(text):
 def check_platform(platform, data, ids):
     """{"platform", "suite_id", "sections", "cases", "unknown": [(sid, path, word)], "unmapped": [(sid, path, n)]}"""
     attributed, tree = testrail_map.attribute(data["sections"], data["cases"], ids)
-    found = testrail_map.find_problems(attributed, tree, data)
+    found = testrail_map.find_problems(attributed, tree, data, ids)
     return {
         "platform": platform,
         "suite_id": data["suite_id"],
@@ -65,11 +66,12 @@ def check_platform(platform, data, ids):
         "cases": len(attributed),
         "unknown": sorted(((sid, tree.path(sid), w) for sid, w in found["unknown"].items()), key=lambda r: r[1]),
         "unmapped": sorted(((sid, tree.path(sid), n) for sid, n in found["unmapped"].items()), key=lambda r: r[1]),
+        "bad_refs": sorted(found["bad_refs"].items()),
     }
 
 
 def has_problems(result):
-    return bool(result["unknown"] or result["unmapped"])
+    return bool(result["unknown"] or result["unmapped"] or result.get("bad_refs"))
 
 
 def summary_line(result):
@@ -79,7 +81,8 @@ def summary_line(result):
     return (f"{PLATFORM_NAMES[result['platform']]} (suite {result['suite_id']}): {status}. "
             f"{result['cases']} cases in {result['sections']} sections; "
             f"{len(result['unknown'])} sections with an unknown ID; "
-            f"{unmapped_cases} cases in {len(result['unmapped'])} sections with no feature ID.")
+            f"{unmapped_cases} cases in {len(result['unmapped'])} sections with no feature ID; "
+            f"{len(result.get('bad_refs', []))} cases with a bad feature ID in References.")
 
 
 def _chunks(lines):
@@ -126,6 +129,11 @@ def slack_payload(results, base_url, run_url=None):
             lines += _limited(r["unmapped"], lambda row: (
                 f"• <{section_url(base_url, r['suite_id'], row[0])}|{slack_escape(row[1])}>: "
                 f"{row[2]} case{'s' if row[2] != 1 else ''}"))
+        if r.get("bad_refs"):
+            if lines:
+                lines.append("")
+            lines.append(f"*{name}: {len(r['bad_refs'])} cases with a bad feature ID in References*")
+            lines += _limited(r["bad_refs"], lambda row: f"• {row[0]}: {slack_escape(row[1])}")
         blocks += [{"type": "section", "text": {"type": "mrkdwn", "text": t}} for t in _chunks(lines)]
     ok = [PLATFORM_NAMES[r["platform"]] for r in results if not has_problems(r)]
     context = []
