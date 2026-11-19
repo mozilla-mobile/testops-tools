@@ -19,9 +19,18 @@ repo: mozilla-mobile/firefox-ios
 
 # Issues (not PRs) with any of these labels are bugs.
 bug_labels: ["Bug 🐞", "Bug", "bug-🐞", "Crash", "Regression"]
-# Escaped = the author isn't part of the org on GitHub.
 escaped:
-  team_associations: [MEMBER, COLLABORATOR, OWNER]
+  # The team = members of these GitHub teams. Everyone else counts as external (escaped), including org members
+  # outside these teams (e.g. Mozillians from other teams filing bugs as users). Membership is read from GitHub at
+  # run time and never stored: it needs a token with read:org (GH_ORG_READ_TOKEN in CI, or the `gh` CLI locally).
+  team_org: mozilla-mobile
+  team_teams: [firefox-ios-eng, firefox-ios-contributors, firefox-ios-pm, firefox-ios-tech-leads, firefox-ios-admins,
+               fxios-eng, fxios-automation-1, fxios-general-owners, fxios-unit-test-owners, firefox-ios-l10n,
+               fxios-a-s, qa, sv-qa, sv-eng]
+  # Service accounts, not people: their issues are never escaped bugs.
+  bot_logins: [data-sync-user]
+  # Who can set a bug's feature with a "Feature affected:" comment.
+  tag_associations: [MEMBER, COLLABORATOR, OWNER]
 # Test and spam issues, dropped before anything else: a title containing one of these phrases, a single short
 # word, or only an email address or URL.
 spam_phrases: ["please ignore", "testing unito", "integration test"]

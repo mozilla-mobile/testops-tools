@@ -168,6 +168,28 @@ class RetryTest(unittest.TestCase):
 TARGETS = bugs_map.valid_targets(TAXONOMY)
 
 
+class IosTeamTest(unittest.TestCase):
+    MAP = dict(IOS_MAP, escaped={"team_org": "example", "team_teams": ["ios-eng"], "bot_logins": ["sync-bot"],
+                                 "tag_associations": ["MEMBER"]})
+
+    def test_team_membership_decides(self):
+        m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        insider = dict(issue(1, assoc="MEMBER"), team=True)
+        mozillian = dict(issue(2, assoc="MEMBER"), team=False)    # org member outside the iOS teams: escaped
+        community = dict(issue(3, assoc="CONTRIBUTOR"), team=False)
+        bot = dict(issue(4, assoc="COLLABORATOR"), team=False, creator="Sync-Bot")
+        self.assertEqual([m.is_escaped(b) for b in (insider, mozillian, community, bot)], [False, True, True, False])
+
+    def test_members_are_read_and_failures_are_explicit(self):
+        m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        ok = unittest.mock.Mock(status_code=200, links={}, json=lambda: [{"login": "Alice"}, {"login": "bob"}])
+        session = unittest.mock.Mock(); session.get.return_value = ok
+        self.assertEqual(bugs_map.team_members(m, session), {"alice", "bob"})
+        session.get.return_value = unittest.mock.Mock(status_code=404, links={})
+        with self.assertRaisesRegex(RuntimeError, "read:org"):
+            bugs_map.team_members(m, session)
+
+
 class AssignedByTest(unittest.TestCase):
     def test_ios(self):
         m = bugs_map.BugsMap(IOS_MAP, TAXONOMY)

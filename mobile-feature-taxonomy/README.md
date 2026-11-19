@@ -198,8 +198,11 @@ Duplicates and invalid bugs aren't counted.
 Bugs come from the public Bugzilla REST API, so security bugs aren't visible. When a new Bugzilla component
 appears, `check` fails until it gets a line in the map.
 
-**iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't a
-member or collaborator of the org; test and spam issues are dropped. Issues carry no feature labels, and title
+**iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't in
+the iOS and QA GitHub teams listed in `ios/bugs-map.yml` (org members from other teams, like Mozillians who use the
+app, count as external); service accounts and test or spam issues are dropped. Only team *names* are in the repo:
+membership is read from GitHub at run time and never stored, which needs a token with read:org (`GH_ORG_READ_TOKEN`
+in CI; locally the `gh` CLI's token). Issues carry no feature labels, and title
 keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand**: a
 `Feature affected:` comment on the issue (see below), or, for the bugs decided before comments existed, a line in
 `ios/bugs-map.yml`. `check` fails while a bug has no feature and prints the comment to post, with a suggestion from

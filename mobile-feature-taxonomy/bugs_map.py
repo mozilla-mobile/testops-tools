@@ -14,7 +14,8 @@ Android (Bugzilla): a bug takes its component's feature, or the feature of the f
 a component that mixes features. Escaped = not reported from a team email domain or by a bot; duplicates and
 invalid bugs aren't counted.
 
-iOS (GitHub issues): issues with a bug label, opened by someone outside the org. There are no feature labels and
+iOS (GitHub issues): issues with a bug label, opened by someone outside the iOS and QA GitHub teams listed in
+ios/bugs-map.yml (org members from other teams count as external). There are no feature labels and
 title rules are too imprecise to decide alone, so a person decides each bug's feature; title rules only suggest
 one. Undecided bugs count as untriaged.
 
@@ -35,7 +36,8 @@ Commands:
               (Android: Bug, L1 ID, L2 ID, Counted; iOS: Issue, L1 ID, L2 ID, Memory leak).
 
 Android bugs come from the public Bugzilla REST API (no credentials, so security bugs are not visible). iOS issues
-come from the GitHub API with GITHUB_TOKEN / GH_TOKEN, or the `gh` CLI's token when neither is set.
+come from the GitHub API with GITHUB_TOKEN / GH_TOKEN, or the `gh` CLI's token when neither is set; reading who is
+in the iOS teams needs read:org (GH_ORG_READ_TOKEN, else the same token).
 
 By default every run covers the current year so far: bugs created from January 1 to today.
 
@@ -67,7 +69,7 @@ from feature_map import load_taxonomy  # noqa: E402
 BUGZILLA = "https://bugzilla.mozilla.org/rest/bug"
 GITHUB_API = "https://api.github.com"
 FIELDS = "id,summary,component,creation_time,creator,status,resolution,whiteboard"
-CACHE_SCHEMA = 2   # bump when fetched bug records change shape, so old caches are refetched
+CACHE_SCHEMA = 3   # bump when fetched bug records change shape, so old caches are refetched
 # How a bug is attributed.
 # UNKNOWN = needs a decision in the map: an unlisted component (Android) or an undecided issue (iOS).
 FEATURE, UNTRIAGED, EXCLUDED, UNKNOWN = "feature", "untriaged", "excluded", "needs a decision"
@@ -168,7 +170,10 @@ class BugsMap:
         self.bug_labels = set(data.get("bug_labels", []))
         self.spam_phrases = tuple(p.lower() for p in data.get("spam_phrases", []))
         esc = data.get("escaped", {})
-        self.team_associations = set(esc.get("team_associations", []))
+        self.tag_associations = set(esc.get("tag_associations", esc.get("team_associations", [])))
+        self.team_org = esc.get("team_org", "")
+        self.team_teams = list(esc.get("team_teams", []))
+        self.bot_logins = {x.lower() for x in esc.get("bot_logins", [])}
         self.team_domains = tuple("@" + d.lower() for d in esc.get("team_email_domains", []))
         self.bot_suffixes = tuple(s.lower() for s in esc.get("bot_email_suffixes", []))
         self.bot_emails = {e.lower() for e in esc.get("bot_emails", [])}
@@ -233,7 +238,11 @@ class BugsMap:
 
     def is_escaped(self, bug):
         if self.source == "github":
-            return bug.get("assoc") not in self.team_associations and not self.is_spam(bug.get("summary"))
+            if (bug.get("creator") or "").lower() in self.bot_logins or self.is_spam(bug.get("summary")):
+                return False
+            if self.team_teams and "team" in bug:   # set at fetch time from the GitHub teams
+                return not bug["team"]
+            return bug.get("assoc") not in self.tag_associations
         email = (bug.get("creator") or "").lower()
         if email in self.bot_emails or email.endswith(self.bot_suffixes):
             return False
@@ -353,6 +362,27 @@ def github_token():
         return None
 
 
+def team_members(bugs_map, session):
+    """Logins of the members of the team GitHub teams, read now and kept in memory only (never written)."""
+    import requests
+
+    token = os.environ.get("GH_ORG_READ_TOKEN") or github_token()
+    headers = {"Accept": "application/vnd.github+json", **({"Authorization": f"Bearer {token}"} if token else {})}
+    members = set()
+    for team in bugs_map.team_teams:
+        url = f"{GITHUB_API}/orgs/{bugs_map.team_org}/teams/{team}/members"
+        params = {"per_page": 100}
+        while url:
+            resp = session.get(url, params=params, headers=headers, timeout=60)
+            if resp.status_code in (401, 403, 404):
+                raise RuntimeError(f"can't read the members of GitHub team {bugs_map.team_org}/{team} "
+                                   f"(HTTP {resp.status_code}): needs a token with read:org (GH_ORG_READ_TOKEN)")
+            resp.raise_for_status()
+            members |= {m["login"].lower() for m in resp.json()}
+            url, params = resp.links.get("next", {}).get("url"), None
+    return members
+
+
 def fetch_github(bugs_map, since, until):
     """Bug-labelled issues (not PRs) created in the window, as {id, summary, creation_time, creator, assoc, ...}."""
     import requests
@@ -380,6 +410,10 @@ def fetch_github(bugs_map, since, until):
                 }
             url, params = resp.links.get("next", {}).get("url"), None
     bugs = sorted(found.values(), key=lambda b: b["id"])
+    if bugs_map.team_teams:
+        team = team_members(bugs_map, session)
+        for b in bugs:
+            b["team"] = b["creator"].lower() in team
     # Tags: the latest "Feature affected:" comment by an org member or collaborator, on escaped issues only.
     for b in bugs:
         if not b.pop("n_comments") or not bugs_map.is_escaped(b):
@@ -389,7 +423,7 @@ def fetch_github(bugs_map, since, until):
         while url:
             resp = get_with_retry(session, url, params)
             for c in resp.json():
-                if c.get("author_association") not in bugs_map.team_associations:
+                if c.get("author_association") not in bugs_map.tag_associations:
                     continue
                 text = comment_tag(c.get("body"))
                 if text and parse_tag(text, bugs_map.targets):
