@@ -168,6 +168,22 @@ class RetryTest(unittest.TestCase):
 TARGETS = bugs_map.valid_targets(TAXONOMY)
 
 
+class AssignedByTest(unittest.TestCase):
+    def test_ios(self):
+        m = bugs_map.BugsMap(IOS_MAP, TAXONOMY)
+        self.assertEqual(m.assigned_by(issue(101)), "decision")
+        self.assertEqual(m.assigned_by(issue(900)), "waiting for a decision")
+        b = issue(901)
+        b["tag_text"] = "Main menu (UI.MENU)"
+        self.assertEqual(m.assigned_by(b), "tag")
+
+    def test_android(self):
+        m = bugs_map.BugsMap(MAP, TAXONOMY)
+        self.assertEqual(m.assigned_by(bug(1, "Tabs", "tab group crash")), "title rule")
+        self.assertEqual(m.assigned_by(bug(2, "Tabs", "tray empty")), "component")
+        self.assertEqual(m.assigned_by(bug(3, "General")), "untriaged")
+
+
 class TagTest(unittest.TestCase):
     def test_parse(self):
         p = lambda t: bugs_map.parse_tag(t, TARGETS)

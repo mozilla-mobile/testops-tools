@@ -202,6 +202,20 @@ class BugsMap:
                 return FEATURE, fid
         return FEATURE, feature
 
+    def assigned_by(self, bug):
+        """How the bug got (or didn't get) its feature, following the same order as classify()."""
+        tag = self.tag(bug)
+        if tag and tag[0] in (FEATURE, EXCLUDED):
+            return "tag"
+        if self.source == "github":
+            return "decision" if str(bug["id"]) in self.issues else "waiting for a decision"
+        rule = self.components.get(bug.get("component"))
+        if rule is None:
+            return "needs a decision"
+        if rule[0] != FEATURE:
+            return rule[0]
+        return "title rule" if self.classify(bug)[1] != rule[1] else "component"
+
     def suggest(self, bug):
         """A feature ID from the title hints, or "" (suggestions for new decisions only)."""
         for rx, fid in self.hints:

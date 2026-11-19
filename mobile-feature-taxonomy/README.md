@@ -203,7 +203,9 @@ member or collaborator of the org; test and spam issues are dropped. Issues carr
 keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand**: a
 `Feature affected:` comment on the issue (see below), or, for the bugs decided before comments existed, a line in
 `ios/bugs-map.yml`. `check` fails while a bug has no feature and prints the comment to post, with a suggestion from
-`title_hints`; until then the bug counts as untriaged, never with a guessed feature. Needs a GitHub token (`GITHUB_TOKEN`,
+`title_hints`; until then the bug counts as untriaged, never with a guessed feature. Once enough bugs carry a
+comment, the title rules can be measured against them, and the ones that turn out reliable could assign bugs
+automatically. Needs a GitHub token (`GITHUB_TOKEN`,
 `GH_TOKEN` or the `gh` CLI's).
 
 ```bash
