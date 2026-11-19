@@ -12,7 +12,7 @@ Columns:
 - **Escaped bugs · this year**: bugs reported by people outside the team, created from January 1 to the day of the
   run, shown as "N open · total". The header links to each tracker's search for the year.
 
-The **Escaped bugs** tab lists every bug: platform, number, title, feature, how it got its feature (*component* or
+The **Escaped bugs** tab lists every bug: platform, number, title, feature, how it got its feature (*tag* on the bug, *component* or
 *title rule* on Android, *decision* or *waiting for a decision* on iOS), component, created date and state. It filters
 by platform, open/closed, area or feature, assignment, date range and text, sorts by any column, opens the Android
 bugs in Bugzilla in one click and downloads the list as CSV. Clicking a count in the overview opens the tab filtered

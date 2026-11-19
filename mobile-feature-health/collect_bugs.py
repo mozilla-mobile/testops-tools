@@ -70,6 +70,9 @@ def query_url(m, since):
 
 def assigned_by(m, bug, kind, fid):
     """How the bug got its feature, to make reviewing easier."""
+    tag = m.tag(bug)
+    if tag and tag[0] in (bugs_map.FEATURE, bugs_map.EXCLUDED):
+        return "tag"
     if m.source == "github":
         return "decision" if kind == bugs_map.FEATURE else "waiting for a decision"
     if kind != bugs_map.FEATURE:

@@ -65,6 +65,12 @@ class AndroidTest(unittest.TestCase):
         self.assertEqual((self.out["bugs"]["1"]["feature"], self.out["bugs"]["1"]["how"]), ("TABS.TRAY", "component"))
         self.assertEqual((self.out["bugs"]["4"]["feature"], self.out["bugs"]["4"]["how"]), ("", "untriaged"))
 
+    def test_tag_is_reported(self):
+        b = bz(8, "Tabs")
+        b["tag_text"] = "Find in page (BRW.FIND)"
+        out = collect_bugs.platform_bugs(ANDROID, [b], "2026-01-01")
+        self.assertEqual((out["bugs"]["8"]["feature"], out["bugs"]["8"]["how"]), ("BRW.FIND", "tag"))
+
     def test_title_rule_is_reported(self):
         m = bugs_map.BugsMap(dict(ANDROID.data, components={
             "Tabs": {"feature": "TABS.TRAY", "titles": [{"match": "group", "feature": "TABS.GRP"}]}}), TAXONOMY)
