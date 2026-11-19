@@ -53,6 +53,15 @@ class CheckPlatformTest(unittest.TestCase):
         self.assertIn("3 cases in 2 sections with no feature ID", line)
 
 
+class BadReferencesTest(unittest.TestCase):
+    def test_flagged(self):
+        data = {**GOOD, "cases": GOOD["cases"] + [{"id": "C9", "section_id": 2, "automation": "", "refs": ["BRW.FND"]}]}
+        r = check.check_platform("ios", data, IDS)
+        self.assertTrue(check.has_problems(r))
+        self.assertEqual(r["bad_refs"][0][0], "C9")
+        self.assertIn("BRW.FND", json.dumps(check.slack_payload([r], "https://x")))
+
+
 class SlackPayloadTest(unittest.TestCase):
     def test_links_and_escaping(self):
         results = [check.check_platform("ios", GOOD, IDS), check.check_platform("android", BAD, IDS)]

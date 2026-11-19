@@ -14,6 +14,10 @@ Each section in the Full Functional suite carries its L2 ID (e.g. `LIB.BMK`) or 
 first word of its description. A case belongs to the ID of its own section or, when that section has none,
 of the nearest ancestor that has one. IDs are checked against features.yml.
 
+A case that tests another feature than its section's (a "Find in page" case inside the menu section, say) can
+carry that feature ID in its References field (`BRW.FIND`, next to any other references, comma-separated). It
+wins over the section, for that case only.
+
 Commands:
     check     sections with an unknown ID, cases that reach no ID, cases that only reach an L1 area.
               Exit 1 when anything is unmapped or unknown.
@@ -66,6 +70,8 @@ TAG_RE = re.compile(r"<[^>]+>")
 FIRST_WORD_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z0-9]+)?)\b")
 # Looks like a feature ID (dotted, upper case) but isn't in the taxonomy: a typo to report.
 DOTTED_ID_RE = re.compile(r"^[A-Z]{2,8}\.[A-Z0-9]{2,10}$")
+# A References entry that could be a feature ID (L1 or L2). Jira links, test names etc. never match.
+REF_TOKEN_RE = re.compile(r"^[A-Z]{2,8}(?:\.[A-Z0-9]{2,10})?$")
 NO_FEATURE = ""
 
 
@@ -142,12 +148,25 @@ class SectionTree:
         return self._resolved[section_id]
 
 
+def ref_tokens(refs):
+    """Entries of a References field that could be feature IDs ("BRW.FIND, https://…" → ["BRW.FIND"])."""
+    return [t for t in (x.strip() for x in re.split(r"[,\s]+", refs or "")) if REF_TOKEN_RE.match(t)]
+
+
+def case_feature(case, ids):
+    """The feature ID a case carries in References, if exactly one valid ID is there; else None."""
+    found = sorted({t for t in case.get("refs") or [] if t in ids})
+    return found[0] if len(found) == 1 else None
+
+
 def attribute(sections, cases, ids):
-    """{case_id: (feature_id, automated)} plus the SectionTree used."""
+    """{case_id: (feature_id, automated)} plus the SectionTree used. A feature ID in the case's References beats
+    its section's."""
     tree = SectionTree(sections, ids)
     out = {}
     for c in cases:
-        out[c["id"]] = (tree.feature(c["section_id"]), c.get("automation") == COMPLETED)
+        fid = case_feature(c, ids) or tree.feature(c["section_id"])
+        out[c["id"]] = (fid, c.get("automation") == COMPLETED)
     return out, tree
 
 
@@ -239,7 +258,9 @@ def fetch(suite_id):
         "suite_id": suite_id,
         "sections": [{k: s.get(k) for k in ("id", "name", "parent_id", "description")} for s in sections],
         "cases": [{"id": f"C{c['id']}", "section_id": c["section_id"],
-                   "automation": labels.get(c.get(AUTOMATION_FIELD), "")} for c in cases],
+                   "automation": labels.get(c.get(AUTOMATION_FIELD), ""),
+                   # Only the References entries that look like feature IDs: no links or other content.
+                   "refs": ref_tokens(c.get("refs"))} for c in cases],
     }
 
 
@@ -339,9 +360,21 @@ def fmt_pct(value):
     return "—" if value is None else f"{value:.0f}%"
 
 
-def find_problems(attributed, tree, data):
+def find_problems(attributed, tree, data, ids=None):
     """What `check` reports: {"unknown": {section_id: word}, "unmapped": Counter(section_id -> cases),
-    "l1_only": Counter(section_id -> cases)}. Unknown IDs and unmapped cases are errors; L1-only is advice."""
+    "l1_only": Counter(section_id -> cases), "bad_refs": {case_id: reason}, "case_refs": n}.
+    Unknown IDs, unmapped cases and bad References are errors; L1-only is advice."""
+    bad_refs, case_refs = {}, 0
+    for c in data["cases"]:
+        tokens = c.get("refs") or []
+        valid = sorted({t for t in tokens if ids is None or t in ids})
+        typos = [t for t in tokens if ids is not None and t not in ids and DOTTED_ID_RE.match(t)]
+        if typos:
+            bad_refs[c["id"]] = f"`{typos[0]}` isn't a feature ID in features.yml"
+        elif len(valid) > 1:
+            bad_refs[c["id"]] = "several feature IDs: " + ", ".join(f"`{v}`" for v in valid)
+        elif valid:
+            case_refs += 1
     unmapped, l1_only = Counter(), Counter()
     for c in data["cases"]:
         fid = attributed[c["id"]][0]
@@ -349,13 +382,20 @@ def find_problems(attributed, tree, data):
             unmapped[c["section_id"]] += 1
         elif "." not in fid:
             l1_only[c["section_id"]] += 1
-    return {"unknown": dict(tree.unknown), "unmapped": unmapped, "l1_only": l1_only}
+    return {"unknown": dict(tree.unknown), "unmapped": unmapped, "l1_only": l1_only,
+            "bad_refs": bad_refs, "case_refs": case_refs}
 
 
 def cmd_check(attributed, tree, data, ids):
-    found = find_problems(attributed, tree, data)
+    found = find_problems(attributed, tree, data, ids)
     unmapped, l1_only = found["unmapped"], found["l1_only"]
     problems = 0
+    if found["bad_refs"]:
+        problems += len(found["bad_refs"])
+        print(f"## Cases whose References need fixing ({len(found['bad_refs'])})\n")
+        for cid, why in sorted(found["bad_refs"].items()):
+            print(f"- {cid}: {why}")
+        print()
     if tree.unknown:
         problems += len(tree.unknown)
         print(f"## Sections with an ID that isn't in features.yml ({len(tree.unknown)})\n")
@@ -376,6 +416,8 @@ def cmd_check(attributed, tree, data, ids):
         print()
 
     mapped = len(attributed) - sum(unmapped.values())
+    if found["case_refs"]:
+        print(f"{found['case_refs']} cases take their feature from their References field.")
     print(f"{len(tree.own)} of {len(tree.sections)} sections carry an ID; "
           f"{mapped} of {len(attributed)} cases reach a feature ({sum(l1_only.values())} only an L1).")
     unused = [k for k in ids if "." in k and k not in {f for f, _ in attributed.values()}]
