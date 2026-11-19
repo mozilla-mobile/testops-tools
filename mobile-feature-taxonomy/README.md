@@ -200,10 +200,10 @@ appears, `check` fails until it gets a line in the map.
 
 **iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't a
 member or collaborator of the org; test and spam issues are dropped. Issues carry no feature labels, and title
-keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand** in
-`ios/bugs-map.yml` (`issue number: FEATURE.ID`, or `{excluded: reason}` for macOS / Focus / memory-leak reports).
-`check` fails while a bug has no decision and prints the lines to paste, with a suggestion from `title_hints`;
-until then the bug counts as untriaged, never with a guessed feature. Needs a GitHub token (`GITHUB_TOKEN`,
+keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand**: a
+`Feature affected:` comment on the issue (see below), or, for the bugs decided before comments existed, a line in
+`ios/bugs-map.yml`. `check` fails while a bug has no feature and prints the comment to post, with a suggestion from
+`title_hints`; until then the bug counts as untriaged, never with a guessed feature. Needs a GitHub token (`GITHUB_TOKEN`,
 `GH_TOKEN` or the `gh` CLI's).
 
 ```bash
@@ -212,6 +212,17 @@ uv run bugs_map.py ios check                       # every escaped issue this ye
 uv run bugs_map.py ios counts --csv                # escaped bugs per L1/L2 and axis, Jan 1 → today
 uv run bugs_map.py android --since 2026-01-01 --until 2026-10-27 compare --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
 ```
+
+**Setting or correcting a bug's feature on the bug itself** (wins over components, title rules and the iOS list):
+
+- GitHub issue: a comment by an org member or collaborator with the line
+  `Feature affected: Toolbar & address bar layout (UI.TB)`. The latest such comment counts.
+- Bugzilla bug: `[feature:UI.TB]` in the whiteboard (no bugmail noise), or that same line in a comment from a
+  @mozilla.com account. The whiteboard wins over comments.
+
+Only the ID counts; the name is there for people reading the bug. `Feature affected: excluded (reason)` excludes the
+bug. A tag whose ID isn't in `features.yml` is reported by `check`, and the bug keeps its previous feature. The next
+weekly run picks tags up; `ios/bugs-map.yml` keeps the decisions made before tags existed.
 
 `--cache FILE` reuses fetched bugs only while they cover the requested window; a later run refetches.
 

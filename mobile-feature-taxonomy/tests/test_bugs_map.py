@@ -143,7 +143,7 @@ class CacheWindowTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             cache = os.path.join(tmp, "bugs.json")
             with open(cache, "w") as f:
-                json.dump({"since": "2026-01-01", "until": "2026-03-31",
+                json.dump({"schema": bugs_map.CACHE_SCHEMA, "since": "2026-01-01", "until": "2026-03-31",
                            "bugs": [bug(1, "Tabs", created="2026-02-01T00:00:00Z"),
                                     bug(2, "Tabs", created="2026-03-15T00:00:00Z")]}, f)
             got = bugs_map.load_bugs(m, "2026-01-01", "2026-02-28", cache)
@@ -163,6 +163,62 @@ class RetryTest(unittest.TestCase):
         with unittest.mock.patch.object(bugs_map.time, "sleep"):
             self.assertIs(bugs_map.get_with_retry(session, "https://x"), good)
         self.assertEqual(session.get.call_count, 2)
+
+
+TARGETS = bugs_map.valid_targets(TAXONOMY)
+
+
+class TagTest(unittest.TestCase):
+    def test_parse(self):
+        p = lambda t: bugs_map.parse_tag(t, TARGETS)
+        self.assertEqual(p("Toolbar & address bar layout (UI.TB)"), ("feature", "UI.TB"))
+        self.assertEqual(p("UI.TB"), ("feature", "UI.TB"))
+        self.assertEqual(p("AI controls (AI.CTRL)"), ("feature", "AI.CTRL"))      # "AI" alone is an L1 too
+        self.assertEqual(p("Performance (X.PERF)"), ("feature", "X.PERF"))
+        self.assertEqual(p("Passwords & autofill (CRED)"), ("feature", "CRED"))
+        self.assertEqual(p("excluded (Focus, not Firefox)"), ("excluded", ""))
+        self.assertEqual(p("Toolbar (UI.TOOLBAR)"), ("invalid tag", "UI.TOOLBAR"))
+        self.assertIsNone(p("it works for me now"))
+        self.assertIsNone(p(""))
+
+    def test_comment_line(self):
+        body = "Thanks!\nFeature affected: Page translation (TRANS.PAGE)\nWIP-Comment added by QA/Test Eng team"
+        self.assertEqual(bugs_map.comment_tag(body), "Page translation (TRANS.PAGE)")
+        self.assertEqual(bugs_map.comment_tag("**Feature:** UI.TB"), "UI.TB")
+        self.assertIsNone(bugs_map.comment_tag("There's also a different feature planned for next week"))
+
+    def test_tag_wins(self):
+        ios = bugs_map.BugsMap(IOS_MAP, TAXONOMY)
+        b = issue(101)                                          # decided LIB.BMK in the map
+        b["tag_text"] = "Main menu (UI.MENU)"
+        self.assertEqual(ios.classify(b), ("feature", "UI.MENU"))
+        b["tag_text"] = "excluded (macOS)"
+        self.assertEqual(ios.classify(b), ("excluded", ""))
+        b["tag_text"] = "Main menu (UI.MNU)"                     # typo: falls back to the decision, reported
+        self.assertEqual(ios.classify(b), ("feature", "LIB.BMK"))
+        android = bugs_map.BugsMap(MAP, TAXONOMY)
+        tb = bug(1, "Tabs")
+        tb["tag_text"] = "BRW.FIND"
+        self.assertEqual(android.classify(tb), ("feature", "BRW.FIND"))
+
+    def test_bugzilla_whiteboard_and_team_comments(self):
+        m = bugs_map.BugsMap(MAP, TAXONOMY)
+        b1, b2, b3 = bug(1, "Tabs"), bug(2, "Tabs"), bug(3, "Tabs")
+        b1["whiteboard"] = "[fxdroid] [feature:BRW.FIND]"
+        comments = {"bugs": {
+            "2": {"comments": [{"creator": "dev@example.com", "creation_time": "2026-03-02T00:00:00Z",
+                                "text": "Feature affected: Tab groups & collections (TABS.GRP)"}]},
+            "3": {"comments": [{"creator": "someone@gmail.com", "creation_time": "2026-03-02T00:00:00Z",
+                                "text": "Feature affected: Main menu (UI.MENU)"}]}}}
+        session = unittest.mock.Mock()
+        session.get.return_value = unittest.mock.Mock(status_code=200, headers={}, json=lambda: comments)
+        bugs_map.add_bugzilla_tags(m, [b1, b2, b3], session)
+        self.assertEqual((b1["tag_text"], b1["tag_source"]), ("BRW.FIND", "whiteboard"))
+        self.assertEqual((b2["tag_text"], b2["tag_source"]), ("Tab groups & collections (TABS.GRP)", "comment"))
+        self.assertNotIn("tag_text", b3)                         # not from the team: ignored
+        url, params = session.get.call_args[0][0], session.get.call_args[1]["params"]
+        self.assertTrue(url.endswith("/2/comment"))
+        self.assertEqual(params, [("ids", "3")])
 
 
 class CommandTest(unittest.TestCase):
@@ -188,7 +244,15 @@ class CommandTest(unittest.TestCase):
         code, out = self.run_cli([issue(101), issue(555, "PDFs not opening")], "check", mapping=IOS_MAP,
                                  platform="ios")
         self.assertEqual(code, 1)
-        self.assertIn("555: BRW.PDF    # PDFs not opening", out)
+        self.assertIn("#555 PDFs not opening", out)
+        self.assertIn("Feature affected: PDFs, documents & printing (BRW.PDF)", out)
+
+    def test_check_reports_invalid_tags(self):
+        b = issue(101)
+        b["tag_text"], b["tag_source"] = "Main menu (UI.MNU)", "comment"
+        code, out = self.run_cli([b], "check", mapping=IOS_MAP, platform="ios")
+        self.assertEqual(code, 1)
+        self.assertIn("`UI.MNU`", out)
 
     def test_counts_csv_and_window(self):
         bugs = [bug(1, "Tabs"), bug(2, "Performance"), bug(3, "Tabs", created="2025-12-31T23:00:00Z")]

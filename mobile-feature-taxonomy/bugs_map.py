@@ -15,8 +15,16 @@ a component that mixes features. Escaped = not reported from a team email domain
 invalid bugs aren't counted.
 
 iOS (GitHub issues): issues with a bug label, opened by someone outside the org. There are no feature labels and
-title rules are too imprecise to decide alone, so each bug's feature is decided by hand in ios/bugs-map.yml; title
-rules only suggest one. Undecided bugs count as untriaged.
+title rules are too imprecise to decide alone, so a person decides each bug's feature; title rules only suggest
+one. Undecided bugs count as untriaged.
+
+Tags on the bug itself win over everything else, so a person can set or correct a bug's feature where they triage:
+  GitHub issue:  a comment by an org member or collaborator with a line "Feature affected: <name> (UI.TB)"
+                 ("Feature:" works too; the latest such comment counts)
+  Bugzilla bug:  "[feature:UI.TB]" in the whiteboard, or that line in a comment from a team email domain
+                 (the whiteboard wins over comments)
+Only the ID counts (the name is for people); "excluded" excludes the bug. ios/bugs-map.yml `issues:` holds the
+decisions made before tags existed.
 
 Commands:
     check     the map is valid (known IDs, valid regexes) and every bug in the window has a decision: its
@@ -58,11 +66,52 @@ from feature_map import load_taxonomy  # noqa: E402
 
 BUGZILLA = "https://bugzilla.mozilla.org/rest/bug"
 GITHUB_API = "https://api.github.com"
-FIELDS = "id,summary,component,creation_time,creator,status,resolution"
+FIELDS = "id,summary,component,creation_time,creator,status,resolution,whiteboard"
+CACHE_SCHEMA = 2   # bump when fetched bug records change shape, so old caches are refetched
 # How a bug is attributed.
 # UNKNOWN = needs a decision in the map: an unlisted component (Android) or an undecided issue (iOS).
 FEATURE, UNTRIAGED, EXCLUDED, UNKNOWN = "feature", "untriaged", "excluded", "needs a decision"
 UNTRIAGED_KEY = "UNTRIAGED"
+INVALID = "invalid tag"
+
+# "Feature affected: Toolbar & address bar layout (UI.TB)" or "Feature: UI.TB", on a line of its own.
+TAG_LINE_RE = re.compile(r"^[\W_]*feature(?:\s+affected)?[\W_]*:[\s*_]*(.+?)[\s*_]*$", re.I | re.M)
+WHITEBOARD_RE = re.compile(r"\[feature\s*:\s*([^\]]+)\]", re.I)
+DOTTED_RE = re.compile(r"\b[A-Z]{1,8}\.[A-Z0-9]{2,10}\b")
+
+
+def parse_tag(text, targets):
+    """(kind, feature_id) from what follows "Feature affected:" / "[feature:", or None if it isn't a tag.
+
+    The ID is taken from the last (parenthesised) part, else from a dotted ID anywhere, else the text itself.
+    A dotted word that isn't a feature ID is a typo: (INVALID, word). Plain prose ("Feature: works for me") is None.
+    """
+    rest = (text or "").strip()
+    if not rest:
+        return None
+    paren = [p.strip() for p in re.findall(r"\(([^()]*)\)", rest)]
+    if paren and paren[-1] in targets:
+        return FEATURE, paren[-1]
+    dotted = sorted({d for d in DOTTED_RE.findall(rest) if d in targets})
+    if len(dotted) == 1:
+        return FEATURE, dotted[0]
+    if rest in targets:
+        return FEATURE, rest
+    if re.search(r"\bexclude(d)?\b", rest, re.I):
+        return EXCLUDED, ""
+    bad = [d for d in DOTTED_RE.findall(rest) if d not in targets] or \
+          [p for p in paren if re.fullmatch(r"[A-Z]{1,8}(\.[A-Z0-9]{2,10})?", p)]
+    if len(dotted) > 1:
+        return INVALID, ", ".join(dotted)
+    if bad:
+        return INVALID, bad[0]
+    return None
+
+
+def comment_tag(text):
+    """The text after "Feature affected:" in the last such line of a comment, or None."""
+    found = TAG_LINE_RE.findall(text or "")
+    return found[-1] if found else None
 
 
 # ---- the map -------------------------------------------------------------------------------------------------
@@ -76,6 +125,7 @@ class BugsMap:
     def __init__(self, data, taxonomy):
         self.data = data
         self.targets = valid_targets(taxonomy)
+        self.names = {k: (v["name"] if v["group"] != "area" else v["area"]) for k, v in taxonomy.items()}
         self.errors = []
         self.components = {}
         for name, rule in (data.get("components") or {}).items():
@@ -129,8 +179,15 @@ class BugsMap:
         with open(path or os.path.join(HERE, platform, "bugs-map.yml")) as f:
             return cls(yaml.safe_load(f), load_taxonomy(taxonomy_path))
 
+    def tag(self, bug):
+        """(kind, feature_id) from the bug's own tag (comment or whiteboard), or None."""
+        return parse_tag(bug.get("tag_text"), self.targets) if bug.get("tag_text") else None
+
     def classify(self, bug):
-        """(kind, feature_id): kind is FEATURE, UNTRIAGED, EXCLUDED or UNKNOWN."""
+        """(kind, feature_id): kind is FEATURE, UNTRIAGED, EXCLUDED or UNKNOWN. A valid tag on the bug wins."""
+        tag = self.tag(bug)
+        if tag and tag[0] in (FEATURE, EXCLUDED):
+            return tag
         if self.source == "github":
             return self.issues.get(str(bug["id"]), (UNKNOWN, ""))
         rule = self.components.get(bug["component"])
@@ -241,8 +298,34 @@ def fetch(bugs_map, since, until):
         batch = resp.json()["bugs"]
         bugs += batch
         if len(batch) < limit:
-            return bugs
+            break
         offset += limit
+    add_bugzilla_tags(bugs_map, bugs, session)
+    return bugs
+
+
+def add_bugzilla_tags(bugs_map, bugs, session, chunk=50):
+    """Set bug["tag_text"] from "[feature:…]" in the whiteboard, else from the latest team comment with a
+    "Feature affected:" line. Only escaped, counted bugs are looked at (the others never show)."""
+    wanted = [b for b in bugs if bugs_map.is_escaped(b) and bugs_map.is_counted(b)]
+    for b in wanted:
+        m = WHITEBOARD_RE.search(b.get("whiteboard") or "")
+        if m:
+            b["tag_text"], b["tag_source"] = m.group(1).strip(), "whiteboard"
+    todo = [b for b in wanted if "tag_text" not in b]
+    by_id = {str(b["id"]): b for b in todo}
+    for i in range(0, len(todo), chunk):
+        ids = [str(b["id"]) for b in todo[i:i + chunk]]
+        # One bug in the path, the rest as repeated ?ids= (Bugzilla rejects a comma-separated list).
+        resp = get_with_retry(session, f"{BUGZILLA}/{ids[0]}/comment", [("ids", i) for i in ids[1:]] or None)
+        for bid, entry in resp.json().get("bugs", {}).items():
+            for c in sorted(entry.get("comments", []), key=lambda c: c.get("creation_time", "")):
+                author = (c.get("creator") or "").lower()
+                if not author.endswith(bugs_map.team_domains):
+                    continue
+                text = comment_tag(c.get("text"))
+                if text and parse_tag(text, bugs_map.targets) and bid in by_id:
+                    by_id[bid]["tag_text"], by_id[bid]["tag_source"] = text, "comment"
 
 
 def github_token():
@@ -279,9 +362,26 @@ def fetch_github(bugs_map, since, until):
                     "id": i["number"], "summary": i["title"], "creation_time": i["created_at"],
                     "creator": i["user"]["login"], "assoc": i["author_association"], "state": i["state"],
                     "labels": [lab["name"] for lab in i["labels"]], "component": "", "resolution": "",
+                    "n_comments": i.get("comments", 0),
                 }
             url, params = resp.links.get("next", {}).get("url"), None
-    return sorted(found.values(), key=lambda b: b["id"])
+    bugs = sorted(found.values(), key=lambda b: b["id"])
+    # Tags: the latest "Feature affected:" comment by an org member or collaborator, on escaped issues only.
+    for b in bugs:
+        if not b.pop("n_comments") or not bugs_map.is_escaped(b):
+            continue
+        url = f"{GITHUB_API}/repos/{bugs_map.data['repo']}/issues/{b['id']}/comments"
+        params = {"per_page": 100}
+        while url:
+            resp = get_with_retry(session, url, params)
+            for c in resp.json():
+                if c.get("author_association") not in bugs_map.team_associations:
+                    continue
+                text = comment_tag(c.get("body"))
+                if text and parse_tag(text, bugs_map.targets):
+                    b["tag_text"], b["tag_source"] = text, "comment"
+            url, params = resp.links.get("next", {}).get("url"), None
+    return bugs
 
 
 def in_window(bugs, since, until):
@@ -296,7 +396,8 @@ def load_bugs(bugs_map, since, until, cache):
             cached = json.load(f)
         if isinstance(cached, list):  # a plain list of bugs (e.g. an older export): trust it, filter by date
             return in_window(cached, since, until)
-        if cached.get("since", "9999") <= since and until <= cached.get("until", ""):
+        if cached.get("schema") == CACHE_SCHEMA and cached.get("since", "9999") <= since \
+                and until <= cached.get("until", ""):
             return in_window(cached["bugs"], since, until)
     if bugs_map.source == "github":
         print(f"Fetching {bugs_map.data['repo']} bug issues {since} → {until} from GitHub...", file=sys.stderr)
@@ -307,7 +408,7 @@ def load_bugs(bugs_map, since, until, cache):
         bugs = fetch(bugs_map, since, until)
     if cache:
         with open(cache, "w") as f:
-            json.dump({"since": since, "until": until, "bugs": bugs}, f)
+            json.dump({"schema": CACHE_SCHEMA, "since": since, "until": until, "bugs": bugs}, f)
     return bugs
 
 
@@ -361,18 +462,26 @@ def cmd_check(bugs_map, bugs, window=""):
         for e in bugs_map.errors:
             print(f"- {e}")
         print()
+    counted = [b for b in bugs if bugs_map.is_escaped(b) and bugs_map.is_counted(b)]
+    invalid = [(b, bugs_map.tag(b)[1]) for b in counted if bugs_map.tag(b) and bugs_map.tag(b)[0] == INVALID]
+    if invalid:
+        problems += len(invalid)
+        print(f"## Bugs whose feature tag isn't a feature ID ({len(invalid)}): fix the comment / whiteboard\n")
+        for b, word in invalid:
+            print(f"- {b['id']} ({b.get('tag_source', 'tag')}): `{word}` in \"{b['tag_text'][:80]}\"")
+        print()
     if bugs_map.source == "github":
-        undecided = [b for b in bugs if bugs_map.is_escaped(b) and bugs_map.classify(b)[0] == UNKNOWN]
+        undecided = [b for b in counted if bugs_map.classify(b)[0] == UNKNOWN]
         if undecided:
             problems += len(undecided)
-            print(f"## Escaped bugs with no decision ({len(undecided)}): review, then paste into issues: in "
-                  f"ios/bugs-map.yml\n")
-            print("```yaml")
+            print(f"## Escaped bugs with no feature yet ({len(undecided)}): review the suggestion, then comment on "
+                  f"the issue\n")
             for b in undecided:
                 hint = bugs_map.suggest(b)
                 title = (b["summary"] or "").replace("\n", " ")[:90]
-                print(f"  {b['id']}: {hint or 'TODO'}    # {title}")
-            print("```\n")
+                line = f"Feature affected: {bugs_map.names[hint]} ({hint})" if hint else "Feature affected: ? (TODO)"
+                print(f"- #{b['id']} {title}\n    {line}")
+            print()
     unknown = Counter(b["component"] for b in bugs
                       if bugs_map.source != "github" and bugs_map.classify(b)[0] == UNKNOWN)
     if unknown:
@@ -384,7 +493,9 @@ def cmd_check(bugs_map, bugs, window=""):
     attributed = attribute(bugs, bugs_map)
     levels = Counter(level(*v) for v in attributed.values())
     total = sum(levels.values()) or 1
-    print(f"{len(bugs)} bugs created {window}; {len(attributed)} escaped and counted:")
+    tagged = sum(1 for b in counted if bugs_map.tag(b) and bugs_map.tag(b)[0] in (FEATURE, EXCLUDED))
+    print(f"{len(bugs)} bugs created {window}; {len(attributed)} escaped and counted"
+          + (f" ({tagged} with a feature tag on the bug)" if tagged else "") + ":")
     for k in ("L2", "L1 only", "cross-cutting axis", "untriaged", "needs a decision"):
         if levels[k]:
             print(f"  {k:<20}{levels[k]:>5}  {100 * levels[k] / total:5.1f}%")
