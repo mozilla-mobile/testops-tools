@@ -470,6 +470,7 @@ BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewController.swi
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewModel.swift,BRW.WEBC
 BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferBookmark.swift,APP.UPD
 BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferHistoryVisit.swift,APP.UPD
+BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferReadingListItem.swift,APP.UPD
 BrowserKit/Sources/WebEngine/BrowserURL.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/Engine.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/EngineConstants.swift,SHARED.WEB
@@ -1403,7 +1404,6 @@ firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsMiddleware.s
 firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsState.swift,TRANS.SET
 firefox-ios/Client/Frontend/Settings/Translation/TranslationSettingsViewController.swift,TRANS.SET
 firefox-ios/Client/Frontend/Settings/Translation/TranslationToggleCell.swift,TRANS.SET
-firefox-ios/Client/Frontend/Settings/VPN/VPNDataUsage.swift,SET.FRAME
 firefox-ios/Client/Frontend/Settings/VPN/VPNGlobeView.swift,SET.FRAME
 firefox-ios/Client/Frontend/Settings/VPN/VPNHelpers.swift,SET.FRAME
 firefox-ios/Client/Frontend/Settings/VPN/VPNLocationsRow.swift,SET.FRAME
