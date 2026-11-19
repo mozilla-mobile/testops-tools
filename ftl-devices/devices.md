@@ -111,7 +111,7 @@
 | dm1q | Galaxy S23 | 35 | Low |
 | dm1q-SM-S911U | Galaxy S23 | 36 | Medium |
 | dm1qcsx | Galaxy S23 | 36 | Low |
-| dm2q | Galaxy S23+ | 34 | Low |
+| dm2q | Galaxy S23+ | 34 | Medium |
 | dm2qksx | Galaxy S23+ | 36 | Low |
 | dm3q | Galaxy S23 Ultra | 33 | Medium |
 | dm3q | Galaxy S23 Ultra | 34 | High |
@@ -147,7 +147,7 @@
 | gta8wifi | Galaxy Tab A8 | 34 | Medium |
 | gta9pwifi | Galaxy Tab A9+ | 34 | Medium |
 | gts10pwifi | Galaxy Tab S10+ | 36 | Low |
-| gts7lwifi | Galaxy Tab S7 | 33 | Low |
+| gts7lwifi | Galaxy Tab S7 | 33 | Medium |
 | gts7xllite | Galaxy Tab S7 FE 5G | 34 | Medium |
 | gts7xlwifi | Galaxy Tab S7+ | 33 | Low |
 | gts8uwifi | Galaxy Tab S8 Ultra | 33 | High |
