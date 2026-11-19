@@ -56,7 +56,7 @@ GitHub, so `bugs.json` lists their IDs, titles and links.
 |---|---|---|
 | `features.json` | `collect.py` | nothing (reads `features.yml`) |
 | `testrail.json` | `collect_testrail.py` | `TESTRAIL_HOST`, `TESTRAIL_USERNAME`, `TESTRAIL_PASSWORD` |
-| `bugs.json` | `collect_bugs.py` | a GitHub token for iOS (`GITHUB_TOKEN`, `GH_TOKEN` or the `gh` CLI's); Bugzilla is public |
+| `bugs.json` | `collect_bugs.py` | a GitHub token for iOS (`GITHUB_TOKEN`, `GH_TOKEN` or the `gh` CLI's) and one with read:org to know who is in the iOS teams (`GH_ORG_READ_TOKEN`, else the same); Bugzilla is public |
 
 ## Run locally
 
