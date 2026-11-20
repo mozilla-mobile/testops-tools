@@ -21,6 +21,7 @@ same list of features and the same rule for "which feature does this code belong
 
 It lives here, not in the product repos, so it's one copy, maintained by Mobile Test Engineering, and kept current
 by a weekly CI job instead of scripts on someone's machine. Consumers: the
+feature health dashboard (`mobile-feature-health/`: TestRail cases and escaped bugs per feature), the
 Testing Assessment charts (`mobile-testing-assessment-charts/`, feature grouping), the coverage scorecards, and
 later the TestRail section → feature mapping.
 
@@ -201,8 +202,8 @@ appears, `check` fails until it gets a line in the map.
 **iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't in
 the iOS and QA GitHub teams listed in `ios/bugs-map.yml` (org members from other teams, like Mozillians who use the
 app, count as external); service accounts and test or spam issues are dropped. Only team *names* are in the repo:
-membership is read from GitHub at run time and never stored, which needs a token with read:org (`GH_ORG_READ_TOKEN`
-in CI; locally the `gh` CLI's token). Issues carry no feature labels, and title
+membership is read from GitHub at run time (locally with the `gh` CLI), or in CI from the `IOS_TEAM_LOGINS` secret,
+which `bugs_map.py ios team --update-secret` refreshes; it is never written to the repo or the dashboard. Issues carry no feature labels, and title
 keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand**: a
 `Feature affected:` comment on the issue (see below), or, for the bugs decided before comments existed, a line in
 `ios/bugs-map.yml`. `check` fails while a bug has no feature and prints the comment to post, with a suggestion from

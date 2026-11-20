@@ -180,14 +180,36 @@ class IosTeamTest(unittest.TestCase):
         bot = dict(issue(4, assoc="COLLABORATOR"), team=False, creator="Sync-Bot")
         self.assertEqual([m.is_escaped(b) for b in (insider, mozillian, community, bot)], [False, True, True, False])
 
+    def test_members_from_the_secret(self):
+        m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        session = unittest.mock.Mock()
+        with unittest.mock.patch.dict(os.environ, {"IOS_TEAM_LOGINS": "Alice, bob\ncarol  dave,"}):
+            self.assertEqual(bugs_map.team_members(m, session), {"alice", "bob", "carol", "dave"})
+        session.get.assert_not_called()
+
+    def test_team_command_updates_the_secret(self):
+        m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        with unittest.mock.patch.object(bugs_map, "team_members", return_value={"bob", "alice"}), \
+                unittest.mock.patch("subprocess.run") as run, contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(bugs_map.cmd_team(m, update_secret=True), 0)
+        self.assertEqual(run.call_args[0][0][:3], ["gh", "secret", "set"])
+        self.assertEqual(run.call_args[1]["input"], "alice, bob")
+        self.assertNotIn("alice", out.getvalue())               # logins aren't printed unless --show
+
     def test_members_are_read_and_failures_are_explicit(self):
         m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        teams = unittest.mock.Mock(status_code=200, links={}, json=lambda: [{"slug": "ios-eng"}])
         ok = unittest.mock.Mock(status_code=200, links={}, json=lambda: [{"login": "Alice"}, {"login": "bob"}])
-        session = unittest.mock.Mock(); session.get.return_value = ok
-        self.assertEqual(bugs_map.team_members(m, session), {"alice", "bob"})
-        session.get.return_value = unittest.mock.Mock(status_code=404, links={})
-        with self.assertRaisesRegex(RuntimeError, "read:org"):
-            bugs_map.team_members(m, session)
+        session = unittest.mock.Mock(); session.get.side_effect = [teams, ok]
+        with unittest.mock.patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(bugs_map.team_members(m, session), {"alice", "bob"})
+            gone = unittest.mock.Mock(status_code=200, links={}, json=lambda: [{"slug": "other"}])
+            session.get.side_effect = [gone]
+            with self.assertRaisesRegex(RuntimeError, "no longer exist.*ios-eng"):
+                bugs_map.team_members(m, session)
+            session.get.side_effect = [unittest.mock.Mock(status_code=403, links={})]
+            with self.assertRaisesRegex(RuntimeError, "read:org"):
+                bugs_map.team_members(m, session)
 
 
 class AssignedByTest(unittest.TestCase):

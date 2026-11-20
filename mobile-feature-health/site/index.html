@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Firefox mobile — feature health (iOS vs Android)</title>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<style>
+.viz-root {
+  color-scheme: light;
+  --surface-0: #f4f3f0; --surface-1: #fcfcfb; --surface-2: #f0efec;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #77756f;
+  --rule: #e2e0da; --head: #17365d; --head-text: #ffffff;
+  --bar: #cfcdc6; --bar-open: #52514e;
+  --h0: #cde2fb; --h1: #9ec5f4; --h2: #6da7ec; --h3: #256abf; --h4: #104281;
+  --t0: #0b0b0b; --t1: #0b0b0b; --t2: #0b0b0b; --t3: #ffffff; --t4: #ffffff;
+  --focus: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #4a4a44; --bar-open: #c3c2b7;
+    --h0: #0d366b; --h1: #184f95; --h2: #2a78d6; --h3: #6da7ec; --h4: #b7d3f6;
+    --t0: #f0efec; --t1: #f0efec; --t2: #ffffff; --t3: #0b0b0b; --t4: #0b0b0b; --focus: #6da7ec;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #242422;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+  --rule: #34342f; --head: #0d2a4a; --head-text: #f0efec; --bar: #4a4a44; --bar-open: #c3c2b7;
+  --h0: #0d366b; --h1: #184f95; --h2: #2a78d6; --h3: #6da7ec; --h4: #b7d3f6;
+  --t0: #f0efec; --t1: #f0efec; --t2: #ffffff; --t3: #0b0b0b; --t4: #0b0b0b; --focus: #6da7ec;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.viz-root { background: var(--surface-0); color: var(--text-primary); min-height: 100vh;
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 28px 32px 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.sub { color: var(--text-secondary); margin: 0 0 6px; max-width: 1100px; }
+.meta { color: var(--text-muted); font-size: 12px; margin: 0 0 20px; }
+.meta a { color: var(--focus); text-decoration: none; }
+.meta a:hover { text-decoration: underline; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 14px; }
+.toolbar input[type=search] { padding: 6px 10px; border: 1px solid var(--rule); border-radius: 6px;
+  background: var(--surface-1); color: var(--text-primary); width: 240px; font: inherit; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface-1); color: var(--text-secondary); padding: 6px 12px; font: inherit; cursor: pointer; }
+.seg button[aria-pressed=true] { background: var(--head); color: var(--head-text); }
+button:focus-visible, input:focus-visible, td[tabindex]:focus-visible, th[tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.legend { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 12px; }
+.legend .sw { display: inline-block; width: 46px; height: 14px; border-radius: 3px; text-align: center; font-size: 10px; line-height: 14px; }
+.card { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 10px; overflow: auto; max-height: 78vh; }
+table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 760px; }
+thead th { position: sticky; background: var(--head); color: var(--head-text); font-weight: 600; font-size: 12px;
+  padding: 7px 8px; text-align: center; z-index: 2; }
+thead tr:first-child th { top: 0; }
+thead tr:nth-child(2) th { top: 31px; font-weight: 500; }
+thead th.grp { border-left: 2px solid var(--surface-1); }
+thead th.feat { text-align: left; left: 0; z-index: 3; min-width: 280px; }
+thead th[data-sort] { cursor: pointer; }
+thead th[aria-sort=ascending]::after { content: " ▲"; } thead th[aria-sort=descending]::after { content: " ▼"; }
+tbody td { padding: 5px 8px; border-bottom: 1px solid var(--rule); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody td.feat { text-align: left; position: sticky; left: 0; background: var(--surface-1); z-index: 1; white-space: normal; }
+tbody td.g { border-left: 2px solid var(--surface-1); }
+.fid { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--text-secondary); margin-right: 6px; }
+tr.l1 td { background: var(--surface-2); font-weight: 600; }
+tr.l1 td.feat { background: var(--surface-2); cursor: pointer; }
+tr.l1 .caret { display: inline-block; width: 14px; color: var(--text-muted); transition: transform .15s; }
+tr.l1.collapsed .caret { transform: rotate(-90deg); }
+tr.total td { background: var(--surface-2); font-weight: 700; border-top: 2px solid var(--rule); }
+td.heat span { display: inline-block; min-width: 54px; padding: 2px 6px; border-radius: 4px; text-align: center; }
+td.na { color: var(--text-muted); text-align: center; }
+td.cnt { position: relative; }
+td.cnt .bar { position: absolute; left: 8px; bottom: 5px; height: 3px; border-radius: 2px; background: var(--bar); }
+td.cnt.zero { color: var(--text-muted); }
+.tip { position: fixed; pointer-events: none; z-index: 10; max-width: 320px; background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 7px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); display: none; }
+.tip b { display: block; margin-bottom: 2px; }
+.wip { border-left: 4px solid var(--h2); background: var(--surface-1); padding: 8px 12px; border-radius: 4px;
+  max-width: 1100px; margin: 0 0 12px; color: var(--text-secondary); }
+.wip b { color: var(--text-primary); }
+.error { border-left: 4px solid var(--h3); background: var(--surface-1); padding: 8px 12px; border-radius: 4px; max-width: 1100px; }
+td.cnt.click { cursor: pointer; }
+td.cnt .open { color: var(--text-muted); font-weight: 400; font-size: 12px; margin-right: 6px; }
+td.cnt .bar.o { background: var(--bar-open); }
+.legend .bk { display: inline-block; width: 16px; height: 4px; border-radius: 2px; vertical-align: middle; }
+td.cnt.click:hover { text-decoration: underline; }
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--rule); margin: 0 0 16px; }
+.tabs button { border: 0; background: none; color: var(--text-secondary); padding: 8px 14px; font: inherit; font-weight: 600;
+  cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.tabs button[aria-selected=true] { color: var(--text-primary); border-bottom-color: var(--head); }
+.tabs .n { font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+.toolbar select, .toolbar input[type=date] { padding: 5px 8px; border: 1px solid var(--rule); border-radius: 6px;
+  background: var(--surface-1); color: var(--text-primary); font: inherit; }
+.toolbar select { max-width: 300px; }
+.toolbar label { color: var(--text-secondary); font-size: 13px; display: inline-flex; gap: 6px; align-items: center; }
+.toolbar .go, .bmeta .go { border: 0; background: none; color: var(--focus); font: inherit; cursor: pointer; padding: 0; text-decoration: none; }
+.toolbar .go:hover, .bmeta .go:hover { text-decoration: underline; }
+.bmeta { color: var(--text-secondary); margin: 0 0 10px; display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+.bmeta b { color: var(--text-primary); }
+table.bt { min-width: 1000px; }
+table.bt thead th { position: sticky; top: 0; text-align: left; }
+table.bt tbody td { text-align: left; white-space: normal; vertical-align: top; }
+table.bt td.nowrap { white-space: nowrap; }
+table.bt td a { color: var(--focus); text-decoration: none; }
+table.bt td a:hover { text-decoration: underline; }
+table.bt .num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+table.bt .fname { color: var(--text-secondary); font-size: 13px; }
+table.bt td.state { min-width: 110px; }
+table.bt .small { font-size: 12px; }
+table.bt .muted, .bmeta .muted { color: var(--text-muted); }
+.pill { display: inline-block; padding: 0 6px; border-radius: 4px; font-size: 12px; border: 1px solid var(--rule); white-space: nowrap; }
+.pill.open { border-color: var(--text-secondary); color: var(--text-primary); }
+.pill.closed { color: var(--text-muted); }
+.notes { max-width: 1100px; color: var(--text-secondary); font-size: 13px; margin-top: 22px; }
+.notes h2 { font-size: 15px; color: var(--text-primary); margin: 18px 0 6px; }
+.notes li { margin: 3px 0; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <h1>Firefox mobile — feature health</h1>
+  <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
+    TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
+    Hover any cell for details; click a bug count to see those bugs in the Escaped bugs tab.</p>
+  <p class="wip"><b>Work in progress.</b> TestRail cases, UI automation and escaped bugs are real data, refreshed from
+    TestRail, Bugzilla and GitHub. Unit-test coverage per feature is still to come.</p>
+  <p class="error" id="notice" hidden></p>
+  <p class="meta" id="meta">Loading…</p>
+
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" id="t-overview" aria-controls="tab-overview" aria-selected="true">Overview by feature</button>
+    <button role="tab" id="t-bugs" aria-controls="tab-bugs" aria-selected="false">Escaped bugs<span class="n" id="t-bugs-n"></span></button>
+  </nav>
+
+  <section id="tab-overview" role="tabpanel" aria-labelledby="t-overview">
+
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="Filter features (e.g. tabs, CRED)" aria-label="Filter features">
+    <div class="seg" role="group" aria-label="View">
+      <button id="vGroup" aria-pressed="true">Grouped by area</button>
+      <button id="vFlat" aria-pressed="false">All features (sortable)</button>
+    </div>
+    <div class="seg" role="group" aria-label="Areas">
+      <button id="expand" aria-pressed="false">Expand all</button>
+      <button id="collapse" aria-pressed="false">Collapse all</button>
+    </div>
+    <div class="legend" aria-label="Colour scale for percentage columns">% columns:
+      <span class="sw" style="background:var(--h0);color:var(--t0)">0–20</span>
+      <span class="sw" style="background:var(--h1);color:var(--t1)">20–40</span>
+      <span class="sw" style="background:var(--h2);color:var(--t2)">40–60</span>
+      <span class="sw" style="background:var(--h3);color:var(--t3)">60–80</span>
+      <span class="sw" style="background:var(--h4);color:var(--t4)">80–100</span>
+    </div>
+    <div class="legend" aria-label="Bug bars">Bug bars:
+      <span class="bk" style="background:var(--bar-open)"></span> open
+      <span class="bk" style="background:var(--bar)"></span> closed
+    </div>
+    <div class="seg" role="group" aria-label="Theme">
+      <button data-theme="light" aria-pressed="false">Light</button>
+      <button data-theme="auto" aria-pressed="true">Auto</button>
+      <button data-theme="dark" aria-pressed="false">Dark</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <table id="t" aria-describedby="notes">
+      <thead><tr id="h1"></tr><tr id="h2"></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="notes" id="notes">
+    <h2>What each column means</h2>
+    <ul>
+      <li><b>UI automation · % of TestRail cases</b> — share of the feature's TestRail Full Functional cases whose
+        <i>Automation</i> field is <i>Completed</i> (XCUITest / Espresso). It's the TestRail status, not a verified run.</li>
+      <li><b>Manual · TestRail cases</b> — number of Full Functional cases attributed to the feature, automated ones included.
+        <span id="tr-totals"></span></li>
+      <li><b>Escaped bugs</b> — bugs reported by people outside the team, created this year so far. Click a number to see them in the
+        <i>Escaped bugs</i> tab, where they can be filtered, sorted and downloaded.
+        iOS: firefox-ios GitHub issues with a bug label, author not an org member or collaborator, feature decided by hand.
+        Android: Bugzilla <i>Firefox for Android</i> defects, reporter not @mozilla.com and not a bot, duplicates / invalid excluded,
+        feature from the component (refined by title inside mixed components). <span id="bug-totals"></span></li>
+    </ul>
+    <h2>How cases are attributed</h2>
+    <ul>
+      <li>Every section of the Full Functional suites (iOS 45443, Android 3192) starts its description with a feature ID,
+        e.g. <code>LIB.BMK</code>, or an area ID such as <code>CRED</code>. A case takes the ID of its section or of the nearest
+        parent section that has one. IDs come from
+        <a href="https://github.com/mozilla-mobile/testops-tools/blob/main/mobile-feature-taxonomy/FEATURES.md">FEATURES.md</a>;
+        a daily check alerts on Slack when a section has none.</li>
+      <li>Area rows count every case in the area, including the ones attributed to the area alone, so they can be larger than the
+        sum of their features.</li>
+    </ul>
+  </div>
+
+  </section>
+
+  <section id="tab-bugs" role="tabpanel" aria-labelledby="t-bugs" hidden>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Platform">
+        <button data-bp="all">All</button><button data-bp="ios">iOS</button><button data-bp="android">Android</button>
+      </div>
+      <div class="seg" role="group" aria-label="State">
+        <button data-bs="open">Open</button><button data-bs="closed">Closed</button><button data-bs="all">All</button>
+      </div>
+      <select id="bf" aria-label="Feature"></select>
+      <select id="bh" aria-label="How the feature was assigned"></select>
+      <label>Created <input type="date" id="bfrom" aria-label="Created from"> → <input type="date" id="bto" aria-label="Created until"></label>
+      <input type="search" id="bq" placeholder="Search title, number, component" aria-label="Search bugs">
+      <button class="go" id="breset">Reset filters</button>
+    </div>
+    <p class="bmeta" id="bmeta"></p>
+    <div class="card">
+      <table class="bt" id="bt">
+        <thead><tr>
+          <th data-bsort="pname" tabindex="0">Platform</th><th data-bsort="id" tabindex="0">Bug</th>
+          <th data-bsort="title" tabindex="0">Title</th><th data-bsort="feature" tabindex="0">Feature</th>
+          <th data-bsort="how" tabindex="0" title="How the bug got its feature: a tag on the bug (comment or whiteboard), a decision in ios/bugs-map.yml, its Bugzilla component, a title rule, or none yet">Assigned by</th>
+          <th data-bsort="component" tabindex="0">Component</th><th data-bsort="created" tabindex="0">Created</th>
+          <th data-bsort="open" tabindex="0">State</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="tip" id="tip" role="tooltip"></div>
+</div>
+
+<script>
+const PLATFORMS = [["ios", "iOS"], ["android", "Android"]];
+// One entry per column group; each group has an iOS and an Android column. New data sources add a group here.
+const GROUPS = [
+  {title: "UI automation · % of TestRail cases", short: "UI automation", cell: (key, p, name) => automationCell(key, p, name)},
+  {title: "Manual · TestRail cases", short: "TestRail cases", cell: (key, p, name) => casesCell(key, p, name)},
+  {title: "Escaped bugs · this year", short: "Escaped bugs", cell: (key, p, name) => bugsCell(key, p, name)},
+];
+const COLS = GROUPS.flatMap(g => PLATFORMS.map(([, name]) => `${g.short} ${name}`));
+const WORKFLOW = "https://github.com/mozilla-mobile/testops-tools/actions/workflows/mobile-feature-health.yml";
+
+const tbody = document.querySelector("#t tbody");
+const tip = document.getElementById("tip");
+let ROWS = [], FEATURES = null, TR = null, BUGS = null, view = "group", sortKey = null, sortDir = -1, query = "";
+const collapsed = new Set();
+
+const bin = v => v < 20 ? 0 : v < 40 ? 1 : v < 60 ? 2 : v < 80 ? 3 : 4;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const plural = (n, w) => `${n.toLocaleString()} ${w}${n === 1 ? "" : "s"}`;
+
+const ZERO = {total: 0, automated: 0};
+const trOf = (key, p) => key === "TOTAL" ? TR.totals[p] : (TR.platforms[p].features[key] || ZERO);
+const bugsOnly = key => key.startsWith("X.") || key === "UNTRIAGED" || key === "L1:X";
+function automationCell(key, p, platform) {
+  if (bugsOnly(key)) return {na: "Bugs only"};
+  if (!TR) return {na: "No TestRail data this run"};
+  const c = trOf(key, p);
+  if (!c.total) return {na: `No ${platform} TestRail cases`};
+  return {v: 100 * c.automated / c.total, tip: `${c.automated} of ${plural(c.total, "TestRail case")} marked Automation = Completed`};
+}
+function casesCell(key, p) {
+  if (bugsOnly(key)) return {na: "Bugs only"};
+  if (!TR) return {na: "No TestRail data this run"};
+  const c = trOf(key, p);
+  return {n: c.total, tip: `${plural(c.total, "TestRail case")} (${c.automated} automated, ${c.total - c.automated} not)`};
+}
+
+function bugsCell(key, p, platform) {
+  if (!BUGS) return {na: "No bug data this run"};
+  const d = BUGS.platforms[p];
+  if (key === "L1:X") {
+    const ids = FEATURES.crosscutting.flatMap(x => d.features[x.id] || []);
+    const nOpen = ids.filter(id => d.bugs[id].open).length;
+    return {n: ids.length, open: nOpen, bugs: ids.length ? {p, key, ids} : null,
+            tip: `${plural(ids.length, "escaped bug")} on a cross-cutting axis: ${nOpen} open, ${ids.length - nOpen} closed · click to list`};
+  }
+  const ids = key === "TOTAL" ? Object.keys(d.bugs) : (d.features[key] || []);
+  const nOpen = ids.filter(id => d.bugs[id].open).length;
+  const what = key === "UNTRIAGED"
+    ? (p === "ios" ? "waiting for a feature decision" : "in Bugzilla's General component, not triaged yet") : "";
+  return {n: ids.length, open: nOpen, bugs: ids.length ? {p, key, ids} : null,
+          tip: `${plural(ids.length, "escaped " + platform + " bug")}${what ? " " + what : ""}` +
+               (ids.length ? `: ${nOpen} open, ${ids.length - nOpen} closed · click to list` : "")};
+}
+
+function buildRows() {
+  const cells = key => GROUPS.flatMap(g => PLATFORMS.map(([p, name]) => g.cell(key, p, name)));
+  const rows = FEATURES.features.map(f => f.type === "l1"
+    ? {type: "l1", id: f.id, name: f.name, cells: cells("L1:" + f.id)}
+    : {type: "l2", id: f.id, l1: f.l1, name: f.name, cells: cells(f.id)});
+  if (BUGS) {
+    rows.push({type: "l1", id: "X", name: "Cross-cutting axes (bugs only)", cells: cells("L1:X")});
+    FEATURES.crosscutting.forEach(x => rows.push({type: "l2", id: x.id, l1: "X", name: x.name, cells: cells(x.id)}));
+    rows.push({type: "l1", id: "—", name: "Escaped bugs without a feature yet", cells: cells("UNTRIAGED")});
+  }
+  if (TR) TR.totals = {};
+  for (const [p] of PLATFORMS) {
+    if (!TR) break;
+    TR.totals[p] = {total: 0, automated: 0};
+    FEATURES.features.filter(f => f.type === "l1").forEach(f => {
+      const c = trOf("L1:" + f.id, p); TR.totals[p].total += c.total; TR.totals[p].automated += c.automated;
+    });
+  }
+  rows.push({type: "total", id: "TOTAL", name: "All", cells: cells("TOTAL")});
+  return rows;
+}
+
+function header() {
+  document.getElementById("h1").innerHTML = `<th class="feat" rowspan="2" data-sort="name" tabindex="0">Feature</th>` +
+    GROUPS.map(g => `<th class="grp" colspan="${PLATFORMS.length}">${esc(g.title)}</th>`).join("");
+  document.getElementById("h2").innerHTML = GROUPS.flatMap((g, gi) => PLATFORMS.map(([, name], pi) => {
+    const i = gi * PLATFORMS.length + pi;
+    return `<th${pi === 0 ? ' class="grp"' : ""} data-sort="${i}" tabindex="0">${name}</th>`;
+  })).join("");
+}
+
+function maxima(rows) {      // per count column, max over the visible rows of the same level
+  const m = {};
+  rows.forEach(r => r.cells.forEach((c, i) => { if (c.n !== undefined && r.type !== "total") m[r.type + i] = Math.max(m[r.type + i] || 0, c.n); }));
+  return m;
+}
+
+function cellHTML(r, c, i, m) {
+  const cls = i % PLATFORMS.length === 0 ? " g" : "";
+  const tipAttr = ` tabindex="0" data-tip="${esc((c.na || c.tip || ""))}" data-col="${i}" data-row="${esc(r.id)}"`;
+  if (c.na) return `<td class="na${cls}"${tipAttr} aria-label="${esc(COLS[i] + ": " + c.na)}">—</td>`;
+  if (c.v !== undefined) {
+    const b = bin(c.v);
+    return `<td class="heat${cls}"${tipAttr}><span style="background:var(--h${b});color:var(--t${b})">${c.v.toFixed(1)}%</span></td>`;
+  }
+  const max = m[r.type + i] || 1, w = c.n / max;
+  let bar = r.type === "total" ? "" : `<span class="bar" style="width:calc((100% - 16px) * ${w})"></span>`;
+  let openTxt = "";
+  if (c.open !== undefined && c.n) {
+    openTxt = `<span class="open">${c.open.toLocaleString()} open ·</span>`;
+    if (r.type !== "total") {   // open segment, then a 2px gap, then closed
+      const wo = w * c.open / c.n, wc = w - wo;
+      bar = (c.open ? `<span class="bar o" style="width:calc((100% - 16px) * ${wo})"></span>` : "") +
+        (c.n - c.open ? `<span class="bar" style="left:calc(8px + (100% - 16px) * ${wo} + ${c.open ? 2 : 0}px);` +
+          `width:max(0px, calc((100% - 16px) * ${wc} - ${c.open ? 2 : 0}px))"></span>` : "");
+    }
+  }
+  const click = c.bugs ? ` click" data-bugs="${i}` : "";
+  return `<td class="cnt${cls}${c.n === 0 ? " zero" : ""}${click}"${tipAttr}>${openTxt}${c.n.toLocaleString()}${bar}</td>`;
+}
+
+function rowHTML(r, m) {
+  const cls = r.type === "l1" ? `l1${collapsed.has(r.id) ? " collapsed" : ""}` : r.type;
+  const caret = r.type === "l1" && view === "group" ? `<span class="caret" aria-hidden="true">▾</span>` : "";
+  const attrs = r.type === "l1" && view === "group"
+    ? ` role="button" tabindex="0" aria-expanded="${!collapsed.has(r.id)}" data-toggle="${esc(r.id)}"` : "";
+  const fid = r.type === "total" ? "" : `<span class="fid">${esc(r.id)}</span>`;
+  return `<tr class="${cls}"><td class="feat"${attrs}>${caret}${fid}${esc(r.name)}</td>` +
+    r.cells.map((c, i) => cellHTML(r, c, i, m)).join("") + "</tr>";
+}
+
+function sortVal(r) {
+  if (sortKey === "name") return r.id;
+  const c = r.cells[sortKey];
+  return c.na ? null : (c.v !== undefined ? c.v : c.n);
+}
+
+function render() {
+  const q = query.trim().toLowerCase();
+  const match = r => !q || (r.id + " " + r.name).toLowerCase().includes(q);
+  let rows;
+  if (view === "group") {
+    rows = [];
+    ROWS.forEach(r => {
+      if (r.type === "l1") {
+        const kids = ROWS.filter(k => k.l1 === r.id && match(k));
+        if (match(r) || kids.length) { rows.push(r); if (!collapsed.has(r.id) || q) rows.push(...(match(r) && !q ? ROWS.filter(k => k.l1 === r.id) : kids)); }
+      } else if (r.type === "total" && !q) rows.push(r);
+    });
+  } else {
+    rows = ROWS.filter(r => r.type === "l2" && match(r));
+    if (sortKey !== null) rows.sort((a, b) => {
+      const x = sortVal(a), y = sortVal(b);
+      if (x === null && y === null) return 0; if (x === null) return 1; if (y === null) return -1;
+      return (x < y ? -1 : x > y ? 1 : 0) * sortDir;
+    });
+  }
+  const m = maxima(rows);
+  tbody.innerHTML = rows.map(r => rowHTML(r, m)).join("");
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    const k = th.dataset.sort === "name" ? "name" : +th.dataset.sort;
+    th.setAttribute("aria-sort", view === "flat" && k === sortKey ? (sortDir > 0 ? "ascending" : "descending") : "none");
+  });
+}
+
+function wire() {
+  document.getElementById("q").addEventListener("input", e => { query = e.target.value; render(); });
+  const setView = v => { view = v; document.getElementById("vGroup").setAttribute("aria-pressed", v === "group");
+    document.getElementById("vFlat").setAttribute("aria-pressed", v === "flat"); render(); };
+  document.getElementById("vGroup").onclick = () => setView("group");
+  document.getElementById("vFlat").onclick = () => setView("flat");
+  document.getElementById("expand").onclick = () => { collapsed.clear(); setView("group"); };
+  document.getElementById("collapse").onclick = () => { ROWS.filter(r => r.type === "l1").forEach(r => collapsed.add(r.id)); setView("group"); };
+  const toggle = id => { collapsed.has(id) ? collapsed.delete(id) : collapsed.add(id); render(); };
+  tbody.addEventListener("click", e => {
+    const b = e.target.closest("[data-bugs]");
+    if (b) { const row = ROWS.find(r => r.id === b.dataset.row); openBugs(row.cells[+b.dataset.bugs].bugs); return; }
+    const t = e.target.closest("[data-toggle]"); if (t) toggle(t.dataset.toggle); });
+  tbody.addEventListener("keydown", e => { const t = e.target.closest("[data-toggle]");
+    if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggle(t.dataset.toggle); } });
+  const sortBy = th => {
+    const k = th.dataset.sort === "name" ? "name" : +th.dataset.sort;
+    if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = k === "name" ? 1 : -1; }
+    setView("flat");
+  };
+  document.querySelectorAll("thead th[data-sort]").forEach(th => {
+    th.addEventListener("click", () => sortBy(th));
+    th.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(th); } });
+  });
+  const showTip = (el, x, y) => {
+    const row = ROWS.find(r => r.id === el.dataset.row);
+    tip.innerHTML = `<b>${esc(row.id === "TOTAL" ? row.name : row.id)} · ${esc(COLS[+el.dataset.col])}</b>${esc(el.dataset.tip)}`;
+    tip.style.display = "block";
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(x + 14, innerWidth - w - 8) + "px";
+    tip.style.top = (y + h + 20 > innerHeight ? y - h - 12 : y + 16) + "px";
+  };
+  tbody.addEventListener("mousemove", e => { const el = e.target.closest("[data-tip]"); el ? showTip(el, e.clientX, e.clientY) : (tip.style.display = "none"); });
+  tbody.addEventListener("mouseleave", () => tip.style.display = "none");
+  tbody.addEventListener("focusin", e => { const el = e.target.closest("[data-tip]"); if (el) { const b = el.getBoundingClientRect(); showTip(el, b.left, b.bottom); } });
+  tbody.addEventListener("focusout", () => tip.style.display = "none");
+  document.querySelectorAll("[data-theme]").forEach(b => b.onclick = () => {
+    const t = b.dataset.theme;
+    t === "auto" ? document.documentElement.removeAttribute("data-theme") : document.documentElement.setAttribute("data-theme", t);
+    document.querySelectorAll("[data-theme]").forEach(x => x.setAttribute("aria-pressed", x === b));
+  });
+}
+
+// ---------------- Escaped bugs tab ----------------
+// Filters live in the URL (#bugs?p=android&f=BRW.NAV&s=open…) so a filtered list can be shared.
+const BDEFAULT = {p: "all", s: "open", f: "", h: "", from: "", to: "", q: "", sort: "created", dir: "desc"};
+let BF = {...BDEFAULT}, BUGLIST = [], FNAMES = {};
+const featureName = fid => (fid && FNAMES[fid]) || "";
+
+function buildBugList() {
+  FEATURES.features.forEach(f => FNAMES[f.id] = f.name);
+  FEATURES.crosscutting.forEach(x => FNAMES[x.id] = x.name);
+  BUGLIST = PLATFORMS.flatMap(([p, name]) => Object.entries(BUGS.platforms[p].bugs).map(([id, b]) =>
+    ({p, pname: name, id, ...b, hay: `${id} ${b.title} ${b.component} ${b.feature}`.toLowerCase()})));
+  document.getElementById("t-bugs-n").textContent = BUGLIST.length.toLocaleString();
+  const opt = (v, label) => `<option value="${esc(v)}">${esc(label)}</option>`;
+  document.getElementById("bf").innerHTML = opt("", "All features") +
+    FEATURES.features.map(f => f.type === "l1" ? opt("L1:" + f.id, `${f.id} — ${f.name} (whole area)`)
+                                               : opt(f.id, `   ${f.id} ${f.name}`)).join("") +
+    opt("L1:X", "X — Cross-cutting axes") +
+    FEATURES.crosscutting.map(x => opt(x.id, `   ${x.id} ${x.name}`)).join("") +
+    opt("UNTRIAGED", "Without a feature yet");
+  const hows = [...new Set(BUGLIST.map(b => b.how))].sort();
+  document.getElementById("bh").innerHTML = opt("", "Any assignment") + hows.map(h => opt(h, `Assigned by: ${h}`)).join("");
+}
+
+function featureMatch(b) {
+  const f = BF.f;
+  if (!f) return true;
+  if (f === "UNTRIAGED") return !b.feature;
+  if (f === "L1:X") return b.feature.startsWith("X.");
+  if (f.startsWith("L1:")) { const a = f.slice(3); return b.feature === a || b.feature.startsWith(a + "."); }
+  return b.feature === f;
+}
+
+function filteredBugs() {
+  const q = BF.q.trim().toLowerCase();
+  const rows = BUGLIST.filter(b => (BF.p === "all" || b.p === BF.p) &&
+    (BF.s === "all" || (BF.s === "open") === b.open) && featureMatch(b) && (!BF.h || b.how === BF.h) &&
+    (!BF.from || b.created >= BF.from) && (!BF.to || b.created <= BF.to) && (!q || b.hay.includes(q)));
+  const k = BF.sort, d = BF.dir === "asc" ? 1 : -1;
+  const val = b => k === "id" ? +b.id : k === "open" ? +b.open : String(b[k] ?? "").toLowerCase();
+  return rows.sort((a, b) => { const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * d || (+b.id - +a.id); });
+}
+
+function renderBugs() {
+  document.querySelectorAll("[data-bp]").forEach(b => b.setAttribute("aria-pressed", b.dataset.bp === BF.p));
+  document.querySelectorAll("[data-bs]").forEach(b => b.setAttribute("aria-pressed", b.dataset.bs === BF.s));
+  document.getElementById("bf").value = BF.f; document.getElementById("bh").value = BF.h;
+  document.getElementById("bfrom").value = BF.from; document.getElementById("bto").value = BF.to;
+  if (document.getElementById("bq").value !== BF.q) document.getElementById("bq").value = BF.q;
+  document.querySelectorAll("#bt th[data-bsort]").forEach(th =>
+    th.setAttribute("aria-sort", th.dataset.bsort === BF.sort ? (BF.dir === "asc" ? "ascending" : "descending") : "none"));
+  const rows = filteredBugs();
+  const nOpen = rows.filter(b => b.open).length;
+  const android = rows.filter(b => b.p === "android"), ios = rows.filter(b => b.p === "ios");
+  const listUrl = BUGS.platforms.android.list_url;
+  const parts = [`<span><b>${plural(rows.length, "bug")}</b> (${nOpen} open, ${rows.length - nOpen} closed)` +
+                 (BF.p === "all" && rows.length ? ` · iOS ${ios.length} · Android ${android.length}` : "") + "</span>"];
+  if (android.length && listUrl)
+    parts.push(`<a class="go" target="_blank" rel="noopener" href="${esc(listUrl + android.map(b => b.id).join(","))}">Open the ${android.length} Android bugs in Bugzilla ›</a>`);
+  if (rows.length) parts.push(`<button class="go" id="bcsv">Download CSV</button>`);
+  if (ios.length) parts.push(`<span class="muted">iOS issues link one by one: GitHub can't open a set of issues.</span>`);
+  document.getElementById("bmeta").innerHTML = parts.join("");
+  const csv = document.getElementById("bcsv"); if (csv) csv.onclick = () => downloadCsv(rows);
+  document.querySelector("#bt tbody").innerHTML = rows.map(b => {
+    const st = b.open ? `<span class="pill open">open</span>` : `<span class="pill closed">closed</span>`;
+    const detail = [b.state, b.resolution].filter(v => v && v !== "open" && v !== "closed").join(" · ");
+    const feat = b.feature ? `<span class="fid">${esc(b.feature)}</span><span class="fname">${esc(featureName(b.feature))}</span>`
+                           : `<span class="muted">—</span>`;
+    return `<tr><td class="nowrap">${esc(b.pname)}</td>` +
+      `<td class="nowrap"><a class="num" href="${esc(b.url)}" target="_blank" rel="noopener">${b.p === "ios" ? "#" : ""}${esc(b.id)}</a></td>` +
+      `<td>${esc(b.title)}</td><td>${feat}</td><td class="nowrap">${esc(b.how)}</td>` +
+      `<td>${b.component ? esc(b.component) : '<span class="muted">—</span>'}</td>` +
+      `<td class="nowrap">${esc(b.created)}</td><td class="state">${st}${detail ? `<div class="muted small">${esc(detail)}</div>` : ""}</td></tr>`;
+  }).join("") || `<tr><td colspan="8" class="muted">No bugs match these filters.</td></tr>`;
+}
+
+function downloadCsv(rows) {
+  const cell = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const head = ["platform", "bug", "url", "title", "feature", "feature_name", "assigned_by", "component", "created",
+                "open", "state", "resolution"];
+  const lines = [head.join(",")].concat(rows.map(b => [b.pname, b.id, b.url, b.title, b.feature, featureName(b.feature),
+    b.how, b.component, b.created, b.open ? "open" : "closed", b.state, b.resolution].map(cell).join(",")));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n") + "\n"], {type: "text/csv"}));
+  a.download = `escaped-bugs-${BUGS.until}.csv`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+function bugsHash() {
+  const q = new URLSearchParams();
+  Object.entries(BF).forEach(([k, v]) => { if (v !== BDEFAULT[k]) q.set(k, v); });
+  const s = q.toString();
+  return "#bugs" + (s ? "?" + s : "");
+}
+function setBF(changes, push) {
+  BF = {...BF, ...changes};
+  history[push ? "pushState" : "replaceState"](null, "", bugsHash());
+  renderBugs();
+}
+function openBugs(sel) {   // from an overview cell
+  const d = BUGS.platforms[sel.p];
+  BF = {...BDEFAULT, p: sel.p, f: sel.key === "TOTAL" ? "" : sel.key,
+        s: sel.ids.some(id => d.bugs[id].open) ? "open" : "all"};
+  history.pushState(null, "", bugsHash());
+  showTab("bugs");
+  window.scrollTo(0, 0);
+}
+
+function showTab(k) {
+  document.getElementById("tab-overview").hidden = k !== "overview";
+  document.getElementById("tab-bugs").hidden = k !== "bugs";
+  document.getElementById("t-overview").setAttribute("aria-selected", k === "overview");
+  document.getElementById("t-bugs").setAttribute("aria-selected", k === "bugs");
+  if (k === "bugs" && BUGS) renderBugs();
+}
+function route() {
+  const h = location.hash;
+  if (!h.startsWith("#bugs") || !BUGS) { showTab("overview"); return; }
+  BF = {...BDEFAULT};
+  const old = decodeURIComponent(h).match(/^#bugs=(ios|android):(.+)$/);   // older links: #bugs=android:BRW.NAV
+  if (old) BF = {...BF, p: old[1], f: old[2] === "—" ? "UNTRIAGED" : old[2] === "X" ? "L1:X" : old[2]};
+  new URLSearchParams(h.split("?")[1] || "").forEach((v, k) => { if (k in BDEFAULT) BF[k] = v; });
+  showTab("bugs");
+}
+
+function wireBugs() {
+  document.getElementById("t-overview").onclick = () => { history.pushState(null, "", "#"); showTab("overview"); };
+  document.getElementById("t-bugs").onclick = () => { history.pushState(null, "", bugsHash()); showTab("bugs"); };
+  document.querySelectorAll("[data-bp]").forEach(b => b.onclick = () => setBF({p: b.dataset.bp}));
+  document.querySelectorAll("[data-bs]").forEach(b => b.onclick = () => setBF({s: b.dataset.bs}));
+  document.getElementById("bf").onchange = e => setBF({f: e.target.value});
+  document.getElementById("bh").onchange = e => setBF({h: e.target.value});
+  document.getElementById("bfrom").onchange = e => setBF({from: e.target.value});
+  document.getElementById("bto").onchange = e => setBF({to: e.target.value});
+  document.getElementById("bq").oninput = e => setBF({q: e.target.value});
+  document.getElementById("breset").onclick = () => setBF({...BDEFAULT}, true);
+  const sortBy = th => { const k = th.dataset.bsort;
+    setBF(BF.sort === k ? {dir: BF.dir === "asc" ? "desc" : "asc"}
+                        : {sort: k, dir: ["created", "id", "open"].includes(k) ? "desc" : "asc"}); };
+  document.querySelectorAll("#bt th[data-bsort]").forEach(th => {
+    th.onclick = () => sortBy(th);
+    th.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(th); } };
+  });
+  window.addEventListener("popstate", route);
+}
+
+function describe(status) {
+  const data = TR || BUGS || status;
+  const when = new Date(data.generated_at);
+  const date = when.toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"});
+  document.getElementById("meta").innerHTML =
+    `Data from <time datetime="${esc(data.generated_at)}">${esc(date)}</time> · updated every Monday · ` +
+    `<a href="${WORKFLOW}">Refresh data</a> (Run workflow)` +
+    (BUGS ? `<br>Escaped bugs created ${esc(BUGS.since)} → ${esc(BUGS.until)} · ` +
+      `<a href="${esc(BUGS.platforms.android.query_url)}">Android query in Bugzilla ›</a> · ` +
+      `<a href="${esc(BUGS.platforms.ios.query_url)}">iOS search on GitHub ›</a> (includes team-filed issues: GitHub can't filter by org)` : "");
+  if (BUGS) document.getElementById("bug-totals").textContent = PLATFORMS.map(([p, name]) => {
+    const c = BUGS.platforms[p];
+    return `${name}: ${plural(c.escaped, "bug")}` + (c.undecided ? ` (${c.undecided} waiting for a feature decision)` : "");
+  }).join("; ") + ".";
+  const failed = Object.entries((status && status.sources) || {}).filter(([, v]) => !v.ok).map(([k]) => k);
+  const notice = document.getElementById("notice");
+  if (failed.length) {
+    notice.hidden = false;
+    notice.textContent = `This run couldn't refresh: ${failed.join(", ")}. Those columns show no data; ` +
+      "re-run the workflow, or see its log.";
+  }
+  if (TR) document.getElementById("tr-totals").textContent = PLATFORMS.map(([p, name]) => {
+    const c = data.platforms[p];
+    return `${name}: ${plural(c.cases, "case")}` + (c.no_feature ? `, ${c.no_feature} not attributed to any feature` : "");
+  }).join("; ") + ".";
+}
+
+header();
+wire();
+const load = (f, optional) => fetch(f, {cache: "no-cache"})
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .catch(e => { if (optional) return null; throw e; });
+Promise.all([load("data/features.json"), load("data/testrail.json", true), load("data/bugs.json", true),
+             load("data/status.json", true)])
+  .then(([features, tr, bugs, status]) => {
+    FEATURES = features; TR = tr; BUGS = bugs;
+    ROWS = buildRows(); describe(status); render();
+    if (BUGS) { buildBugList(); wireBugs(); } else document.getElementById("t-bugs").hidden = true;
+    route();
+  })
+  .catch(() => {
+    document.getElementById("meta").innerHTML =
+      `<span class="error">Couldn't load the dashboard data. Run the <a href="${WORKFLOW}">workflow</a> to build it.</span>`;
+  });
+</script>
+</body>
+</html>
