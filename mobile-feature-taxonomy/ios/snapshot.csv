@@ -66,6 +66,7 @@ BrowserKit/Sources/Common/Theming/NovaFaviconColorSet.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/NovaLightTheme.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/NovaMissingToken.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/NovaPrivateTheme.swift,SET.THEME
+BrowserKit/Sources/Common/Theming/NovaTabGroupGradients.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/PrivateModeTheme.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/StandardFaviconColorSet.swift,SET.THEME
 BrowserKit/Sources/Common/Theming/SwiftUITheme.swift,SET.THEME
@@ -253,14 +254,19 @@ BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersEntryPointButton.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersNavigationHandler.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersPrivacyTip.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersPrivacyTipPresenter.swift,AI.QA
+BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersSessionStorage.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersSourceView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersTelemetry.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersViewConfiguration.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersViewController.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersViewModel.swift,AI.QA
+BrowserKit/Sources/QuickAnswersKit/UI/ReturnPill/QuickAnswersReturnPillDragEvaluator.swift,AI.QA
+BrowserKit/Sources/QuickAnswersKit/UI/ReturnPill/QuickAnswersReturnPillView.swift,AI.QA
+BrowserKit/Sources/QuickAnswersKit/UI/ReturnToBrowserTransitionAnimator.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/SourceRevealTransitionAnimator.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/Store.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/TranscriptLabel.swift,AI.QA
+BrowserKit/Sources/QuickAnswersKit/UI/UIImage+GradientTint.swift,AI.QA
 BrowserKit/Sources/Redux/Action.swift,SHARED.ARCH
 BrowserKit/Sources/Redux/DispatchStore.swift,SHARED.ARCH
 BrowserKit/Sources/Redux/Middleware.swift,SHARED.ARCH
@@ -468,9 +474,11 @@ BrowserKit/Sources/WebCompatReporterKit/WebCompatReporterUX.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatScreenshotRailView.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewController.swift,BRW.WEBC
 BrowserKit/Sources/WebCompatReporterKit/WebCompatTechnicalDataViewModel.swift,BRW.WEBC
+BrowserKit/Sources/WebDataTransfer/Models/BrowserDataTransferErrors.swift,APP.UPD
 BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferBookmark.swift,APP.UPD
 BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferHistoryVisit.swift,APP.UPD
 BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferReadingListItem.swift,APP.UPD
+BrowserKit/Sources/WebDataTransfer/Models/BrowserTransferResult.swift,APP.UPD
 BrowserKit/Sources/WebEngine/BrowserURL.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/Engine.swift,SHARED.WEB
 BrowserKit/Sources/WebEngine/EngineConstants.swift,SHARED.WEB
@@ -1227,6 +1235,7 @@ firefox-ios/Client/Frontend/QuickAnswers/QuickAnswersAction.swift,AI.QA
 firefox-ios/Client/Frontend/QuickAnswers/QuickAnswersMiddleware.swift,AI.QA
 firefox-ios/Client/Frontend/QuickAnswers/QuickAnswersTip.swift,AI.QA
 firefox-ios/Client/Frontend/QuickAnswers/RemoteQuickAnswersConfigFetcher.swift,AI.QA
+firefox-ios/Client/Frontend/QuickAnswers/ReturnPill/QuickAnswersReturnPillPresenter.swift,AI.QA
 firefox-ios/Client/Frontend/Reader/ReadabilityService.swift,BRW.READ
 firefox-ios/Client/Frontend/Reader/ReaderMode.swift,BRW.READ
 firefox-ios/Client/Frontend/Reader/ReaderModeHandlers.swift,BRW.READ
@@ -1582,7 +1591,6 @@ firefox-ios/Client/Protocols/Presenter.swift,SHARED.SHELL
 firefox-ios/Client/Protocols/TopBottomInterchangeable.swift,SHARED.SHELL
 firefox-ios/Client/Protocols/UIDeviceInterface.swift,SHARED.SHELL
 firefox-ios/Client/RatingPromptManager.swift,ENG.SURV
-firefox-ios/Client/Redownloads/AppAcquisitionProvider.swift,APP.UPD
 firefox-ios/Client/Redownloads/InstallationHistoryStore.swift,APP.UPD
 firefox-ios/Client/Redownloads/InstallationTelemetryService.swift,APP.UPD
 firefox-ios/Client/Redux/GlobalState/AppComponent.swift,SHARED.ARCH

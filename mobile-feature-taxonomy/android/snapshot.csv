@@ -1437,6 +1437,7 @@ android-components/components/service/mars/src/main/java/mozilla/components/serv
 android-components/components/service/mars/src/main/java/mozilla/components/service/mars/MozAdsUseCases.kt,HOME.SC
 android-components/components/service/merino-manifest/src/main/java/mozilla/components/service/merino/manifest/MerinoManifest.kt,SRCH.SUG
 android-components/components/service/merino-manifest/src/main/java/mozilla/components/service/merino/manifest/MerinoManifestProvider.kt,SRCH.SUG
+android-components/components/service/merino-sports/src/main/java/mozilla/components/service/merino/sports/GlobalMerinoSportsDependencyProvider.kt,HOME.STORY
 android-components/components/service/merino-sports/src/main/java/mozilla/components/service/merino/sports/MerinoMatches.kt,HOME.STORY
 android-components/components/service/merino-sports/src/main/java/mozilla/components/service/merino/sports/MerinoMatchesStorage.kt,HOME.STORY
 android-components/components/service/merino-sports/src/main/java/mozilla/components/service/merino/sports/MerinoSportsJson.kt,HOME.STORY
@@ -1649,6 +1650,7 @@ android-components/components/support/utils/src/main/java/mozilla/components/sup
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/Browsers.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/BrowsersCache.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/BuildMetadata.kt,SHARED.ARCH
+android-components/components/support/utils/src/main/java/mozilla/components/support/utils/CertificateDetails.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/CertificateUtils.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/ClipboardHandler.kt,SHARED.ARCH
 android-components/components/support/utils/src/main/java/mozilla/components/support/utils/ColorUtils.kt,SHARED.ARCH
@@ -1811,7 +1813,6 @@ fenix/app/src/main/java/org/mozilla/fenix/addons/WebExtensionMenuAction.kt,EXT.A
 fenix/app/src/main/java/org/mozilla/fenix/addons/ui/AddonPermissionsScreen.kt,EXT.ADDON
 fenix/app/src/main/java/org/mozilla/fenix/addons/ui/RemoveAddonDialog.kt,EXT.ADDON
 fenix/app/src/main/java/org/mozilla/fenix/android/DefaultActivityLifecycleCallbacks.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/android/FenixDialogFragment.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/autofill/AutofillConfirmActivity.kt,CRED
 fenix/app/src/main/java/org/mozilla/fenix/autofill/AutofillSearchActivity.kt,CRED
 fenix/app/src/main/java/org/mozilla/fenix/autofill/AutofillService.kt,CRED
@@ -1913,19 +1914,6 @@ fenix/app/src/main/java/org/mozilla/fenix/browser/tabstrip/TabStripColors.kt,TAB
 fenix/app/src/main/java/org/mozilla/fenix/browser/tabstrip/TabStripState.kt,TABS.STRIP
 fenix/app/src/main/java/org/mozilla/fenix/browser/tabstrip/TabStripTabCounterButton.kt,TABS.STRIP
 fenix/app/src/main/java/org/mozilla/fenix/browser/tabstrip/ext/LastTabClose.kt,TABS.STRIP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationBottomBarView.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationController.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationFragment.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationInteractor.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationStore.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationTabListAdapter.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionCreationView.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionsDialog.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/CollectionsListAdapter.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/SaveCollectionListAdapter.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/SaveToCollectionMenuItemProvider.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/Tab.kt,TABS.GRP
-fenix/app/src/main/java/org/mozilla/fenix/collections/TabDiffUtil.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/components/AboutHomeMiddleware.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/components/AccountAbnormalities.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/Ads.kt,SHARED.ARCH
@@ -1967,6 +1955,7 @@ fenix/app/src/main/java/org/mozilla/fenix/components/Services.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/components/SettingsSearchProviders.kt,SET.FRAME
 fenix/app/src/main/java/org/mozilla/fenix/components/ShortcutManagerCompatWrapper.kt,OS.ASSIST
 fenix/app/src/main/java/org/mozilla/fenix/components/SnackbarBehavior.kt,UI.TOAST
+fenix/app/src/main/java/org/mozilla/fenix/components/Sports.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/components/TabCollectionStorage.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/components/TrackingProtectionPolicyFactory.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/components/UseCases.kt,SHARED.ARCH
@@ -2125,7 +2114,6 @@ fenix/app/src/main/java/org/mozilla/fenix/components/share/store/ShareUiStore.kt
 fenix/app/src/main/java/org/mozilla/fenix/components/tabs/DefaultTabRepository.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BottomToolbarContainerIntegration.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BottomToolbarContainerView.kt,UI.TB
-fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserFragmentStore.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserNavigationBar.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserTabStrip.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserTabStripView.kt,UI.TB
@@ -2133,12 +2121,9 @@ fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserToolbarCompo
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserToolbarMiddleware.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/BrowserToolbarTelemetryMiddleware.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/CustomTabBrowserToolbarMiddleware.kt,UI.TB
-fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/FenixTabCounterMenu.kt,UI.TB
-fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/MenuPresenter.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/NavbarToolbarSyncBehavior.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/NavigationBarComposeView.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/ScrollableToolbarComposeView.kt,UI.TB
-fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/ToolbarMenu.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/ToolbarPosition.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/ToolbarsIntegration.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/components/toolbar/TopDividerColumn.kt,UI.TB
@@ -2497,7 +2482,6 @@ fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomeSwipeIntegration.kt,HOME.S
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/Homepage.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomepageHeader.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomepageTestTag.kt,HOME.SET
-fenix/app/src/main/java/org/mozilla/fenix/home/ui/MiddleSearchHomepage.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/PrivateBrowsingDescription.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/SearchBar.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/WallpaperBackground.kt,HOME.SET
@@ -2995,7 +2979,6 @@ fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/TrustPanelFragment
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/middleware/TrustPanelMiddleware.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/middleware/TrustPanelNavigationMiddleware.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/middleware/TrustPanelTelemetryMiddleware.kt,PROT.ETP
-fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/store/CertificateDetails.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/store/TrustPanelAction.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/store/TrustPanelState.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/store/TrustPanelStore.kt,PROT.ETP
@@ -3003,7 +2986,6 @@ fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/CertificateDeta
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/CertificateIssuedTo.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/CertificateVerifiedBy.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/ClearSiteDataDialog.kt,PROT.ETP
-fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/IssuedTo.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/ProtectionPanel.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/ProtectionPanelBanner.kt,PROT.ETP
 fenix/app/src/main/java/org/mozilla/fenix/settings/trustpanel/ui/ProtectionPanelHeader.kt,PROT.ETP
@@ -3272,8 +3254,6 @@ fenix/app/src/main/java/org/mozilla/fenix/utils/ScreenMetricsCompat.kt,SHARED.AR
 fenix/app/src/main/java/org/mozilla/fenix/utils/SecretSettingsPrefDefaults.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/Settings.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/Stories.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/utils/ThemeUtils.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/utils/ToolbarPopupWindow.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/TransitionsAnimation.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/Undo.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/view/GroupableRadioButton.kt,SHARED.ARCH

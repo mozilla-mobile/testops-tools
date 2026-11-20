@@ -121,7 +121,6 @@ rules:
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/biometricauthentication/**", feature: PRIV.LOCK, by: ai}
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/pbmlock/**", feature: PRIV.LOCK, by: ai}
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/bookmarks/**", feature: LIB.BMK, by: ai}
-  - {path: "fenix/app/src/main/java/org/mozilla/fenix/collections/**", feature: TABS.GRP, by: ai}
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/tabgroups/**", feature: TABS.GRP, by: ai}
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/crashes/**", feature: APP.CRASH, by: ai}
   - {path: "fenix/app/src/main/java/org/mozilla/fenix/startupCrash/**", feature: APP.CRASH, by: ai}
