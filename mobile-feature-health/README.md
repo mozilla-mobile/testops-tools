@@ -56,7 +56,7 @@ GitHub, so `bugs.json` lists their IDs, titles and links.
 |---|---|---|
 | `features.json` | `collect.py` | nothing (reads `features.yml`) |
 | `testrail.json` | `collect_testrail.py` | `TESTRAIL_HOST`, `TESTRAIL_USERNAME`, `TESTRAIL_PASSWORD` |
-| `bugs.json` | `collect_bugs.py` | a GitHub token for iOS (`GITHUB_TOKEN`, `GH_TOKEN` or the `gh` CLI's) and one with read:org to know who is in the iOS teams (`GH_ORG_READ_TOKEN`, else the same); Bugzilla is public |
+| `bugs.json` | `collect_bugs.py` | a GitHub token for iOS (`GITHUB_TOKEN`, `GH_TOKEN` or the `gh` CLI's) and who is in the iOS teams: the `IOS_TEAM_LOGINS` secret in CI, locally read with the `gh` CLI; Bugzilla is public |
 
 ## Run locally
 
@@ -68,6 +68,16 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 
 `--cache-dir` keeps fetched data between runs: bugs are refetched when the day changes; delete the TestRail cache
 to see TestRail edits.
+
+**Refreshing the team** (who doesn't count as escaped on iOS): the workflow's token can't read GitHub org teams, so a
+repo admin stores the members of the teams listed in `ios/bugs-map.yml` as the `IOS_TEAM_LOGINS` secret:
+
+```bash
+uv run mobile-feature-taxonomy/bugs_map.py ios team --update-secret    # from the repo root, with `gh` logged in
+```
+
+Run it again when people join or leave the iOS / QA teams (monthly is enough). If a team in the list is deleted or
+renamed, the command says which one.
 
 ## Adding a column
 

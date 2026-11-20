@@ -76,8 +76,9 @@ jobs:
       - run: pip install -r mobile-feature-taxonomy/requirements.txt
 
       # TestRail: cases and automation per feature. Bugzilla (Android): public API. GitHub (iOS issues): this
-      # workflow's token, read-only on public repos; who is in the iOS/QA teams needs read:org, which that token
-      # doesn't have: GH_ORG_READ_TOKEN (a fine-grained token with Members: read on mozilla-mobile).
+      # workflow's token, read-only on public repos. Who is in the iOS/QA teams: the IOS_TEAM_LOGINS secret, refreshed
+      # by a repo admin with `uv run mobile-feature-taxonomy/bugs_map.py ios team --update-secret` (this token can't
+      # read org teams); a GH_ORG_READ_TOKEN with read:org, if one is ever added, is used instead.
       - name: Collect TestRail cases and escaped bugs
         env:
           TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
@@ -85,6 +86,7 @@ jobs:
           TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ github.token }}
           GH_ORG_READ_TOKEN: ${{ secrets.GH_ORG_READ_TOKEN }}
+          IOS_TEAM_LOGINS: ${{ secrets.IOS_TEAM_LOGINS }}
         run: python mobile-feature-health/collect.py --out-dir "$DIR/data" --allow-partial
 
       - uses: google-github-actions/auth@v3
