@@ -33,14 +33,17 @@ mobile-feature-taxonomy/
 ├── taxonomy.py             # generates FEATURES.md, checks it's in sync, exports CSV
 ├── ios/
 │   ├── feature-map.yml     # rules: firefox-ios source path → feature ID
+│   ├── bugs-map.yml        # each escaped GitHub issue → feature ID (decided by hand), plus who counts as external
 │   └── snapshot.csv        # every file and its feature at the last accepted update
 ├── android/
 │   ├── feature-map.yml     # rules: mozilla-firefox/firefox mobile/android path → feature ID
+│   ├── bugs-map.yml        # rules: Bugzilla component (+ title) → feature ID, and who counts as external
 │   └── snapshot.csv
 ├── feature_map.py          # CLI: check / files / lines / drift
 ├── drift.py                # map-vs-code comparison and suggested fixes
 ├── testrail_map.py         # CLI: TestRail cases per feature, from the IDs in section descriptions
 ├── testrail_section_check.py  # daily: Slack alert when a TestRail section has no / an unknown feature ID
+├── bugs_map.py             # CLI: escaped bugs per feature (check / counts / compare)
 └── tests/
 ```
 
@@ -179,6 +182,58 @@ accepted. Section names go to Slack only; the public log shows counts.
 ```bash
 uv run testrail_section_check.py --dry-run     # locally: print the Slack message instead of sending it
 ```
+=======
+## Escaped bugs per feature
+
+`<platform>/bugs-map.yml` attributes bugs to features. Every run covers the current year so far (bugs created from
+January 1 to today) unless `--since` / `--until` say otherwise, and prints the window it used.
+
+**Android** (Bugzilla): a bug takes its component's feature;
+components that mix features (Privacy, Tabs, Browser Engine…) list title rules, and the first one that matches the
+bug summary wins. Each component maps to a feature ID (an L2, an L1 area or a cross-cutting axis `X.*`), or is
+`untriaged` (General: counted without a feature) or `excluded` (UI Tests, Tooling: not product defects). The same
+file says who counts as external: "escaped" bugs are the ones not reported by a team email domain or a bot.
+Duplicates and invalid bugs aren't counted.
+
+Bugs come from the public Bugzilla REST API, so security bugs aren't visible. When a new Bugzilla component
+appears, `check` fails until it gets a line in the map.
+
+**iOS** (GitHub issues on firefox-ios): issues with a bug label (Bug 🐞, Crash, Regression…) whose author isn't in
+the iOS and QA GitHub teams listed in `ios/bugs-map.yml` (org members from other teams, like Mozillians who use the
+app, count as external); service accounts and test or spam issues are dropped. Only team *names* are in the repo:
+membership is read from GitHub at run time and never stored, which needs a token with read:org (`GH_ORG_READ_TOKEN`
+in CI; locally the `gh` CLI's token). Issues carry no feature labels, and title
+keywords alone get the feature right for only ~40% of bugs, so each escaped bug gets its feature **by hand**: a
+`Feature affected:` comment on the issue (see below), or, for the bugs decided before comments existed, a line in
+`ios/bugs-map.yml`. `check` fails while a bug has no feature and prints the comment to post, with a suggestion from
+`title_hints`; until then the bug counts as untriaged, never with a guessed feature. Once enough bugs carry a
+comment, the title rules can be measured against them, and the ones that turn out reliable could assign bugs
+automatically. Needs a GitHub token (`GITHUB_TOKEN`,
+`GH_TOKEN` or the `gh` CLI's).
+
+```bash
+uv run bugs_map.py android check                   # map is valid and every component in the window has a decision
+uv run bugs_map.py ios check                       # every escaped issue this year has a decision
+uv run bugs_map.py ios counts --csv                # escaped bugs per L1/L2 and axis, Jan 1 → today
+uv run bugs_map.py android --since 2026-01-01 --until 2026-10-27 compare --sheet firefox_android_feature_mapping_with_L1_and_bugs.xlsx
+```
+
+**Setting or correcting a bug's feature on the bug itself** (wins over components, title rules and the iOS list):
+
+- GitHub issue: a comment by an org member or collaborator with the line
+  `Feature affected: Toolbar & address bar layout (UI.TB)`. The latest such comment counts.
+- Bugzilla bug: `[feature:UI.TB]` in the whiteboard (no bugmail noise), or that same line in a comment from a
+  @mozilla.com account. The whiteboard wins over comments.
+
+Only the ID counts; the name is there for people reading the bug. `Feature affected: excluded (reason)` excludes the
+bug. A tag whose ID isn't in `features.yml` is reported by `check`, and the bug keeps its previous feature. The next
+weekly run picks tags up; `ios/bugs-map.yml` keeps the decisions made before tags existed.
+
+`--cache FILE` reuses fetched bugs only while they cover the requested window; a later run refetches.
+
+**Cross-cutting axes** (`X.A11Y`, `X.L10N`, `X.PERF`, `X.TELEM`, `X.EXP` in `features.yml`) hold bugs and tests that
+concern the whole app along one axis and can't be attributed to a feature, e.g. the Performance component. They
+are reported in their own rows, like `SHARED.*` for code. A bug that does hit a feature goes to that feature.
 
 ## Changing the taxonomy
 

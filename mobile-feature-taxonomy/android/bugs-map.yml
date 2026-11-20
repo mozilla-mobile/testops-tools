@@ -1,0 +1,133 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Firefox for Android bugs → feature IDs (features.yml), read by bugs_map.py.
+#
+# A bug takes its Bugzilla component's feature. Components that mix features list title rules: the first
+# `match` (case-insensitive regex on the bug summary) that hits sets the feature instead. A component maps to
+# exactly one of:
+#   feature: ID      an L2, an L1 area or a cross-cutting axis (X.*)
+#   untriaged: true  counted, but without a feature ("General": nobody has triaged it to a component yet)
+#   excluded: true   not product defects (test failures, tooling): not counted at all
+# A component that isn't listed makes `bugs_map.py android check` fail, so new components get a decision.
+#
+# Imported from the Testing Assessment's Android workbook (Orla's crosswalk, Bugzilla Firefox for Android, plus
+# title rules inside mixed components), 2026-10-27.
+
+platform: android
+source: bugzilla
+product: "Firefox for Android"
+bug_type: defect
+
+# Who counts as external, for "escaped" bugs. Bugzilla has no org field: the email domain is an approximation.
+escaped:
+  team_email_domains: ["mozilla.com"]
+  bot_email_suffixes: ["@mozilla.tld"]
+  bot_emails: ["intermittent-bug-filer@mozilla.bugs", "csnybot@gmail.com"]
+# Resolutions that mean "same defect twice" or "not a defect".
+not_counted_resolutions: [DUPLICATE, INVALID, MOVED]
+
+components:
+  Accounts and Sync:
+    feature: ACCT
+    titles:
+      - {match: "send tab|synced tab", feature: ACCT.SEND}
+      - {match: "\\bsync", feature: ACCT.SYNC}
+      - {match: "sign.?in|sign.?out|account|pair|log.?in", feature: ACCT.SIGN}
+  App Links: {feature: BRW.LINKS}
+  Autofill:
+    feature: CRED
+    titles:
+      - {match: "address", feature: CRED.ADDR}
+      - {match: "password|\\blogins?\\b", feature: CRED.PW}
+      - {match: "credit card|payment|\\bcard", feature: CRED.CC}
+  Bookmarks: {feature: LIB.BMK}
+  Browser Engine:
+    feature: BRW.NAV
+    titles:
+      - {match: "summar", feature: AI.SUM}
+      - {match: "\\bpdf\\b", feature: BRW.PDF}
+      - {match: "picture.in.picture|\\bpip\\b|video|audio|media", feature: BRW.MEDIA}
+      - {match: "find in page", feature: BRW.FIND}
+      - {match: "\\bzoom|desktop site", feature: BRW.ZOOM}
+      - {match: "text selection|copy|paste|keyboard|\\bime\\b", feature: BRW.CTX}
+  Collections: {feature: TABS.GRP}
+  Contextual AI:
+    feature: AI
+    titles:
+      - {match: "summar", feature: AI.SUM}
+      - {match: "ai control|block ai", feature: AI.CTRL}
+  Crash Reporting: {feature: APP.CRASH}
+  Design System and Theming:
+    feature: SET.THEME
+    titles:
+      - {match: "webcompat reporter|report broken site", feature: BRW.WEBC}
+  Downloads: {feature: LIB.DL}
+  Experimentation and Telemetry: {feature: X.TELEM}
+  General: {untriaged: true}
+  History:
+    feature: LIB.HIST
+    titles:
+      - {match: "recently closed", feature: TABS.CLOSED}
+  Homepage:
+    feature: HOME.SET
+    titles:
+      - {match: "wallpaper", feature: HOME.WALL}
+      - {match: "shortcut|top site", feature: HOME.SC}
+      - {match: "\\bstor(y|ies)\\b|pocket|discover", feature: HOME.STORY}
+      - {match: "jump back|recent tabs|task continuity", feature: HOME.JBI}
+  L10N: {feature: X.L10N}
+  Logins: {feature: CRED.PW}
+  Media: {feature: BRW.MEDIA}
+  Menu: {feature: UI.MENU}
+  Onboarding: {feature: ENG.ONB}
+  Performance: {feature: X.PERF}
+  Privacy:
+    feature: PROT
+    titles:
+      - {match: "\\bvpn\\b|ip protection", feature: PROT.VPN}
+      - {match: "relay|email mask", feature: CRED.MASK}
+      - {match: "biometric|private (mode|browsing)? ?lock", feature: PRIV.LOCK}
+      - {match: "private (tab|mode|browsing)|\\bpbm\\b", feature: PRIV.MODE}
+      - {match: "permission|location|camera|microphone", feature: PROT.PERM}
+      - {match: "cookie banner", feature: PROT.ADB}
+      - {match: "https|certificate|\\bssl\\b", feature: PROT.HTTPS}
+      - {match: "delete browsing data|clear (data|history)", feature: PROT.CLEAR}
+      - {match: "tracking protection|\\betp\\b|trust panel|tracker", feature: PROT.ETP}
+  Push: {feature: APP.SVC}
+  PWA: {feature: OS.CTAB}
+  QR: {feature: SRCH.VIS}
+  Reader Mode: {feature: BRW.READ}
+  Search:
+    feature: SRCH.ENG
+    titles:
+      - {match: "suggest", feature: SRCH.SUG}
+      - {match: "\\bqr\\b|lens|voice", feature: SRCH.VIS}
+      - {match: "trending|recent search", feature: SRCH.REC}
+      - {match: "address bar|\\burl\\b|autocomplet", feature: SRCH.URL}
+  Settings: {feature: SET.FRAME}
+  Share: {feature: OS.SHARE}
+  Stories: {feature: HOME.STORY}
+  Tabs:
+    feature: TABS.TRAY
+    titles:
+      - {match: "tab group", feature: TABS.GRP}
+      - {match: "private", feature: PRIV.MODE}
+      - {match: "inactive|recently closed", feature: TABS.CLOSED}
+      - {match: "tab ?strip", feature: TABS.STRIP}
+      - {match: "synced tab", feature: ACCT.SEND}
+  Toolbar:
+    feature: UI.TB
+    titles:
+      - {match: "autocomplet|typing|type in|keyboard|clipboard|\\bime\\b|predict", feature: SRCH.URL}
+  Tooling: {excluded: true}
+  Top Sites: {feature: HOME.SC}
+  Translations:
+    feature: TRANS
+    titles:
+      - {match: "setting|download|language model", feature: TRANS.SET}
+      - {match: ".", feature: TRANS.PAGE}
+  UI Tests: {excluded: true}
+  WebAuthn: {feature: CRED.PASSKEY}
+  WebExtensions: {feature: EXT.ADDON}

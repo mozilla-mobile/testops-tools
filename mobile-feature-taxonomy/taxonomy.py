@@ -114,6 +114,13 @@ def to_markdown(data, mapped=None):
             "| ID | Covers |", "|---|---|"]
     out += [f"| `{s['id']}` | {s['name']} |" for s in data.get("shared", []) + data.get("excluded", [])]
     out.append("")
+    if data.get("crosscutting"):
+        out += ["## Cross-cutting axes", "",
+                "Bugs and tests that concern the whole app along one axis and can't be attributed to a feature. "
+                "Anything that hits a feature goes to that feature instead. Not used for code.", "",
+                "| ID | Axis |", "|---|---|"]
+        out += [f"| `{x['id']}` | {x['name']} |" for x in data["crosscutting"]]
+        out.append("")
     return "\n".join(out)
 
 
