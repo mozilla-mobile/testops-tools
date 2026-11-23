@@ -37,7 +37,9 @@ Commands:
 
 Android bugs come from the public Bugzilla REST API (no credentials, so security bugs are not visible). iOS issues
 come from the GitHub API with GITHUB_TOKEN / GH_TOKEN, or the `gh` CLI's token when neither is set; reading who is
-in the iOS teams needs read:org (GH_ORG_READ_TOKEN, else the same token).
+in the iOS teams needs read:org (GH_ORG_READ_TOKEN, else the same token), or the list of their logins in the
+IOS_TEAM_LOGINS environment variable (a repository secret in CI, refreshed with `bugs_map.py ios team
+--update-secret` by someone whose `gh` can read the teams).
 
 By default every run covers the current year so far: bugs created from January 1 to today.
 
@@ -362,12 +364,42 @@ def github_token():
         return None
 
 
-def team_members(bugs_map, session):
-    """Logins of the members of the team GitHub teams, read now and kept in memory only (never written)."""
-    import requests
+TEAM_LOGINS_ENV = "IOS_TEAM_LOGINS"
+TESTOPS_REPO = "mozilla-mobile/testops-tools"
 
+
+def parse_logins(text):
+    """{"login", …} from logins separated by commas, spaces or new lines (case-insensitive)."""
+    return {x.lower() for x in re.split(r"[,\s]+", text or "") if x}
+
+
+def team_members(bugs_map, session, use_env=True):
+    """Logins of the members of the team GitHub teams, kept in memory only (never written).
+
+    From the IOS_TEAM_LOGINS environment variable when set (CI: a repository secret), else read from GitHub, which
+    needs read:org (GH_ORG_READ_TOKEN, else GITHUB_TOKEN / GH_TOKEN / the gh CLI's token)."""
+    if use_env and os.environ.get(TEAM_LOGINS_ENV, "").strip():
+        return parse_logins(os.environ[TEAM_LOGINS_ENV])
     token = os.environ.get("GH_ORG_READ_TOKEN") or github_token()
     headers = {"Accept": "application/vnd.github+json", **({"Authorization": f"Bearer {token}"} if token else {})}
+    resp = session.get(f"{GITHUB_API}/orgs/{bugs_map.team_org}/teams", params={"per_page": 100},
+                       headers=headers, timeout=60)
+    if resp.status_code in (401, 403):
+        raise RuntimeError(f"can't read the GitHub teams of {bugs_map.team_org} (HTTP {resp.status_code}): set "
+                           f"{TEAM_LOGINS_ENV} (see `bugs_map.py ios team --update-secret`) or a token with read:org "
+                           "(GH_ORG_READ_TOKEN)")
+    resp.raise_for_status()
+    existing, url = set(), resp.links.get("next", {}).get("url")
+    existing |= {t["slug"] for t in resp.json()}
+    while url:
+        resp = session.get(url, headers=headers, timeout=60)
+        resp.raise_for_status()
+        existing |= {t["slug"] for t in resp.json()}
+        url = resp.links.get("next", {}).get("url")
+    missing = [t for t in bugs_map.team_teams if t not in existing]
+    if missing:
+        raise RuntimeError(f"GitHub teams in ios/bugs-map.yml no longer exist in {bugs_map.team_org}: "
+                           f"{', '.join(missing)}. Update team_teams.")
     members = set()
     for team in bugs_map.team_teams:
         url = f"{GITHUB_API}/orgs/{bugs_map.team_org}/teams/{team}/members"
@@ -376,7 +408,8 @@ def team_members(bugs_map, session):
             resp = session.get(url, params=params, headers=headers, timeout=60)
             if resp.status_code in (401, 403, 404):
                 raise RuntimeError(f"can't read the members of GitHub team {bugs_map.team_org}/{team} "
-                                   f"(HTTP {resp.status_code}): needs a token with read:org (GH_ORG_READ_TOKEN)")
+                                   f"(HTTP {resp.status_code}): set {TEAM_LOGINS_ENV} (see `bugs_map.py ios team "
+                                   f"--update-secret`) or a token with read:org (GH_ORG_READ_TOKEN)")
             resp.raise_for_status()
             members |= {m["login"].lower() for m in resp.json()}
             url, params = resp.links.get("next", {}).get("url"), None
@@ -599,6 +632,29 @@ def cmd_compare(bugs_map, bugs, taxonomy, sheet_path, window=""):
     return 0
 
 
+def cmd_team(bugs_map, update_secret=False, show=False, repo=TESTOPS_REPO):
+    """Read the team from GitHub now; optionally store it as the IOS_TEAM_LOGINS secret of the testops-tools repo."""
+    import subprocess
+
+    import requests
+
+    if not bugs_map.team_teams:
+        print("No team_teams in the map: nothing to do.")
+        return 1
+    members = sorted(team_members(bugs_map, requests.Session(), use_env=False))
+    print(f"{len(members)} people in {len(bugs_map.team_teams)} GitHub teams of {bugs_map.team_org}.")
+    if show:
+        print(", ".join(members))
+    if update_secret:
+        subprocess.run(["gh", "secret", "set", TEAM_LOGINS_ENV, "--repo", repo], input=", ".join(members),
+                       text=True, check=True)
+        print(f"Updated the {TEAM_LOGINS_ENV} secret of {repo}.")
+    elif not show:
+        print(f"Run with --update-secret to store them as the {TEAM_LOGINS_ENV} secret of {repo}, or --show to "
+              "print them here.")
+    return 0
+
+
 def main(argv=None):
     today = datetime.date.today()
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
@@ -613,10 +669,17 @@ def main(argv=None):
     p_counts.add_argument("--csv", action="store_true")
     p_compare = sub.add_parser("compare")
     p_compare.add_argument("--sheet", required=True)
+    p_team = sub.add_parser("team", help="iOS: who counts as the team, read from the GitHub teams now")
+    p_team.add_argument("--update-secret", action="store_true",
+                        help=f"store the logins as the {TEAM_LOGINS_ENV} secret of {TESTOPS_REPO} (needs admin)")
+    p_team.add_argument("--show", action="store_true", help="print the logins (stays on your screen)")
+    p_team.add_argument("--repo", default=TESTOPS_REPO)
     args = parser.parse_args(argv)
 
     taxonomy = load_taxonomy()
     bugs_map = BugsMap.load(args.platform, args.map)
+    if args.command == "team":
+        return cmd_team(bugs_map, args.update_secret, args.show, args.repo)
     if args.command == "check" and bugs_map.errors and not args.cache:
         return cmd_check(bugs_map, [])
     if args.since > args.until:

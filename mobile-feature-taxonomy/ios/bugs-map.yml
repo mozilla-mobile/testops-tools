@@ -24,8 +24,8 @@ escaped:
   # outside these teams (e.g. Mozillians from other teams filing bugs as users). Membership is read from GitHub at
   # run time and never stored: it needs a token with read:org (GH_ORG_READ_TOKEN in CI, or the `gh` CLI locally).
   team_org: mozilla-mobile
-  team_teams: [firefox-ios-eng, firefox-ios-contributors, firefox-ios-pm, firefox-ios-tech-leads, firefox-ios-admins,
-               fxios-eng, fxios-automation-1, fxios-general-owners, fxios-unit-test-owners, firefox-ios-l10n,
+  team_teams: [firefox-ios-codeowners, firefox-ios-contributors, firefox-ios-pm, firefox-ios-tech-leads,
+               firefox-ios-admins, fxios-automation-1, fxios-general-owners, fxios-unit-test-owners, firefox-ios-l10n,
                fxios-a-s, qa, sv-qa, sv-eng]
   # Service accounts, not people: their issues are never escaped bugs.
   bot_logins: [data-sync-user]
