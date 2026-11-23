@@ -221,10 +221,12 @@ uv run bugs_map.py android --since 2026-01-01 --until 2026-10-27 compare --sheet
 
 **Setting or correcting a bug's feature on the bug itself** (wins over components, title rules and the iOS list):
 
-- GitHub issue: a comment by an org member or collaborator with the line
-  `Feature affected: Toolbar & address bar layout (UI.TB)`. The latest such comment counts.
-- Bugzilla bug: `[feature:UI.TB]` in the whiteboard (no bugmail noise), or that same line in a comment from a
-  @mozilla.com account. The whiteboard wins over comments.
+- GitHub issue: a comment with the line `Feature affected: Toolbar & address bar layout (UI.TB)`.
+- Bugzilla bug: `[feature:UI.TB]` in the whiteboard (no bugmail noise), or that same line in a comment. The
+  whiteboard wins over comments.
+
+Anyone's comment counts and the latest one wins: the format is specific enough not to appear by accident, and the
+dashboard shows such bugs as assigned by "tag", so an odd one is easy to spot and fix with another comment.
 
 Only the ID counts; the name is there for people reading the bug. `Feature affected: excluded (reason)` excludes the
 bug. A tag whose ID isn't in `features.yml` is reported by `check`, and the bug keeps its previous feature. The next

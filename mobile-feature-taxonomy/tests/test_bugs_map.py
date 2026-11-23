@@ -169,8 +169,7 @@ TARGETS = bugs_map.valid_targets(TAXONOMY)
 
 
 class IosTeamTest(unittest.TestCase):
-    MAP = dict(IOS_MAP, escaped={"team_org": "example", "team_teams": ["ios-eng"], "bot_logins": ["sync-bot"],
-                                 "tag_associations": ["MEMBER"]})
+    MAP = dict(IOS_MAP, escaped={"team_org": "example", "team_teams": ["ios-eng"], "bot_logins": ["sync-bot"]})
 
     def test_team_membership_decides(self):
         m = bugs_map.BugsMap(self.MAP, TAXONOMY)
@@ -179,6 +178,24 @@ class IosTeamTest(unittest.TestCase):
         community = dict(issue(3, assoc="CONTRIBUTOR"), team=False)
         bot = dict(issue(4, assoc="COLLABORATOR"), team=False, creator="Sync-Bot")
         self.assertEqual([m.is_escaped(b) for b in (insider, mozillian, community, bot)], [False, True, True, False])
+
+    def test_tag_comments_from_anyone_latest_wins(self):
+        m = bugs_map.BugsMap(self.MAP, TAXONOMY)
+        issues = [{"number": 7, "title": "Menu labels break", "created_at": "2026-03-01T00:00:00Z", "state": "open",
+                   "user": {"login": "reporter"}, "author_association": "NONE", "labels": [{"name": "Bug"}],
+                   "comments": 2}]
+        comments = [  # how CI sees them: the team member's association is CONTRIBUTOR, not MEMBER
+            {"user": {"login": "Isabel"}, "author_association": "CONTRIBUTOR", "body": "Feature: Main menu (UI.MENU)"},
+            {"user": {"login": "random"}, "author_association": "NONE", "body": "Feature affected: Toolbar (UI.TB)"}]
+        resp = lambda data: unittest.mock.Mock(status_code=200, headers={}, links={}, json=lambda: data)
+        session = unittest.mock.Mock(headers={})
+        session.get.side_effect = lambda url, *a, **kw: resp(comments if url.endswith("/comments") else issues)
+        with unittest.mock.patch.object(bugs_map, "team_members", return_value={"isabel"}), \
+                unittest.mock.patch.object(bugs_map, "github_token", return_value=None), \
+                unittest.mock.patch("requests.Session", return_value=session):
+            bugs = bugs_map.fetch_github(m, "2026-01-01", "2026-12-31")
+        self.assertEqual(bugs[0]["tag_text"], "Toolbar (UI.TB)")       # anyone's comment counts; the latest wins
+        self.assertEqual(m.classify(bugs[0]), ("feature", "UI.TB"))
 
     def test_members_from_the_secret(self):
         m = bugs_map.BugsMap(self.MAP, TAXONOMY)
@@ -275,7 +292,7 @@ class TagTest(unittest.TestCase):
         bugs_map.add_bugzilla_tags(m, [b1, b2, b3], session)
         self.assertEqual((b1["tag_text"], b1["tag_source"]), ("BRW.FIND", "whiteboard"))
         self.assertEqual((b2["tag_text"], b2["tag_source"]), ("Tab groups & collections (TABS.GRP)", "comment"))
-        self.assertNotIn("tag_text", b3)                         # not from the team: ignored
+        self.assertEqual(b3["tag_text"], "Main menu (UI.MENU)")  # anyone's comment counts
         url, params = session.get.call_args[0][0], session.get.call_args[1]["params"]
         self.assertTrue(url.endswith("/2/comment"))
         self.assertEqual(params, [("ids", "3")])
