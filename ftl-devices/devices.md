@@ -185,7 +185,7 @@
 | p3s | Galaxy S21 Ultra 5G | 35 | Low |
 | pa1q | Galaxy S25 | 36 | High |
 | pa1qksx | Galaxy S25 | 36 | Low |
-| pa1qsqw | Galaxy S25 | 36 | Low |
+| pa1qsqw | Galaxy S25 | 36 | Medium |
 | pa2q | Galaxy S25+ | 36 | Low |
 | pa2qxxx | Galaxy S25+ | 36 | Low |
 | pa3q | Galaxy S25 Ultra | 35 | High |
@@ -200,7 +200,7 @@
 | q5q | Galaxy Z Fold5 | 34 | Medium |
 | q5qksx | Galaxy Z Fold5 | 36 | Low |
 | q6q | Galaxy Z Fold6 | 34 | Medium |
-| q6qksx | Galaxy Z Fold6 | 36 | Medium |
+| q6qksx | Galaxy Z Fold6 | 36 | Low |
 | q6qsqw | Galaxy Z Fold6 | 36 | Low |
 | q7mq | Galaxy Z TriFold | 36 | High |
 | r0q | Galaxy S22 | 34 | Medium |
