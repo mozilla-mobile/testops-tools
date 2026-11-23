@@ -1035,6 +1035,7 @@ firefox-ios/Client/Frontend/Home/Homepage/MessageCard/MessageCardState.swift,ENG
 firefox-ios/Client/Frontend/Home/Homepage/NotificationCard/NotificationCardCell.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/NotificationCard/NotificationCardState.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/NotificationCard/NotificationCardView.swift,HOME.SET
+firefox-ios/Client/Frontend/Home/Homepage/PrivacyNotice/LegacyPrivacyNoticeCell.swift,ENG.TOU
 firefox-ios/Client/Frontend/Home/Homepage/PrivacyNotice/PrivacyNoticeCell.swift,ENG.TOU
 firefox-ios/Client/Frontend/Home/Homepage/PrivacyNotice/PrivacyNoticeState.swift,ENG.TOU
 firefox-ios/Client/Frontend/Home/Homepage/Redux/HomepageAction.swift,HOME.SET

@@ -873,6 +873,8 @@ android-components/components/feature/listentopage/src/main/java/mozilla/compone
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/ListenMediaSessionService.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/ListenPlayer.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/PlaybackController.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/PlaybackPhase.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/PlaybackSpeed.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/ProgressMapper.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/SessionCommands.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/playback/SessionPlayer.kt,BRW.READ
@@ -884,7 +886,10 @@ android-components/components/feature/listentopage/src/main/java/mozilla/compone
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SpeechSynthesizer.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SplitArticle.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SynthesisQueue.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ArticleDetails.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ArticleHeading.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/AudioProgressBar.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/InertWhileTransitioning.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ListenSheet.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ListenSheetUiState.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayPauseButton.kt,BRW.READ
@@ -895,6 +900,7 @@ android-components/components/feature/listentopage/src/main/java/mozilla/compone
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayerExpanded.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/SpeedState.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/VoiceSelection.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/voices/Voice.kt,BRW.READ
 android-components/components/feature/logins/src/main/java/mozilla/components/feature/logins/exceptions/LoginException.kt,CRED.PW
 android-components/components/feature/logins/src/main/java/mozilla/components/feature/logins/exceptions/LoginExceptionStorage.kt,CRED.PW
 android-components/components/feature/logins/src/main/java/mozilla/components/feature/logins/exceptions/adapter/LoginExceptionAdapter.kt,CRED.PW
@@ -2311,7 +2317,6 @@ fenix/app/src/main/java/org/mozilla/fenix/ext/ConnectivityManager.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/Context.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/Dialog.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/Drawable.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/ext/EditText.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/Fragment.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/ImageButton.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/ext/NavController.kt,SHARED.ARCH
@@ -2374,7 +2379,6 @@ fenix/app/src/main/java/org/mozilla/fenix/home/intent/OpenTabsTrayIntentProcesso
 fenix/app/src/main/java/org/mozilla/fenix/home/intent/SpeechProcessingIntentProcessor.kt,SHARED.SHELL
 fenix/app/src/main/java/org/mozilla/fenix/home/intent/StartSearchIntentProcessor.kt,SHARED.SHELL
 fenix/app/src/main/java/org/mozilla/fenix/home/interactor/HomepageInteractor.kt,HOME.SET
-fenix/app/src/main/java/org/mozilla/fenix/home/logo/LogoController.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/logo/TrackingProtectionController.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/mars/MARSUseCases.kt,HOME.SC
 fenix/app/src/main/java/org/mozilla/fenix/home/middleware/HomeTelemetryMiddleware.kt,HOME.SET
@@ -2441,6 +2445,7 @@ fenix/app/src/main/java/org/mozilla/fenix/home/termsofuse/PrivacyNoticeBannerInt
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/BrowserSimpleToolbar.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/BrowserToolbarMiddleware.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/BrowserToolbarTelemetryMiddleware.kt,UI.TB
+fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/CollapsingTopBarState.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/FenixHomeToolbar.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/HomeNavigationBar.kt,UI.TB
 fenix/app/src/main/java/org/mozilla/fenix/home/toolbar/HomeToolbarComposable.kt,UI.TB
@@ -2482,6 +2487,7 @@ fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomeSwipeIntegration.kt,HOME.S
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/Homepage.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomepageHeader.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/HomepageTestTag.kt,HOME.SET
+fenix/app/src/main/java/org/mozilla/fenix/home/ui/MiddleSearchPinState.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/PrivateBrowsingDescription.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/SearchBar.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/ui/WallpaperBackground.kt,HOME.SET
@@ -2900,6 +2906,7 @@ fenix/app/src/main/java/org/mozilla/fenix/settings/emailmasks/middleware/EmailMa
 fenix/app/src/main/java/org/mozilla/fenix/settings/emailmasks/middleware/EmailMasksTelemetryMiddleware.kt,CRED.MASK
 fenix/app/src/main/java/org/mozilla/fenix/settings/ipprotection/IPProtectionLocations.kt,PROT.VPN
 fenix/app/src/main/java/org/mozilla/fenix/settings/ipprotection/IPProtectionLocationsFragment.kt,PROT.VPN
+fenix/app/src/main/java/org/mozilla/fenix/settings/ipprotection/IPProtectionMessageCard.kt,PROT.VPN
 fenix/app/src/main/java/org/mozilla/fenix/settings/labs/FirefoxLabsFragment.kt,SHARED.EXPERIMENTS
 fenix/app/src/main/java/org/mozilla/fenix/settings/labs/FirefoxLabsSettingsSearchProvider.kt,SHARED.EXPERIMENTS
 fenix/app/src/main/java/org/mozilla/fenix/settings/labs/LabsItem.kt,SHARED.EXPERIMENTS
@@ -3062,6 +3069,7 @@ fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsFeatureDiscoveryCon
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsStrip.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/TabGroupsTestTag.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/UngroupTabGroupConfirmationDialog.kt,TABS.GRP
+fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/MoveLastTabAndDeleteTabGroupConfirmationDialog.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowDestination.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowEntryPoint.kt,TABS.GRP
 fenix/app/src/main/java/org/mozilla/fenix/tabgroups/flow/TabGroupFlowFragment.kt,TABS.GRP
@@ -3136,12 +3144,14 @@ fenix/app/src/main/java/org/mozilla/fenix/tabstray/redux/state/TabsTrayState.kt,
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/redux/store/TabsTrayStore.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/repository/uistate/TabManagerUiStateDataStore.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/repository/uistate/TabManagerUiStateRepository.kt,TABS.TRAY
+fenix/app/src/main/java/org/mozilla/fenix/tabstray/repository/uistate/UngroupConfirmationDelegate.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/repository/uistate/data/PersistedUIState.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/SyncButtonBinding.kt,ACCT.SEND
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/SyncedTabsIntegration.kt,ACCT.SEND
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/SyncedTabsList.kt,ACCT.SEND
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/SyncedTabsListItem.kt,ACCT.SEND
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/syncedtabs/SyncedTabsListSupportedFeature.kt,ACCT.SEND
+fenix/app/src/main/java/org/mozilla/fenix/tabstray/telemetry/TabCloseType.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/ui/AccessPoint.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/ui/TabManagementFragment.kt,TABS.TRAY
 fenix/app/src/main/java/org/mozilla/fenix/tabstray/ui/animation/NavigationAnimation.kt,TABS.TRAY
