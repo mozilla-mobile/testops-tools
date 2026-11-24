@@ -20,10 +20,9 @@ title rules are too imprecise to decide alone, so a person decides each bug's fe
 one. Undecided bugs count as untriaged.
 
 Tags on the bug itself win over everything else, so a person can set or correct a bug's feature where they triage:
-  GitHub issue:  a comment by an org member or collaborator with a line "Feature affected: <name> (UI.TB)"
-                 ("Feature:" works too; the latest such comment counts)
-  Bugzilla bug:  "[feature:UI.TB]" in the whiteboard, or that line in a comment from a team email domain
-                 (the whiteboard wins over comments)
+  GitHub issue:  a comment with a line "Feature affected: <name> (UI.TB)" ("Feature:" works too)
+  Bugzilla bug:  "[feature:UI.TB]" in the whiteboard, or that line in a comment (the whiteboard wins)
+Anyone's comment counts, and the latest one wins: the format is specific, and the bug shows "tag" on the dashboard.
 Only the ID counts (the name is for people); "excluded" excludes the bug. ios/bugs-map.yml `issues:` holds the
 decisions made before tags existed.
 
@@ -172,7 +171,7 @@ class BugsMap:
         self.bug_labels = set(data.get("bug_labels", []))
         self.spam_phrases = tuple(p.lower() for p in data.get("spam_phrases", []))
         esc = data.get("escaped", {})
-        self.tag_associations = set(esc.get("tag_associations", esc.get("team_associations", [])))
+        self.team_associations = set(esc.get("team_associations", []))   # used when there are no team_teams
         self.team_org = esc.get("team_org", "")
         self.team_teams = list(esc.get("team_teams", []))
         self.bot_logins = {x.lower() for x in esc.get("bot_logins", [])}
@@ -244,7 +243,7 @@ class BugsMap:
                 return False
             if self.team_teams and "team" in bug:   # set at fetch time from the GitHub teams
                 return not bug["team"]
-            return bug.get("assoc") not in self.tag_associations
+            return bug.get("assoc") not in self.team_associations
         email = (bug.get("creator") or "").lower()
         if email in self.bot_emails or email.endswith(self.bot_suffixes):
             return False
@@ -330,7 +329,7 @@ def fetch(bugs_map, since, until):
 
 
 def add_bugzilla_tags(bugs_map, bugs, session, chunk=50):
-    """Set bug["tag_text"] from "[feature:…]" in the whiteboard, else from the latest team comment with a
+    """Set bug["tag_text"] from "[feature:…]" in the whiteboard, else from the latest comment with a
     "Feature affected:" line. Only escaped, counted bugs are looked at (the others never show)."""
     wanted = [b for b in bugs if bugs_map.is_escaped(b) and bugs_map.is_counted(b)]
     for b in wanted:
@@ -345,9 +344,6 @@ def add_bugzilla_tags(bugs_map, bugs, session, chunk=50):
         resp = get_with_retry(session, f"{BUGZILLA}/{ids[0]}/comment", [("ids", i) for i in ids[1:]] or None)
         for bid, entry in resp.json().get("bugs", {}).items():
             for c in sorted(entry.get("comments", []), key=lambda c: c.get("creation_time", "")):
-                author = (c.get("creator") or "").lower()
-                if not author.endswith(bugs_map.team_domains):
-                    continue
                 text = comment_tag(c.get("text"))
                 if text and parse_tag(text, bugs_map.targets) and bid in by_id:
                     by_id[bid]["tag_text"], by_id[bid]["tag_source"] = text, "comment"
@@ -447,7 +443,7 @@ def fetch_github(bugs_map, since, until):
         team = team_members(bugs_map, session)
         for b in bugs:
             b["team"] = b["creator"].lower() in team
-    # Tags: the latest "Feature affected:" comment by an org member or collaborator, on escaped issues only.
+    # Tags: the latest "Feature affected:" comment, by anyone, on escaped issues only.
     for b in bugs:
         if not b.pop("n_comments") or not bugs_map.is_escaped(b):
             continue
@@ -456,8 +452,6 @@ def fetch_github(bugs_map, since, until):
         while url:
             resp = get_with_retry(session, url, params)
             for c in resp.json():
-                if c.get("author_association") not in bugs_map.tag_associations:
-                    continue
                 text = comment_tag(c.get("body"))
                 if text and parse_tag(text, bugs_map.targets):
                     b["tag_text"], b["tag_source"] = text, "comment"

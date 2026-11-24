@@ -29,8 +29,6 @@ escaped:
                fxios-a-s, qa, sv-qa, sv-eng]
   # Service accounts, not people: their issues are never escaped bugs.
   bot_logins: [data-sync-user]
-  # Who can set a bug's feature with a "Feature affected:" comment.
-  tag_associations: [MEMBER, COLLABORATOR, OWNER]
 # Test and spam issues, dropped before anything else: a title containing one of these phrases, a single short
 # word, or only an email address or URL.
 spam_phrases: ["please ignore", "testing unito", "integration test"]
