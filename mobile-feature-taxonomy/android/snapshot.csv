@@ -356,7 +356,10 @@ android-components/components/compose/base/src/main/java/mozilla/components/comp
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/snackbar/SnackbarUtils.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/text/FadedText.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/text/Text.kt,SHARED.UI
+android-components/components/compose/base/src/main/java/mozilla/components/compose/base/textfield/SecureTextField.kt,SHARED.UI
+android-components/components/compose/base/src/main/java/mozilla/components/compose/base/textfield/SyncedTextFieldState.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/textfield/TextField.kt,SHARED.UI
+android-components/components/compose/base/src/main/java/mozilla/components/compose/base/textfield/TextFieldDecorations.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/textfield/TrailingIconScope.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/theme/AcornColorGrid.kt,SHARED.UI
 android-components/components/compose/base/src/main/java/mozilla/components/compose/base/theme/AcornColors.kt,SHARED.UI
@@ -1411,7 +1414,7 @@ android-components/components/service/firefox-accounts/src/main/java/mozilla/com
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/store/SyncState.kt,ACCT.SIGN
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/store/SyncStore.kt,ACCT.SIGN
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/store/SyncStoreSupport.kt,ACCT.SIGN
-android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/sync/Connect.kt,ACCT.SIGN
+android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/sync/ConnectResult.kt,ACCT.SIGN
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/sync/RustSyncManager.kt,ACCT.SIGN
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/sync/SyncConnectionState.kt,ACCT.SIGN
 android-components/components/service/firefox-accounts/src/main/java/mozilla/components/service/fxa/sync/SyncManager.kt,ACCT.SIGN
@@ -2145,10 +2148,10 @@ fenix/app/src/main/java/org/mozilla/fenix/compose/Favicon.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/HorizontalFadingEdgeBox.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/Image.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/ImagesPlaceholder.kt,SHARED.UI
-fenix/app/src/main/java/org/mozilla/fenix/compose/LazyListEagerFlingBehavior.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/ListItemTabSurface.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/Menu.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/MessageCard.kt,SHARED.UI
+fenix/app/src/main/java/org/mozilla/fenix/compose/ModalSheetState.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/ScrollIndicator.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/SwipeToDismiss.kt,SHARED.UI
 fenix/app/src/main/java/org/mozilla/fenix/compose/TabThumbnail.kt,SHARED.UI
@@ -2390,9 +2393,7 @@ fenix/app/src/main/java/org/mozilla/fenix/home/pocket/PocketState.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/StoriesFragment.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/controller/PocketStoriesController.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/interactor/PocketStoriesInteractor.kt,HOME.STORY
-fenix/app/src/main/java/org/mozilla/fenix/home/pocket/ui/PocketSection.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/ui/Stories.kt,HOME.STORY
-fenix/app/src/main/java/org/mozilla/fenix/home/pocket/ui/StoriesCategories.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/ui/StoriesScreen.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/pocket/ui/StoryCard.kt,HOME.STORY
 fenix/app/src/main/java/org/mozilla/fenix/home/privatebrowsing/controller/PrivateBrowsingController.kt,PRIV.MODE
@@ -2422,8 +2423,10 @@ fenix/app/src/main/java/org/mozilla/fenix/home/setup/store/SetupChecklistTelemet
 fenix/app/src/main/java/org/mozilla/fenix/home/setup/ui/ChecklistView.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/setup/ui/ProgressBarSetupChecklistView.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/setup/ui/SetupChecklist.kt,HOME.SET
+fenix/app/src/main/java/org/mozilla/fenix/home/sports/MerinoMatchesMapper.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportCardData.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportCardErrorState.kt,HOME.SET
+fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportsWidgetRefreshMiddleware.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/fake/FakeSportsPreview.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/ui/MatchCard.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/ui/MatchCardHeader.kt,HOME.SET
@@ -2951,7 +2954,6 @@ fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineFragment.k
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineMenu.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineShortcuts.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchShortcutsFragment.kt,SRCH.ENG
-fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchStringValidator.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/DefaultFenixSettingsIndexer.kt,SET.FRAME
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/FenixRecentSettingsSearchesRepository.kt,SET.FRAME
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/PreferenceFileInformation.kt,SET.FRAME
@@ -3031,7 +3033,6 @@ fenix/app/src/main/java/org/mozilla/fenix/shortcut/PasswordManagerIntentProcesso
 fenix/app/src/main/java/org/mozilla/fenix/shortcut/UninstallShortcutIntentProcessor.kt,OS.ASSIST
 fenix/app/src/main/java/org/mozilla/fenix/snackbar/FenixSnackbarDelegate.kt,UI.TOAST
 fenix/app/src/main/java/org/mozilla/fenix/snackbar/SnackbarBinding.kt,UI.TOAST
-fenix/app/src/main/java/org/mozilla/fenix/splashscreen/CompositeSplashScreenOperation.kt,APP.START
 fenix/app/src/main/java/org/mozilla/fenix/splashscreen/SplashScreenManager.kt,APP.START
 fenix/app/src/main/java/org/mozilla/fenix/splashscreen/SplashScreenOperation.kt,APP.START
 fenix/app/src/main/java/org/mozilla/fenix/startupCrash/StartupCrashAction.kt,APP.CRASH
@@ -3268,7 +3269,6 @@ fenix/app/src/main/java/org/mozilla/fenix/utils/TransitionsAnimation.kt,SHARED.A
 fenix/app/src/main/java/org/mozilla/fenix/utils/Undo.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/view/GroupableRadioButton.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/utils/view/ViewHolder.kt,SHARED.ARCH
-fenix/app/src/main/java/org/mozilla/fenix/wallpapers/LegacyWallpaperMigration.kt,HOME.WALL
 fenix/app/src/main/java/org/mozilla/fenix/wallpapers/Wallpaper.kt,HOME.WALL
 fenix/app/src/main/java/org/mozilla/fenix/wallpapers/WallpaperDownloader.kt,HOME.WALL
 fenix/app/src/main/java/org/mozilla/fenix/wallpapers/WallpaperFileManager.kt,HOME.WALL
@@ -3295,7 +3295,6 @@ fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/EditUrlConfirmationDialog
 fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/ReadOnlyUrlField.kt,BRW.WEBC
 fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/WebCompatReporter.kt,BRW.WEBC
 fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/WebCompatReporterFragment.kt,BRW.WEBC
-fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/WebCompatReporterPreviewSampleJsonData.kt,BRW.WEBC
 fenix/app/src/main/java/org/mozilla/fenix/webcompat/ui/WebCompatReporterPreviewSheet.kt,BRW.WEBC
 fenix/app/src/main/java/org/mozilla/fenix/whatsnew/WhatsNew.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/whatsnew/WhatsNewStorage.kt,ENG.ONB

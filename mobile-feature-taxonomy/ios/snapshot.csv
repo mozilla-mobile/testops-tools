@@ -101,6 +101,7 @@ BrowserKit/Sources/Common/Utilities/Notifiable.swift,SHARED.ARCH
 BrowserKit/Sources/Common/Utilities/NotificationProtocol.swift,SHARED.ARCH
 BrowserKit/Sources/Common/Utilities/TextStyling.swift,SHARED.UI
 BrowserKit/Sources/Common/Utilities/UserDefaultsInterface.swift,SHARED.ARCH
+BrowserKit/Sources/Common/Utilities/VPNProxySessionProvider.swift,SHARED.ARCH
 BrowserKit/Sources/Common/WindowUUID+Extensions.swift,SHARED.ARCH
 BrowserKit/Sources/ComponentLibrary/AIAnswerCardView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/AIBackgroundEffectView.swift,SHARED.UI
@@ -696,8 +697,8 @@ firefox-ios/Client/Extensions/UIView+ThemeUUIDIdentifiable.swift,SHARED.ARCH
 firefox-ios/Client/Extensions/UIViewController+Extension.swift,SHARED.ARCH
 firefox-ios/Client/Extensions/UIWindow+Extension.swift,SHARED.ARCH
 firefox-ios/Client/Extensions/URL+Mail.swift,BRW.LINKS
-firefox-ios/Client/Extensions/URLSession+sharedMPTCP.swift,SHARED.ARCH
-firefox-ios/Client/Extensions/URLSessionConfiguration+defaultMPTCP.swift,SHARED.ARCH
+firefox-ios/Client/Extensions/URLSession+Extension.swift,SHARED.ARCH
+firefox-ios/Client/Extensions/URLSessionConfiguration+Extension.swift,SHARED.ARCH
 firefox-ios/Client/Extensions/UserDefaults+valueExists.swift,SHARED.ARCH
 firefox-ios/Client/FeatureFlags/CoreBuildFlags.swift,SHARED.EXPERIMENTS
 firefox-ios/Client/FeatureFlags/FeatureFlagID.swift,SHARED.EXPERIMENTS
@@ -1004,7 +1005,7 @@ firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuAction.swift,BR
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuConfiguration.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuCoordinator.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/ContextMenuState.swift,BRW.CTX
-firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/NativeMenuHelper.swift,BRW.CTX
+firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/HomeNativeMenuHelper.swift,BRW.CTX
 firefox-ios/Client/Frontend/Home/Homepage/Header/HeaderState.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/Header/HomepageHeaderCell.swift,HOME.SET
 firefox-ios/Client/Frontend/Home/Homepage/HomepageDiffableDataSource.swift,HOME.SET
@@ -1159,6 +1160,7 @@ firefox-ios/Client/Frontend/Library/LibraryViewController/LibraryViewController+
 firefox-ios/Client/Frontend/Library/LibraryViewController/LibraryViewController.swift,LIB.BMK
 firefox-ios/Client/Frontend/Library/LibraryViewController/LibraryViewModel.swift,LIB.BMK
 firefox-ios/Client/Frontend/Library/LibraryViewController/TestableUIToolbar.swift,LIB.BMK
+firefox-ios/Client/Frontend/Library/Reader/ReaderNativeMenuHelper.swift,LIB.RL
 firefox-ios/Client/Frontend/Library/Reader/ReaderPanel.swift,LIB.RL
 firefox-ios/Client/Frontend/Library/Reader/ReaderPanelEmptyStateView.swift,LIB.RL
 firefox-ios/Client/Frontend/Library/RecentlyClosedTabsPanel.swift,TABS.CLOSED
@@ -1476,6 +1478,7 @@ firefox-ios/Client/Frontend/TabContentsScripts/LoginsHelper.swift,CRED.PW
 firefox-ios/Client/Frontend/TabContentsScripts/NightModeHelper.swift,SET.THEME
 firefox-ios/Client/Frontend/TabContentsScripts/NoImageModeHelper.swift,BRW.NAV
 firefox-ios/Client/Frontend/TabContentsScripts/PrintHelper.swift,BRW.PDF
+firefox-ios/Client/Frontend/TabContentsScripts/ProxyLeakGuardHelper.swift,SHARED.WEB
 firefox-ios/Client/Frontend/TabContentsScripts/UserScriptManager.swift,SHARED.WEB
 firefox-ios/Client/Frontend/TabToolbar/ToolbarTextField.swift,SRCH.URL
 firefox-ios/Client/Frontend/Theme/PrivateModeUI.swift,PRIV.MODE
