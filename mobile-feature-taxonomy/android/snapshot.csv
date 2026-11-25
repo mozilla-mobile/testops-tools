@@ -889,10 +889,12 @@ android-components/components/feature/listentopage/src/main/java/mozilla/compone
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SpeechSynthesizer.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SplitArticle.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/synthesis/SynthesisQueue.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/AccessibilityFocusMover.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ArticleDetails.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ArticleHeading.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/AudioProgressBar.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/InertWhileTransitioning.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ListenPlayerCard.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ListenSheet.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/ListenSheetUiState.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayPauseButton.kt,BRW.READ
@@ -900,6 +902,7 @@ android-components/components/feature/listentopage/src/main/java/mozilla/compone
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlaybackSpeedMenu.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlaybackUiState.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayerCompact.kt,BRW.READ
+android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayerControl.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/PlayerExpanded.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/SpeedState.kt,BRW.READ
 android-components/components/feature/listentopage/src/main/java/mozilla/components/feature/listentopage/ui/VoiceSelection.kt,BRW.READ
@@ -1971,6 +1974,7 @@ fenix/app/src/main/java/org/mozilla/fenix/components/UseCases.kt,SHARED.ARCH
 fenix/app/src/main/java/org/mozilla/fenix/components/VoiceSearchFeature.kt,SRCH.VIS
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/EntrypointTrackingAuthFeature.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/FenixFxAEntryPoint.kt,ACCT.SIGN
+fenix/app/src/main/java/org/mozilla/fenix/components/accounts/FxaPairingLink.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/FxaWebChannelIntegration.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/accounts/MozillaAccountMenuItemProvider.kt,ACCT.SIGN
 fenix/app/src/main/java/org/mozilla/fenix/components/appstate/AppAction.kt,SHARED.ARCH
@@ -2426,6 +2430,8 @@ fenix/app/src/main/java/org/mozilla/fenix/home/setup/ui/SetupChecklist.kt,HOME.S
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/MerinoMatchesMapper.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportCardData.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportCardErrorState.kt,HOME.SET
+fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportsWidgetController.kt,HOME.SET
+fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportsWidgetInteractor.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/SportsWidgetRefreshMiddleware.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/fake/FakeSportsPreview.kt,HOME.SET
 fenix/app/src/main/java/org/mozilla/fenix/home/sports/ui/MatchCard.kt,HOME.SET
@@ -2607,7 +2613,6 @@ fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingDebugSeed.kt,ENG.
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingFragment.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingPageAdditionSupport.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingReason.kt,ENG.ONB
-fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingSyncFlowResult.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/OnboardingTelemetryRecorder.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/WallpaperOnboardingDialogFragment.kt,ENG.ONB
 fenix/app/src/main/java/org/mozilla/fenix/onboarding/continuous/ContinuousOnboardingFeature.kt,ENG.ONB
@@ -2951,9 +2956,10 @@ fenix/app/src/main/java/org/mozilla/fenix/settings/search/GoogleLensSettingsSear
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/RadioSearchEngineListPreference.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SaveSearchEngineFragment.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineFragment.kt,SRCH.ENG
-fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineMenu.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchEngineShortcuts.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/search/SearchShortcutsFragment.kt,SRCH.ENG
+fenix/app/src/main/java/org/mozilla/fenix/settings/search/ui/SearchEngineDropdownMenu.kt,SRCH.ENG
+fenix/app/src/main/java/org/mozilla/fenix/settings/search/ui/SearchEngineDropdownMenuTestTag.kt,SRCH.ENG
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/DefaultFenixSettingsIndexer.kt,SET.FRAME
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/FenixRecentSettingsSearchesRepository.kt,SET.FRAME
 fenix/app/src/main/java/org/mozilla/fenix/settings/settingssearch/PreferenceFileInformation.kt,SET.FRAME
