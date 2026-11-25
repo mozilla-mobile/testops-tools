@@ -23,10 +23,13 @@ Commands:
     lines               CSV: files and source lines per feature (and layer).
     drift               Markdown/JSON report of where the map and the code disagree,
                         with suggested rule changes. --apply writes the confident ones.
+    coverage REPORT     CSV: unit-test line coverage per feature from an xccov JSON report
+                        (iOS). Needs no checkout.
 
 Usage:
     uv run feature_map.py ios --repo ~/git/firefox-ios check
     uv run feature_map.py android --repo ~/git/mozilla-firefox/firefox drift
+    uv run feature_map.py ios coverage unit-test-coverage.json
 """
 
 import argparse
@@ -120,7 +123,11 @@ def area_of(feature_id):
 
 
 class FeatureMap:
-    """One platform's map, bound to a checkout of that platform's repository."""
+    """One platform's map, bound to a checkout of that platform's repository.
+
+    `repo=None` loads the rules without a checkout: resolve() and coverage attribution work, the commands that walk
+    the source tree (check, files, lines, drift) don't.
+    """
 
     def __init__(self, platform, repo, map_path=None, taxonomy_path=None):
         self.map_path = map_path or os.path.join(HERE, platform, "feature-map.yml")
@@ -130,8 +137,8 @@ class FeatureMap:
             raise SystemExit(f"{self.map_path} is for platform {cfg['platform']}, not {platform}")
         self.platform = platform
         self.repo_name = cfg.get("repo", "")
-        self.repo = os.path.abspath(os.path.expanduser(repo))
-        self.base = os.path.join(self.repo, cfg.get("base") or "")
+        self.repo = os.path.abspath(os.path.expanduser(repo)) if repo else None
+        self.base = os.path.join(self.repo, cfg.get("base") or "") if repo else None
         self.roots = cfg["roots"]
         self.extensions = tuple(cfg.get("extensions", []))
         self.required_segment = cfg.get("require_path_segment")
@@ -140,7 +147,7 @@ class FeatureMap:
         self.ids = load_taxonomy(taxonomy_path)
         self.rules = [Rule(r, i) for i, r in enumerate(cfg["rules"])]
         self._files = None
-        if not os.path.isdir(self.base):
+        if repo and not os.path.isdir(self.base):
             raise SystemExit(f"{self.base} does not exist: --repo should point at a {self.repo_name} checkout")
 
     # ---- source discovery -------------------------------------------------
@@ -157,6 +164,8 @@ class FeatureMap:
         """Repo-relative (to `base`) paths of every in-scope source file, sorted."""
         if self._files is not None:
             return self._files
+        if self.base is None:
+            raise SystemExit("this command needs --repo: a checkout of " + self.repo_name)
         files = []
         for root in self.roots:
             top = os.path.join(self.base, root)
@@ -225,6 +234,72 @@ class FeatureMap:
                 used.add(rule.index)
         out["dead_rules"] = [r for r in self.rules if r.index not in used and not r.optional]
         return out
+
+
+# ---- unit test coverage -------------------------------------------------------
+
+
+def repo_relative(fm, path):
+    """Maps a path from a coverage report (absolute, on the CI machine) to the map's repo-relative form.
+
+    Returns None for files outside the map's roots: tests, test support, third-party packages.
+    """
+    p = path.replace(os.sep, "/")
+    for root in fm.roots:
+        r = root.rstrip("/")
+        if p.startswith(r + "/"):
+            return p
+        i = p.find("/" + r + "/")
+        if i >= 0:
+            return p[i + 1:]
+    return None
+
+
+def coverage_from_xccov(fm, report):
+    """Executable and covered lines per feature, from `xcrun xccov view --report --json <bundle>.xcresult`.
+
+    Returns {"features": {key: {"executable", "covered"}}, "files", "outside_roots", "unmapped": [path]}. Keys are
+    the features the files resolve to (L2 IDs, area IDs, SHARED.*, EXCLUDED, UNMAPPED) plus "L1:<area>", which adds
+    up an area's features and the code attributed to the area alone, like the TestRail counts. Symbol rules move the
+    functions they match to their feature; the rest of the file stays with the file's feature, so file totals stay
+    exact (xccov counts a closure's lines in both the closure and its parent function).
+    """
+    totals = collections.defaultdict(lambda: {"executable": 0, "covered": 0})
+    out = {"files": 0, "outside_roots": 0, "unmapped": []}
+
+    def add(feature, executable, covered):
+        keys = (feature, "L1:" + area_of(feature)) if area_of(feature) else (feature,)
+        for key in keys:
+            totals[key]["executable"] += executable
+            totals[key]["covered"] += covered
+
+    for target in report.get("targets", []):
+        for f in target.get("files", []):
+            if not f.get("executableLines"):
+                continue
+            rel = repo_relative(fm, f["path"])
+            if rel is None:
+                out["outside_roots"] += 1
+                continue
+            out["files"] += 1
+            executable, covered = f["executableLines"], f["coveredLines"]
+            rule, error = fm.resolve(rel)
+            if error:
+                out["unmapped"].append(rel)
+                add("UNMAPPED", executable, covered)
+                continue
+            moved = collections.defaultdict(lambda: [0, 0])
+            for fn in f.get("functions", []) if rule.symbols else []:
+                feature = rule.feature_for_symbol(fn["name"])
+                if feature != rule.feature:
+                    moved[feature][0] += fn["executableLines"]
+                    moved[feature][1] += fn["coveredLines"]
+            for feature, (e, c) in moved.items():
+                add(feature, e, c)
+            add(rule.feature, max(executable - sum(e for e, _ in moved.values()), 0),
+                max(covered - sum(c for _, c in moved.values()), 0))
+    out["features"] = dict(totals)
+    return out
 
 
 # ---- commands -----------------------------------------------------------------
@@ -296,14 +371,38 @@ def cmd_drift(fm, args):
     return 1 if (args.fail_on_action and report["needs_action"]) else 0
 
 
-COMMANDS = {"check": cmd_check, "files": cmd_files, "lines": cmd_lines, "drift": cmd_drift}
+def cmd_coverage(fm, args):
+    if fm.platform != "ios":
+        raise SystemExit("coverage reads xccov reports (iOS) for now; Android (JaCoCo) is not supported yet")
+    import json
+    with open(args.report) as f:
+        result = coverage_from_xccov(fm, json.load(f))
+    w = csv.writer(sys.stdout)
+    w.writerow(["feature", "area", "name", "executable_lines", "covered_lines", "line_coverage"])
+    order = sort_key(fm.ids)
+    for key in sorted(result["features"], key=lambda k: (order(k.removeprefix("L1:")), not k.startswith("L1:"))):
+        t = result["features"][key]
+        meta = fm.ids.get(key.removeprefix("L1:"), {})
+        name = meta.get("area", "") if key.startswith("L1:") else meta.get("name", "")
+        pct = f"{100 * t['covered'] / t['executable']:.1f}" if t["executable"] else ""
+        w.writerow([key, meta.get("area", ""), name, t["executable"], t["covered"], pct])
+    print(f"{fm.platform}: {result['files']} files attributed, {result['outside_roots']} outside the map's roots, "
+          f"{len(result['unmapped'])} unmapped", file=sys.stderr)
+    for path in result["unmapped"]:
+        print(f"unmapped: {path}", file=sys.stderr)
+    return 1 if result["unmapped"] else 0
+
+
+COMMANDS = {"check": cmd_check, "files": cmd_files, "lines": cmd_lines, "drift": cmd_drift,
+            "coverage": cmd_coverage}
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("platform", choices=PLATFORMS)
-    parser.add_argument("--repo", required=True,
-                        help="checkout of mozilla-mobile/firefox-ios (ios) or mozilla-firefox/firefox (android)")
+    parser.add_argument("--repo",
+                        help="checkout of mozilla-mobile/firefox-ios (ios) or mozilla-firefox/firefox (android); "
+                             "every command but coverage needs it")
     parser.add_argument("--map", help="feature-map.yml to use instead of <platform>/feature-map.yml")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("check")
@@ -316,6 +415,8 @@ def main(argv=None):
                    help="write confident suggestions into the map, marked `by: drift`, for review in a PR")
     d.add_argument("--fail-on-action", action="store_true",
                    help="exit 1 if something needs a decision (check fails); changes that only need review don't fail")
+    c = sub.add_parser("coverage", help="CSV: unit-test line coverage per feature from an xccov JSON report")
+    c.add_argument("report", help="output of `xcrun xccov view --report --json <bundle>.xcresult`")
     args = parser.parse_args(argv)
     fm = FeatureMap(args.platform, args.repo, map_path=args.map)
     return COMMANDS[args.command](fm, args)

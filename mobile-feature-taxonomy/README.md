@@ -15,9 +15,9 @@ same list of features and the same rule for "which feature does this code belong
   list as readable L1/L2 tables.
 - **`ios/feature-map.yml`, `android/feature-map.yml`**: path rules that assign every source file in firefox-ios and
   in Fenix + android-components to exactly one of those features.
-- **Tooling** to check the maps, list each file's feature and lines of code per feature, and detect when the code
-  has moved on so the maps can be updated. Per-feature test coverage, which needs a unit-test run, will come in a
-  separate PR.
+- **Tooling** to check the maps, list each file's feature and lines of code per feature, detect when the code
+  has moved on so the maps can be updated, and attribute a unit-test coverage report to features (iOS xccov for
+  now; Android JaCoCo to come).
 
 It lives here, not in the product repos, so it's one copy, maintained by Mobile Test Engineering, and kept current
 by a weekly CI job instead of scripts on someone's machine. Consumers: the
@@ -40,7 +40,7 @@ mobile-feature-taxonomy/
 │   ├── feature-map.yml     # rules: mozilla-firefox/firefox mobile/android path → feature ID
 │   ├── bugs-map.yml        # rules: Bugzilla component (+ title) → feature ID, and who counts as external
 │   └── snapshot.csv
-├── feature_map.py          # CLI: check / files / lines / drift
+├── feature_map.py          # CLI: check / files / lines / drift / coverage
 ├── drift.py                # map-vs-code comparison and suggested fixes
 ├── testrail_map.py         # CLI: TestRail cases per feature, from the IDs in section descriptions
 ├── testrail_section_check.py  # daily: Slack alert when a TestRail section has no / an unknown feature ID
@@ -64,9 +64,18 @@ uv run feature_map.py android --repo ~/git/mozilla-firefox/firefox   check
 uv run feature_map.py ios --repo ~/git/firefox-ios files    # CSV: feature, area and matching rule per file
 uv run feature_map.py ios --repo ~/git/firefox-ios lines    # CSV: files and source lines per feature (and layer)
 uv run feature_map.py ios --repo ~/git/firefox-ios drift    # Markdown report: where the map and the code disagree
+
+uv run feature_map.py ios coverage unit-test-coverage.json  # CSV: unit-test line coverage per feature (no checkout)
 ```
 
 `--map PATH` uses another feature-map.yml, for trying rule changes.
+
+`coverage` reads an xccov report (`xcrun xccov view --report --json <bundle>.xcresult`), like the
+`unit-test-coverage.json` artifact of the Bitrise workflow `firefox_unit_tests_ios_versions`. Paths from the CI
+machine are matched to the map's roots; files outside them (tests, test support) are skipped. Rows are per feature
+plus `L1:<area>` (the whole area, including code attributed to the area alone), like the TestRail counts. Symbol
+rules move the functions they match; the rest of the file stays with its feature. The feature health dashboard uses
+the same function (`coverage_from_xccov`).
 
 ## Keeping the maps in sync with the code
 
