@@ -1551,7 +1551,7 @@ firefox-ios/Client/Frontend/Translations/TranslationsTelemetry.swift,TRANS.PAGE
 firefox-ios/Client/Frontend/UIConstants+BottomInset.swift,SHARED.UI
 firefox-ios/Client/Frontend/UIConstants.swift,SHARED.UI
 firefox-ios/Client/Frontend/UXSizeClass.swift,SHARED.UI
-firefox-ios/Client/Frontend/VPN/Onboarding/VPNOnboardingCoordinator.swift,UNMAPPED
+firefox-ios/Client/Frontend/VPN/Onboarding/VPNOnboardingCoordinator.swift,PROT.VPN
 firefox-ios/Client/Frontend/Wayback/WaybackCodes.swift,BRW.ERR
 firefox-ios/Client/Frontend/Wayback/WaybackService.swift,BRW.ERR
 firefox-ios/Client/Frontend/Wayback/WaybackTelemetry.swift,BRW.ERR
