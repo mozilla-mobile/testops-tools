@@ -278,7 +278,7 @@ jobs:
 
       - name: Send analysis to Slack
         if: ${{ env.USE_PROD_SERVICE == 'true' }}
-        uses: slackapi/slack-github-action@v4.0.0
+        uses: slackapi/slack-github-action@v4.1.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_TEST_ALERTS_SANDBOX }}
           webhook-type: incoming-webhook
