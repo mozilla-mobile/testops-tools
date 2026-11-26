@@ -14,6 +14,14 @@ Columns:
 - **Escaped bugs · this year**: bugs reported by people outside the team, created from January 1 to the day of the
   run, shown as "N open · total". The header links to each tracker's search for the year.
 
+The **iOS unit test coverage** tab is the developers' view of the unit-test column: one section per feature with the
+source files whose lines count for it, most uncovered lines first, each with its target, executable lines, coverage
+and its biggest gaps (the functions with the most lines no unit test runs, closures counted in their function). Files
+and functions link to the code on GitHub. It filters by area or feature and by file / function name, can put the
+features with the most uncovered lines first, and downloads the list as CSV. Clicking an iOS unit-test percentage in
+the overview opens it on that feature, e.g. `…/#coverage?f=TABS.TRAY`; shared code, excluded code and files missing
+from the feature map are at the end.
+
 The **Escaped bugs** tab lists every bug: platform, number, title, feature, how it got its feature (*tag* on the bug, *component* or
 *title rule* on Android, *decision* or *waiting for a decision* on iOS), component, created date and state. It filters
 by platform, open/closed, area or feature, assignment, date range and text, sorts by any column, opens the Android
@@ -58,8 +66,9 @@ the Actions tab (the site's **Refresh data** link goes there):
 
 The data files only exist on the site, behind Mozilla SSO, and aren't committed because this repo is public.
 TestRail data is aggregate counts only (no section names, titles or case IDs). Bugs are public on Bugzilla and
-GitHub, so `bugs.json` lists their IDs, titles and links. `coverage.json` holds line counts per feature, the Bitrise
-build it came from and the paths of public source files missing from the feature map.
+GitHub, so `bugs.json` lists their IDs, titles and links. `coverage.json` holds line counts per feature and per source
+file, the names of each file's functions with the most uncovered lines (firefox-ios is public) and the Bitrise build
+it came from.
 
 | File | Built by | Needs |
 |---|---|---|
