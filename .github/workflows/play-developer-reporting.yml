@@ -43,7 +43,7 @@ jobs:
 
       - name: Slack
         if: steps.payload.outputs.exists == 'true'
-        uses: slackapi/slack-github-action@v4.0.0
+        uses: slackapi/slack-github-action@v4.1.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL_PRODUCT_HEALTH }}
           webhook-type: incoming-webhook
