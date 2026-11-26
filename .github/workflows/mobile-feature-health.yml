@@ -24,11 +24,17 @@ on:
         description: Overwrite even if the site was last deployed by someone else
         type: boolean
         default: false
+      coverage_branch:
+        description: firefox-ios branch whose Bitrise unit-test coverage to read (to try a workflow change)
+        type: string
+        default: main
   pull_request:
     paths:
       - "mobile-feature-health/**"
       - "mobile-feature-taxonomy/testrail_map.py"
       - "mobile-feature-taxonomy/bugs_map.py"
+      - "mobile-feature-taxonomy/feature_map.py"
+      - "mobile-feature-taxonomy/*/feature-map.yml"
       - "mobile-feature-taxonomy/*/bugs-map.yml"
       - "mobile-feature-taxonomy/features.yml"
       - ".github/workflows/mobile-feature-health.yml"
@@ -79,7 +85,9 @@ jobs:
       # workflow's token, read-only on public repos. Who is in the iOS/QA teams: the IOS_TEAM_LOGINS secret, refreshed
       # by a repo admin with `uv run mobile-feature-taxonomy/bugs_map.py ios team --update-secret` (this token can't
       # read org teams); a GH_ORG_READ_TOKEN with read:org, if one is ever added, is used instead.
-      - name: Collect TestRail cases and escaped bugs
+      # iOS unit-test coverage: the unit-test-coverage.json artifact of the weekly Bitrise workflow
+      # firefox_unit_tests_ios_versions (Tuesdays), read with a Bitrise token that can read the firefox-ios app.
+      - name: Collect TestRail cases, escaped bugs and unit-test coverage
         env:
           TESTRAIL_HOST: ${{ secrets.TESTRAIL_HOST }}
           TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
@@ -87,6 +95,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GH_ORG_READ_TOKEN: ${{ secrets.GH_ORG_READ_TOKEN }}
           IOS_TEAM_LOGINS: ${{ secrets.IOS_TEAM_LOGINS }}
+          BITRISE_TOKEN: ${{ secrets.BITRISE_TOKEN }}
+          BITRISE_APP_SLUG: ${{ secrets.BITRISE_APP_ID }}   # the firefox-ios app (also used by check-bitrise-ios-release-tags.yml)
+          BITRISE_COVERAGE_BRANCH: ${{ inputs.coverage_branch || 'main' }}
         run: python mobile-feature-health/collect.py --out-dir "$DIR/data" --allow-partial
 
       - uses: google-github-actions/auth@v3

@@ -14,6 +14,7 @@ Writes to site/data/:
   features.json   the taxonomy rows: L1 areas, L2 features, cross-cutting axes (from features.yml, no network)
   testrail.json   TestRail cases and UI automation per feature (collect_testrail.py; needs TestRail credentials)
   bugs.json       escaped bugs per feature this year, with the list of bugs (collect_bugs.py; GitHub token for iOS)
+  coverage.json   unit-test line coverage per feature, iOS (collect_coverage.py; needs a Bitrise token)
   status.json     when it ran and which sources succeeded
 
 A source that fails doesn't stop the others: the page shows "no data" for its columns and a notice. The exit status
@@ -38,10 +39,11 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "mobile-feature-taxonomy"))
 
 import collect_bugs  # noqa: E402
+import collect_coverage  # noqa: E402
 import collect_testrail  # noqa: E402
 import taxonomy  # noqa: E402
 
-SOURCES = {"testrail": collect_testrail, "bugs": collect_bugs}
+SOURCES = {"testrail": collect_testrail, "bugs": collect_bugs, "coverage": collect_coverage}
 
 
 def feature_rows():

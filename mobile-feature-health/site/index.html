@@ -126,10 +126,10 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
 <div class="viz-root">
   <h1>Firefox mobile — feature health</h1>
   <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
-    TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
+    unit-test coverage, TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
     Hover any cell for details; click a bug count to see those bugs in the Escaped bugs tab.</p>
-  <p class="wip"><b>Work in progress.</b> TestRail cases, UI automation and escaped bugs are real data, refreshed from
-    TestRail, Bugzilla and GitHub. Unit-test coverage per feature is still to come.</p>
+  <p class="wip"><b>Work in progress.</b> All columns are real data, refreshed from Bitrise, TestRail, Bugzilla and GitHub.
+    Android unit-test coverage is still to come.</p>
   <p class="error" id="notice" hidden></p>
   <p class="meta" id="meta">Loading…</p>
 
@@ -178,6 +178,15 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
   <div class="notes" id="notes">
     <h2>What each column means</h2>
     <ul>
+      <li><b>Unit tests · line coverage</b> — share of the feature's executable lines that unit tests run. iOS: the
+        <code>unit-test-coverage.json</code> (xccov) of the weekly Bitrise workflow <i>firefox_unit_tests_ios_versions</i>
+        (latest Xcode, iOS 27 simulator), attributed to features with the taxonomy's
+        <a href="https://github.com/mozilla-mobile/testops-tools/blob/main/mobile-feature-taxonomy/ios/feature-map.yml">feature map</a>.
+        Area rows include code attributed to the area alone; the "All" row is feature code only (shared code such as the browser
+        shell is left out). Coverage says the code ran during a test, not that a test checks it: read it next to the escaped bugs.
+        Known gap: xccov sometimes leaves out Swift packages it attributes to another binary (currently QuickAnswersKit and
+        VPNKit), so features built on them, such as Quick answers and VPN, only count their app code for now.
+        Android isn't measured yet. <span id="cov-totals"></span></li>
       <li><b>UI automation · % of TestRail cases</b> — share of the feature's TestRail Full Functional cases whose
         <i>Automation</i> field is <i>Completed</i> (XCUITest / Espresso). It's the TestRail status, not a verified run.</li>
       <li><b>Manual · TestRail cases</b> — number of Full Functional cases attributed to the feature, automated ones included.
@@ -238,6 +247,7 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
 const PLATFORMS = [["ios", "iOS"], ["android", "Android"]];
 // One entry per column group; each group has an iOS and an Android column. New data sources add a group here.
 const GROUPS = [
+  {title: "Unit tests · line coverage", short: "Unit tests", cell: (key, p, name) => unitCell(key, p, name)},
   {title: "UI automation · % of TestRail cases", short: "UI automation", cell: (key, p, name) => automationCell(key, p, name)},
   {title: "Manual · TestRail cases", short: "TestRail cases", cell: (key, p, name) => casesCell(key, p, name)},
   {title: "Escaped bugs · this year", short: "Escaped bugs", cell: (key, p, name) => bugsCell(key, p, name)},
@@ -247,7 +257,7 @@ const WORKFLOW = "https://github.com/mozilla-mobile/testops-tools/actions/workfl
 
 const tbody = document.querySelector("#t tbody");
 const tip = document.getElementById("tip");
-let ROWS = [], FEATURES = null, TR = null, BUGS = null, view = "group", sortKey = null, sortDir = -1, query = "";
+let ROWS = [], FEATURES = null, TR = null, BUGS = null, COV = null, view = "group", sortKey = null, sortDir = -1, query = "";
 const collapsed = new Set();
 
 const bin = v => v < 20 ? 0 : v < 40 ? 1 : v < 60 ? 2 : v < 80 ? 3 : 4;
@@ -263,6 +273,18 @@ function automationCell(key, p, platform) {
   const c = trOf(key, p);
   if (!c.total) return {na: `No ${platform} TestRail cases`};
   return {v: 100 * c.automated / c.total, tip: `${c.automated} of ${plural(c.total, "TestRail case")} marked Automation = Completed`};
+}
+const NO_LINES = {executable: 0, covered: 0};
+function unitCell(key, p, platform) {
+  if (bugsOnly(key)) return {na: "Bugs only"};
+  if (!COV) return {na: "No coverage data this run"};
+  const d = COV.platforms[p];
+  if (!d) return {na: `${platform} unit coverage isn't measured yet`};
+  const c = key === "TOTAL" ? d.totals.features : (d.features[key] || NO_LINES);
+  if (!c.executable) return {na: `No ${platform} code attributed to this feature`};
+  return {v: 100 * c.covered / c.executable,
+          tip: `${c.covered.toLocaleString()} of ${plural(c.executable, "executable line")} run by unit tests · ` +
+               `Bitrise #${d.build.number}, ${d.build.finished_at.slice(0, 10)}`};
 }
 function casesCell(key, p) {
   if (bugsOnly(key)) return {na: "Bugs only"};
@@ -602,6 +624,14 @@ function describe(status) {
     notice.textContent = `This run couldn't refresh: ${failed.join(", ")}. Those columns show no data; ` +
       "re-run the workflow, or see its log.";
   }
+  if (COV) document.getElementById("cov-totals").innerHTML = PLATFORMS.filter(([p]) => COV.platforms[p]).map(([p, name]) => {
+    const c = COV.platforms[p], b = c.build, t = c.totals.features, s = c.totals.shared;
+    const pct = x => x.executable ? `${(100 * x.covered / x.executable).toFixed(1)}%` : "—";
+    return `${name}: ${pct(t)} of ${plural(t.executable, "feature line")}, ${pct(s)} of shared code · ` +
+      `<a href="${esc(b.url)}">Bitrise #${esc(b.number)}</a> (${esc(b.branch)}, ${esc(b.stack || "")}, ${esc(b.finished_at.slice(0, 10))})` +
+      (c.unmapped.length ? ` · ${plural(c.unmapped.length, "file")} not in the feature map yet` : "") +
+      ((c.ambiguous || []).length ? ` · ${plural(c.ambiguous.length, "file")} where two map rules tie` : "");
+  }).join("; ") + ".";
   if (TR) document.getElementById("tr-totals").textContent = PLATFORMS.map(([p, name]) => {
     const c = data.platforms[p];
     return `${name}: ${plural(c.cases, "case")}` + (c.no_feature ? `, ${c.no_feature} not attributed to any feature` : "");
@@ -614,9 +644,9 @@ const load = (f, optional) => fetch(f, {cache: "no-cache"})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .catch(e => { if (optional) return null; throw e; });
 Promise.all([load("data/features.json"), load("data/testrail.json", true), load("data/bugs.json", true),
-             load("data/status.json", true)])
-  .then(([features, tr, bugs, status]) => {
-    FEATURES = features; TR = tr; BUGS = bugs;
+             load("data/status.json", true), load("data/coverage.json", true)])
+  .then(([features, tr, bugs, status, cov]) => {
+    FEATURES = features; TR = tr; BUGS = bugs; COV = cov;
     ROWS = buildRows(); describe(status); render();
     if (BUGS) { buildBugList(); wireBugs(); } else document.getElementById("t-bugs").hidden = true;
     route();

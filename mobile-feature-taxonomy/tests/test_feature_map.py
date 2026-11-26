@@ -6,6 +6,7 @@
 
 import contextlib
 import io
+import json
 import os
 import shutil
 import sys
@@ -329,6 +330,116 @@ class DriftTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(feature_map.main(["ios", "--repo", self.r.repo, "--map", self.r.map_path,
                                                "drift", "--fail-on-action", "--format", "json"]), 0)
+
+
+COVERAGE_MAP = """\
+platform: ios
+repo: example/firefox-ios
+base: ""
+extensions: [".swift"]
+roots:
+  - App
+  - Kit
+rules:
+  - {path: "App/**", feature: SHARED.SHELL}
+  - {path: "App/Library/Bookmarks/**", feature: LIB.BMK}
+  - {path: "App/Logins/**", feature: CRED}
+  - path: "App/Browser/BrowserViewController.swift"
+    feature: SHARED.SHELL
+    symbols:
+      - {match: "(?i)readerMode", feature: BRW.READ}
+  # Two equally specific rules for App/Tie/Ab.swift: ambiguous, not unmapped.
+  - {path: "App/Tie/A*.swift", feature: LIB.HIST}
+  - {path: "App/Tie/*b.swift", feature: LIB.BMK}
+"""
+
+# As in a real xccov report, a file's functions (closures included) partition its executable lines: the parent
+# readerModeDidChange() and its closure count different lines, and 5 + 2 + 3 + 12 = 22.
+XCCOV_REPORT = {"targets": [
+    {"name": "Client.app", "files": [
+        {"path": "/ci/git/App/Library/Bookmarks/Panel.swift", "executableLines": 10, "coveredLines": 4},
+        {"path": "/ci/git/App/Logins/LoginList.swift", "executableLines": 6, "coveredLines": 3},
+        {"path": "/ci/git/App/Browser/BrowserViewController.swift", "executableLines": 22, "coveredLines": 11,
+         "functions": [
+             {"name": "BrowserViewController.showReaderMode()", "executableLines": 5, "coveredLines": 1},
+             {"name": "BrowserViewController.readerModeDidChange()", "executableLines": 2, "coveredLines": 1},
+             {"name": "closure #1 in BrowserViewController.readerModeDidChange()", "executableLines": 3,
+              "coveredLines": 3},
+             {"name": "BrowserViewController.viewDidLoad()", "executableLines": 12, "coveredLines": 6}]},
+        {"path": "/ci/git/App/Tie/Ab.swift", "executableLines": 7, "coveredLines": 1},
+        {"path": "/ci/git/App/Empty.swift", "executableLines": 0, "coveredLines": 0},
+    ]},
+    {"name": "ClientTests.xctest", "files": [
+        {"path": "/ci/git/AppTests/PanelTests.swift", "executableLines": 8, "coveredLines": 8}]},
+    {"name": "Kit", "files": [{"path": "/ci/git/Kit/Helper.swift", "executableLines": 4, "coveredLines": 0}]},
+]}
+
+
+class CoverageTests(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.map_path = os.path.join(self.dir, "feature-map.yml")
+        with open(self.map_path, "w") as f:
+            f.write(COVERAGE_MAP)
+        self.fm = FeatureMap("ios", None, map_path=self.map_path)   # no checkout needed
+
+    def tearDown(self):
+        shutil.rmtree(self.dir)
+
+    def test_paths_from_the_ci_machine_are_made_repo_relative(self):
+        self.assertEqual(feature_map.repo_relative(self.fm, "/Users/vagrant/git/App/A.swift"), "App/A.swift")
+        self.assertEqual(feature_map.repo_relative(self.fm, "App/A.swift"), "App/A.swift")
+        self.assertIsNone(feature_map.repo_relative(self.fm, "/Users/vagrant/git/AppTests/A.swift"))
+
+    def test_lines_are_attributed_per_feature_and_area(self):
+        out = feature_map.coverage_from_xccov(self.fm, XCCOV_REPORT)
+        f = out["features"]
+        self.assertEqual(f["LIB.BMK"], {"executable": 10, "covered": 4})
+        self.assertEqual(f["L1:LIB"], {"executable": 10, "covered": 4})
+        # Code attributed to an area alone counts in the area row.
+        self.assertEqual(f["CRED"], {"executable": 6, "covered": 3})
+        self.assertEqual(f["L1:CRED"], {"executable": 6, "covered": 3})
+        # Symbol rules move every matching function: parent and closure count different lines, so both move once.
+        self.assertEqual(f["BRW.READ"], {"executable": 10, "covered": 5})
+        self.assertEqual(f["L1:BRW"], {"executable": 10, "covered": 5})
+        self.assertEqual(f["SHARED.SHELL"], {"executable": 12, "covered": 6})
+        self.assertEqual(f["BRW.READ"]["executable"] + f["SHARED.SHELL"]["executable"], 22)   # the file's total
+        self.assertFalse([k for k in f if k.startswith("L1:") and not k[3:].isalpha()])   # no area row for SHARED
+        # In the roots but no rule matches: reported, and counted apart. Files with no executable lines are skipped.
+        self.assertEqual(out["unmapped"], ["Kit/Helper.swift"])
+        self.assertEqual(f["UNMAPPED"], {"executable": 4, "covered": 0})
+        # Two rules tie: kept apart from unmapped, with the real error, and never counted in an area.
+        self.assertEqual([a["path"] for a in out["ambiguous"]], ["App/Tie/Ab.swift"])
+        self.assertTrue(out["ambiguous"][0]["error"].startswith("ambiguous: App/Tie/"))
+        self.assertEqual(f["AMBIGUOUS"], {"executable": 7, "covered": 1})
+        self.assertNotIn("L1:AMBIGUOUS", f)
+        self.assertEqual((out["files"], out["outside_roots"]), (5, 1))
+
+    def test_functions_adding_up_to_more_than_the_file_are_rejected(self):
+        report = {"targets": [{"name": "Client.app", "files": [
+            {"path": "/ci/git/App/Browser/BrowserViewController.swift", "executableLines": 10, "coveredLines": 8,
+             "functions": [{"name": "BrowserViewController.showReaderMode()", "executableLines": 12,
+                            "coveredLines": 3}]}]}]}
+        with self.assertRaises(ValueError):
+            feature_map.coverage_from_xccov(self.fm, report)
+
+    def test_commands_that_walk_the_tree_need_a_checkout(self):
+        with self.assertRaises(SystemExit):
+            self.fm.source_files()
+
+    def test_coverage_command_writes_csv_without_a_checkout(self):
+        report = os.path.join(self.dir, "coverage.json")
+        with open(report, "w") as f:
+            json.dump(XCCOV_REPORT, f)
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            code = feature_map.main(["ios", "--map", self.map_path, "coverage", report])
+        self.assertEqual(code, 1)   # an unmapped and an ambiguous file, like `check`
+        rows = {line.split(",")[0]: line for line in stdout.getvalue().splitlines()[1:]}
+        self.assertTrue(rows["LIB.BMK"].endswith(",10,4,40.0"))
+        self.assertIn("unmapped: Kit/Helper.swift", stderr.getvalue())
+        self.assertIn("ambiguous: App/Tie/", stderr.getvalue())
+        self.assertIn(": App/Tie/Ab.swift", stderr.getvalue())
 
 
 class TaxonomyListTests(unittest.TestCase):
