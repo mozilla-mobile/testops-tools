@@ -16,7 +16,9 @@ Columns:
 
 The **iOS unit test coverage** tab is the developers' view of the unit-test column. At the top, the coverage of
 feature code and of shared code, with the change since the previous run (▲ / ▼, in points) and a sparkline of the
-last runs; with a filter, the coverage of what's shown. Below, one section per feature with the
+last runs; with a filter, the coverage of what's shown. Below, one collapsible block per area with the same numbers
+as its overview row (its features plus the code of the area as a whole), then shared code and what isn't counted.
+Inside each block, one section per feature with the
 source files whose lines count for it, most uncovered lines first, each with its target, executable lines, coverage
 and its biggest gaps (the functions with the most lines no unit test runs, closures counted in their function). Files
 and functions link to the code on GitHub, and each section shows its change since the previous run. It filters by
