@@ -147,7 +147,16 @@ table.bt td.r, table.bt th.r { text-align: right; font-variant-numeric: tabular-
 table.bt .fdir { color: var(--text-muted); font-size: 12px; word-break: break-all; }
 table.bt .gaps div { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
 table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: system-ui, sans-serif; }
-.covhead { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin: 14px 0 6px; }
+details.area { border: 1px solid var(--rule); border-radius: 10px; margin: 0 0 8px; background: var(--surface-2); }
+details.area > summary { cursor: pointer; padding: 9px 12px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+  list-style: none; font-size: 15px; }
+details.area > summary::-webkit-details-marker { display: none; }
+details.area > summary .caret { display: inline-block; width: 14px; font-size: 11px; color: var(--text-secondary); transition: transform .15s; }
+details.area[open] > summary .caret { transform: rotate(90deg); }
+details.area > summary .sname { font-weight: 700; }
+details.area > summary:hover .sname { text-decoration: underline; }
+details.area > summary .muted { color: var(--text-muted); font-size: 13px; }
+details.area > .inner { padding: 0 8px 2px 22px; }
 .notes { max-width: 1100px; color: var(--text-secondary); font-size: 13px; margin-top: 22px; }
 .notes h2 { font-size: 15px; color: var(--text-primary); margin: 18px 0 6px; }
 .notes li { margin: 3px 0; }
@@ -264,7 +273,8 @@ table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: sys
     <div class="notes">
       <h2>Reading this tab</h2>
       <ul>
-        <li>One section per feature, with the source files whose lines count for it, most uncovered lines first. Files that
+        <li>One block per area, with the same numbers as its row in the overview: its features plus the code of the area as a
+          whole. Inside, one section per feature, with the source files whose lines count for it, most uncovered lines first. Files that
           symbol rules split between features show up in each, with that feature's lines only.</li>
         <li><b>Biggest gaps</b> — the file's functions with the most lines no unit test runs (closures count in the function
           they're in), linked to the function in the code. They're where a test adds the most lines; whether it's worth
@@ -602,17 +612,36 @@ function buildCov() {
 
 const covMatch = x => !CF.f || (CF.f.startsWith("L1:") ? x.l1 === CF.f.slice(3) : x.id === CF.f);
 function covShown() {
-  const q = CF.q.trim().toLowerCase(), groups = ["Features", "Shared code", "Not counted"];
+  const q = CF.q.trim().toLowerCase();
   const inTarget = e => !CF.t || (e.target || "") === CF.t;
-  const secs = CSECTIONS.filter(covMatch).map(x => {
-    if (!CF.t) return {...x, shown: q ? x.files.filter(e => e.hay.includes(q)) : x.files};
+  const shownOf = (x, files) => !covMatch(x) ? [] : q ? files.filter(e => e.hay.includes(q)) : files;
+  const secs = CSECTIONS.map(x => {
+    if (!CF.t) return {...x, shown: shownOf(x, x.files)};
     const files = x.files.filter(inTarget);   // the section's numbers are the target's share of it
     return {...x, files, exec: files.reduce((a, e) => a + e.executable, 0), cov: files.reduce((a, e) => a + e.covered, 0),
-            zero: files.filter(e => !e.covered).length, shown: q ? files.filter(e => e.hay.includes(q)) : files};
-  }).filter(x => x.shown.length);
-  if (CF.o === "gap") secs.sort((a, b) => groups.indexOf(a.group) - groups.indexOf(b.group) ||
-                                          (b.exec - b.cov) - (a.exec - a.cov));
-  return secs;
+            zero: files.filter(e => !e.covered).length, shown: shownOf(x, files)};
+  });
+  const gap = (a, b) => (b.exec - b.cov) - (a.exec - a.cov);
+  // Blocks: one per area (its features and the code of the area as a whole), then shared code, then what isn't counted.
+  // A block's numbers add up all its sections (the target's share of them with a target filter), whatever the feature
+  // filter or the search, so an area always reads like its overview row.
+  const blocks = [
+    ...FEATURES.features.filter(f => f.type === "l1").map(a => ({id: a.id, name: a.name, key: "L1:" + a.id, area: true,
+                                                              rank: 0, secs: secs.filter(x => x.l1 === a.id)})),
+    {id: "SHARED", name: "Shared code", key: "shared", rank: 1, secs: secs.filter(x => x.group === "Shared code")},
+    {id: "—", name: "Not counted: excluded code and files the map doesn't place", rank: 2,
+     secs: secs.filter(x => x.group === "Not counted")},
+  ].filter(b => b.secs.length);
+  blocks.forEach(b => {
+    b.exec = b.secs.reduce((a, x) => a + x.exec, 0); b.cov = b.secs.reduce((a, x) => a + x.cov, 0);
+    b.nfiles = b.secs.reduce((a, x) => a + x.files.length, 0);
+    b.nsecs = b.secs.filter(x => x.files.length).length;
+    b.secs = b.secs.filter(x => x.shown.length);
+    if (CF.o === "gap") b.secs.sort(gap);
+  });
+  const shown = blocks.filter(b => b.secs.length);
+  if (CF.o === "gap") shown.sort((a, b) => a.rank - b.rank || gap(a, b));
+  return shown;
 }
 
 function codeUrl(path, line) {
@@ -643,8 +672,10 @@ function renderCov() {
   document.getElementById("ct").value = CF.t;
   if (document.getElementById("cq").value !== CF.q) document.getElementById("cq").value = CF.q;
   document.querySelectorAll("[data-co]").forEach(b => b.setAttribute("aria-pressed", b.dataset.co === CF.o));
-  CSHOWN = covShown();
-  const q = CF.q.trim(), open = copen !== null ? copen : !!(q || CF.f);
+  const blocks = covShown();
+  CSHOWN = blocks.flatMap(b => b.secs);
+  const q = CF.q.trim(), auto = !!(q || CF.f);
+  const blockOpen = copen !== null ? copen : auto, open = copen === null && auto;   // Expand all opens the areas only
   const files = CSHOWN.flatMap(x => x.shown), exec = files.reduce((a, e) => a + e.executable, 0);
   const unc = files.reduce((a, e) => a + e.executable - e.covered, 0), b = d.build;
   document.getElementById("cmeta").innerHTML = [
@@ -660,16 +691,29 @@ function renderCov() {
     const c = prev && !CF.t && prev.features[id];
     return c && c[0] ? pct(c[1], c[0]) : null;
   };
-  let group = null;
-  document.getElementById("csec").innerHTML = CSHOWN.map((x, i) => {
-    const head = x.group !== group ? `<div class="covhead">${esc(group = x.group)}</div>` : "";
+  const prevBlock = b => {
+    if (!prev || CF.t || !b.key) return null;
+    const c = b.key === "shared" ? [prev.totals.shared.executable, prev.totals.shared.covered] : prev.features[b.key];
+    return c && c[0] ? pct(c[1], c[0]) : null;
+  };
+  let i = 0;
+  const section = x => {
     const match = q ? ` · ${plural(x.shown.length, "file")} match` : "";
-    return head + `<details class="fsec" data-i="${i}"${open ? " open" : ""}><summary>` +
+    return `<details class="fsec" data-i="${i++}"${open ? " open" : ""}><summary>` +
       `<span class="caret" aria-hidden="true">▶</span><span class="fid">${esc(x.id)}</span>` +
       `<span class="sname">${esc(x.name)}</span>${heatPill(pct(x.cov, x.exec))}` +
       `${prev ? deltaHTML(pct(x.cov, x.exec), prevPct(x.id), prev.build, true) : ""}<span class="muted">` +
       `${(x.exec - x.cov).toLocaleString()} uncovered of ${plural(x.exec, "line")} · ${plural(x.files.length, "file")}` +
       `${x.zero ? ` · ${x.zero} at 0%` : ""}${match}</span></summary><div>${open ? filesTable(x) : ""}</div></details>`;
+  };
+  document.getElementById("csec").innerHTML = blocks.map(b => {
+    const nsec = (b.secs.length < b.nsecs ? `${b.secs.length} of ` : "") + plural(b.nsecs, b.area ? "feature" : "bucket");
+    const match = q ? ` · ${plural(b.secs.reduce((a, x) => a + x.shown.length, 0), "file")} match` : "";
+    return `<details class="area"${blockOpen ? " open" : ""}><summary><span class="caret" aria-hidden="true">▶</span>` +
+      `${b.area ? `<span class="fid">${esc(b.id)}</span>` : ""}<span class="sname">${esc(b.name)}</span>` +
+      `${heatPill(pct(b.cov, b.exec))}${prev ? deltaHTML(pct(b.cov, b.exec), prevBlock(b), prev.build, true) : ""}` +
+      `<span class="muted">${(b.exec - b.cov).toLocaleString()} uncovered of ${plural(b.exec, "line")} · ${nsec} · ` +
+      `${plural(b.nfiles, "file")}${match}</span></summary><div class="inner">${b.secs.map(section).join("")}</div></details>`;
   }).join("") || `<p class="muted">No files match these filters.</p>`;
 }
 
@@ -737,7 +781,7 @@ function wireCov() {
   // Tables are drawn when a section opens: all of them at once is ~1,500 rows.
   document.getElementById("csec").addEventListener("toggle", e => {
     const det = e.target, body = det.lastElementChild;
-    if (det.open && !body.firstChild) body.innerHTML = filesTable(CSHOWN[+det.dataset.i]);
+    if (det.classList.contains("fsec") && det.open && !body.firstChild) body.innerHTML = filesTable(CSHOWN[+det.dataset.i]);
   }, true);
 }
 
