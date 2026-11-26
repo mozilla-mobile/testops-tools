@@ -14,10 +14,13 @@ Columns:
 - **Escaped bugs · this year**: bugs reported by people outside the team, created from January 1 to the day of the
   run, shown as "N open · total". The header links to each tracker's search for the year.
 
-The **iOS unit test coverage** tab is the developers' view of the unit-test column: one section per feature with the
+The **iOS unit test coverage** tab is the developers' view of the unit-test column. At the top, the coverage of
+feature code and of shared code, with the change since the previous run (▲ / ▼, in points) and a sparkline of the
+last runs; with a filter, the coverage of what's shown. Below, one section per feature with the
 source files whose lines count for it, most uncovered lines first, each with its target, executable lines, coverage
 and its biggest gaps (the functions with the most lines no unit test runs, closures counted in their function). Files
-and functions link to the code on GitHub. It filters by area or feature and by file / function name, can put the
+and functions link to the code on GitHub, and each section shows its change since the previous run. It filters by
+area or feature, by target (e.g. `Client.app`, `libStorage.a`) and by file / function name, can put the
 features with the most uncovered lines first, and downloads the list as CSV. Clicking an iOS unit-test percentage in
 the overview opens it on that feature, e.g. `…/#coverage?f=TABS.TRAY`; shared code, excluded code and files missing
 from the feature map are at the end.
@@ -42,6 +45,8 @@ All of them use the taxonomy's attribution tools, so the dashboard, the checks a
   with `feature_map.py`'s coverage attribution and `ios/feature-map.yml`. The run is used whatever its status: a
   failing test step on another iOS version doesn't invalidate the coverage. Known gap: xccov leaves out a few Swift
   packages it attributes to another binary (e.g. QuickAnswersKit, VPNKit); reading them needs the run's profdata.
+  The trend reads the artifacts of the earlier runs on the same branch (up to 8) from Bitrise and attributes them
+  with today's map, so nothing is stored between runs and a change is the tests or the code, not a map edit.
 - **TestRail** — [`testrail_map.py`](../mobile-feature-taxonomy/testrail_map.py): each Full Functional section
   (iOS 45443, Android 3192) starts its description with a feature ID; a case takes the ID of its section or nearest
   parent. A daily check alerts on Slack when a section has none.

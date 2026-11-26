@@ -122,7 +122,21 @@ td.heat.click:hover span { text-decoration: underline; }
 .hp { display: inline-block; min-width: 54px; padding: 1px 6px; border-radius: 4px; text-align: center; font-size: 12px;
   font-variant-numeric: tabular-nums; }
 details.fsec { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 8px; margin: 0 0 6px; }
-details.fsec > summary { cursor: pointer; padding: 8px 12px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+details.fsec > summary { cursor: pointer; padding: 8px 12px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+  list-style: none; }
+details.fsec > summary::-webkit-details-marker { display: none; }
+details.fsec > summary .caret { display: inline-block; width: 14px; font-size: 11px; line-height: 1; color: var(--text-secondary);
+  transition: transform .15s; }
+details.fsec[open] > summary .caret { transform: rotate(90deg); }
+details.fsec > summary:hover .sname { text-decoration: underline; }
+.delta { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+.chead { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 14px; }
+.ctile { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 16px; min-width: 210px; }
+.ctile .lab { color: var(--text-secondary); font-size: 12px; }
+.ctile .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.ctile .sub2 { color: var(--text-muted); font-size: 12px; }
+.ctile .delta { font-size: 13px; }
+.ctile svg { display: block; margin-top: 4px; overflow: visible; }
 details.fsec > summary .sname { font-weight: 600; }
 details.fsec > summary .muted { color: var(--text-muted); font-size: 13px; }
 details.fsec[open] > summary { border-bottom: 1px solid var(--rule); }
@@ -233,6 +247,7 @@ table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: sys
   <section id="tab-cov" role="tabpanel" aria-labelledby="t-cov" hidden>
     <div class="toolbar">
       <select id="cf" aria-label="Feature"></select>
+      <select id="ct" aria-label="Target"></select>
       <input type="search" id="cq" placeholder="Search file, function or target" aria-label="Search files">
       <div class="seg" role="group" aria-label="Order">
         <button data-co="">Taxonomy order</button><button data-co="gap">Most uncovered first</button>
@@ -243,6 +258,7 @@ table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: sys
       </div>
       <button class="go" id="creset">Reset filters</button>
     </div>
+    <div class="chead" id="chead"></div>
     <p class="bmeta" id="cmeta"></p>
     <div id="csec"></div>
     <div class="notes">
@@ -255,6 +271,9 @@ table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: sys
           testing is for the team to judge.</li>
         <li>Files come from the same xccov report as the overview, so the same known gap applies: Swift packages xccov
           leaves out aren't listed. Shared code, excluded code and files not in the feature map are at the end.</li>
+        <li><b>Change since the last run</b> — the earlier runs of the workflow on the same branch are attributed with
+          today's feature map, so ▲ / ▼ is a change in the tests or the code, not an edit of the map. A run where xccov
+          leaves out a package it had included before (see the known gap) also moves the numbers.</li>
       </ul>
     </div>
   </section>
@@ -512,13 +531,32 @@ function wire() {
 
 // ---------------- iOS unit test coverage tab ----------------
 // The source files behind each feature's percentage, most uncovered lines first, to find where tests are missing.
-// Filters live in the URL (#coverage?f=TABS.TRAY&q=…&o=gap) so a view can be shared.
-const CDEFAULT = {f: "", q: "", o: ""};
+// Filters live in the URL (#coverage?f=TABS.TRAY&t=Client.app&q=…&o=gap) so a view can be shared.
+const CDEFAULT = {f: "", t: "", q: "", o: ""};
 const CODE = "https://github.com/mozilla-mobile/firefox-ios/blob/";
 let CF = {...CDEFAULT}, CSECTIONS = [], copen = null;   // copen: null = open what the filters point at; true/false = all
 const covIos = () => (COV && COV.platforms.ios && COV.platforms.ios.by_file) ? COV.platforms.ios : null;
 const pct = (c, e) => e ? 100 * c / e : 0;
 const heatPill = v => `<span class="hp" style="background:var(--h${bin(v)});color:var(--t${bin(v)})">${v.toFixed(1)}%</span>`;
+const covPrev = () => (covIos().history || [])[1] || null;   // the run before the latest
+function deltaHTML(now, before, prevBuild, quiet) {     // now / before: % or null
+  if (before === null || before === undefined) return "";
+  const d = now - before, since = `#${prevBuild.number}, ${prevBuild.finished_at.slice(0, 10)}`;
+  if (Math.abs(d) < (quiet ? 0.1 : 0.05)) return quiet ? "" : `<span class="delta" title="${esc(before.toFixed(1))}% in Bitrise ${esc(since)}">= no change since ${esc(since)}</span>`;
+  return `<span class="delta" title="${esc(before.toFixed(1))}% in Bitrise ${esc(since)}">${d > 0 ? "▲ +" : "▼ −"}${Math.abs(d).toFixed(1)} pts` +
+    `${quiet ? "" : ` since ${esc(since)}`}</span>`;
+}
+function sparkline(points) {   // [{v, label}] oldest first; one series, so no legend
+  if (points.length < 3) return "";
+  const w = 180, h = 30, lo = Math.min(...points.map(p => p.v)), hi = Math.max(...points.map(p => p.v));
+  const x = i => i * w / (points.length - 1), y = v => hi === lo ? h / 2 : h - 3 - (v - lo) * (h - 6) / (hi - lo);
+  const pts = points.map((p, i) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+  const last = points[points.length - 1];
+  return `<svg width="${w}" height="${h}" role="img" aria-label="${esc(points.map(p => p.label).join("; "))}">` +
+    `<polyline points="${pts}" fill="none" stroke="var(--h3)" stroke-width="2" stroke-linejoin="round"/>` +
+    points.map((p, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="${p === last ? 4 : 6}" ` +
+      `fill="${p === last ? "var(--h3)" : "transparent"}"><title>${esc(p.label)}</title></circle>`).join("") + `</svg>`;
+}
 const shortFn = (name, limit = 70) => {
   name = name.replace(/\((?=[^)]{25,})[^)]*\)/g, "(…)");   // long Swift argument lists
   return name.length <= limit ? name : name.slice(0, limit - 1) + "…";
@@ -548,6 +586,11 @@ function buildCov() {
     x.zero = x.files.filter(e => !e.covered).length;
   });
   document.getElementById("t-cov-n").textContent = d.by_file.length.toLocaleString();
+  const targets = {};
+  d.by_file.forEach(e => targets[e.target || ""] = (targets[e.target || ""] || 0) + 1);
+  document.getElementById("ct").innerHTML = `<option value="">All targets</option>` +
+    Object.entries(targets).sort((a, b) => b[1] - a[1]).map(([t, n]) =>
+      `<option value="${esc(t)}">${esc(t || "(no target)")} · ${n.toLocaleString()} files</option>`).join("");
   const opt = (v, label) => `<option value="${esc(v)}">${esc(label)}</option>`;
   document.getElementById("cf").innerHTML = opt("", "All files") +
     FEATURES.features.filter(f => f.type === "l1" && CSECTIONS.some(x => x.l1 === f.id)).map(a =>
@@ -560,8 +603,13 @@ function buildCov() {
 const covMatch = x => !CF.f || (CF.f.startsWith("L1:") ? x.l1 === CF.f.slice(3) : x.id === CF.f);
 function covShown() {
   const q = CF.q.trim().toLowerCase(), groups = ["Features", "Shared code", "Not counted"];
-  const secs = CSECTIONS.filter(covMatch).map(x => ({...x, shown: q ? x.files.filter(e => e.hay.includes(q)) : x.files}))
-    .filter(x => x.shown.length);
+  const inTarget = e => !CF.t || (e.target || "") === CF.t;
+  const secs = CSECTIONS.filter(covMatch).map(x => {
+    if (!CF.t) return {...x, shown: q ? x.files.filter(e => e.hay.includes(q)) : x.files};
+    const files = x.files.filter(inTarget);   // the section's numbers are the target's share of it
+    return {...x, files, exec: files.reduce((a, e) => a + e.executable, 0), cov: files.reduce((a, e) => a + e.covered, 0),
+            zero: files.filter(e => !e.covered).length, shown: q ? files.filter(e => e.hay.includes(q)) : files};
+  }).filter(x => x.shown.length);
   if (CF.o === "gap") secs.sort((a, b) => groups.indexOf(a.group) - groups.indexOf(b.group) ||
                                           (b.exec - b.cov) - (a.exec - a.cov));
   return secs;
@@ -592,6 +640,7 @@ function renderCov() {
   const d = covIos();
   if (!d) return;
   document.getElementById("cf").value = CF.f;
+  document.getElementById("ct").value = CF.t;
   if (document.getElementById("cq").value !== CF.q) document.getElementById("cq").value = CF.q;
   document.querySelectorAll("[data-co]").forEach(b => b.setAttribute("aria-pressed", b.dataset.co === CF.o));
   CSHOWN = covShown();
@@ -606,15 +655,46 @@ function renderCov() {
     b.commit ? "" : `<span class="muted">Links open today's ${esc(b.branch || "main")}: the code may have moved since the run.</span>`,
   ].filter(Boolean).join("");
   const csv = document.getElementById("ccsv"); if (csv) csv.onclick = () => downloadCovCsv(files);
+  renderCovHead(d, files, exec, unc);
+  const prev = covPrev(), prevPct = id => {
+    const c = prev && !CF.t && prev.features[id];
+    return c && c[0] ? pct(c[1], c[0]) : null;
+  };
   let group = null;
   document.getElementById("csec").innerHTML = CSHOWN.map((x, i) => {
     const head = x.group !== group ? `<div class="covhead">${esc(group = x.group)}</div>` : "";
     const match = q ? ` · ${plural(x.shown.length, "file")} match` : "";
-    return head + `<details class="fsec" data-i="${i}"${open ? " open" : ""}><summary><span class="fid">${esc(x.id)}</span>` +
-      `<span class="sname">${esc(x.name)}</span>${heatPill(pct(x.cov, x.exec))}<span class="muted">` +
+    return head + `<details class="fsec" data-i="${i}"${open ? " open" : ""}><summary>` +
+      `<span class="caret" aria-hidden="true">▶</span><span class="fid">${esc(x.id)}</span>` +
+      `<span class="sname">${esc(x.name)}</span>${heatPill(pct(x.cov, x.exec))}` +
+      `${prev ? deltaHTML(pct(x.cov, x.exec), prevPct(x.id), prev.build, true) : ""}<span class="muted">` +
       `${(x.exec - x.cov).toLocaleString()} uncovered of ${plural(x.exec, "line")} · ${plural(x.files.length, "file")}` +
       `${x.zero ? ` · ${x.zero} at 0%` : ""}${match}</span></summary><div>${open ? filesTable(x) : ""}</div></details>`;
   }).join("") || `<p class="muted">No files match these filters.</p>`;
+}
+
+function renderCovHead(d, files, exec, unc) {
+  const hist = d.history || [], prev = covPrev();
+  const tile = (label, c, key, sub) => {
+    const now = pct(c.covered, c.executable);
+    const before = prev && prev.totals[key].executable ? pct(prev.totals[key].covered, prev.totals[key].executable) : null;
+    const spark = sparkline(hist.slice().reverse().filter(h => h.totals[key].executable).map(h => ({
+      v: pct(h.totals[key].covered, h.totals[key].executable),
+      label: `${pct(h.totals[key].covered, h.totals[key].executable).toFixed(1)}% · Bitrise #${h.build.number}, ${h.build.finished_at.slice(0, 10)}`})));
+    return `<div class="ctile"><div class="lab">${esc(label)}</div><div class="big">${now.toFixed(1)}%</div>` +
+      `<div class="sub2">${c.covered.toLocaleString()} of ${plural(c.executable, "line")}${sub ? " · " + esc(sub) : ""}</div>` +
+      (prev ? deltaHTML(now, before, prev.build, false)
+            : `<span class="delta">Trend from the next run: this is the first with coverage</span>`) + spark + `</div>`;
+  };
+  const filtered = CF.f || CF.t || CF.q.trim();
+  const viewPrev = prev && CF.f && !CF.t && !CF.q.trim() && prev.features[CF.f];   // a feature or area, nothing else
+  document.getElementById("chead").innerHTML =
+    tile("Feature code · unit-test line coverage", d.totals.features, "features", "the overview's “All” row") +
+    tile("Shared code", d.totals.shared, "shared", "browser shell, architecture, UI…") +
+    (filtered ? `<div class="ctile"><div class="lab">This view</div><div class="big">${pct(exec - unc, exec).toFixed(1)}%</div>` +
+      `<div class="sub2">${(exec - unc).toLocaleString()} of ${plural(exec, "line")} · ${plural(files.length, "file")}</div>` +
+      (viewPrev && viewPrev[0] ? deltaHTML(pct(exec - unc, exec), pct(viewPrev[1], viewPrev[0]), prev.build, false) : "") +
+      `</div>` : "");
 }
 
 function downloadCovCsv(files) {
@@ -648,6 +728,7 @@ function openFiles(key) {   // from an overview cell
 function wireCov() {
   document.getElementById("t-cov").onclick = () => { history.pushState(null, "", covHash()); showTab("cov"); };
   document.getElementById("cf").onchange = e => setCF({f: e.target.value});
+  document.getElementById("ct").onchange = e => setCF({t: e.target.value});
   document.getElementById("cq").oninput = e => setCF({q: e.target.value});
   document.querySelectorAll("[data-co]").forEach(b => b.onclick = () => setCF({o: b.dataset.co}));
   document.getElementById("cexpand").onclick = () => { copen = true; renderCov(); };
