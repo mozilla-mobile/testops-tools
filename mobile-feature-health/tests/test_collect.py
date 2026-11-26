@@ -50,6 +50,8 @@ class CollectTest(unittest.TestCase):
         self.assertEqual(rows["features"][0], {"type": "l1", "id": "BRW", "name": "Browsing & page content"})
         self.assertIn({"type": "l2", "id": "LIB.BMK", "l1": "LIB", "name": "Bookmarks"}, rows["features"])
         self.assertIn("X.PERF", [x["id"] for x in rows["crosscutting"]])
+        self.assertIn("SHARED.SHELL", [x["id"] for x in rows["shared"]])
+        self.assertEqual([x["id"] for x in rows["excluded"]], ["EXCLUDED"])
 
     def test_all_sources(self):
         code, files, _ = self.run_collect({"a": FakeSource({"n": 1}), "b": FakeSource({"n": 2})})
