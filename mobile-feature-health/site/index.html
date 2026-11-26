@@ -629,7 +629,8 @@ function describe(status) {
     const pct = x => x.executable ? `${(100 * x.covered / x.executable).toFixed(1)}%` : "—";
     return `${name}: ${pct(t)} of ${plural(t.executable, "feature line")}, ${pct(s)} of shared code · ` +
       `<a href="${esc(b.url)}">Bitrise #${esc(b.number)}</a> (${esc(b.branch)}, ${esc(b.stack || "")}, ${esc(b.finished_at.slice(0, 10))})` +
-      (c.unmapped.length ? ` · ${plural(c.unmapped.length, "file")} not in the feature map yet` : "");
+      (c.unmapped.length ? ` · ${plural(c.unmapped.length, "file")} not in the feature map yet` : "") +
+      ((c.ambiguous || []).length ? ` · ${plural(c.ambiguous.length, "file")} where two map rules tie` : "");
   }).join("; ") + ".";
   if (TR) document.getElementById("tr-totals").textContent = PLATFORMS.map(([p, name]) => {
     const c = data.platforms[p];

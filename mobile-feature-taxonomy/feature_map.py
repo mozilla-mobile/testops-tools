@@ -43,7 +43,7 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PLATFORMS = ("ios", "android")
-NON_FEATURE_PREFIXES = ("SHARED", "EXCLUDED", "UNMAPPED", "GENERATED", "X.")
+NON_FEATURE_PREFIXES = ("SHARED", "EXCLUDED", "UNMAPPED", "AMBIGUOUS", "GENERATED", "X.")
 CLOSURE_PREFIX = re.compile(r"^(?:(?:implicit )?closure #\d+ (?:\(\) )?in )+")
 
 
@@ -258,14 +258,18 @@ def repo_relative(fm, path):
 def coverage_from_xccov(fm, report):
     """Executable and covered lines per feature, from `xcrun xccov view --report --json <bundle>.xcresult`.
 
-    Returns {"features": {key: {"executable", "covered"}}, "files", "outside_roots", "unmapped": [path]}. Keys are
-    the features the files resolve to (L2 IDs, area IDs, SHARED.*, EXCLUDED, UNMAPPED) plus "L1:<area>", which adds
-    up an area's features and the code attributed to the area alone, like the TestRail counts. Symbol rules move the
-    functions they match to their feature; the rest of the file stays with the file's feature, so file totals stay
-    exact (xccov counts a closure's lines in both the closure and its parent function).
+    Returns {"features": {key: {"executable", "covered"}}, "files", "outside_roots", "unmapped": [path],
+    "ambiguous": [{"path", "error"}]}. Keys are the features the files resolve to (L2 IDs, area IDs, SHARED.*,
+    EXCLUDED), UNMAPPED (no rule matches: add one) and AMBIGUOUS (two rules tie: break the tie), plus "L1:<area>",
+    which adds up an area's features and the code attributed to the area alone, like the TestRail counts.
+
+    Symbol rules move the functions they match to their feature; the rest of the file stays with the file's
+    feature. In an xccov report a file's functions, closures included, partition its executable lines (a closure's
+    lines aren't also counted in its parent), so every matching function is moved, parent and closures alike. A
+    report where they add up to more than the file is rejected rather than clamped.
     """
     totals = collections.defaultdict(lambda: {"executable": 0, "covered": 0})
-    out = {"files": 0, "outside_roots": 0, "unmapped": []}
+    out = {"files": 0, "outside_roots": 0, "unmapped": [], "ambiguous": []}
 
     def add(feature, executable, covered):
         keys = (feature, "L1:" + area_of(feature)) if area_of(feature) else (feature,)
@@ -284,9 +288,13 @@ def coverage_from_xccov(fm, report):
             out["files"] += 1
             executable, covered = f["executableLines"], f["coveredLines"]
             rule, error = fm.resolve(rel)
-            if error:
+            if error == "unmapped":
                 out["unmapped"].append(rel)
                 add("UNMAPPED", executable, covered)
+                continue
+            if error:
+                out["ambiguous"].append({"path": rel, "error": error})
+                add("AMBIGUOUS", executable, covered)
                 continue
             moved = collections.defaultdict(lambda: [0, 0])
             for fn in f.get("functions", []) if rule.symbols else []:
@@ -294,10 +302,14 @@ def coverage_from_xccov(fm, report):
                 if feature != rule.feature:
                     moved[feature][0] += fn["executableLines"]
                     moved[feature][1] += fn["coveredLines"]
+            moved_executable = sum(e for e, _ in moved.values())
+            moved_covered = sum(c for _, c in moved.values())
+            if moved_executable > executable or moved_covered > covered:
+                raise ValueError(f"{rel}: functions add up to more lines than the file "
+                                 f"({moved_executable}/{moved_covered} moved of {executable}/{covered})")
             for feature, (e, c) in moved.items():
                 add(feature, e, c)
-            add(rule.feature, max(executable - sum(e for e, _ in moved.values()), 0),
-                max(covered - sum(c for _, c in moved.values()), 0))
+            add(rule.feature, executable - moved_executable, covered - moved_covered)
     out["features"] = dict(totals)
     return out
 
@@ -387,10 +399,12 @@ def cmd_coverage(fm, args):
         pct = f"{100 * t['covered'] / t['executable']:.1f}" if t["executable"] else ""
         w.writerow([key, meta.get("area", ""), name, t["executable"], t["covered"], pct])
     print(f"{fm.platform}: {result['files']} files attributed, {result['outside_roots']} outside the map's roots, "
-          f"{len(result['unmapped'])} unmapped", file=sys.stderr)
+          f"{len(result['unmapped'])} unmapped, {len(result['ambiguous'])} ambiguous", file=sys.stderr)
     for path in result["unmapped"]:
         print(f"unmapped: {path}", file=sys.stderr)
-    return 1 if result["unmapped"] else 0
+    for a in result["ambiguous"]:
+        print(f"{a['error']}: {a['path']}", file=sys.stderr)
+    return 1 if result["unmapped"] or result["ambiguous"] else 0
 
 
 COMMANDS = {"check": cmd_check, "files": cmd_files, "lines": cmd_lines, "drift": cmd_drift,

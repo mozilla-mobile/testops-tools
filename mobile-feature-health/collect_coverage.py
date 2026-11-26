@@ -68,10 +68,12 @@ def fetch_report(token, app, branch, workflow=WORKFLOW):
 
 
 def platform_coverage(report, build, fm):
-    """{"build", "files", "outside_roots", "unmapped", "features": {key: {"executable", "covered"}}, "totals"}.
+    """{"build", "files", "outside_roots", "unmapped", "ambiguous", "features": {key: {"executable", "covered"}},
+    "totals"}.
 
-    Keys are L2 IDs, area-only IDs, "L1:<area>" (the whole area), SHARED.*, EXCLUDED and UNMAPPED. totals["features"]
-    adds up the area rows (feature code, what the scorecards report); totals["shared"] the SHARED.* buckets.
+    Keys are L2 IDs, area-only IDs, "L1:<area>" (the whole area), SHARED.*, EXCLUDED, UNMAPPED (no rule matches) and
+    AMBIGUOUS (two rules tie). totals["features"] adds up the area rows (feature code, what the scorecards report);
+    totals["shared"] the SHARED.* buckets.
     """
     result = coverage_from_xccov(fm, report)
     features = result["features"]
@@ -86,6 +88,7 @@ def platform_coverage(report, build, fm):
         "files": result["files"],
         "outside_roots": result["outside_roots"],
         "unmapped": sorted(result["unmapped"]),
+        "ambiguous": sorted(result["ambiguous"], key=lambda a: a["path"]),
         "features": dict(sorted(features.items())),
         "totals": {"features": total(k for k in features if k.startswith("L1:")),
                    "shared": total(k for k in features if k.startswith("SHARED."))},
@@ -127,7 +130,8 @@ def summary(out):
         t, b = c["totals"]["features"], c["build"]
         pct = 100 * t["covered"] / t["executable"] if t["executable"] else 0
         lines.append(f"{p}: {pct:.1f}% of {t['executable']:,} feature lines, Bitrise #{b['number']} ({b['branch']}, "
-                     f"{b['finished_at'][:10]}), {c['files']} files, {len(c['unmapped'])} unmapped")
+                     f"{b['finished_at'][:10]}), {c['files']} files, {len(c['unmapped'])} unmapped, "
+                     f"{len(c['ambiguous'])} ambiguous")
     return lines
 
 
