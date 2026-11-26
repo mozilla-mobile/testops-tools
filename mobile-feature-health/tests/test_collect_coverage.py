@@ -47,13 +47,15 @@ def build(n, slug, finished=True):
 
 
 class FakeBitrise:
-    """builds: newest first; artifacts: {build slug: [titles]}."""
+    """builds: newest first; artifacts: {build slug: [titles]}; broken: build slugs whose artifacts can't be read."""
 
-    def __init__(self, builds, artifacts):
-        self.builds, self.artifacts, self.calls = builds, artifacts, []
+    def __init__(self, builds, artifacts, broken=()):
+        self.builds, self.artifacts, self.broken, self.calls = builds, artifacts, broken, []
 
     def get(self, url, headers=None, params=None, timeout=None):
         self.calls.append(url)
+        if any(f"/builds/{slug}/" in url for slug in self.broken):
+            raise collect_coverage.requests.ConnectionError("gone")
         r = mock.Mock()
         r.raise_for_status = lambda: None
         if url == SECRET_URL:
@@ -103,6 +105,40 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(report, REPORT)
         self.assertEqual((meta["number"], meta["status"], meta["commit"]), (1, "error", "0123456789ab"))
         self.assertEqual(meta["url"], "https://app.bitrise.io/build/good")
+
+    def test_history_has_the_earlier_runs_newest_first(self):
+        api = FakeBitrise([build(4, "new"), build(3, "no-artifact"), build(2, "gone"), build(1, "old")],
+                          {"new": [collect_coverage.ARTIFACT], "gone": [collect_coverage.ARTIFACT],
+                           "old": [collect_coverage.ARTIFACT]}, broken={"gone"})
+        with mock.patch.object(collect_coverage.requests, "get", api.get):
+            runs = collect_coverage.fetch_reports("token", "app", "main")
+        self.assertEqual([b["number"] for _, b in runs], [4, 1])   # an unreadable older run is skipped
+        (report, meta), previous = runs[0], runs[1:]
+        out = collect_coverage.collect(report, meta, self.fm, previous)["platforms"]["ios"]
+        self.assertEqual([h["build"]["number"] for h in out["history"]], [4, 1])
+        self.assertEqual(out["history"][0]["totals"], out["totals"])
+        self.assertEqual(out["history"][1]["features"]["L1:LIB"], [40, 8])
+        self.assertNotIn("X-Signature", json.dumps(out))
+
+    def test_the_newest_run_must_be_readable(self):
+        api = FakeBitrise([build(2, "gone"), build(1, "old")],
+                          {"gone": [collect_coverage.ARTIFACT], "old": [collect_coverage.ARTIFACT]}, broken={"gone"})
+        with mock.patch.object(collect_coverage.requests, "get", api.get), \
+                self.assertRaises(collect_coverage.requests.RequestException):
+            collect_coverage.fetch_reports("token", "app", "main")
+
+    def test_a_run_the_map_cant_read_is_left_out_of_the_trend(self):
+        bad = {"targets": [{"name": "Client.app", "files": [
+            {"path": "/Users/vagrant/git/App/Logins/List.swift", "executableLines": 1, "coveredLines": 1,
+             "functions": [{"name": "f()", "executableLines": 5, "coveredLines": 5}]}]}]}
+        symbols = MAP.replace('{path: "App/Logins/**", feature: CRED}',
+                              '{path: "App/Logins/**", feature: CRED, symbols: [{match: "f", feature: LIB.BMK}]}')
+        path = os.path.join(self.dir, "symbols.yml")
+        with open(path, "w") as f:
+            f.write(symbols)
+        fm = FeatureMap("ios", None, map_path=path)
+        out = collect_coverage.collect(REPORT, {"number": 2}, fm, [(bad, {"number": 1})])["platforms"]["ios"]
+        self.assertEqual([h["build"]["number"] for h in out["history"]], [2])
 
     def test_no_build_with_the_artifact_is_an_error(self):
         api = FakeBitrise([build(1, "old")], {"old": []})
