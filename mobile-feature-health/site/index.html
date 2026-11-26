@@ -117,6 +117,23 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
 .pill { display: inline-block; padding: 0 6px; border-radius: 4px; font-size: 12px; border: 1px solid var(--rule); white-space: nowrap; }
 .pill.open { border-color: var(--text-secondary); color: var(--text-primary); }
 .pill.closed { color: var(--text-muted); }
+td.heat.click { cursor: pointer; }
+td.heat.click:hover span { text-decoration: underline; }
+.hp { display: inline-block; min-width: 54px; padding: 1px 6px; border-radius: 4px; text-align: center; font-size: 12px;
+  font-variant-numeric: tabular-nums; }
+details.fsec { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 8px; margin: 0 0 6px; }
+details.fsec > summary { cursor: pointer; padding: 8px 12px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+details.fsec > summary .sname { font-weight: 600; }
+details.fsec > summary .muted { color: var(--text-muted); font-size: 13px; }
+details.fsec[open] > summary { border-bottom: 1px solid var(--rule); }
+details.fsec > div { overflow-x: auto; }
+details.fsec table.bt thead th { position: static; }
+details.fsec h3 { font-size: 13px; }
+table.bt td.r, table.bt th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.bt .fdir { color: var(--text-muted); font-size: 12px; word-break: break-all; }
+table.bt .gaps div { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+table.bt .gaps .n { color: var(--text-muted); margin-left: 6px; font-family: system-ui, sans-serif; }
+.covhead { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin: 14px 0 6px; }
 .notes { max-width: 1100px; color: var(--text-secondary); font-size: 13px; margin-top: 22px; }
 .notes h2 { font-size: 15px; color: var(--text-primary); margin: 18px 0 6px; }
 .notes li { margin: 3px 0; }
@@ -127,7 +144,7 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
   <h1>Firefox mobile — feature health</h1>
   <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
     unit-test coverage, TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
-    Hover any cell for details; click a bug count to see those bugs in the Escaped bugs tab.</p>
+    Hover any cell for details; click an iOS unit-test percentage to see the feature's files, or a bug count to see those bugs.</p>
   <p class="wip"><b>Work in progress.</b> All columns are real data, refreshed from Bitrise, TestRail, Bugzilla and GitHub.
     Android unit-test coverage is still to come.</p>
   <p class="error" id="notice" hidden></p>
@@ -135,6 +152,7 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
 
   <nav class="tabs" role="tablist" aria-label="Views">
     <button role="tab" id="t-overview" aria-controls="tab-overview" aria-selected="true">Overview by feature</button>
+    <button role="tab" id="t-cov" aria-controls="tab-cov" aria-selected="false">iOS unit test coverage<span class="n" id="t-cov-n"></span></button>
     <button role="tab" id="t-bugs" aria-controls="tab-bugs" aria-selected="false">Escaped bugs<span class="n" id="t-bugs-n"></span></button>
   </nav>
 
@@ -186,6 +204,7 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
         shell is left out). Coverage says the code ran during a test, not that a test checks it: read it next to the escaped bugs.
         Known gap: xccov sometimes leaves out Swift packages it attributes to another binary (currently QuickAnswersKit and
         VPNKit), so features built on them, such as Quick answers and VPN, only count their app code for now.
+        Click an iOS percentage to see the feature's files in the <i>iOS unit test coverage</i> tab.
         Android isn't measured yet. <span id="cov-totals"></span></li>
       <li><b>UI automation · % of TestRail cases</b> — share of the feature's TestRail Full Functional cases whose
         <i>Automation</i> field is <i>Completed</i> (XCUITest / Espresso). It's the TestRail status, not a verified run.</li>
@@ -209,6 +228,35 @@ table.bt .muted, .bmeta .muted { color: var(--text-muted); }
     </ul>
   </div>
 
+  </section>
+
+  <section id="tab-cov" role="tabpanel" aria-labelledby="t-cov" hidden>
+    <div class="toolbar">
+      <select id="cf" aria-label="Feature"></select>
+      <input type="search" id="cq" placeholder="Search file, function or target" aria-label="Search files">
+      <div class="seg" role="group" aria-label="Order">
+        <button data-co="">Taxonomy order</button><button data-co="gap">Most uncovered first</button>
+      </div>
+      <div class="seg" role="group" aria-label="Sections">
+        <button id="cexpand" aria-pressed="false">Expand all</button>
+        <button id="ccollapse" aria-pressed="false">Collapse all</button>
+      </div>
+      <button class="go" id="creset">Reset filters</button>
+    </div>
+    <p class="bmeta" id="cmeta"></p>
+    <div id="csec"></div>
+    <div class="notes">
+      <h2>Reading this tab</h2>
+      <ul>
+        <li>One section per feature, with the source files whose lines count for it, most uncovered lines first. Files that
+          symbol rules split between features show up in each, with that feature's lines only.</li>
+        <li><b>Biggest gaps</b> — the file's functions with the most lines no unit test runs (closures count in the function
+          they're in), linked to the function in the code. They're where a test adds the most lines; whether it's worth
+          testing is for the team to judge.</li>
+        <li>Files come from the same xccov report as the overview, so the same known gap applies: Swift packages xccov
+          leaves out aren't listed. Shared code, excluded code and files not in the feature map are at the end.</li>
+      </ul>
+    </div>
   </section>
 
   <section id="tab-bugs" role="tabpanel" aria-labelledby="t-bugs" hidden>
@@ -282,9 +330,10 @@ function unitCell(key, p, platform) {
   if (!d) return {na: `${platform} unit coverage isn't measured yet`};
   const c = key === "TOTAL" ? d.totals.features : (d.features[key] || NO_LINES);
   if (!c.executable) return {na: `No ${platform} code attributed to this feature`};
-  return {v: 100 * c.covered / c.executable,
+  const files = d.by_file ? {key: key === "TOTAL" ? "" : key} : null;
+  return {v: 100 * c.covered / c.executable, files,
           tip: `${c.covered.toLocaleString()} of ${plural(c.executable, "executable line")} run by unit tests · ` +
-               `Bitrise #${d.build.number}, ${d.build.finished_at.slice(0, 10)}`};
+               `Bitrise #${d.build.number}, ${d.build.finished_at.slice(0, 10)}` + (files ? " · click to see the files" : "")};
 }
 function casesCell(key, p) {
   if (bugsOnly(key)) return {na: "Bugs only"};
@@ -354,7 +403,7 @@ function cellHTML(r, c, i, m) {
   if (c.na) return `<td class="na${cls}"${tipAttr} aria-label="${esc(COLS[i] + ": " + c.na)}">—</td>`;
   if (c.v !== undefined) {
     const b = bin(c.v);
-    return `<td class="heat${cls}"${tipAttr}><span style="background:var(--h${b});color:var(--t${b})">${c.v.toFixed(1)}%</span></td>`;
+    return `<td class="heat${cls}${c.files ? " click" : ""}"${c.files ? ` data-files="${i}"` : ""}${tipAttr}><span style="background:var(--h${b});color:var(--t${b})">${c.v.toFixed(1)}%</span></td>`;
   }
   const max = m[r.type + i] || 1, w = c.n / max;
   let bar = r.type === "total" ? "" : `<span class="bar" style="width:calc((100% - 16px) * ${w})"></span>`;
@@ -428,6 +477,8 @@ function wire() {
   tbody.addEventListener("click", e => {
     const b = e.target.closest("[data-bugs]");
     if (b) { const row = ROWS.find(r => r.id === b.dataset.row); openBugs(row.cells[+b.dataset.bugs].bugs); return; }
+    const fc = e.target.closest("[data-files]");
+    if (fc) { const row = ROWS.find(r => r.id === fc.dataset.row); openFiles(row.cells[+fc.dataset.files].files.key); return; }
     const t = e.target.closest("[data-toggle]"); if (t) toggle(t.dataset.toggle); });
   tbody.addEventListener("keydown", e => { const t = e.target.closest("[data-toggle]");
     if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggle(t.dataset.toggle); } });
@@ -457,6 +508,156 @@ function wire() {
     t === "auto" ? document.documentElement.removeAttribute("data-theme") : document.documentElement.setAttribute("data-theme", t);
     document.querySelectorAll("[data-theme]").forEach(x => x.setAttribute("aria-pressed", x === b));
   });
+}
+
+// ---------------- iOS unit test coverage tab ----------------
+// The source files behind each feature's percentage, most uncovered lines first, to find where tests are missing.
+// Filters live in the URL (#coverage?f=TABS.TRAY&q=…&o=gap) so a view can be shared.
+const CDEFAULT = {f: "", q: "", o: ""};
+const CODE = "https://github.com/mozilla-mobile/firefox-ios/blob/";
+let CF = {...CDEFAULT}, CSECTIONS = [], copen = null;   // copen: null = open what the filters point at; true/false = all
+const covIos = () => (COV && COV.platforms.ios && COV.platforms.ios.by_file) ? COV.platforms.ios : null;
+const pct = (c, e) => e ? 100 * c / e : 0;
+const heatPill = v => `<span class="hp" style="background:var(--h${bin(v)});color:var(--t${bin(v)})">${v.toFixed(1)}%</span>`;
+const shortFn = (name, limit = 70) => {
+  name = name.replace(/\((?=[^)]{25,})[^)]*\)/g, "(…)");   // long Swift argument lists
+  return name.length <= limit ? name : name.slice(0, limit - 1) + "…";
+};
+
+function buildCov() {
+  const d = covIos(), by = {};
+  d.by_file.forEach(e => {
+    e.hay = `${e.path} ${e.target || ""} ${e.gaps.map(g => g[0]).join(" ")}`.toLowerCase();
+    (by[e.feature] = by[e.feature] || []).push(e);
+  });
+  const section = (id, name, group, l1) => ({id, name, group, l1, files: by[id] || []});
+  CSECTIONS = [
+    ...FEATURES.features.map(f => f.type === "l1" ? section(f.id, `${f.name} — code of the area as a whole`, "Features", f.id)
+                                                  : section(f.id, f.name, "Features", f.l1)),
+    ...(FEATURES.shared || []).map(x => section(x.id, x.name, "Shared code")),
+    ...(FEATURES.excluded || []).map(x => section(x.id, x.name, "Not counted")),
+    section("UNMAPPED", "Not in the feature map yet: add a rule", "Not counted"),
+    section("AMBIGUOUS", "Two map rules tie: make one more specific", "Not counted"),
+  ];
+  const known = new Set(CSECTIONS.map(x => x.id));   // anything the taxonomy doesn't name yet goes last
+  Object.keys(by).filter(k => !known.has(k)).sort().forEach(k => CSECTIONS.push(section(k, "", "Not counted")));
+  CSECTIONS = CSECTIONS.filter(x => x.files.length);
+  CSECTIONS.forEach(x => {
+    x.exec = x.files.reduce((a, e) => a + e.executable, 0);
+    x.cov = x.files.reduce((a, e) => a + e.covered, 0);
+    x.zero = x.files.filter(e => !e.covered).length;
+  });
+  document.getElementById("t-cov-n").textContent = d.by_file.length.toLocaleString();
+  const opt = (v, label) => `<option value="${esc(v)}">${esc(label)}</option>`;
+  document.getElementById("cf").innerHTML = opt("", "All files") +
+    FEATURES.features.filter(f => f.type === "l1" && CSECTIONS.some(x => x.l1 === f.id)).map(a =>
+      opt("L1:" + a.id, `${a.id} — ${a.name} (whole area)`) +
+      CSECTIONS.filter(x => x.l1 === a.id).map(x => opt(x.id, `   ${x.id} ${x.id === a.id ? "(area as a whole)" : x.name}`)).join("")
+    ).join("") +
+    CSECTIONS.filter(x => x.group !== "Features").map(x => opt(x.id, `${x.id}${x.name ? " — " + x.name : ""}`)).join("");
+}
+
+const covMatch = x => !CF.f || (CF.f.startsWith("L1:") ? x.l1 === CF.f.slice(3) : x.id === CF.f);
+function covShown() {
+  const q = CF.q.trim().toLowerCase(), groups = ["Features", "Shared code", "Not counted"];
+  const secs = CSECTIONS.filter(covMatch).map(x => ({...x, shown: q ? x.files.filter(e => e.hay.includes(q)) : x.files}))
+    .filter(x => x.shown.length);
+  if (CF.o === "gap") secs.sort((a, b) => groups.indexOf(a.group) - groups.indexOf(b.group) ||
+                                          (b.exec - b.cov) - (a.exec - a.cov));
+  return secs;
+}
+
+function codeUrl(path, line) {
+  const b = covIos().build, ref = b.commit || b.branch || "main";
+  return CODE + encodeURIComponent(ref) + "/" + path.split("/").map(encodeURIComponent).join("/") + (line ? "#L" + line : "");
+}
+function filesTable(x) {
+  const rows = x.shown.map(e => {
+    const name = e.path.split("/").pop(), dir = e.path.slice(0, -name.length);
+    const gaps = e.gaps.map(([fn, n, line]) =>
+      `<div><a href="${esc(codeUrl(e.path, line))}" target="_blank" rel="noopener" title="${esc(fn)}">${esc(shortFn(fn))}</a>` +
+      `<span class="n">${n.toLocaleString()}</span></div>`).join("");
+    return `<tr><td><a href="${esc(codeUrl(e.path))}" target="_blank" rel="noopener">${esc(name)}</a><div class="fdir">${esc(dir)}</div></td>` +
+      `<td class="small">${esc(e.target || "")}</td><td class="r">${e.executable.toLocaleString()}</td>` +
+      `<td class="r">${heatPill(pct(e.covered, e.executable))}</td><td class="r">${(e.executable - e.covered).toLocaleString()}</td>` +
+      `<td class="gaps">${gaps || '<span class="muted">—</span>'}</td></tr>`;
+  }).join("");
+  return `<table class="bt"><thead><tr><th>File</th><th>Target</th><th class="r">Lines</th><th class="r">Covered</th>` +
+    `<th class="r">Uncovered</th><th title="Functions with the most lines no unit test runs">Biggest gaps · uncovered lines</th>` +
+    `</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+let CSHOWN = [];
+function renderCov() {
+  const d = covIos();
+  if (!d) return;
+  document.getElementById("cf").value = CF.f;
+  if (document.getElementById("cq").value !== CF.q) document.getElementById("cq").value = CF.q;
+  document.querySelectorAll("[data-co]").forEach(b => b.setAttribute("aria-pressed", b.dataset.co === CF.o));
+  CSHOWN = covShown();
+  const q = CF.q.trim(), open = copen !== null ? copen : !!(q || CF.f);
+  const files = CSHOWN.flatMap(x => x.shown), exec = files.reduce((a, e) => a + e.executable, 0);
+  const unc = files.reduce((a, e) => a + e.executable - e.covered, 0), b = d.build;
+  document.getElementById("cmeta").innerHTML = [
+    `<span><b>${plural(files.length, "file")}</b> · ${unc.toLocaleString()} uncovered of ${plural(exec, "line")}</span>`,
+    `<span>From <a class="go" href="${esc(b.url)}" target="_blank" rel="noopener">Bitrise #${esc(b.number)}</a> ` +
+      `(${esc(b.branch)}, ${esc(b.finished_at.slice(0, 10))})</span>`,
+    files.length ? `<button class="go" id="ccsv">Download CSV</button>` : "",
+    b.commit ? "" : `<span class="muted">Links open today's ${esc(b.branch || "main")}: the code may have moved since the run.</span>`,
+  ].filter(Boolean).join("");
+  const csv = document.getElementById("ccsv"); if (csv) csv.onclick = () => downloadCovCsv(files);
+  let group = null;
+  document.getElementById("csec").innerHTML = CSHOWN.map((x, i) => {
+    const head = x.group !== group ? `<div class="covhead">${esc(group = x.group)}</div>` : "";
+    const match = q ? ` · ${plural(x.shown.length, "file")} match` : "";
+    return head + `<details class="fsec" data-i="${i}"${open ? " open" : ""}><summary><span class="fid">${esc(x.id)}</span>` +
+      `<span class="sname">${esc(x.name)}</span>${heatPill(pct(x.cov, x.exec))}<span class="muted">` +
+      `${(x.exec - x.cov).toLocaleString()} uncovered of ${plural(x.exec, "line")} · ${plural(x.files.length, "file")}` +
+      `${x.zero ? ` · ${x.zero} at 0%` : ""}${match}</span></summary><div>${open ? filesTable(x) : ""}</div></details>`;
+  }).join("") || `<p class="muted">No files match these filters.</p>`;
+}
+
+function downloadCovCsv(files) {
+  const cell = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [["feature", "path", "target", "executable_lines", "covered_lines", "uncovered_lines", "biggest_gaps"].join(",")]
+    .concat(files.map(e => [e.feature, e.path, e.target, e.executable, e.covered, e.executable - e.covered,
+      e.gaps.map(([fn, n]) => `${fn} (${n})`).join("; ")].map(cell).join(",")));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n") + "\n"], {type: "text/csv"}));
+  a.download = `ios-unit-coverage-files-${covIos().build.number}.csv`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+function covHash() {
+  const q = new URLSearchParams();
+  Object.entries(CF).forEach(([k, v]) => { if (v !== CDEFAULT[k]) q.set(k, v); });
+  const s = q.toString();
+  return "#coverage" + (s ? "?" + s : "");
+}
+function setCF(changes, push) {
+  CF = {...CF, ...changes}; copen = null;
+  history[push ? "pushState" : "replaceState"](null, "", covHash());
+  renderCov();
+}
+function openFiles(key) {   // from an overview cell
+  CF = {...CDEFAULT, f: key}; copen = null;
+  history.pushState(null, "", covHash());
+  showTab("cov");
+  window.scrollTo(0, 0);
+}
+
+function wireCov() {
+  document.getElementById("t-cov").onclick = () => { history.pushState(null, "", covHash()); showTab("cov"); };
+  document.getElementById("cf").onchange = e => setCF({f: e.target.value});
+  document.getElementById("cq").oninput = e => setCF({q: e.target.value});
+  document.querySelectorAll("[data-co]").forEach(b => b.onclick = () => setCF({o: b.dataset.co}));
+  document.getElementById("cexpand").onclick = () => { copen = true; renderCov(); };
+  document.getElementById("ccollapse").onclick = () => { copen = false; renderCov(); };
+  document.getElementById("creset").onclick = () => setCF({...CDEFAULT}, true);
+  // Tables are drawn when a section opens: all of them at once is ~1,500 rows.
+  document.getElementById("csec").addEventListener("toggle", e => {
+    const det = e.target, body = det.lastElementChild;
+    if (det.open && !body.firstChild) body.innerHTML = filesTable(CSHOWN[+det.dataset.i]);
+  }, true);
 }
 
 // ---------------- Escaped bugs tab ----------------
@@ -565,15 +766,23 @@ function openBugs(sel) {   // from an overview cell
   window.scrollTo(0, 0);
 }
 
+const TABS = ["overview", "cov", "bugs"];
 function showTab(k) {
-  document.getElementById("tab-overview").hidden = k !== "overview";
-  document.getElementById("tab-bugs").hidden = k !== "bugs";
-  document.getElementById("t-overview").setAttribute("aria-selected", k === "overview");
-  document.getElementById("t-bugs").setAttribute("aria-selected", k === "bugs");
+  TABS.forEach(t => {
+    document.getElementById("tab-" + t).hidden = t !== k;
+    document.getElementById("t-" + t).setAttribute("aria-selected", t === k);
+  });
   if (k === "bugs" && BUGS) renderBugs();
+  if (k === "cov") renderCov();
 }
 function route() {
   const h = location.hash;
+  if (h.startsWith("#coverage") && covIos()) {
+    CF = {...CDEFAULT};
+    new URLSearchParams(h.split("?")[1] || "").forEach((v, k) => { if (k in CDEFAULT) CF[k] = v; });
+    showTab("cov");
+    return;
+  }
   if (!h.startsWith("#bugs") || !BUGS) { showTab("overview"); return; }
   BF = {...BDEFAULT};
   const old = decodeURIComponent(h).match(/^#bugs=(ios|android):(.+)$/);   // older links: #bugs=android:BRW.NAV
@@ -582,8 +791,12 @@ function route() {
   showTab("bugs");
 }
 
-function wireBugs() {
+function wireTabs() {
   document.getElementById("t-overview").onclick = () => { history.pushState(null, "", "#"); showTab("overview"); };
+  window.addEventListener("popstate", route);
+}
+
+function wireBugs() {
   document.getElementById("t-bugs").onclick = () => { history.pushState(null, "", bugsHash()); showTab("bugs"); };
   document.querySelectorAll("[data-bp]").forEach(b => b.onclick = () => setBF({p: b.dataset.bp}));
   document.querySelectorAll("[data-bs]").forEach(b => b.onclick = () => setBF({s: b.dataset.bs}));
@@ -600,7 +813,6 @@ function wireBugs() {
     th.onclick = () => sortBy(th);
     th.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(th); } };
   });
-  window.addEventListener("popstate", route);
 }
 
 function describe(status) {
@@ -648,7 +860,9 @@ Promise.all([load("data/features.json"), load("data/testrail.json", true), load(
   .then(([features, tr, bugs, status, cov]) => {
     FEATURES = features; TR = tr; BUGS = bugs; COV = cov;
     ROWS = buildRows(); describe(status); render();
+    wireTabs();
     if (BUGS) { buildBugList(); wireBugs(); } else document.getElementById("t-bugs").hidden = true;
+    if (covIos()) { buildCov(); wireCov(); } else document.getElementById("t-cov").hidden = true;
     route();
   })
   .catch(() => {
