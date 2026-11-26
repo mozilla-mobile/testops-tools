@@ -45,6 +45,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PLATFORMS = ("ios", "android")
 NON_FEATURE_PREFIXES = ("SHARED", "EXCLUDED", "UNMAPPED", "AMBIGUOUS", "GENERATED", "X.")
 CLOSURE_PREFIX = re.compile(r"^(?:(?:implicit )?closure #\d+ (?:\(\) )?in )+")
+GAPS = 3   # functions listed per file in coverage_from_xccov's by_file
 
 
 def glob_to_regex(pattern):
@@ -267,9 +268,14 @@ def coverage_from_xccov(fm, report):
     feature. In an xccov report a file's functions, closures included, partition its executable lines (a closure's
     lines aren't also counted in its parent), so every matching function is moved, parent and closures alike. A
     report where they add up to more than the file is rejected rather than clamped.
+
+    "by_file" lists each file's lines per feature, for finding where to add tests: [{"path", "target", "feature",
+    "executable", "covered", "gaps"}], one entry per file, or more when symbol rules split it. "gaps" holds the
+    functions with the most uncovered lines, as [name, uncovered lines, line number or None] (closures folded into the
+    function they're in).
     """
     totals = collections.defaultdict(lambda: {"executable": 0, "covered": 0})
-    out = {"files": 0, "outside_roots": 0, "unmapped": [], "ambiguous": []}
+    out = {"files": 0, "outside_roots": 0, "unmapped": [], "ambiguous": [], "by_file": []}
 
     def add(feature, executable, covered):
         keys = (feature, "L1:" + area_of(feature)) if area_of(feature) else (feature,)
@@ -287,29 +293,46 @@ def coverage_from_xccov(fm, report):
                 continue
             out["files"] += 1
             executable, covered = f["executableLines"], f["coveredLines"]
+            functions = f.get("functions", [])
+
+            def add_file(feature, e, c, fns):
+                add(feature, e, c)
+                if not e:
+                    return
+                gaps, lines = collections.Counter(), {}
+                for fn in fns:
+                    if fn["executableLines"] > fn["coveredLines"]:
+                        name = CLOSURE_PREFIX.sub("", fn["name"])
+                        gaps[name] += fn["executableLines"] - fn["coveredLines"]
+                        line = fn.get("lineNumber")
+                        if line and (name not in lines or line < lines[name]):
+                            lines[name] = line   # the function's, before its closures
+                out["by_file"].append({"path": rel, "target": target.get("name"), "feature": feature,
+                                       "executable": e, "covered": c,
+                                       "gaps": [[name, n, lines.get(name)] for name, n in gaps.most_common(GAPS)]})
+
             rule, error = fm.resolve(rel)
             if error == "unmapped":
                 out["unmapped"].append(rel)
-                add("UNMAPPED", executable, covered)
+                add_file("UNMAPPED", executable, covered, functions)
                 continue
             if error:
                 out["ambiguous"].append({"path": rel, "error": error})
-                add("AMBIGUOUS", executable, covered)
+                add_file("AMBIGUOUS", executable, covered, functions)
                 continue
-            moved = collections.defaultdict(lambda: [0, 0])
-            for fn in f.get("functions", []) if rule.symbols else []:
-                feature = rule.feature_for_symbol(fn["name"])
-                if feature != rule.feature:
-                    moved[feature][0] += fn["executableLines"]
-                    moved[feature][1] += fn["coveredLines"]
+            by_feature = collections.defaultdict(list)
+            for fn in functions:
+                by_feature[rule.feature_for_symbol(fn["name"]) if rule.symbols else rule.feature].append(fn)
+            moved = {feature: (sum(fn["executableLines"] for fn in fns), sum(fn["coveredLines"] for fn in fns))
+                     for feature, fns in by_feature.items() if feature != rule.feature}
             moved_executable = sum(e for e, _ in moved.values())
             moved_covered = sum(c for _, c in moved.values())
             if moved_executable > executable or moved_covered > covered:
                 raise ValueError(f"{rel}: functions add up to more lines than the file "
                                  f"({moved_executable}/{moved_covered} moved of {executable}/{covered})")
             for feature, (e, c) in moved.items():
-                add(feature, e, c)
-            add(rule.feature, executable - moved_executable, covered - moved_covered)
+                add_file(feature, e, c, by_feature[feature])
+            add_file(rule.feature, executable - moved_executable, covered - moved_covered, by_feature[rule.feature])
     out["features"] = dict(totals)
     return out
 

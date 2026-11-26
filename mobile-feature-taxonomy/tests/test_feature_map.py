@@ -362,9 +362,10 @@ XCCOV_REPORT = {"targets": [
         {"path": "/ci/git/App/Browser/BrowserViewController.swift", "executableLines": 22, "coveredLines": 11,
          "functions": [
              {"name": "BrowserViewController.showReaderMode()", "executableLines": 5, "coveredLines": 1},
-             {"name": "BrowserViewController.readerModeDidChange()", "executableLines": 2, "coveredLines": 1},
+             {"name": "BrowserViewController.readerModeDidChange()", "executableLines": 2, "coveredLines": 1,
+              "lineNumber": 40},
              {"name": "closure #1 in BrowserViewController.readerModeDidChange()", "executableLines": 3,
-              "coveredLines": 3},
+              "coveredLines": 3, "lineNumber": 42},
              {"name": "BrowserViewController.viewDidLoad()", "executableLines": 12, "coveredLines": 6}]},
         {"path": "/ci/git/App/Tie/Ab.swift", "executableLines": 7, "coveredLines": 1},
         {"path": "/ci/git/App/Empty.swift", "executableLines": 0, "coveredLines": 0},
@@ -414,6 +415,25 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(f["AMBIGUOUS"], {"executable": 7, "covered": 1})
         self.assertNotIn("L1:AMBIGUOUS", f)
         self.assertEqual((out["files"], out["outside_roots"]), (5, 1))
+
+    def test_files_are_listed_per_feature_with_their_biggest_gaps(self):
+        out = feature_map.coverage_from_xccov(self.fm, XCCOV_REPORT)
+        by = {(e["path"], e["feature"]): e for e in out["by_file"]}
+        self.assertEqual(len(out["by_file"]), 6)   # 5 files, the split one twice; none for the empty file
+        bvc = "App/Browser/BrowserViewController.swift"
+        read, shell = by[(bvc, "BRW.READ")], by[(bvc, "SHARED.SHELL")]
+        self.assertEqual((read["target"], read["executable"], read["covered"]), ("Client.app", 10, 5))
+        # Covered functions aren't gaps; a closure folds into its function.
+        self.assertEqual(read["gaps"], [["BrowserViewController.showReaderMode()", 4, None],
+                                        ["BrowserViewController.readerModeDidChange()", 1, 40]])
+        self.assertEqual(shell["gaps"], [["BrowserViewController.viewDidLoad()", 6, None]])
+        self.assertEqual(by[("App/Library/Bookmarks/Panel.swift", "LIB.BMK")]["gaps"], [])
+        self.assertEqual(by[("Kit/Helper.swift", "UNMAPPED")]["executable"], 4)
+        self.assertIn(("App/Tie/Ab.swift", "AMBIGUOUS"), by)
+        # Same lines as the feature totals.
+        for key in ("BRW.READ", "SHARED.SHELL", "LIB.BMK"):
+            self.assertEqual(sum(e["executable"] for e in out["by_file"] if e["feature"] == key),
+                             out["features"][key]["executable"])
 
     def test_functions_adding_up_to_more_than_the_file_are_rejected(self):
         report = {"targets": [{"name": "Client.app", "files": [

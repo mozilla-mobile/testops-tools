@@ -9,8 +9,9 @@
 iOS: the `unit-test-coverage.json` artifact (`xcrun xccov view --report --json`) of the latest run of the Bitrise
 workflow firefox_unit_tests_ios_versions (weekly, on the app's default Xcode stack, iOS 27 simulator), attributed
 to features with ../mobile-feature-taxonomy/ios/feature-map.yml. The latest finished run that has the artifact is
-used whatever its status: a failing test step on another iOS version doesn't invalidate the coverage. Only
-aggregate line counts and build metadata are written; URLs and tokens never reach the output file or the log.
+used whatever its status: a failing test step on another iOS version doesn't invalidate the coverage. Only line
+counts (per feature and per source file), the names of the functions with the most uncovered lines and build
+metadata are written; URLs and tokens never reach the output file or the log.
 
 Needs BITRISE_TOKEN (can read the firefox-ios app) and BITRISE_APP_SLUG. BITRISE_COVERAGE_BRANCH picks the branch
 (default main), e.g. to try a workflow change from a branch.
@@ -69,11 +70,12 @@ def fetch_report(token, app, branch, workflow=WORKFLOW):
 
 def platform_coverage(report, build, fm):
     """{"build", "files", "outside_roots", "unmapped", "ambiguous", "features": {key: {"executable", "covered"}},
-    "totals"}.
+    "totals", "by_file"}.
 
     Keys are L2 IDs, area-only IDs, "L1:<area>" (the whole area), SHARED.*, EXCLUDED, UNMAPPED (no rule matches) and
     AMBIGUOUS (two rules tie). totals["features"] adds up the area rows (feature code, what the scorecards report);
-    totals["shared"] the SHARED.* buckets.
+    totals["shared"] the SHARED.* buckets. by_file lists each file's lines per feature and its functions with the most
+    uncovered lines (see coverage_from_xccov), most uncovered first, for the dashboard's per-file tab.
     """
     result = coverage_from_xccov(fm, report)
     features = result["features"]
@@ -92,6 +94,7 @@ def platform_coverage(report, build, fm):
         "features": dict(sorted(features.items())),
         "totals": {"features": total(k for k in features if k.startswith("L1:")),
                    "shared": total(k for k in features if k.startswith("SHARED."))},
+        "by_file": sorted(result["by_file"], key=lambda e: (e["feature"], e["covered"] - e["executable"], e["path"])),
     }
 
 

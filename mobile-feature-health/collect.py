@@ -47,13 +47,16 @@ SOURCES = {"testrail": collect_testrail, "bugs": collect_bugs, "coverage": colle
 
 
 def feature_rows():
-    """{"features": [{"type": "l1"|"l2", ...}], "crosscutting": [{"id", "name"}]} in features.yml order."""
+    """{"features": [{"type": "l1"|"l2", ...}], "crosscutting", "shared", "excluded": [{"id", "name"}]} in
+    features.yml order."""
     data = taxonomy.load()
     rows = []
     for l1, area, features in taxonomy.areas(data):
         rows.append({"type": "l1", "id": l1, "name": area})
         rows += [{"type": "l2", "id": f["id"], "l1": l1, "name": f["name"]} for f in features]
-    return {"features": rows, "crosscutting": [{"id": x["id"], "name": x["name"]} for x in data.get("crosscutting", [])]}
+    named = lambda key: [{"id": x["id"], "name": x["name"]} for x in data.get(key, [])]
+    return {"features": rows, "crosscutting": named("crosscutting"), "shared": named("shared"),
+            "excluded": named("excluded")}
 
 
 def write(path, obj):

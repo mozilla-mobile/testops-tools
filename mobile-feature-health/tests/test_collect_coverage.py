@@ -88,6 +88,13 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(out["totals"]["shared"], {"executable": 50, "covered": 25})
         self.assertEqual(out["unmapped"], [])
 
+    def test_files_are_listed_by_feature_most_uncovered_first(self):
+        out = collect_coverage.collect(REPORT, {"number": 1}, self.fm)["platforms"]["ios"]
+        self.assertEqual([(e["feature"], e["path"]) for e in out["by_file"]],
+                         [("CRED", "App/Logins/List.swift"), ("LIB.BMK", "App/Library/Bookmarks/Panel.swift"),
+                          ("LIB.HIST", "App/Library/History/Panel.swift"), ("SHARED.SHELL", "App/AppDelegate.swift")])
+        self.assertEqual(out["by_file"][0]["target"], "Client.app")
+
     def test_uses_the_newest_finished_build_that_has_the_artifact(self):
         api = FakeBitrise([build(3, "running", finished=False), build(2, "no-artifact"), build(1, "good")],
                           {"no-artifact": ["raw-xcodebuild-output.log"], "good": ["unit-test-coverage.json"]})
