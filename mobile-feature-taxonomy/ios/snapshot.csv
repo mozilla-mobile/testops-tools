@@ -139,6 +139,10 @@ BrowserKit/Sources/ComponentLibrary/GradientView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/Headers/HeaderView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/Headers/NavigationHeaderView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/IntensityVisualEffectView.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/OnboardingSheet/OnboardingSheetConfiguration.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/OnboardingSheet/OnboardingSheetHeroGradient.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/OnboardingSheet/OnboardingSheetView.swift,SHARED.UI
+BrowserKit/Sources/ComponentLibrary/OnboardingSheet/OnboardingSheetViewController.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/ShadowCardView.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/SwiftUI/AttributedLinkText.swift,SHARED.UI
 BrowserKit/Sources/ComponentLibrary/SwiftUI/ButtonStyleExtensions.swift,SHARED.UI
@@ -249,7 +253,6 @@ BrowserKit/Sources/QuickAnswersKit/UI/AudioWaveformView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/ErrorHandler.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/OptInTransitionAnimator.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/OptInView.swift,AI.QA
-BrowserKit/Sources/QuickAnswersKit/UI/OptInViewController.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersContentView.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersEntryPointButton.swift,AI.QA
 BrowserKit/Sources/QuickAnswersKit/UI/QuickAnswersNavigationHandler.swift,AI.QA
@@ -779,6 +782,7 @@ firefox-ios/Client/Frontend/Browser/BrowserViewController/Extensions/BrowserView
 firefox-ios/Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+WebViewDelegates.swift,SHARED.SHELL
 firefox-ios/Client/Frontend/Browser/BrowserViewController/Extensions/BrowserViewController+ZoomPage.swift,SHARED.SHELL
 firefox-ios/Client/Frontend/Browser/BrowserViewController/State/BrowserNavigationType.swift,SHARED.SHELL
+firefox-ios/Client/Frontend/Browser/BrowserViewController/State/BrowserViewControllerLens.swift,SHARED.SHELL
 firefox-ios/Client/Frontend/Browser/BrowserViewController/State/BrowserViewControllerState.swift,SHARED.SHELL
 firefox-ios/Client/Frontend/Browser/BrowserViewController/State/BrowserViewType.swift,SHARED.SHELL
 firefox-ios/Client/Frontend/Browser/BrowserViewController/State/SearchScreenState.swift,SHARED.SHELL
@@ -1547,6 +1551,7 @@ firefox-ios/Client/Frontend/Translations/TranslationsTelemetry.swift,TRANS.PAGE
 firefox-ios/Client/Frontend/UIConstants+BottomInset.swift,SHARED.UI
 firefox-ios/Client/Frontend/UIConstants.swift,SHARED.UI
 firefox-ios/Client/Frontend/UXSizeClass.swift,SHARED.UI
+firefox-ios/Client/Frontend/VPN/Onboarding/VPNOnboardingCoordinator.swift,PROT.VPN
 firefox-ios/Client/Frontend/Wayback/WaybackCodes.swift,BRW.ERR
 firefox-ios/Client/Frontend/Wayback/WaybackService.swift,BRW.ERR
 firefox-ios/Client/Frontend/Wayback/WaybackTelemetry.swift,BRW.ERR
@@ -1602,6 +1607,7 @@ firefox-ios/Client/Redux/GlobalState/AppState.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/ComponentAction.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/PresentedComponentsState.swift,SHARED.ARCH
 firefox-ios/Client/Redux/GlobalState/ScreenState.swift,SHARED.ARCH
+firefox-ios/Client/Redux/GlobalState/StateLens.swift,SHARED.ARCH
 firefox-ios/Client/TabManagement/BackForwardList.swift,BRW.NAV
 firefox-ios/Client/TabManagement/BlankPageNavigationDelegate.swift,SHARED.WEB
 firefox-ios/Client/TabManagement/CodableColor.swift,SHARED.WEB
