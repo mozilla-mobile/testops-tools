@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Firefox mobile — feature health (iOS vs Android)</title>
+<title>Firefox Mobile — Feature Health</title>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <style>
 .viz-root {
   color-scheme: light;
-  --surface-0: #f4f3f0; --surface-1: #fcfcfb; --surface-2: #f0efec;
-  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #77756f;
-  --rule: #e2e0da; --head: #17365d; --head-text: #ffffff;
-  --bar: #cfcdc6; --bar-open: #52514e;
+  --surface-0: #f7f8fa; --surface-1: #ffffff; --surface-2: #eef1f5;
+  --text-primary: #0b0b0b; --text-secondary: #4a5260; --text-muted: #687080;
+  --rule: #dfe3e9; --head: #17365d; --head-text: #ffffff;
+  --bar: #cdd3dc; --bar-open: #4a5260;
   --h0: #cde2fb; --h1: #9ec5f4; --h2: #6da7ec; --h3: #256abf; --h4: #104281;
   --t0: #0b0b0b; --t1: #0b0b0b; --t2: #0b0b0b; --t3: #ffffff; --t4: #ffffff;
   --focus: #2a78d6;
@@ -39,7 +39,30 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 .viz-root { background: var(--surface-0); color: var(--text-primary); min-height: 100vh;
-  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 28px 32px 48px; }
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; display: grid; grid-template-columns: 252px minmax(0, 1fr); }
+.side { background: var(--surface-1); border-right: 1px solid var(--rule); padding: 24px 14px; position: sticky; top: 0;
+  height: 100vh; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.side .brand { font-weight: 700; font-size: 15px; padding: 0 10px; }
+.side .brand small { display: block; font-weight: 400; font-size: 12px; color: var(--text-muted); }
+.side .tabs { flex-direction: column; border: 0; margin: 0; gap: 2px; }
+.side .tabs button { text-align: left; border: 0; border-left: 3px solid transparent; border-radius: 0 6px 6px 0; margin: 0;
+  padding: 8px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.side .tabs button:hover { background: var(--surface-2); }
+.side .tabs button[aria-selected=true] { background: var(--surface-2); border-left-color: var(--head); }
+.side .about { border-top: 1px solid var(--rule); padding: 14px 10px 0; color: var(--text-secondary); font-size: 13px; }
+.side .about h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); margin: 0 0 6px; }
+.side .about a { color: var(--focus); text-decoration: none; font-weight: 600; }
+.side .about a:hover { text-decoration: underline; }
+.side .about p { margin: 4px 0 0; }
+.content { padding: 28px 32px 48px; min-width: 0; }
+#intro[hidden] ~ section { margin-top: 16px; }
+@media (max-width: 900px) {
+  .viz-root { grid-template-columns: 1fr; }
+  .side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding: 14px; }
+  .side .tabs { flex-direction: row; flex-wrap: wrap; }
+  .side .tabs button { border-left: 0; border-bottom: 3px solid transparent; border-radius: 6px 6px 0 0; }
+  .side .tabs button[aria-selected=true] { border-bottom-color: var(--head); }
+}
 h1 { font-size: 22px; margin: 0 0 4px; }
 .sub { color: var(--text-secondary); margin: 0 0 6px; max-width: 1100px; }
 .meta { color: var(--text-muted); font-size: 12px; margin: 0 0 20px; }
@@ -164,20 +187,30 @@ details.area > .inner { padding: 0 8px 2px 22px; }
 </head>
 <body>
 <div class="viz-root">
-  <h1>Firefox mobile — feature health</h1>
+<aside class="side">
+  <div class="brand">Feature Health<small>Firefox iOS &amp; Android</small></div>
+  <nav class="tabs" role="tablist" aria-label="Views" aria-orientation="vertical">
+    <button role="tab" id="t-overview" aria-controls="tab-overview" aria-selected="true">Overview by feature</button>
+    <button role="tab" id="t-cov" aria-controls="tab-cov" aria-selected="false">iOS unit test coverage<span class="n" id="t-cov-n"></span></button>
+    <button role="tab" id="t-bugs" aria-controls="tab-bugs" aria-selected="false">Escaped bugs<span class="n" id="t-bugs-n"></span></button>
+  </nav>
+  <div class="about">
+    <h2>About</h2>
+    <a href="https://docs.google.com/document/d/1QbHuvyY-cdYm_lM7lb_4w8GdPH3hRe3lCQTG8vHb7aE/edit?tab=t.0#heading=h.8ug2ydh5gih8" target="_blank" rel="noopener">Feature Health: project doc ›</a>
+    <p>Why we measure test health per feature, how the feature taxonomy is used and what comes next.</p>
+  </div>
+</aside>
+<main class="content">
+  <h1>Firefox Mobile — Feature Health</h1>
+  <div id="intro">
   <p class="sub">One row per feature of the Firefox Mobile feature taxonomy (L1 areas and L2 features), iOS next to Android:
     unit-test coverage, TestRail cases and their UI automation, next to the bugs people outside the team reported this year.
     Hover any cell for details; click an iOS unit-test percentage to see the feature's files, or a bug count to see those bugs.</p>
   <p class="wip"><b>Work in progress.</b> All columns are real data, refreshed from Bitrise, TestRail, Bugzilla and GitHub.
     Android unit-test coverage is still to come.</p>
-  <p class="error" id="notice" hidden></p>
   <p class="meta" id="meta">Loading…</p>
-
-  <nav class="tabs" role="tablist" aria-label="Views">
-    <button role="tab" id="t-overview" aria-controls="tab-overview" aria-selected="true">Overview by feature</button>
-    <button role="tab" id="t-cov" aria-controls="tab-cov" aria-selected="false">iOS unit test coverage<span class="n" id="t-cov-n"></span></button>
-    <button role="tab" id="t-bugs" aria-controls="tab-bugs" aria-selected="false">Escaped bugs<span class="n" id="t-bugs-n"></span></button>
-  </nav>
+  </div>
+  <p class="error" id="notice" hidden></p>
 
   <section id="tab-overview" role="tabpanel" aria-labelledby="t-overview">
 
@@ -289,6 +322,7 @@ details.area > .inner { padding: 0 8px 2px 22px; }
   </section>
 
   <section id="tab-bugs" role="tabpanel" aria-labelledby="t-bugs" hidden>
+    <p class="meta" id="bsrc"></p>
     <div class="toolbar">
       <div class="seg" role="group" aria-label="Platform">
         <button data-bp="all">All</button><button data-bp="ios">iOS</button><button data-bp="android">Android</button>
@@ -318,6 +352,7 @@ details.area > .inner { padding: 0 8px 2px 22px; }
   </section>
 
   <div class="tip" id="tip" role="tooltip"></div>
+</main>
 </div>
 
 <script>
@@ -595,7 +630,9 @@ function buildCov() {
     x.cov = x.files.reduce((a, e) => a + e.covered, 0);
     x.zero = x.files.filter(e => !e.covered).length;
   });
-  document.getElementById("t-cov-n").textContent = d.by_file.length.toLocaleString();
+  const ft = d.totals.features, tab = document.getElementById("t-cov-n");   // the headline number, like the tile
+  tab.textContent = `${pct(ft.covered, ft.executable).toFixed(1)}%`;
+  tab.title = "Unit-test line coverage of feature code";
   const targets = {};
   d.by_file.forEach(e => targets[e.target || ""] = (targets[e.target || ""] || 0) + 1);
   document.getElementById("ct").innerHTML = `<option value="">All targets</option>` +
@@ -897,6 +934,7 @@ function showTab(k) {
     document.getElementById("tab-" + t).hidden = t !== k;
     document.getElementById("t-" + t).setAttribute("aria-selected", t === k);
   });
+  document.getElementById("intro").hidden = k !== "overview";   // the overview's description; the other tabs explain themselves
   if (k === "bugs" && BUGS) renderBugs();
   if (k === "cov") renderCov();
 }
@@ -946,10 +984,11 @@ function describe(status) {
   const date = when.toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"});
   document.getElementById("meta").innerHTML =
     `Data from <time datetime="${esc(data.generated_at)}">${esc(date)}</time> · updated every Monday · ` +
-    `<a href="${WORKFLOW}">Refresh data</a> (Run workflow)` +
-    (BUGS ? `<br>Escaped bugs created ${esc(BUGS.since)} → ${esc(BUGS.until)} · ` +
-      `<a href="${esc(BUGS.platforms.android.query_url)}">Android query in Bugzilla ›</a> · ` +
-      `<a href="${esc(BUGS.platforms.ios.query_url)}">iOS search on GitHub ›</a> (includes team-filed issues: GitHub can't filter by org)` : "");
+    `<a href="${WORKFLOW}">Refresh data</a> (Run workflow)`;
+  if (BUGS) document.getElementById("bsrc").innerHTML =
+    `Escaped bugs created ${esc(BUGS.since)} → ${esc(BUGS.until)} · ` +
+    `<a href="${esc(BUGS.platforms.android.query_url)}">Android query in Bugzilla ›</a> · ` +
+    `<a href="${esc(BUGS.platforms.ios.query_url)}">iOS search on GitHub ›</a> (includes team-filed issues: GitHub can't filter by org)`;
   if (BUGS) document.getElementById("bug-totals").textContent = PLATFORMS.map(([p, name]) => {
     const c = BUGS.platforms[p];
     return `${name}: ${plural(c.escaped, "bug")}` + (c.undecided ? ` (${c.undecided} waiting for a feature decision)` : "");
